@@ -1,0 +1,38 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "Coucou c nous",
+  "main": "app.js",
+  "scripts": {
+    "dev": "webpack-dev-server --inline --hot --watch --progress",
+    "build": "webpack -p"
+  },
+  "author": "Coucou C Nous",
+  "license": "MIT",
+  "dependencies": {
+    "babel-runtime": "^6.0.0",
+    "vue": "^1.0.0",
+    "vue-resource": "0.7.0",
+    "vue-router": "^0.7.5"
+  },
+  "devDependencies": {
+    "babel-core": "^6.0.0",
+    "babel-loader": "^6.0.0",
+    "babel-plugin-transform-runtime": "^6.0.0",
+    "babel-preset-es2015": "^6.0.0",
+    "babel-preset-stage-2": "^6.0.0",
+    "vue-hot-reload-api": "^1.2.0",
+    "vue-html-loader": "^1.0.0",
+    "vue-loader": "^8.2.1",
+    "vue-style-loader": "^1.0.0",
+    "webpack": "^1.13.1",
+    "webpack-dev-server": "^1.14.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "Groupe5"
+  },
+  "keywords": [
+    "languages"
+  ]
+}
