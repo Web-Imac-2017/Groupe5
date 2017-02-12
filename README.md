@@ -1,4 +1,4 @@
-# plume
+# Plume
 
 > A Vue.js project
 
