@@ -1,15 +1,20 @@
 <template>
   <div id="app">
+  	<header-component></header-component>
     <h1>Hello Vue!</h1>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'app'
-}
+	import HeaderComponent from './components/Header.vue'
+
+	export default {
+    components: {
+  		HeaderComponent
+  	}
+	}
 </script>
 
 <style lang="scss">
-  @import 'src/assets/scss/design.scss';
+  @import 'assets/scss/design.scss';
 </style>
