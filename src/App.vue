@@ -1,18 +1,17 @@
 <template>
   <div id="app">
-  	<header-component></header-component>
-    <h1>Hello Vue!</h1>
+    <home-no-connected-view></home-no-connected-view>
   </div>
 </template>
 
 <script>
-	import HeaderComponent from './components/Header.vue'
+  import HomeNoConnectedView from './views/HomeNoConnected.vue'
 
-	export default {
+  export default {
     components: {
-  		HeaderComponent
-  	}
-	}
+      HomeNoConnectedView
+    }
+  }
 </script>
 
 <style lang="scss">
