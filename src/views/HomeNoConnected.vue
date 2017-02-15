@@ -2,16 +2,16 @@
   <div id="home-no-connected">
     <h1>Plume</h1>
     <h2>Page non connecté</h2>
-    <connexion-view></connexion-view>
+    <connexion-component></connexion-component>
   </div>
 </template>
 
 <script>
-  import ConnexionView from './Connexion.vue'
+  import ConnexionComponent from './../components/Connexion.vue'
 
   export default {
     components: {
-      ConnexionView
+      ConnexionComponent
     }
   }
 </script>
