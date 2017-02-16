@@ -3,4 +3,4 @@ node_modules/
 dist/
 npm-debug.log
 plume.sql
-php/secure/
+api/secure/
