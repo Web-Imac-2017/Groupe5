@@ -1,0 +1,33 @@
+#centrer{
+	width : 1000px;
+	margin : 0 auto;
+	font-family : 'calibri', sans-serif;
+	background-color : white;
+}
+
+body{
+	background-color : #edd1c5;
+	margin : 0;
+}
+
+table, th, td{
+	border : 1px solid black;
+}
+
+table{
+	border-collapse: collapse;
+}
+
+h1, h2{
+	color : #873b51;
+	text-align : center;
+	margin : 0;
+	padding : 10px;
+	background-color : #dea37c;
+}
+
+h4{
+	color : #b0574d;
+}
+
+/* #f2e6e6 blanc / #edd1c5 beige / # dea37c orange clair / #b0574d rouge orange / #873b51 rose / #435154 vert */
