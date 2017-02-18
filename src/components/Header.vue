@@ -1,9 +1,7 @@
 <template>
 	<div class="header">
 		<menu-component></menu-component>
-		<form>
-      <input type="submit" value="Sign out">
-    </form>   
+		<router-link v-bind:to="'/login/'">Login</router-link>
 	</div>
 </template>s
 

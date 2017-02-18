@@ -1,17 +1,42 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+// main.js
+
 import Vue from 'vue'
-import App from './App'
-import router from './router'
+import Resource from 'vue-resource'
+import Router from 'vue-router'
 
-import jQuery from 'jquery'
-window.jQuery = window.$ = jQuery
-require('bootstrap-sass')
+import App from './App.vue'
+import Home from './components/Home.vue'
+import Login from './components/Login.vue'
 
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  template: '<App/>',
-  components: { App }
+// install router
+Vue.use(Router)
+
+Vue.use(Resource)
+Vue.http.options.root = "http://localhost"
+
+// routing
+var router = new Router({
+	mode: "history",
+	routes: [
+		{
+			name: 'home',
+			path: '/home/',
+			component: Home
+		},
+		{
+			name : 'login',
+			path: '/login/',
+			component: Login
+		},
+		{
+			path: '*',
+			redirect: '/home'
+		}
+	]
 })
+
+const app = new Vue({
+  router,
+  render: (h) => h(App)
+}).$mount('#app')
+

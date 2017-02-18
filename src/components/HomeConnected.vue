@@ -7,7 +7,7 @@
 </template>
 
 <script>
-	import HeaderComponent from './../components/Header.vue'
+	import HeaderComponent from './Header.vue'
 
 	export default {
     components: {

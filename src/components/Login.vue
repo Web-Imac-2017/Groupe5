@@ -11,8 +11,6 @@
 
 
 <script>
-//import router from './../router'
-
 	export default {
     data : function () {
       return {
@@ -27,8 +25,8 @@
         // Connection test without back files
         if(this.loginUser == "coucoucnous" && this.loginPassword == "mdp") {
           console.log("Connexion !");
-          //location.reload();
-          //router.go({ name: 'HomeConnected'});
+          location.reload();
+          this.$router.push('/home/');
         }
         else {
           this.loginError = "User unknowm or password uncorrect.";

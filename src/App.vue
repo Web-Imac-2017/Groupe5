@@ -1,15 +1,19 @@
 <template>
   <div id="app">
-    <home-no-connected-view></home-no-connected-view>
+    <header-component></header-component>
+    <router-view keep-alive></router-view>
+    <footer-component></footer-component>
   </div>
 </template>
 
 <script>
-  import HomeNoConnectedView from './views/HomeNoConnected.vue'
+  import HeaderComponent from './components/Header.vue'
+  import FooterComponent from './components/Footer.vue'
 
   export default {
     components: {
-      HomeNoConnectedView
+      HeaderComponent,
+      FooterComponent
     }
   }
 </script>
