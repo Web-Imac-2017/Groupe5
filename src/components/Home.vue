@@ -1,7 +1,6 @@
 <template>
-  <div id="home-no-connected">
+  <div id="home">
     <h1>Plume</h1>
-    <h2>Page non connecté</h2>
   </div>
 </template>
 

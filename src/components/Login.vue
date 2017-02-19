@@ -11,6 +11,7 @@
 
 
 <script>
+
 	export default {
     data : function () {
       return {
@@ -21,9 +22,17 @@
       }
     },
     methods: {
+      setCookie(cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays*24*60*60*1000));
+        var expires = "expires="+ d.toUTCString();
+        document.cookie = cname + "=" + cvalue + "; " + expires;
+      },
       login() {
         // Connection test without back files
         if(this.loginUser == "coucoucnous" && this.loginPassword == "mdp") {
+          this.setCookie("idUser", 0, 10);
+          this.setCookie("pseudo","coucoucnous", 10);
           console.log("Connexion !");
           location.reload();
           this.$router.push('/home/');
