@@ -1,7 +1,7 @@
 <template>
-	<div class="footer"> 
+	<div class="footer">
 	</div>
-</template>s
+</template>
 
 <script>
 </script>
@@ -9,5 +9,3 @@
 <style type="scss">
 
 </style>
-
-
