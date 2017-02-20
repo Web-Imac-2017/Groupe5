@@ -3,7 +3,7 @@
 		  <router-link v-bind:to="'/home/'">Home</router-link>
       <router-link v-if="connected === 'true'" v-bind:to="'/home/'">Messages</router-link>
       <router-link v-if="connected === 'true'" v-bind:to="'/home/'">Matchs</router-link>
-      <router-link v-if="connected === 'true'" v-bind:to="'/home/'">Profil</router-link>
+      <router-link v-if="connected === 'true'" v-bind:to="'/profil/'">Profil</router-link>
       <router-link v-if="connected === ''" v-bind:to="'/login/'">Sign up / Sign in</router-link>
       <a v-if="connected === 'true'" v-on:click.prevent="logout">Sign out</a>
 	</div>
@@ -49,5 +49,3 @@
 <style type="scss">
 
 </style>
-
-

@@ -7,6 +7,7 @@ import Router from 'vue-router'
 import App from './App.vue'
 import Home from './components/Home.vue'
 import Login from './components/Login.vue'
+import Profil from './components/Profil.vue'
 
 // install router
 Vue.use(Router)
@@ -29,6 +30,11 @@ var router = new Router({
 			component: Login
 		},
 		{
+			name : 'profil',
+			path: '/profil/',
+			component: Profil
+		},
+		{
 			path: '*',
 			redirect: '/home'
 		}
@@ -39,4 +45,3 @@ const app = new Vue({
   router,
   render: (h) => h(App)
 }).$mount('#app')
-
