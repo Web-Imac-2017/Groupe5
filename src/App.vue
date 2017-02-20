@@ -1,16 +1,23 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view></router-view>
+    <header-component></header-component>
+    <router-view keep-alive></router-view>
+    <footer-component></footer-component>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'app'
-}
+  import HeaderComponent from './components/Header.vue'
+  import FooterComponent from './components/Footer.vue'
+
+  export default {
+    components: {
+      HeaderComponent,
+      FooterComponent
+    }
+  }
 </script>
 
 <style lang="scss">
-  @import 'src/assets/scss/design.scss';
+  @import 'assets/scss/design.scss';
 </style>
