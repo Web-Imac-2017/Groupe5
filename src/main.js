@@ -7,6 +7,7 @@ import Router from 'vue-router'
 import App from './App.vue'
 import Home from './components/Home.vue'
 import Login from './components/Login.vue'
+import Register from './components/Register.vue'
 import Profil from './components/Profil.vue'
 
 // install router
@@ -33,6 +34,11 @@ var router = new Router({
 			name : 'profil',
 			path: '/profil/',
 			component: Profil
+		},
+		{
+			name : 'register',
+			path: '/register/',
+			component: Register
 		},
 		{
 			path: '*',
