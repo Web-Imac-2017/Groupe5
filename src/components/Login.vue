@@ -1,48 +1,55 @@
 <template>
   <div class="connexion">
-    <div class="error-message" v-text="loginError"></div>
-    <input type="text" name="user" placeholder="Email or Username" v-model="loginUser">  
-    <input type="password" name="password" placeholder="Password" v-model="loginPassword">  
-    <input type="submit" v-on:click="login" v-model="loginSubmit"  id="loginSubmit">  
-    <!--<input type="submit" v-on:click="login" v-model="loginSubmit"  id="loginSubmit">-->
+      <h1>Connexion</h1>
+      <p>Pseudo:</p><br>
+      <div class="error-message" v-text="loginError"></div>
+      <input type="text"  name="pseudo" id="pseudo" placeholder="Email or Username" v-model="pseudo">  
+      <p>Mot de passe:</p><br>
+      <input type="password" name="password" id="password" placeholder="Password" v-model="password">  
+      <input type="submit" v-on:click="login" v-model="submit" id="submit">
   </div>
 
 </template>
 
 
 <script>
+import {apiRoot} from '../../config/localhost/settings.js'
+import Header from './Header.vue'
 
-	export default {
+  export default {
     data : function () {
       return {
         loginError: '',
-        loginUser: '',
-        loginPassword: '',
-        loginSubmit: ''
+        pseudo: '',
+        password: '',
+        submit: ''
       }
     },
     methods: {
-      setCookie(cname, cvalue, exdays) {
-        var d = new Date();
-        d.setTime(d.getTime() + (exdays*24*60*60*1000));
-        var expires = "expires="+ d.toUTCString();
-        document.cookie = cname + "=" + cvalue + "; " + expires;
-      },
-      login() {
-        // Connection test without back files
-        if(this.loginUser == "coucoucnous" && this.loginPassword == "mdp") {
-          this.setCookie("idUser", 0, 10);
-          this.setCookie("pseudo","coucoucnous", 10);
-          console.log("Connexion !");
-          location.reload();
-          this.$router.push('/home/');
-        }
-        else {
-          this.loginError = "User unknowm or password uncorrect.";
-        }
+      login: function() {
+        var _this = this;
+        fetch(apiRoot() + 'Controllers/User/login.php', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+            'Content-Type': 'application/json; charset=utf-8'
+          },
+          dataType: 'JSON',
+          body: JSON.stringify({pseudo : this.pseudo, password : this.password})
+        }).then(function(response) {
+          return response.json();
+        }).then(function(data){
+          if(data[0] == "Error"){
+            _this.loginError = data[1];
+          }
+          else {
+            _this.$router.push('/home/');
+            _this.$parent.getUserState();
+          }
+        });
       }
     }
-	}
+  }
 </script>
 
 
