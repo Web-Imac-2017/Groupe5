@@ -74,6 +74,98 @@ class UserModel
 
         return $result;
     }
+
+    public static function updateUserLastname($pseudo, $userLastname){
+        $bdd = Database::connexionBDD();
+        
+        $req_active = $bdd->prepare('UPDATE user SET nom = '.$userLastname.' WHERE pseudo = "'.$pseudo.'"');
+        $req_active->execute();
+    }
+
+    public static function updateUserName($pseudo, $userName){
+        $bdd = Database::connexionBDD();
+        
+        $req_active = $bdd->prepare('UPDATE user SET prenom = '.$userName.' WHERE pseudo = "'.$pseudo.'"');
+        $req_active->execute();
+    }
+
+    public static function updateUserPassword($pseudo, $userPassword){
+        $bdd = Database::connexionBDD();
+        
+        $req_active = $bdd->prepare('UPDATE user SET password = '.MD5($userPassword).' WHERE pseudo = "'.$pseudo.'"');
+        $req_active->execute();
+    }
+
+    public static function updateUserMail($pseudo, $userMail){
+        $bdd = Database::connexionBDD();
+        
+        $req_active = $bdd->prepare('UPDATE user SET email = '.$userMail.' WHERE pseudo = "'.$pseudo.'"');
+        $req_active->execute();
+    }
+
+    public static function updateUserDescription($pseudo, $userDescription){
+        $bdd = Database::connexionBDD();
+        
+        $req_active = $bdd->prepare('UPDATE user SET description = '.$userDescription.' WHERE pseudo = "'.$pseudo.'"');
+        $req_active->execute();
+    }
+
+    public static function setUserHobbies($pseudo, $nameHobby){
+        $idUser = UserModel::getUserId();
+
+        $req_idHobby = $bdd->prepare('SELECT ID FROM centre_interet WHERE Nom = "'.$nameHobby.'"');
+        $req_idHobby->execute();
+        $id_Hobby = $req_idHobby->fetch(PDO::FETCH_ASSOC);
+
+        $req_active = $bdd->prepare('INSERT INTO user_centre_interet (ID, id_interet, id_user) VALUES ('','.$idHobby['ID'].','.idUser.')');
+        $req_active->execute();
+    }
+
+    public static function deleteUserHobbies($pseudo, $nameHobby){
+        $idUser = UserModel::getUserId();
+
+        $req_idHobby = $bdd->prepare('SELECT ID FROM centre_interet WHERE Nom = "'.$nameHobby.'"');
+        $req_idHobby->execute();
+        $id_Hobby = $req_idHobby->fetch(PDO::FETCH_ASSOC);
+
+        $req_active = $bdd->prepare('DELETE FROM user_centre_interet WHERE id_interet = '.$id_Hobby.' AND id_user = "'.$idUser.'"');
+        $req_active->execute();
+    }
+
+    public static function setUserLang($pseudo, $nameLang, $master){
+        $idUser = UserModel::getUserId();
+
+        $req_idLang = $bdd->prepare('SELECT ID FROM langue WHERE Nom = "'.$nameLang.'"');
+        $req_idLang->execute();
+        $id_lang = $req_idLang->fetch(PDO::FETCH_ASSOC);
+
+        $req_active = $bdd->prepare('INSERT INTO user_langue (ID, id_user, id_langue, maitrise) VALUES ('','.idUser.','.$idLang['ID'].','.$master.')');
+        $req_active->execute();
+    }
+
+    public static function deleteUserLang($pseudo, $nameLang){
+        $idUser = UserModel::getUserId();
+
+        $req_idLang = $bdd->prepare('SELECT ID FROM langue WHERE Nom = "'.$nameLang.'"');
+        $req_idLang->execute();
+        $id_lang = $req_idLang->fetch(PDO::FETCH_ASSOC);
+
+        $req_active = $bdd->prepare('DELETE FROM user_langue WHERE id_langue = '.$id_lang.' AND id_user = "'.$idUser.'"');
+        $req_active->execute();
+    }
+
+    public static function updateUserPays($pseudo, $namePays){
+        $idUser = UserModel::getUserId();
+
+        $req_idPays = $bdd->prepare('SELECT id_pays FROM table_pays WHERE fr = '.$namePays.'"');
+        $req_idPays->execute();
+        $id_pays = $req_idPays->fetch(PDO::FETCH_ASSOC);
+
+        $req_active = $bdd->prepare('UPDATE user SET id_pays = '.$id_pays['id_pays'].' WHERE pseudo = "'.$pseudo.'"');
+        $req_active->execute();
+    }
+
+
 }
 
 ?>
