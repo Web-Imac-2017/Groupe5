@@ -74,6 +74,90 @@ class UserModel
 
         return $result;
     }
+
+    /*Récupère les langues maitrisées (2) par un utilisateur*/
+    public static function getUserLangueMaitrise($pseuso) {
+        $bdd = Database::connexionBDD();
+
+        $idUser = getUserId($pseudo);
+
+
+        session_start();
+        if(isset($_SESSION['login'])) {
+            $idUser = getUserId();
+            $req_id = $bdd->prepare('SELECT DISTINCT id_langue FROM user, user_langue, langue WHERE user_langue.maitrise = "2" AND user.ID=user_langue.id_user AND user.ID='.$idUser' ');
+            $req_id->execute();
+            $idUser = $req_id->fetch(PDO::FETCH_ASSOC);
+
+            $result = array($idLangueMaitrise['id_langue_maitrise']);
+        }
+        else $result = array(0);
+
+        return $result;
+    }
+
+    /*Récupère les langues à apprendre (1) par un utilisateur*/
+    public static function getUserLangueApprendre($pseudo) {
+        $bdd = Database::connexionBDD();
+
+        $idUser = getUserId($pseudo);
+
+        session_start();
+        if(isset($_SESSION['login'])) {
+            $idUser = getUserId();
+            $req_id = $bdd->prepare('SELECT DISTINCT id_user FROM user, user_langue, langue WHERE user_langue.maitrise = "1" AND user_langue.id_langue='.$idUser.'');
+            $req_id->execute();
+            $idUser = $req_id->fetch(PDO::FETCH_ASSOC);
+
+            $result = array($idLangueMaitrise['id_langue_apprendre']);
+        }
+        else $result = array(0);
+
+        return $result;
+    }
+
+    /*Récupère les possibles "Maitres" pour une langue donnée*/
+    public static function findMaitre($pseudo, $idLangue) {
+        $bdd = Database::connexionBDD();
+
+        $idUser = getUserId($pseudo);
+
+        session_start();
+        if(isset($_SESSION['login'])) {
+            $idUser = getUserId();
+            $req_id = $bdd->prepare('SELECT DISTINCT id_user FROM user, user_langue, langue WHERE user_langue.maitrise = "2" AND user_langue.id_langue='.$idLangue.'');
+            $req_id->execute();
+            $idUser = $req_id->fetch(PDO::FETCH_ASSOC);
+
+            $result = array($idUserMaitrise['id_user_maitre']);
+        }
+        else $result = array(0);
+
+        return $result;
+    }
+
+    /*Récupère les possibles "Apprentis" pour une langue donnée*/
+    public static function findApprenti($pseudo, $idLangue) {
+        $bdd = Database::connexionBDD();
+
+        $idUser = getUserId($pseudo);
+
+        session_start();
+        if(isset($_SESSION['login'])) {
+            $idUser = getUserId();
+            $req_id = $bdd->prepare('SELECT DISTINCT id_user FROM user, user_langue, langue WHERE user_langue.maitrise = "1" AND user_langue.id_langue='.$idLangue.'');
+            $req_id->execute();
+            $idUser = $req_id->fetch(PDO::FETCH_ASSOC);
+
+            $result = array($idLangueMaitrise['id_user_apprendre']);
+        }
+        else $result = array(0);
+
+        return $result;
+    }
+
+
+
 }
 
 ?>
