@@ -74,7 +74,6 @@ class ConversationModel{
         /*$bdlink = Database::connexionBDD();
         $sql = $bdlink->prepare("INSERT INTO `conversation`(`ID`) VALUES (NULL);");
         $sql->execute();*/
-        // 5 -> kingofimac / 1 -> fabricetea / 4 -> Jesus
 
         /*aller chercher la dernière conv grace à la string (unique car vérifié au dessus)*/
         
