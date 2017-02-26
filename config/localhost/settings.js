@@ -1,6 +1,4 @@
 export function apiRoot(){
-    /* REPLACE WITH YOUR LOCALHOST PROJECT ROOT */
-    /* Exemple : "http://localhost:8888/Social-Network-IMAC/" */
-    var projectRoot = "http://localhost/WebS4/Plume/";
+    var projectRoot = "/home/login/maureen/IMAC/Web/IMAC2/PLUME/PLUME";
     return projectRoot + "api/";
 }

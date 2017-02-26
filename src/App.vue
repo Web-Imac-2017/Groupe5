@@ -6,7 +6,7 @@
   </div>
 </template>
 
-<script>  
+<script>
   import {apiRoot} from '../config/localhost/settings.js'
   import HeaderComponent from './components/Header.vue'
   import FooterComponent from './components/Footer.vue'
@@ -51,4 +51,5 @@
 
 <style lang="scss">
   @import 'assets/scss/design.scss';
+  @import 'assets/scss/reset.css'
 </style>
