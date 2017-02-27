@@ -48,6 +48,7 @@ var router = new Router({
 			path: '/searchBar',
 			component: SearchBar
 		},
+		{
 			name: 'messages',
 			path: '/messages/:conversationID',
 			component: Messages

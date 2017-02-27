@@ -1,27 +1,27 @@
 <template>
 
   <div class="profil">
-    <img v-bind:src="'/static/avatar/' + user.avatar" class="avatar">
+    <img v-bind:src="'/static/avatar/' + $parent.selectedUser.avatar" class="avatarProfil">
     <div class="infos">
-      <h1 class="pseudo">{{user.pseudo}}</h1>
-      <p class="name">{{user.name}} {{user.age}}</p>
-      <p class="city" v-if="user.city">{{user.city}}</p>
-      <p class="country">{{user.country}}</p>
-      <p class="description">{{user.description}}</p>
+      <h1 class="pseudo">{{$parent.selectedUser.pseudo}}</h1>
+      <p class="name">{{$parent.selectedUser.name}} {{$parent.selectedUser.age}}</p>
+      <p class="city" v-if="$parent.selectedUser.city">{{$parent.selectedUser.city}}</p>
+      <p class="country">{{$parent.selectedUser.country}}</p>
+      <p class="description">{{$parent.selectedUser.description}}</p>
       <ul class="hobbies">
-        <li v-for="hobbies in user.hobbies">{{hobbies}}</li>
+        <li v-for="hobbies in $parent.selectedUser.hobbies">{{hobbies}}</li>
       </ul>
       <div class="language">
         <p class="llabel">I speak</p>
         <ul class="spoken-lang">
-          <li v-for="spokenLang in user.languages.spokenLang">
-            <img v-bind:src="spokenLang">
+          <li v-for="spokenLang in $parent.selectedUser.languages.spokenLang">
+            <img v-bind:src="$parent.languagesToFlag(spokenLang)">
           </li>
         </ul>
         <p class="llabel">I'm learning</p>
         <ul class="learning-lang">
-          <li v-for="learningLang in user.languages.learningLang">
-            <img v-bind:src="learningLang">
+          <li v-for="learningLang in $parent.selectedUser.languages.learningLang">
+            <img v-bind:src="$parent.languagesToFlag(learningLang)">
           </li>
         </ul>
       </div>
@@ -36,23 +36,10 @@ import {apiRoot} from '../../config/localhost/settings.js';
 export default {
   data() {
     return {
-      "user" : {
-        "pseudo": $parent.user.pseudo,
-        "avatar": $parent.user.avatar,
-        "lastname": $parent.user.lastname,
-        "firstname": $parent.user.firstname,
-        "age": $parent.user.age,
-        "country": $parent.user.country,
-        "city": $parent.user.city,
-        "description": $parent.user.description,
-        "color": $parent.user.color,
-        "hobbies" : $parent.user.hobbies,
-        "languages" : {
-          "spokenLang" : $parent.user.languages.spokenLang,
-          "learningLang" : $parent.user.languages.learningLang
-        }
-      }
     }
+  },
+  created: function() {
+    this.$parent.getSelectedUser();
   }
 }
 
@@ -69,7 +56,7 @@ $profil_color: #C3272F;
   min-height: 100%;
   box-shadow: 0px 0 40px 0px #706f6f;
 
-  img.avatar{
+  img.avatarProfil{
     width: 100%;
     border-bottom: 4px $profil_color solid;
   }

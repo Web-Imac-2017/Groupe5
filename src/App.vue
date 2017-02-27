@@ -19,7 +19,22 @@ export default {
   data(){
     return {
       connected: '',
-      selectedUser: ''
+      selectedUser: {
+        id : '',
+        pseudo: '',
+        avatar: '',
+        firstname: '',
+        lastname: '',
+        age: '',
+        country: '',
+        description: '',
+        city: '',
+        hobbies: '',
+        languages: {
+          spokenLang: '',
+          learningLang: ''
+        }
+      }
     }
   },
   methods: {
@@ -28,24 +43,30 @@ export default {
       this.$route.router.go('/home/');
     },
     getUserState: function() {
-      this.$http.post(
-        apiRoot() + 'Controllers/User/getUserState.php',
-        {headers : {'Content-Type' : 'application/json; charset=UTF-8', 'Accept': 'application/json, application/xml, text/plain, text/html, *.*'}}
-      ).then(
-        function(response) {
-          if(response.data[0] == "Error"){
-            this.loginError = response.data[1];
+      var _this = this;
+
+      fetch(apiRoot() + 'Controllers/User/getUserState.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON'
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+          if(data[0] == "Error"){
+            _this.loginError = data[1];
           }
           else {
-            if(response.data[0] == 0) this.connected = "";
-            else this.connected = "true";
+            if(data[0] == 0) _this.connected = "";
+            else _this.connected = "true";
           }
         }
       );
     },
-    getUser: function(){
+    getSelectedUser: function(){
       var _this = this;
-      var _selectedUser = this.selectedUser/*recuperer quand on click sur le peudo, le pseudo*/;
 
       fetch(apiRoot() + 'Controllers/User/getUser.php', {
         method: 'POST',
@@ -54,40 +75,42 @@ export default {
           'Content-Type': 'application/json; charset=utf-8'
         },
         dataType: 'JSON',
-        body: JSON.stringify(pseudoUserToGet: _selectedUser)
+        body: JSON.stringify({pseudoUserToGet: _this.selectedUser.pseudo})
       }).then(function(response) {
         return response.json();
       }).then(function(data){
-        _this.user.pseudo = data['pseudo'];
-        _this.user.firstname = data['firstname'];
-        _this.user.lastname = data['lastname'];
-        _this.user.age = data['age'];
-        _this.user.country = data['country'];
-        _this.user.city = data['city'];
-        _this.user.description = data['description'];
-        _this.user.color = data['color'];
-        _this.user.hobbies = data['hobbies']; //Return tab with hobbies
-        _this.user.languages.spokenLang = languagesToFlag(data['spokenLang']); //Return tab with mastered languages
-        _this.user.languages.learningLang = languagesToFlag(data['learningLang']); //Return tab with learning languages
+        _this.selectedUser.pseudo = data['pseudo'];
+        _this.selectedUser.avatar = data['avatar'];
+        _this.selectedUser.firstname = data['firstname'];
+        _this.selectedUser.lastname = data['lastname'];
+        _this.selectedUser.age = data['age'];
+        _this.selectedUser.country = data['country'];
+        _this.selectedUser.city = data['city'];
+        _this.selectedUser.description = data['description'];
+        _this.selectedUser.color = data['color'];
+        _this.selectedUser.hobbies = data['hobbies'];
+        _this.selectedUser.languages = data['languages'];
       });
     },
-    created: function(){
-      this.getUserState();
-      this.getUser();
+    languagesToFlag: function(country) {
+      var flag = {
+        portuguese : '/static/flags/portugal.png',
+        english : '/static/flags/united-kingdom.png',
+        chinese : '/static/flags/china.png',
+        french : '/static/flags/france.png',
+        japanese : '/static/flags/japan.png',
+        german : '/static/flags/germany.png',
+        spanish : '/static/flags/spain.png'
+      }
+      return flag[country];
     }
+  },
+  created: function(){
+    this.selectedUser.id = 1;
+
+    this.getUserState();
+    this.getSelectedUser();
   }
-}
-function languagesToFlag(country) {
-  var flag = {
-    portuguese : '/static/flags/portugal.png',
-    english : '/static/flags/united-kingdom.png',
-    chinese : '/static/flags/china.png',
-    french : '/static/flags/france.png',
-    japanese : '/static/flags/japan.png',
-    german : '/static/flags/germany.png',
-    spanish : '/static/flags/spain.png'
-  }
-  return flag[country];
 }
 </script>
 

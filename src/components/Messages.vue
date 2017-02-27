@@ -21,7 +21,6 @@ import {apiRoot} from '../../config/localhost/settings.js'
 import Header from './Header.vue'
 import ConversationsMenuComponent from './ConversationsMenuCPN.vue'
 import ConversationComponent from './ConversationCPN.vue'
-import ProfilComponent from './Profil.vue'
 
   export default {
     data : function () {
@@ -31,8 +30,7 @@ import ProfilComponent from './Profil.vue'
     },
     components: {
       ConversationsMenuComponent,
-      ConversationComponent,
-      ProfilComponent
+      ConversationComponent
     },
     methods: {
     }
