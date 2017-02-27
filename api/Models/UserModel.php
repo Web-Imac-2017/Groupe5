@@ -321,7 +321,7 @@ class UserModel {
         $bdd = Database::connexionBDD();
         
         /* Recherche si le pseudo existe :*/
-        $req_pseudo = $bdd->prepare('SELECT ID FROM user WHERE pseudo = '.$pseudo);
+        $req_pseudo = $bdd->prepare('SELECT ID FROM user WHERE pseudo = "'.$pseudo.'"');
         $req_pseudo->execute();
         
         if($donnees = $req_pseudo->fetch(PDO::FETCH_ASSOC)){
@@ -330,13 +330,13 @@ class UserModel {
         
         else{
             /* Recherche si le mail deja used :*/
-            $req_mail = $bdd->prepare('SELECT email FROM user WHERE pseudo = '.$pseudo);
+            $req_mail = $bdd->prepare('SELECT email FROM user WHERE pseudo = "'.$pseudo.'"');
             $req_mail->execute();
             if($donnees = $req_mail->fetch(PDO::FETCH_ASSOC)){
                 $result = array("Error", "Error: mail already taken.");
             }
             else{
-                $req_idPays = $bdd->prepare('SELECT id_pays FROM table_pays WHERE fr = '.$pays);
+                $req_idPays = $bdd->prepare('SELECT id_pays FROM table_pays WHERE fr = "'.$pays.'"');
                 $req_idPays->execute();
                 $id_pays = $req_idPays->fetch(PDO::FETCH_ASSOC);
 
@@ -350,7 +350,7 @@ class UserModel {
     
     public static function getUserId($pseudo) {
         $bdd = Database::connexionBDD();
-        $req_active = $bdd->prepare('SELECT ID FROM user WHERE pseudo ='.$pseudo);
+        $req_active = $bdd->prepare('SELECT ID FROM user WHERE pseudo ="'.$pseudo.'"');
         $req_active->execute();
         
         if($id_user = $req_active->fetch(PDO::FETCH_ASSOC)){
