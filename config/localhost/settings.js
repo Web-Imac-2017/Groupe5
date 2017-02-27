@@ -1,4 +1,4 @@
 export function apiRoot(){
-    var projectRoot = "/home/login/maureen/IMAC/Web/IMAC2/PLUME/PLUME";
+    var projectRoot = "http://localhost/WebS4/Plume/";
     return projectRoot + "api/";
 }
