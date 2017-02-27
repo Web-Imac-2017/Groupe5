@@ -157,28 +157,94 @@ class UserModel
         return $result;
     }
     
-   /* public static function getUserHobbies($pseudo) {
+    public static function getUserHobbies($pseudo) {
         $bdd = Database::connexionBDD();
-        $user_id = getUserId($pseudo);*/
+        $user_id = getUserId($pseudo);
+        $donnees = array();
+        i = 0;
         
         /* Recuperer les id des hobbies du user */
-       /* $req_active = $bdd->prepare('SELECT id_interet FROM user_centre_interet WHERE id_user = '.$user_id);
-        $req_active->execute();*/
+        $req_active = $bdd->prepare('SELECT id_interet FROM user_centre_interet WHERE id_user = '.$user_id);
+        $req_active->execute();
         
-        /*$result = $req_active->fetch(PDO::FETCH_ASSOC);
-        $id_hobbies = array($result['id_interet']);*/
+        /*$result = $req_active->fetch(PDO::FETCH_ASSOC);*/
+        /*$id_hobbies = array($result['id_interet']);*/
         
         /* Renvoyer les noms des hobbies du user */
-      /*  while($result = $req_active->fetch(PDO::FETCH_ASSOC)){
-            $req_hobbies = $bdd->prepare('SELECT Nom FROM centre_interet WHERE ID ='.$req_hobbies);
-            $req_hobbies->execute();
-            while($data = $req_hobbies->fetch(PDO::FETCH_ASSOC)){
-                /*$result = array($data['Nom']);*/
-            /*}
-            
-        }
+        while($result = $req_active->fetch(PDO::FETCH_ASSOC)){
+            $hobbies = getHobbies($result['id_interet']);
+            $donnees[i] = $hobbies;
+            i++;
+            }
+        return $donnees;
+    }
+    
+    public static function getUserDateInscription($pseudo) {
+        $bdd = Database::connexionBDD();
+        $id = getUserId($pseudo);
         
-    }*/
+        if($id !== 0){
+            $req_active = $bdd->prepare('SELECT date_inscription FROM user WHERE ID ='.$id);
+            $req_active->execute();
+            $user_inscription = $req_active->fetch(PDO::FETCH_ASSOC);
+            $result = array($user_inscription['date_inscription']);
+        }
+        else $result = array(0);
+        
+        return $result;        
+    }
+    
+    public static function getUserMail($pseudo) {
+        $bdd = Database::connexionBDD();
+        $id = getUserId($pseudo);
+        
+        if($id !== 0){
+            $req_active = $bdd->prepare('SELECT email FROM user WHERE ID ='.$id);
+            $req_active->execute();
+            $user_mail = $req_active->fetch(PDO::FETCH_ASSOC);
+            $result = array($user_mail['email']);
+        }
+        else $result = array(0);
+        
+        return $result;   
+    }
+    
+    public static function getUserLastConnexion($pseudo) {
+        $bdd = Database::connexionBDD();
+        $id = getUserId($pseudo);
+        
+        if($id !== 0){
+            $req_active = $bdd->prepare('SELECT derniere_connexion FROM user WHERE ID ='.$id);
+            $req_active->execute();
+            $user_lastConnect = $req_active->fetch(PDO::FETCH_ASSOC);
+            $result = array($user_lastConnect['derniere_connexion']);
+        }
+        else $result = array(0);
+        
+        return $result;  
+    }
+    
+    public static function getUserPays($pseudo) {
+        $bdd = Database::connexionBDD();
+        $id = getUserId($pseudo);
+        
+        /* Recupere l'ID du pays dans la table user */
+        if($id !== 0){
+            $req_active = $bdd->prepare('SELECT id_pays FROM user WHERE ID ='.$id);
+            $req_active->execute();
+            $user_pays = $req_active->fetch(PDO::FETCH_ASSOC);
+            $idPays = array($user_pays['id_pays']);
+            
+            /* Recuperation du nom dans la table Pays */
+            $req_nomPays = $bdd->prepare('SELECT fr FROM table_pays WHERE id_pays = '.$idPays['id_pays']);
+            $req_nomPays->execute();
+            $nom_pays = $req_nomPays->fetch(PDO::FETCH_ASSOC);
+            $result = array($nom_pays['fr']);
+        }
+        else $result = array(0);
+
+        return $result;  
+    }
     
 }
 
