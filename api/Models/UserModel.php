@@ -79,12 +79,32 @@ class UserModel
     public static function setUserProfil($nom, $prenom, $pseudo, $email, $password, $date_inscription, $last_connection, $description, $pays, $id_etat_activ) {
         $bdd = Database::connexionBDD();
         
-        $req_idPays = $bdd->prepare('SELECT id_pays FROM table_pays WHERE fr = '.$pays);
-        $req_idPays->execute();
-        $id_pays = $req_idPays->fetch(PDO::FETCH_ASSOC);
+        /* Recherche si le pseudo existe :*/
+        $req_pseudo = $bdd->prepare('SELECT ID FROM user WHERE pseudo = '.$pseudo);
+        $req_pseudo->execute();
+        
+        if($donnees = $req_pseudo->fetch(PDO::FETCH_ASSOC)){
+            $result = array("Error", "Error: Pseudo already taken");
+        }
+        
+        else{
+            /* Recherche si le mail deja used :*/
+            $req_mail = $bdd->prepare('SELECT email FROM user WHERE pseudo = '.$pseudo);
+            $req_mail->execute();
+            if($donnees = $req_mail->fetch(PDO::FETCH_ASSOC)){
+                $result = array("Error", "Error: mail already taken.");
+            }
+            else{
+                $req_idPays = $bdd->prepare('SELECT id_pays FROM table_pays WHERE fr = '.$pays);
+                $req_idPays->execute();
+                $id_pays = $req_idPays->fetch(PDO::FETCH_ASSOC);
 
-        $req_active = $bdd->prepare('INSERT INTO user (ID, nom, prenom, pseudo, email, password, date_inscription, derniere_connexion, description, id_pays, id_etat_activite) VALUES ('.$nom.', '.$prenom.', '.$pseudo.', '.$email.', '.$password.', '.$date_inscription ', '.$last_connection.', '.$description.', '.$id_pays['id_pays'].', '.$id_etat_activ.')');
-        $req_active->execute();
+                $req_active = $bdd->prepare('INSERT INTO user (ID, nom, prenom, pseudo, email, password, date_inscription, derniere_connexion, description, id_pays, id_etat_activite) VALUES ('.$nom.', '.$prenom.', '.$pseudo.', '.$email.', '.$password.', '.$date_inscription ', '.$last_connection.', '.$description.', '.$id_pays['id_pays'].', '.$id_etat_activ.')');
+                $req_active->execute(); 
+                $result = array(0);
+            }
+        }
+        return $result;
     }
     
     public static function getUserId($pseudo) {
