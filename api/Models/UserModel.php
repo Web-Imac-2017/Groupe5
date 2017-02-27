@@ -2,8 +2,8 @@
 
 require_once(__DIR__.'/../Database.php');
 
-class UserModel
-{
+class UserModel {
+
    public static function login($pseudo, $password) {
         $bdd = Database::connexionBDD();
         
@@ -201,7 +201,7 @@ class UserModel
         session_start();
         if(isset($_SESSION['login'])) {
             $idUser = getUserId($pseudo);
-            $req_id = $bdd->prepare('SELECT DISTINCT id_langue FROM user, user_langue, langue WHERE user_langue.maitrise = 2 AND user.ID=user_langue.id_user AND user.ID='.$idUser' ');
+            $req_id = $bdd->prepare('SELECT DISTINCT id_langue FROM user, user_langue, langue WHERE user_langue.maitrise = 2 AND user.ID=user_langue.id_user AND user.ID='.$idUser.' ');
             $req_id->execute();
             $idLangueMaitrisee = $req_id->fetch(PDO::FETCH_ASSOC);
 
@@ -340,7 +340,7 @@ class UserModel
                 $req_idPays->execute();
                 $id_pays = $req_idPays->fetch(PDO::FETCH_ASSOC);
 
-                $req_active = $bdd->prepare('INSERT INTO user (ID, nom, prenom, pseudo, email, password, date_inscription, derniere_connexion, description, id_pays, id_etat_activite) VALUES (NULL, '.$nom.', '.$prenom.', '.$pseudo.', '.$email.', '.$password.', '.$date_inscription ', '.$last_connection.', '.$description.', '.$id_pays['id_pays'].', '.$id_etat_activ.')');
+                $req_active = $bdd->prepare('INSERT INTO user (ID, nom, prenom, pseudo, email, password, date_inscription, derniere_connexion, description, id_pays, id_etat_activite) VALUES (NULL, '.$nom.', '.$prenom.', '.$pseudo.', '.$email.', '.$password.', '.$date_inscription.', '.$last_connection.', '.$description.', '.$id_pays['id_pays'].', '.$id_etat_activ.')');
                 $req_active->execute(); 
                 $result = array(0);
             }
@@ -406,11 +406,11 @@ class UserModel
         return $result;      
     }
     
-    public static getHobbies($id_hobbies) {
+    public static function getHobbies($id_hobbies) {
         $bdd = Database::connexionBDD();
         
-        $req_active = $bdd->prepare('SELECT Nom FROM centre_interet WHERE ID = '$id_hobbies);
-        $req_active->execute();
+        $req_active = $bdd->prepare('SELECT Nom FROM centre_interet WHERE ID = '.$id_hobbies);
+        $req_active->e.xecute();
         
         $hobbies = $req_active->fetch(PDO::FETCH_ASSOC);
         $result = array($hobbies['Nom']);
@@ -422,7 +422,7 @@ class UserModel
         $bdd = Database::connexionBDD();
         $user_id = getUserId($pseudo);
         $donnees = array();
-        i = 0;
+        $i = 0;
         
         /* Recuperer les id des hobbies du user */
         $req_active = $bdd->prepare('SELECT id_interet FROM user_centre_interet WHERE id_user = '.$user_id);
@@ -434,8 +434,8 @@ class UserModel
         /* Renvoyer les noms des hobbies du user */
         while($result = $req_active->fetch(PDO::FETCH_ASSOC)){
             $hobbies = getHobbies($result['id_interet']);
-            $donnees[i] = $hobbies;
-            i++;
+            $donnees[$i] = $hobbies;
+            $i++;
             }
         return $donnees;
     }
@@ -508,4 +508,4 @@ class UserModel
     }
 }
 
-    
+?>
