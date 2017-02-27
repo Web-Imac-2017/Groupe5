@@ -16,7 +16,6 @@ class ConversationModel{
     public static function getAllMessagesOfConv($id_conv){
         $bdd = Database::connexionBDD();
         $result = [];
-        $i = 0;
 
         $req_active = $bdd->prepare("SELECT `contenu`, `id_user` FROM `message` WHERE `id_conversation` = :conv ORDER BY `date`DESC;");
         $req_active->execute(array(':conv' => $id_conv));
@@ -27,16 +26,22 @@ class ConversationModel{
         
         return $result;
     }
+    
+    public static function getNewMessagesOfConv($id_last_message, $id_conv){
+        $bdd = Database::connexionBDD();
+        $result = [];
 
-    public static function getNewMessagesOfConv(){
-        /*
-            chercher si le dernier message connu est égal au nombre de messages de la conv
-            date du dernier message == date dernier message connu ?
-            message connu ?
-        */
+        $req_active = $bdd->prepare("SELECT `contenu`, `id_user` FROM `message` WHERE `id_conversation` = :conv && `ID` > :last_message ORDER BY `date`DESC;");
+        $req_active->execute(array(':conv' => $id_conv, ":last_message" => $id_last_message));
+        
+        $result = $req_active->fetchAll();
+        
+        /*var_dump($result);*/
+        
+        return $result;
     }
     
-    /*true = conv exist / false conv n'existe pas*/
+    /*true = conv exist / false = conv n'existe pas*/
     public static function convExist($conv_name){
         $bdd = Database::connexionBDD();
 	
@@ -58,11 +63,11 @@ class ConversationModel{
         $conv_name = $pseudo_array[0];
         $user = [];
         
-        $user[0] = UserModel::getUserIdByPseudo($pseudo_array[0]);
+        $user[0] = UserModel::getUserId($pseudo_array[0]);
         
         for($i = 1; $i < count($pseudo_array); $i++){
             $conv_name = $conv_name.", ".$pseudo_array[$i];
-            array_push($user, UserModel::getUserIdByPseudo($pseudo_array[$i]));
+            array_push($user, UserModel::getUserId($pseudo_array[$i]));
         }
         
         /*var_dump($user);
@@ -89,7 +94,7 @@ class ConversationModel{
                 /*faire for taille pseudo_array ajouter ligne dans user_conv avec id conv ligne précédente*/
                 for($i = 0; $i < count($pseudo_array); $i++){
                     $req_active = $bdd->prepare("INSERT INTO `user_conversation`(`id_user_conversation`, `id_conversation`, `id_user`) VALUES (NULL, :conv, :user)");
-                    $req_active->execute(array(':conv' => $id_conv, ':user' => $user[$i]));
+                    $req_active->execute(array(':conv' => $id_conv, ':user' => $user[$i][0]));
                 }
                 
             }else{
@@ -101,9 +106,10 @@ class ConversationModel{
             echo "conv existe déjà !";
         }
     }
-
+    
+    /*retourne un tableau*/
     public static function getConvOfUser($pseudo){
-        $id_user = UserModel::getUserIdByPseudo($pseudo);
+        $id_user = UserModel::getUserId($pseudo);
         
         $bdd = Database::connexionBDD();
         $req_active = $bdd->prepare("SELECT `ID`, `conversation_name`
@@ -112,7 +118,7 @@ class ConversationModel{
         WHERE conversation.`ID` = user_conversation.`id_conversation` && user_conversation.`id_user` = :id;");
         $req_active->execute(array(':id' => $id_user));
         
-        var_dump($req_active->fetchAll());
+        return $req_active->fetchAll();
     }
 }
 
