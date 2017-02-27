@@ -195,21 +195,16 @@ class UserModel {
 
 
     /*Récupère les langues maitrisées (2) par un utilisateur*/
-    public static function getUserLangueMaitrisee($pseuso) {
-        $bdd = Database::connexionBDD();  
+    public static function getUserLangueMaitrisee($pseudo) {
+        $bdd = Database::connexionBDD(); 
 
-        session_start();
-        if(isset($_SESSION['login'])) {
-            $idUser = getUserId($pseudo);
-            $req_id = $bdd->prepare('SELECT DISTINCT id_langue FROM user, user_langue, langue WHERE user_langue.maitrise = 2 AND user.ID=user_langue.id_user AND user.ID='.$idUser.' ');
-            $req_id->execute();
-            $idLangueMaitrisee = $req_id->fetch(PDO::FETCH_ASSOC);
+        $idUser = UserModel::getUserId($pseudo);
+        var_dump($idUser);
+        $req_id = $bdd->prepare('SELECT DISTINCT id_langue FROM user, user_langue, langue WHERE user_langue.maitrise = 2 AND user.ID=user_langue.id_user AND user.ID='.$idUser);
+        $req_id->execute();
+        $idLangueMaitrisee = $req_id->fetch(PDO::FETCH_ASSOC);
 
-            $result = array($idLangueMaitrisee['id_langue']);
-        }
-        else $result = array(0);
-
-        var_dump($result);
+        $result = array($idLangueMaitrisee['id_langue']);
 
         return $result;
     }
@@ -350,11 +345,13 @@ class UserModel {
     
     public static function getUserId($pseudo) {
         $bdd = Database::connexionBDD();
-        $req_active = $bdd->prepare('SELECT ID FROM user WHERE pseudo ='.$pseudo);
+
+        $req_active = $bdd->prepare('SELECT ID FROM user WHERE pseudo = "'.$pseudo.'"');
         $req_active->execute();
+       
         
-        if($id_user = $req_active->fetch(PDO::FETCH_ASSOC)){
-            $result = array($id_user['id']);
+        if( $id_user = $req_active->fetch(PDO::FETCH_ASSOC)){  
+        $result = $id_user['ID'];
         }
         else $result = array(0);
         
