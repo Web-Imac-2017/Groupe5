@@ -29,7 +29,7 @@ export default {
           //Display error messages
         }
         else {
-          _this.$router.push('/Profil/' + data['pseudo']);
+          //_this.$router.push('/Profil/' + data['pseudo']);
         }
       });
     }

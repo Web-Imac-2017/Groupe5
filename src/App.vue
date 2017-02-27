@@ -2,6 +2,7 @@
   <div id="app">
     <header-component></header-component>
     <router-view keep-alive></router-view>
+    <profil-component v-if="profilShowed === 'true'"></profil-component>
     <footer-component></footer-component>
   </div>
 </template>
@@ -10,11 +11,13 @@
 import {apiRoot} from '../config/localhost/settings.js'
 import HeaderComponent from './components/Header.vue'
 import FooterComponent from './components/Footer.vue'
+import ProfilComponent from './components/ProfilCPN.vue'
 
 export default {
   components: {
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    ProfilComponent
   },
   data(){
     return {
@@ -34,7 +37,8 @@ export default {
           spokenLang: '',
           learningLang: ''
         }
-      }
+      },
+      profilShowed: ''
     }
   },
   methods: {
@@ -67,7 +71,6 @@ export default {
     },
     getSelectedUser: function(){
       var _this = this;
-
       fetch(apiRoot() + 'Controllers/User/getUser.php', {
         method: 'POST',
         headers: {
@@ -103,18 +106,28 @@ export default {
         spanish : '/static/flags/spain.png'
       }
       return flag[country];
+    },
+    changeSelectedUser: function(pseudo) {
+      if(pseudo != '') {
+        this.selectedUser.pseudo = pseudo;
+        this.getSelectedUser();
+        this.profilShowed = "true";
+      }
+      else {
+        this.selectedUser.pseudo = '';
+        this.profilShowed = "false";
+      }
     }
   },
   created: function(){
-    this.selectedUser.id = 1;
-
+    this.profilShowed = "false";
     this.getUserState();
-    this.getSelectedUser();
   }
 }
 </script>
 
 <style lang="scss">
 @import 'assets/scss/design.scss';
-@import 'assets/scss/reset.css'
+@import 'assets/scss/reset.css';
+
 </style>

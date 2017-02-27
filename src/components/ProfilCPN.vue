@@ -39,7 +39,6 @@ export default {
     }
   },
   created: function() {
-    this.$parent.getSelectedUser();
   }
 }
 
@@ -52,7 +51,7 @@ $profil_color: #C3272F;
   width: 25%;
   position: absolute;
   top: 0;
-  right: -100%;
+  right: 0;
   min-height: 100%;
   box-shadow: 0px 0 40px 0px #706f6f;
 
