@@ -43,6 +43,7 @@ class ConversationModel{
         return $result;
     }
     
+    /*retourne une string*/
     public static function getLastMessageOfConv($id_conv){
         $bdd = Database::connexionBDD();
         $result = [];
@@ -54,7 +55,7 @@ class ConversationModel{
         
         /*var_dump($result);*/
         
-        return $result;
+        return $result[0]['contenu'];
     }
     
     /*true = conv exist / false = conv n'existe pas*/
@@ -126,6 +127,7 @@ class ConversationModel{
     /*retourne un tableau*/
     public static function getConvOfUser($pseudo){
         $id_user = UserModel::getUserId($pseudo);
+        $result = [];
         
         $bdd = Database::connexionBDD();
         $req_active = $bdd->prepare("SELECT `ID`
@@ -134,7 +136,25 @@ class ConversationModel{
         WHERE conversation.`ID` = user_conversation.`id_conversation` && user_conversation.`id_user` = :user ;");
         $req_active->execute(array(':user' => $id_user[0]));
         
-        return $req_active->fetchAll();
+        $result = $req_active->fetchAll();
+        
+        for($i=0; $i < count($result); $i++){
+            /*last message*/
+            $result[$i]['lastMessage'] = ConversationModel::getLastMessageOfConv($result[$i]['ID']);
+            
+            /*pseudo of other users of conv*/
+            $req_active = $bdd->prepare("SELECT `pseudo`
+            FROM user
+            INNER JOIN user_conversation
+            WHERE user.`ID` = user_conversation.`id_user` && user_conversation.`id_user` != :user && user_conversation.`id_conversation` = :id_conv;");
+            $req_active->execute(array(':user' => $id_user[0], ':id_conv' => $result[$i]['ID']));
+            
+            $result[$i]['users'] = $req_active->fetchAll();
+            
+            /*var_dump($result[$i]);*/
+        }
+        
+        return $result;
     }
 }
 
