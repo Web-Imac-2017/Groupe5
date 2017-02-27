@@ -9,7 +9,10 @@ include "../../Models/ConversationModel.php";
 /*ConversationModel::get_all_messages_of_conv(1);*/
 
 /*test create conv*/
-$test_tab = array("kingofimac", "Jesus");
-ConversationModel::create_conv($test_tab);
+/*$test_tab = array("Robibidu77", "sapristi", "fabricetea");
+ConversationModel::createConv($test_tab);*/
+
+/*test get conv of user*/
+ConversationModel::getConvOfUser("fabricetea");
 
 ?>

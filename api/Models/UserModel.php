@@ -74,6 +74,15 @@ class UserModel
 
         return $result;
     }
+    
+    public static function getUserIdByPseudo($pseudo) {
+        $bdd = Database::connexionBDD();
+       
+        $req_active = $bdd->prepare('SELECT `ID` FROM user WHERE pseudo = :pseudo');
+        $req_active->execute(array(':pseudo' => $pseudo));
+        
+        return intval($req_active->fetchColumn());
+    }
 }
 
 ?>
