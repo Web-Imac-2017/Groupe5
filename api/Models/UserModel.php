@@ -200,11 +200,14 @@ class UserModel {
 
         $idUser = UserModel::getUserId($pseudo);
         var_dump($idUser);
-        $req_id = $bdd->prepare('SELECT DISTINCT id_langue FROM user, user_langue, langue WHERE user_langue.maitrise = 2 AND user.ID=user_langue.id_user AND user.ID='.$idUser);
+        $req_id = $bdd->prepare('SELECT DISTINCT id_langue FROM user, user_langue, langue WHERE user_langue.maitrise = 2 AND user.ID=user_langue.id_user AND user.ID='.$idUser.'');
         $req_id->execute();
-        $idLangueMaitrisee = $req_id->fetch(PDO::FETCH_ASSOC);
 
-        $result = array($idLangueMaitrisee['id_langue']);
+        $i = 0;
+        while($idLangueMaitrisee = $req_id->fetch(PDO::FETCH_ASSOC)){
+           $result[$i] .= $idLangueMaitrisee["id_langue"];
+           $i++;
+        }
 
         return $result;
     }
@@ -219,9 +222,11 @@ class UserModel {
 
             $req_id = $bdd->prepare('SELECT DISTINCT id_langue FROM user, user_langue, langue WHERE user_langue.maitrise =1 AND user_langue.id_langue='.$idUser.'');
             $req_id->execute();
-            $idLangueAApprendre = $req_id->fetch(PDO::FETCH_ASSOC);
-
-            $result = array($idLangueAApprendre['id_langue']);
+            $i =0;
+            while($idLangueAApprendre = $req_id->fetch(PDO::FETCH_ASSOC)){
+               $result[$i] .= $idLangueAApprendre["id_langue"];
+               $i++;
+            }
         }
         else $result = array(0);
 
