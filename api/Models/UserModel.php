@@ -75,8 +75,6 @@ class UserModel
         return $result;
     }
     
-<<<<<<< HEAD
-=======
     /* Création du profil (première connexion) */
     public static function setUserProfil($nom, $prenom, $pseudo, $email, $password, $date_inscription, $last_connection, $description, $pays, $id_etat_activ) {
         $bdd = Database::connexionBDD();
@@ -247,8 +245,7 @@ class UserModel
 
         return $result;  
     }
-    
->>>>>>> f7b6ad7819df1cbe9f19e1f1fd704448d8689e3d
+
 }
 
 ?>
