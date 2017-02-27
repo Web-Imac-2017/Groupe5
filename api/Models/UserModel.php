@@ -74,6 +74,254 @@ class UserModel
 
         return $result;
     }
+
+    /*Mettre à jour le nom de l'utilisateur*/
+    public static function updateUserLastname($pseudo, $userLastname){
+        $bdd = Database::connexionBDD();
+        
+        $req_active = $bdd->prepare('UPDATE user SET nom = '.$userLastname.' WHERE pseudo = "'.$pseudo.'"');
+        $req_active->execute();
+    }
+
+    /*Mettre à jour le prénom de l'utilisateur*/
+    public static function updateUserName($pseudo, $userName){
+        $bdd = Database::connexionBDD();
+        
+        $req_active = $bdd->prepare('UPDATE user SET prenom = '.$userName.' WHERE pseudo = "'.$pseudo.'"');
+        $req_active->execute();
+    }
+
+    /*Mettre à jour le mot de passe de l'utilisateur*/
+    public static function updateUserPassword($pseudo, $userPassword){
+        $bdd = Database::connexionBDD();
+        
+        $req_active = $bdd->prepare('UPDATE user SET password = '.MD5($userPassword).' WHERE pseudo = "'.$pseudo.'"');
+        $req_active->execute();
+    }
+
+    /*Mettre à jour le mail de l'utilisateur*/
+    public static function updateUserMail($pseudo, $userMail){
+        $bdd = Database::connexionBDD();
+        
+        $req_active = $bdd->prepare('UPDATE user SET email = '.$userMail.' WHERE pseudo = "'.$pseudo.'"');
+        $req_active->execute();
+    }
+
+    /*Mettre à jour la description de l'utilisateur*/
+    public static function updateUserDescription($pseudo, $userDescription){
+        $bdd = Database::connexionBDD();
+        
+        $req_active = $bdd->prepare('UPDATE user SET description = '.$userDescription.' WHERE pseudo = "'.$pseudo.'"');
+        $req_active->execute();
+    }
+
+    /*Ajouter un hobby à l'utilisateur*/
+    public static function setUserHobbies($pseudo, $nameHobby){
+        $idUser = UserModel::getUserId();
+
+        $req_idHobby = $bdd->prepare('SELECT ID FROM centre_interet WHERE Nom = "'.$nameHobby.'"');
+        $req_idHobby->execute();
+        $id_Hobby = $req_idHobby->fetch(PDO::FETCH_ASSOC);
+
+        $req_active = $bdd->prepare('INSERT INTO user_centre_interet (ID, id_interet, id_user) VALUES ('','.$idHobby['ID'].','.idUser.')');
+        $req_active->execute();
+    }
+
+    /*Supprimer un hobby à l'utilisateur*/
+    public static function deleteUserHobbies($pseudo, $nameHobby){
+        $idUser = UserModel::getUserId();
+
+        $req_idHobby = $bdd->prepare('SELECT ID FROM centre_interet WHERE Nom = "'.$nameHobby.'"');
+        $req_idHobby->execute();
+        $id_Hobby = $req_idHobby->fetch(PDO::FETCH_ASSOC);
+
+        $req_active = $bdd->prepare('DELETE FROM user_centre_interet WHERE id_interet = '.$id_Hobby.' AND id_user = "'.$idUser.'"');
+        $req_active->execute();
+    }
+
+    /*Ajouter une langue à l'utilisateur*/
+    public static function setUserLang($pseudo, $nameLang, $master){
+        $idUser = UserModel::getUserId();
+
+        $req_idLang = $bdd->prepare('SELECT ID FROM langue WHERE Nom = "'.$nameLang.'"');
+        $req_idLang->execute();
+        $id_lang = $req_idLang->fetch(PDO::FETCH_ASSOC);
+
+        $req_active = $bdd->prepare('INSERT INTO user_langue (ID, id_user, id_langue, maitrise) VALUES ('','.idUser.','.$idLang['ID'].','.$master.')');
+        $req_active->execute();
+    }
+
+    /*Enlever une langue à l'utilisateur*/
+    public static function deleteUserLang($pseudo, $nameLang){
+        $idUser = UserModel::getUserId();
+
+        $req_idLang = $bdd->prepare('SELECT ID FROM langue WHERE Nom = "'.$nameLang.'"');
+        $req_idLang->execute();
+        $id_lang = $req_idLang->fetch(PDO::FETCH_ASSOC);
+
+        $req_active = $bdd->prepare('DELETE FROM user_langue WHERE id_langue = '.$id_lang.' AND id_user = "'.$idUser.'"');
+        $req_active->execute();
+    }
+
+    /*Modifier le pays de l'utilisateur*/
+    public static function updateUserPays($pseudo, $namePays){
+        $idUser = UserModel::getUserId();
+
+        $req_idPays = $bdd->prepare('SELECT id_pays FROM table_pays WHERE fr = '.$namePays.'"');
+        $req_idPays->execute();
+        $id_pays = $req_idPays->fetch(PDO::FETCH_ASSOC);
+
+        $req_active = $bdd->prepare('UPDATE user SET id_pays = '.$id_pays['id_pays'].' WHERE pseudo = "'.$pseudo.'"');
+        $req_active->execute();
+    }
+
+    
+    public static function userResearch($searched) { //La variable $searched est ce que l'utilisateur a entré dans le champ de recherche
+        $bdd = Database::connexionBDD();
+        // On cherche tous les pseudos contenant la suite de caractères entrée
+        $searchResults = $bdd->prepare('SELECT pseudo FROM user WHERE pseudo LIKE "%'.$searched.'%"');
+        $searchResults->execute();
+
+        if($searchResults->fetch()){
+            $result = $searchResults->fetch();
+        }
+        else {
+            $result = array("Error", "Error: We can't find what you searched");
+        }
+        
+        return $result;
+    }
+
+
+
+    /*Récupère les langues maitrisées (2) par un utilisateur*/
+    public static function getUserLangueMaitrisee($pseuso) {
+        $bdd = Database::connexionBDD();
+
+        $idUser = getUserId($pseudo);
+
+
+        session_start();
+        if(isset($_SESSION['login'])) {
+            $idUser = getUserId();
+            $req_id = $bdd->prepare('SELECT DISTINCT id_langue FROM user, user_langue, langue WHERE user_langue.maitrise = "2" AND user.ID=user_langue.id_user AND user.ID='.$idUser' ');
+            $req_id->execute();
+            $idLangueMaitrisee = $req_id->fetch(PDO::FETCH_ASSOC);
+
+            $result = array($idLangueMaitrisee['id_langue']);
+        }
+        else $result = array(0);
+
+        return $result;
+    }
+
+    /*Récupère les langues à apprendre (1) par un utilisateur*/
+    public static function getUserLangueAApprendre($pseudo) {
+        $bdd = Database::connexionBDD();
+
+        $idUser = getUserId($pseudo);
+
+        session_start();
+        if(isset($_SESSION['login'])) {
+            $idUser = getUserId();
+            $req_id = $bdd->prepare('SELECT DISTINCT id_langue FROM user, user_langue, langue WHERE user_langue.maitrise = "1" AND user_langue.id_langue='.$idUser.'');
+            $req_id->execute();
+            $idLangueAApprendre = $req_id->fetch(PDO::FETCH_ASSOC);
+
+            $result = array($idLangueAApprendre['id_langue']);
+        }
+        else $result = array(0);
+
+        return $result;
+    }
+
+    /*Récupère les possibles "Maitres" pour une langue donnée*/
+    public static function findMaitre($pseudo, $idLangue) {
+        $bdd = Database::connexionBDD();
+
+        $idUser = getUserId($pseudo);
+
+        session_start();
+        if(isset($_SESSION['login'])) {
+            $idUser = getUserId();
+            $req_id = $bdd->prepare('SELECT DISTINCT id_user, pseudo FROM user, user_langue, langue WHERE user_langue.maitrise=2 AND user_langue.id_langue='.$idLangue.' AND user.ID=user_langue.id_user ');
+            $req_id->execute();
+            $idUserMaitre = $req_id->fetch(PDO::FETCH_ASSOC);
+
+            $result = array($idUserMaitre['id_user']);
+        }
+        else $result = array(0);
+
+        return $result;
+    }
+
+    /*Récupère les possibles "Apprentis" pour une langue donnée*/
+    public static function findApprenti($pseudo, $idLangue) {
+        $bdd = Database::connexionBDD();
+
+        $idUser = getUserId($pseudo);
+
+        session_start();
+        if(isset($_SESSION['login'])) {
+            $idUser = getUserId();
+            $req_id = $bdd->prepare('SELECT DISTINCT id_user FROM user, user_langue, langue WHERE user_langue.maitrise=1 AND user_langue.id_langue='.$idLangue.' AND user.ID=user_langue.id_user ');
+            $req_id->execute();
+
+            $idUserApprenti = $req_id->fetch(PDO::FETCH_ASSOC);
+
+            $result = array($idUserApprenti['id_user']);
+        }
+        else $result = array(0);
+
+        return $result;
+    }
+
+    /*Récupère les centres d'interet d'un utilisateur*/
+    public static function getUserCentreInteret($pseuso) {
+        $bdd = Database::connexionBDD();
+
+        $idUser = getUserId($pseudo);
+
+
+        session_start();
+        if(isset($_SESSION['login'])) {
+            $idUser = getUserId();
+            $req_id = $bdd->prepare('SELECT DISTINCT id_interet FROM user, user_centre_interet, centre_interet WHERE user_centre_interet.id_user ='.$idUser.'');
+            $req_id->execute();
+            $idCentreInteret = $req_id->fetch(PDO::FETCH_ASSOC);
+
+            $result = array($idCentreInteret['id_interet']);
+        }
+        else $result = array(0);
+
+        return $result;
+    }
+
+    public static function getUserMatch($pseuso) {
+        $bdd = Database::connexionBDD();
+
+        $idUser = getUserId($pseudo);
+        $idCentreInteret = getUserCentreInteret($idUser);
+
+        if($idCentreInteret != NULL){
+            session_start();
+            if(isset($_SESSION['login'])) {
+                $arret=0;
+                do {
+                    $req_id = $bdd->prepare('SELECT DISTINCT id_user, id_interet FROM user, user_centre_interet, centre_interet WHERE user_centre_interet.id_interet ='.$idCentreInteret['id_interet'][$i].'');
+                    $req_id->execute();
+                    $idUserCentreInteret = $req_id->fetch(PDO::FETCH_ASSOC);
+
+                    $result = array($idUserCentreInteret['id_interet'], $idUserCentreInteret['id_interet']);
+                    $arret++;
+                }while(($idCentreInteret['id_interet'] != NULL) || ($arret < 10));
+            }
+            else $result = array(0);
+        }
+
+        return $result;
+    }
+
     
     /* Création du profil (première connexion) */
     public static function setUserProfil($nom, $prenom, $pseudo, $email, $password, $date_inscription, $last_connection, $description, $pays, $id_etat_activ) {
@@ -265,7 +513,5 @@ class UserModel
 
         return $result;  
     }
-    
-}
 
-?>
+    
