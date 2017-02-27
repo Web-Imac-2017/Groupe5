@@ -107,6 +107,38 @@ class UserModel {
         $req_active->execute();
     }
 
+    /*Mettre à jour l'avatar de l'utilisateur*/
+    public static function updateUserAvatar($pseudo, $userAvatar){
+        $bdd = Database::connexionBDD();
+        
+        $req_active = $bdd->prepare('UPDATE user SET avatar = '.$userAvatar.' WHERE pseudo = "'.$pseudo.'"');
+        $req_active->execute();
+    }
+
+    /*Mettre à jour la ville de l'utilisateur*/
+    public static function updateUserCity($pseudo, $userCity){
+        $bdd = Database::connexionBDD();
+        
+        $req_active = $bdd->prepare('UPDATE user SET ville = '.$userCity.' WHERE pseudo = "'.$pseudo.'"');
+        $req_active->execute();
+    }
+
+    /*Mettre à jour la ville de l'utilisateur*/
+    public static function updateUserColor($pseudo, $userColor){
+        $bdd = Database::connexionBDD();
+        
+        $req_active = $bdd->prepare('UPDATE user SET couleur = '.$userColor.' WHERE pseudo = "'.$pseudo.'"');
+        $req_active->execute();
+    }
+
+    /*Mettre à jour l'avatar de l'utilisateur*/
+    public static function updateUserAge($pseudo, $userAge){
+        $bdd = Database::connexionBDD();
+        
+        $req_active = $bdd->prepare('UPDATE user SET age = '.$userAge.' WHERE pseudo = "'.$pseudo.'"');
+        $req_active->execute();
+    }
+
     /*Mettre à jour la description de l'utilisateur*/
     public static function updateUserDescription($pseudo, $userDescription){
         $bdd = Database::connexionBDD();
@@ -117,6 +149,7 @@ class UserModel {
 
     /*Ajouter un hobby à l'utilisateur*/
     public static function setUserHobbies($pseudo, $nameHobby){
+        $bdd = Database::connexionBDD();
         $idUser = UserModel::getUserId();
 
         $req_idHobby = $bdd->prepare('SELECT ID FROM centre_interet WHERE Nom = "'.$nameHobby.'"');
@@ -129,6 +162,7 @@ class UserModel {
 
     /*Supprimer un hobby à l'utilisateur*/
     public static function deleteUserHobbies($pseudo, $nameHobby){
+        $bdd = Database::connexionBDD();
         $idUser = UserModel::getUserId();
 
         $req_idHobby = $bdd->prepare('SELECT ID FROM centre_interet WHERE Nom = "'.$nameHobby.'"');
@@ -141,6 +175,7 @@ class UserModel {
 
     /*Ajouter une langue à l'utilisateur*/
     public static function setUserLang($pseudo, $nameLang, $master){
+        $bdd = Database::connexionBDD();
         $idUser = UserModel::getUserId();
 
         $req_idLang = $bdd->prepare('SELECT ID FROM langue WHERE Nom = "'.$nameLang.'"');
@@ -153,6 +188,7 @@ class UserModel {
 
     /*Enlever une langue à l'utilisateur*/
     public static function deleteUserLang($pseudo, $nameLang){
+        $bdd = Database::connexionBDD();
         $idUser = UserModel::getUserId();
 
         $req_idLang = $bdd->prepare('SELECT ID FROM langue WHERE Nom = "'.$nameLang.'"');
@@ -165,6 +201,7 @@ class UserModel {
 
     /*Modifier le pays de l'utilisateur*/
     public static function updateUserPays($pseudo, $namePays){
+        $bdd = Database::connexionBDD();
         $idUser = UserModel::getUserId();
 
         $req_idPays = $bdd->prepare('SELECT id_pays FROM table_pays WHERE fr = '.$namePays.'"');
@@ -317,11 +354,11 @@ class UserModel {
 
     
     /* Création du profil (première connexion) */
-    public static function setUserProfil($nom, $prenom, $pseudo, $email, $password, $date_inscription, $last_connection, $description, $pays, $id_etat_activ) {
+    public static function setUserProfil($nom, $prenom, $pseudo, $email, $password, $avatar, $age, $sexe, $ville, $couleur, $date_inscription, $last_connection, $description, $pays, $id_etat_activ) {
         $bdd = Database::connexionBDD();
         
         /* Recherche si le pseudo existe :*/
-        $req_pseudo = $bdd->prepare('SELECT ID FROM user WHERE pseudo = '.$pseudo);
+        $req_pseudo = $bdd->prepare('SELECT ID FROM user WHERE pseudo = "'.$pseudo.'"');
         $req_pseudo->execute();
         
         if($donnees = $req_pseudo->fetch(PDO::FETCH_ASSOC)){
@@ -330,17 +367,17 @@ class UserModel {
         
         else{
             /* Recherche si le mail deja used :*/
-            $req_mail = $bdd->prepare('SELECT email FROM user WHERE pseudo = '.$pseudo);
+            $req_mail = $bdd->prepare('SELECT email FROM user WHERE pseudo = "'.$pseudo.'"');
             $req_mail->execute();
             if($donnees = $req_mail->fetch(PDO::FETCH_ASSOC)){
                 $result = array("Error", "Error: mail already taken.");
             }
             else{
-                $req_idPays = $bdd->prepare('SELECT id_pays FROM table_pays WHERE fr = '.$pays);
+                $req_idPays = $bdd->prepare('SELECT id_pays FROM table_pays WHERE fr = "'.$pays.'"');
                 $req_idPays->execute();
                 $id_pays = $req_idPays->fetch(PDO::FETCH_ASSOC);
 
-                $req_active = $bdd->prepare('INSERT INTO user (ID, nom, prenom, pseudo, email, password, date_inscription, derniere_connexion, description, id_pays, id_etat_activite) VALUES (NULL, '.$nom.', '.$prenom.', '.$pseudo.', '.$email.', '.$password.', '.$date_inscription.', '.$last_connection.', '.$description.', '.$id_pays['id_pays'].', '.$id_etat_activ.')');
+                $req_active = $bdd->prepare('INSERT INTO user (ID, nom, prenom, pseudo, email, password, avatar, age, sexe, ville, couleur,  date_inscription, derniere_connexion, description, id_pays, id_etat_activite) VALUES (NULL, '.$nom.', '.$prenom.', '.$pseudo.', '.$email.', '.$password.', '.$avatar.', '.$age.', '.$sexe.', '.$ville.', '.$couleur.', '.$date_inscription.', '.$last_connection.', '.$description.', '.$id_pays['id_pays'].', '.$id_etat_activ.')');
                 $req_active->execute(); 
                 $result = array(0);
             }
@@ -354,7 +391,6 @@ class UserModel {
         $req_active = $bdd->prepare('SELECT ID FROM user WHERE pseudo = "'.$pseudo.'"');
         $req_active->execute();
        
-        
         if( $id_user = $req_active->fetch(PDO::FETCH_ASSOC)){  
         $result = $id_user['ID'];
         }
@@ -406,6 +442,81 @@ class UserModel {
         else $result = array(0);
         
         return $result;      
+    }
+
+    public static function getUserAvatar($pseudo) {
+        $bdd = Database::connexionBDD();
+        $id = getUserId($pseudo);
+        
+        if($id !== 0){
+            $req_active = $bdd->prepare('SELECT avatar FROM user WHERE ID ='.$id);
+            $req_active->execute();
+            $user_avatar = $req_active->fetch(PDO::FETCH_ASSOC);
+            $result = array($user_avatar['avatar']);
+        }
+        else $result = array(0);
+        
+        return $result;  
+    }
+
+    public static function getUserAge($pseudo) {
+        $bdd = Database::connexionBDD();
+        $id = getUserId($pseudo);
+        
+        if($id !== 0){
+            $req_active = $bdd->prepare('SELECT age FROM user WHERE ID ='.$id);
+            $req_active->execute();
+            $user_age = $req_active->fetch(PDO::FETCH_ASSOC);
+            $result = array($user_age['age']);
+        }
+        else $result = array(0);
+        
+        return $result;  
+    }
+
+    public static function getUserSex($pseudo) {
+        $bdd = Database::connexionBDD();
+        $id = getUserId($pseudo);
+        
+        if($id !== 0){
+            $req_active = $bdd->prepare('SELECT sexe FROM user WHERE ID ='.$id);
+            $req_active->execute();
+            $user_sex = $req_active->fetch(PDO::FETCH_ASSOC);
+            $result = array($user_sex['sexe']);
+        }
+        else $result = array(0);
+        
+        return $result;  
+    }
+
+    public static function getUserColor($pseudo) {
+        $bdd = Database::connexionBDD();
+        $id = getUserId($pseudo);
+        
+        if($id !== 0){
+            $req_active = $bdd->prepare('SELECT couleur FROM user WHERE ID ='.$id);
+            $req_active->execute();
+            $user_color = $req_active->fetch(PDO::FETCH_ASSOC);
+            $result = array($user_color['couleur']);
+        }
+        else $result = array(0);
+        
+        return $result;  
+    }
+
+    public static function getUserCity($pseudo) {
+        $bdd = Database::connexionBDD();
+        $id = getUserId($pseudo);
+        
+        if($id !== 0){
+            $req_active = $bdd->prepare('SELECT ville FROM user WHERE ID ='.$id);
+            $req_active->execute();
+            $user_city = $req_active->fetch(PDO::FETCH_ASSOC);
+            $result = array($user_city['ville']);
+        }
+        else $result = array(0);
+        
+        return $result;  
     }
     
     public static function getHobbies($id_hobbies) {
