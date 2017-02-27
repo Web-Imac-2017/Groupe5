@@ -380,4 +380,5 @@ class UserModel
     }
 }
 
+/* test pour recommit et remerger */
 ?>
