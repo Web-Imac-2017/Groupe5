@@ -9,30 +9,24 @@ header('Content-Type: application/json;charset=utf-8');
 include "../../Models/ConversationModel.php";
 
 $message = "";
-$pseudo = "";
+$pseudo = $_SESSION['pseudo'];
+$id_conv = $_SESSION['conv'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST')
 {	
     $json = json_decode(file_get_contents('php://input'), true);
     if(!is_array($json)) $data = array("Error", "Error: POST.");
 
-    if(isset($json['pseudo']) && $json['pseudo'] != '') {
-    $pseudo = $json['pseudo'];
+    if(isset($json['message']) && $json['message'] != ''){
+        $pseudo = $json['message'];
+        ConversationModel::addMessage($message, $pseudo, $id_conv);
+        $data = array(0);
   }
-  else $data = array("Error", "Error: Pseudo empty.");
-
-  if(isset($json['message']) && $json['message'] != '') {
-    $message = $json['password'];
-  }
-  else $data = array("Error", "Error: Password empty.");
-
-  $data = UserModel::login($pseudo, $password);
+  else $data = array("Error", "Error: Message empty.");
 }
 else $data = array("Error", "Error: POST.");
 
 
 echo json_encode($data);
-/*$array = array("fabricetea", "kingofimac");
-ConversationModel::createConv($array);*/
 
 ?>

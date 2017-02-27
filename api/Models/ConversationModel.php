@@ -5,9 +5,11 @@ require_once('../../Models/UserModel.php');
 
 class ConversationModel{
     
-    public static function addMessage($contenu, $id_user, $id_conv){
+    public static function addMessage($contenu, $pseudo, $id_conv){
         $bdd = Database::connexionBDD();
-
+        
+        $id_user = UserModel::getUserId($pseudo);
+        
         $req_active = $bdd->prepare("INSERT INTO message (`contenu`, `date`, `id_user`, `id_conversation`) VALUES (:contenu, now(), :user, :conv);");
         $req_active->execute(array(':contenu' => $contenu, ':user' => $id_user, ':conv' => $id_conv));
     }
@@ -33,6 +35,20 @@ class ConversationModel{
 
         $req_active = $bdd->prepare("SELECT `contenu`, `id_user` FROM `message` WHERE `id_conversation` = :conv && `ID` > :last_message ORDER BY `date`DESC;");
         $req_active->execute(array(':conv' => $id_conv, ":last_message" => $id_last_message));
+        
+        $result = $req_active->fetchAll();
+        
+        /*var_dump($result);*/
+        
+        return $result;
+    }
+    
+    public static function getLastMessageOfConv($id_conv){
+        $bdd = Database::connexionBDD();
+        $result = [];
+
+        $req_active = $bdd->prepare("SELECT `contenu` FROM `message` WHERE `id_conversation` = :conv ORDER BY `date` DESC LIMIT 1;");
+        $req_active->execute(array(':conv' => $id_conv));
         
         $result = $req_active->fetchAll();
         
@@ -112,11 +128,11 @@ class ConversationModel{
         $id_user = UserModel::getUserId($pseudo);
         
         $bdd = Database::connexionBDD();
-        $req_active = $bdd->prepare("SELECT `ID`, `conversation_name`
+        $req_active = $bdd->prepare("SELECT `ID`
         FROM conversation
         INNER JOIN user_conversation
-        WHERE conversation.`ID` = user_conversation.`id_conversation` && user_conversation.`id_user` = :id;");
-        $req_active->execute(array(':id' => $id_user));
+        WHERE conversation.`ID` = user_conversation.`id_conversation` && user_conversation.`id_user` = :user ;");
+        $req_active->execute(array(':user' => $id_user[0]));
         
         return $req_active->fetchAll();
     }
