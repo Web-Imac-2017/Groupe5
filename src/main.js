@@ -11,6 +11,8 @@ import Register from './components/Register.vue'
 import Profil from './components/ProfilCPN.vue'
 import SearchBar from './components/SearchBarCPN.vue'
 
+import Messages from './components/Messages.vue'
+
 // install router
 Vue.use(Router)
 
@@ -23,7 +25,7 @@ var router = new Router({
 	routes: [
 		{
 			name: 'home',
-			path: '/home/',
+			path: '/home',
 			component: Home
 		},
 		{
@@ -45,6 +47,10 @@ var router = new Router({
 			name: 'searchBar',
 			path: '/searchBar',
 			component: SearchBar
+		},
+			name: 'messages',
+			path: '/messages/:conversationID',
+			component: Messages
 		},
 		{
 			path: '*',
