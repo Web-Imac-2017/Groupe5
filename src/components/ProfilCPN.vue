@@ -37,59 +37,25 @@ export default {
   data() {
     return {
       "user" : {
-        "pseudo": "maureeniz",
-        "avatar": "maureeniz.jpg",
-        "name": "maureen roche",
-        "age": "21",
-        "country": "France",
-        "city": "bordeaux",
-        "description": "Hi :D. If you're looking for a funny french girl to talk to, here I stand !",
-        "hobbies" : ["travel", "music", "cinema", "science","arts"],
+        "pseudo": $parent.user.pseudo,
+        "avatar": $parent.user.avatar,
+        "lastname": $parent.user.lastname,
+        "firstname": $parent.user.firstname,
+        "age": $parent.user.age,
+        "country": $parent.user.country,
+        "city": $parent.user.city,
+        "description": $parent.user.description,
+        "color": $parent.user.color,
+        "hobbies" : $parent.user.hobbies,
         "languages" : {
-          "spokenLang" : [countryToFlag("french"), countryToFlag("english")],
-          "learningLang" : [countryToFlag("spanish"), countryToFlag("chinese"), countryToFlag("german")]
+          "spokenLang" : $parent.user.languages.spokenLang,
+          "learningLang" : $parent.user.languages.learningLang
         }
       }
     }
   }
-
-  // var _this = this;
-  // fetch(apiRoot() + 'Controllers/User/getUser.php', {
-  //   method: 'POST',
-  //   headers: {
-  //     'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
-  //     'Content-Type': 'application/json; charset=utf-8'
-  //   },
-  //   dataType: 'JSON',
-  //   body: JSON.stringify(pseudoUserToGet: //pseudo récupéré de la page précedente)
-  // }).then(function(response) {
-  //   return response.json();
-  // }).then(function(data){
-  //   // TRAITEMENT DES DONNEES
-  //   _this.user.pseudo = data['pseudo'];
-  //   _this.user.name = data['name'];
-  //   _this.user.age = data['age'];
-  //   _this.user.country = data['country'];
-  //   _this.user.city = data['city'];
-  //   _this.user.description = data['description'];
-  //   _this.user.hobbies = data['hobbies']; //Return tab with hobbies
-  //   _this.user.languages.spokenLang = data['spokenLang']; //Return tab with mastered languages
-  //   _this.user.languages.learningLang = data['learningLang']; //Return tab with learning languages
-  // });
 }
 
-function countryToFlag(country) {
-  var flag = {
-    portuguese : '/static/flags/portugal.png',
-    english : '/static/flags/united-kingdom.png',
-    chinese : '/static/flags/china.png',
-    french : '/static/flags/france.png',
-    japanese : '/static/flags/japan.png',
-    german : '/static/flags/germany.png',
-    spanish : '/static/flags/spain.png'
-  }
-  return flag[country];
-}
 </script>
 
 <style lang="scss">
@@ -99,7 +65,7 @@ $profil_color: #C3272F;
   width: 25%;
   position: absolute;
   top: 0;
-  right: 0;
+  right: -100%;
   min-height: 100%;
   box-shadow: 0px 0 40px 0px #706f6f;
 
