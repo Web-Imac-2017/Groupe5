@@ -2,7 +2,7 @@
   <div id="home">
   	<div class="bg" v-bind:style="{ backgroundImage: 'url(/static/imgCss/Home_BG.jpg)' }"> 
   	</div>
-    <h1>Plume</h1>
+  	<img v-bind:src="'/static/img/logo.png'" class="homeLogo">
     <router-link v-if="$parent.connected === ''" v-bind:to="'/login/'" class="test" id="sign">
     	<span>Sign up</span>
     	<span> | </span>
@@ -17,6 +17,15 @@
 
 <style lang="scss">
 
+.homeLogo
+{
+	width : 200px;
+	position : absolute;
+	left: 50%;
+	top: 35%;
+	transform: translateX(-50%) translateY(-50%);
+}
+
 .bg
 {
 	width : 100%;
@@ -25,22 +34,13 @@
 	background-position : center 100%;
 }
 
-h1
-{
-	color : red;
-	position: absolute;
-	left: 50%;
-	top: 30%;
-	transform: translateX(-50%) translateY(-50%);
-}
-
 .test
 {
 	text-align : center;
 	color : pink;
 	position: absolute;
 	left: 50%;
-	top: 40%;
+	top: 45%;
 	transform: translateX(-50%) translateY(-50%);
 }
 
