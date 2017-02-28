@@ -7,3 +7,4 @@ api/secure/
 logs/
 access.log
 config/localhost/settings.js
+php/

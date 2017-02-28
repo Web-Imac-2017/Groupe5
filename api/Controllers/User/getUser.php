@@ -1,49 +1,34 @@
-<?php
+<?php 
+	header('Access-Control-Allow-Origin:*');
+	header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
+	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
+	header('Content-Type: application/json;charset=utf-8');
 
-header('Access-Control-Allow-Origin:*');
-header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
-header('Content-Type: application/json;charset=utf-8');
+	include "../../Models/UserModel.php";
 
-$json = json_decode(file_get_contents('php://input'), true);
-$pseudo = $json['pseudoUserToGet'];
+$data = array();
 
-if($pseudo == "maureeniz") {
-  echo '
-  {
-    "pseudo": "maureeniz",
-    "avatar": "maureeniz.jpg",
-    "name": "maureen roche",
-    "age": "21",
-    "country": "France",
-    "city": "bordeaux",
-    "description": "Hi :D. If you\'re looking for a funny french girl to talk to, here I stand !",
-    "hobbies" : ["travel", "music", "cinema", "science","arts"],
-    "languages" : {
-      "spokenLang" : ["french", "english"],
-      "learningLang" : ["spanish", "chinese", "german"]
+	$pseudo = "";
+	
+	if(isset($_SESSION['login'])) {
+        $pseudo = $_SESSION['login'];
     }
-  }
-  ';
-}
-else {
-  echo '
-  {
-    "pseudo": "CoralieBurton",
-    "avatar": "maureeniz.jpg",
-    "name": "Coralie Goldbaum",
-    "age": "21",
-    "country": "France",
-    "city": "Paris",
-    "description": "I loooove dogs and Tim Burton!",
-    "hobbies" : ["music", "cinema", "science", "arts"],
-    "languages" : {
-      "spokenLang" : ["french", "english"],
-      "learningLang" : ["spanish", "german"]
-    }
-  }
-  ';
-}
 
+    $data["pseudo"] = $pseudo;
+    $data["avatar"] = "";
+    $data["name"] = UserModel::getUserLastName($pseudo);
+    $data["age"] = UserModel::getUserAge($pseudo);
+    $data["sexe"] = UserModel::getUserSex($pseudo);
+    $data["prenom"] = UserModel::getUserName($pseudo);
+    $data["description"] = UserModel::getUserDescription($pseudo);
+    $data["ville"] = UserModel::getUserCity($pseudo);
+    $data["pays"] = UserModel::getUserPays($pseudo);
+    $data["hobbies"] = UserModel::getUserHobbies($pseudo);
+    $data["languages"]["spokenLang"] = UserModel::getUserLangueMaitrisee($pseudo);
+    $data["languages"]["learningLang"] = UserModel::getUserLangueAApprendre($pseudo);
+
+
+
+  echo json_encode($data);
 
 ?>
