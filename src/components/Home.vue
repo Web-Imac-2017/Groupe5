@@ -1,15 +1,17 @@
 <template>
-  <div id="home">
-  	<div class="bg" v-bind:style="{ backgroundImage: 'url(/static/imgCss/Home_BG.jpg)' }"> 
+	<div id="home">
+  		<div class="bg" v-bind:style="{backgroundImage: 'url(./static/img/bg.jpg)' }">
+  			<div id="centerwrapper">
+  				<img v-bind:src="'/static/img/logo.png'" class="homeLogo"><br/>
+	    		<router-link v-if="$parent.connected === ''" v-bind:to="'/login/'" class="test" id="sign">
+	    			<span>SIGN UP</span>
+	    			<p>or</p>
+	    			<span>SIGN IN</span>
+	    		</router-link>
+	    		<a v-if="$parent.connected === 'true'" v-on:click.prevent="$parent.logout">Sign out</a>
+  			</div>
+  		</div>
   	</div>
-  	<img v-bind:src="'/static/img/logo.png'" class="homeLogo">
-    <router-link v-if="$parent.connected === ''" v-bind:to="'/login/'" class="test" id="sign">
-    	<span>Sign up</span>
-    	<span> | </span>
-    	<span>Sign in </span>
-    </router-link>
-    <a v-if="$parent.connected === 'true'" v-on:click.prevent="$parent.logout">Sign out</a>
-  </div>
 </template>
 
 <script>
@@ -17,37 +19,66 @@
 
 <style lang="scss">
 
-.homeLogo
-{
-	width : 200px;
-	position : absolute;
-	left: 50%;
-	top: 35%;
-	transform: translateX(-50%) translateY(-50%);
-}
-
 .bg
 {
-	width : 100%;
-	height : 100vh;
+	width: 100vw;
+	height: 100vh;
 	background-size: cover;
-	background-position : center 100%;
-}
+	background-position: center center;
+	text-align: center;
 
-.test
-{
-	text-align : center;
-	color : pink;
-	position: absolute;
-	left: 50%;
-	top: 45%;
-	transform: translateX(-50%) translateY(-50%);
-}
+	#centerwrapper
+	{
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translateX(-50%) translateY(-50%);
 
-.test:hover
-{
-	color : white;
-	text-decoration: none;
+		.homeLogo
+		{
+			width: 500px;
+			margin-bottom: 30px;
+		}
+
+		.test
+		{
+			color: black;
+		}
+
+		.test:hover
+		{
+			text-decoration: none;
+		}
+
+		p
+		{
+			display: inline-block;
+			font-family: Montserrat;
+		}
+
+		span
+		{
+			display: inline-block;
+			font-size: 2em;
+			font-family: Montserrat;
+			transition: .1s;
+		}
+
+		span:hover
+		{
+			transform: scale(1.1);
+		}
+
+		span:nth-child(1)
+		{
+			margin-right: 50px;
+		}
+
+		span:nth-child(3)
+		{
+			margin-left: 50px;
+		}
+	}
 }
 
 #sign span
