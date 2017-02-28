@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <header-component></header-component>
+    <header-component class="tutulu"></header-component>
     <router-view keep-alive></router-view>
     <footer-component></footer-component>
   </div>
@@ -50,5 +50,9 @@
 </script>
 
 <style lang="scss">
+  .tutulu
+  {
+    text-align : center
+  }
   @import 'assets/scss/design.scss';
 </style>
