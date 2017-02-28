@@ -1,6 +1,6 @@
 <template>
   <div id="home">
-  	<div class="bg"> 
+  	<div class="bg" v-bind:style="{ backgroundImage: 'url(/static/imgCss/Home_BG.jpg)' }"> 
   	</div>
     <h1>Plume</h1>
     <router-link v-if="$parent.connected === ''" v-bind:to="'/login/'" class="test" id="sign">
@@ -19,9 +19,10 @@
 
 .bg
 {
-	background-color : yellow;
 	width : 100%;
 	height : 100vh;
+	background-size: cover;
+	background-position : center 100%;
 }
 
 h1
