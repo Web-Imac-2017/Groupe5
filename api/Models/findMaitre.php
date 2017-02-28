@@ -25,9 +25,6 @@
 	 }
 	 else $data = array("Error", "Error");
 
-  $data = UserModel::findMaitre('Robibidu77');
-
-
   echo json_encode($data);
 
 ?>
