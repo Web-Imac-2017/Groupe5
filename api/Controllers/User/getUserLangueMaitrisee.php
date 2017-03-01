@@ -18,14 +18,16 @@
 		if(isset($_SESSION['login'])) {
             $pseudo = $_SESSION['login'];
 
-            UserModel::getUserLangueMaitrisee('sapristi');
+            UserModel::getUserLangueMaitrisee($pseudo);
+            echo("test");
 
         }
 
 	 }
 	 else $data = array("Error", "Error");
 
-  $data = UserModel::getUserLangueMaitrisee('sapristi');
+  $data = UserModel::getUserLangueMaitrisee('Robibidu77');
+
 
   echo json_encode($data);
 
