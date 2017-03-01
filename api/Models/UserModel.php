@@ -237,16 +237,14 @@ class UserModel {
 
         $idUser = UserModel::getUserId($pseudo);
 
-        $result= array();
-        $i = 0;
+        $result= array('spokenLang' => array());
 
         if($idUser == NULL) return $result = array(0);
         else {
             $req_id = $bdd->prepare('SELECT DISTINCT id_langue FROM user, user_langue, langue WHERE user_langue.maitrise = 2 AND user.ID=user_langue.id_user AND user.ID='.$idUser.'');
             $req_id->execute();
             while($idLangueMaitrisee = $req_id->fetch(PDO::FETCH_ASSOC)){
-                $result[$i] = $idLangueMaitrisee["id_langue"];
-                $i++;
+                $result['spokenLang'][] = $idLangueMaitrisee["id_langue"];
             }
         }
 
@@ -259,20 +257,16 @@ class UserModel {
         
         $idUser = UserModel::getUserId($pseudo);
 
-        $result= array();
-        $i = 0;
+        $result= array('learningLang' => array());
 
         if($idUser == NULL) return $result = array(0);
         else {
             $req_id = $bdd->prepare('SELECT DISTINCT id_langue FROM user, user_langue, langue WHERE user_langue.maitrise = 1 AND user.ID=user_langue.id_user AND user.ID='.$idUser.'');
             $req_id->execute();
             while($idLangueAApprendre = $req_id->fetch(PDO::FETCH_ASSOC)){
-                $result[$i] = $idLangueAApprendre["id_langue"];
-                $i++;
+                $result['learningLang'][] = $idLangueAApprendre["id_langue"];
             }
         }
-
-        var_dump($result);
 
         return $result;
     }
@@ -286,11 +280,9 @@ class UserModel {
         $req_id = $bdd->prepare('SELECT DISTINCT pseudo FROM user, user_langue, langue WHERE user_langue.maitrise=2 AND user_langue.id_langue='.$idLangue.' AND user.ID=user_langue.id_user AND user_langue.id_user !='.$idUser.'');
         $req_id->execute();
 
-        $result= array();
-        $i = 0;       
+        $result= array('maitres' => array());
         while($maitres = $req_id->fetch(PDO::FETCH_ASSOC)){
-            $result[$i] = $maitres['pseudo'];
-            $i++;
+            $result['maitres'][] = $maitres['pseudo'];
         }
         return $result;
     }
@@ -303,11 +295,9 @@ class UserModel {
         $req_id = $bdd->prepare('SELECT DISTINCT pseudo FROM user, user_langue, langue WHERE user_langue.maitrise=1 AND user_langue.id_langue='.$idLangue.' AND user.ID=user_langue.id_user AND user_langue.id_user !='.$idUser.'');
         $req_id->execute();
 
-        $result= array();
-        $i = 0;       
+        $result= array('apprentis' => array());       
         while($apprentis = $req_id->fetch(PDO::FETCH_ASSOC)){
-            $result[$i] = $apprentis['pseudo'];
-            $i++;
+            $result['apprentis'][] = $apprentis['pseudo'];
         }
 
         return $result;
@@ -321,11 +311,9 @@ class UserModel {
         $req_id = $bdd->prepare('SELECT DISTINCT id_interet FROM user, user_centre_interet, centre_interet WHERE user_centre_interet.id_user ='.$idUser.'');
         $req_id->execute();
 
-        $result= array();
-        $i = 0;
+        $result= array('hobbies' => array());
         while($idUserCentreInteret = $req_id->fetch(PDO::FETCH_ASSOC)){
-            $result[$i] = $idUserCentreInteret["id_interet"];
-            $i++;
+            $result['hobbies'][] = $idUserCentreInteret["id_interet"];
         }
 
         return $result;
@@ -344,7 +332,7 @@ class UserModel {
         $idCentreInteret = UserModel::getUserCentreInteret($pseudo);
 
         $result= array();
-        $i = 0;
+        $i =0;
 
         // var_dump($idLanguesAApprendre);
         // var_dump($idLanguesMaitrisees);
@@ -352,20 +340,22 @@ class UserModel {
         // var_dump($idUserApprentis);        
         var_dump($idCentreInteret);
 
-        if($idCentreInteret != NULL){
+        if(isset($idCentreInteret)){
             $arret=0;
+            echo('test');
             do {
-                $req_id = $bdd->prepare('SELECT DISTINCT id_user, id_interet FROM user, user_centre_interet, centre_interet, user_langue WHERE user_centre_interet.id_interet ='.$idCentreInteret[$i].' AND user_centre_interet.id_user != '.$idUser);
+                $req_id = $bdd->prepare('SELECT DISTINCT id_user, id_interet FROM user, user_centre_interet, centre_interet WHERE user_centre_interet.id_interet ='.$idCentreInteret['hobbies'][$i].' AND user_centre_interet.id_user != '.$idUser);
                 $req_id->execute();
 
                 while($idUserCentreInteret = $req_id->fetch(PDO::FETCH_ASSOC)){
-                    $result[] = array('id_user'=>$idUserCentreInteret['id_user'], 'id_centre_interet'=>$idUserCentreInteret['id_interet']);
+                    $result[''] = array($idUserCentreInteret['id_user'], $idUserCentreInteret['id_interet']);
                     $arret++;
+                    echo 'test';
                 }
-                $i++;
-            }while(($idCentreInteret[$i] != NULL) && ($arret < 10));
-            }
-            else $result = array(0);
+                ++$i;
+            }while(($i < count($idCentreInteret['hobbies'])) && ($arret < 10));
+        }
+        else $result = array(0);
 
         return $result;
     }

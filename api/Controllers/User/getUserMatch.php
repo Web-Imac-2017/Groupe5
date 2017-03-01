@@ -19,11 +19,15 @@
 		if(isset($_SESSION['login'])) {
             $pseudo = $_SESSION['login'];
 
-            $data = UserModel::getUserLangueAApprendre($pseudo);
+            $data = UserModel::getUserMatch($pseudo);
         }
 
 	 }
 	 else $data = array("Error", "Error");
+
+	 $data = UserModel::getUserMatch("Robibidu77");
+	 var_dump($data);
+
 
   echo json_encode($data, JSON_PRETTY_PRINT);
 
