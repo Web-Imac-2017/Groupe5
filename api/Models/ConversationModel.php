@@ -19,12 +19,12 @@ class ConversationModel{
         $bdd = Database::connexionBDD();
         $result = [];
 
-        $req_active = $bdd->prepare("SELECT `contenu`, `id_user` FROM `message` WHERE `id_conversation` = :conv ORDER BY `date`DESC;");
+        $req_active = $bdd->prepare("SELECT `id_user`, `date`, `ID`, `contenu` FROM `message` WHERE `id_conversation` = :conv ORDER BY `date`DESC;");
         $req_active->execute(array(':conv' => $id_conv));
         
         $result = $req_active->fetchAll();
         
-        /*var_dump($result);*/
+        var_dump($result);
         
         return $result;
     }
@@ -142,19 +142,24 @@ class ConversationModel{
             /*last message*/
             $result[$i]['lastMessage'] = ConversationModel::getLastMessageOfConv($result[$i]['ID']);
             
-            /*pseudo of other users of conv*/
-            $req_active = $bdd->prepare("SELECT `pseudo`
-            FROM user
-            INNER JOIN user_conversation
-            WHERE user.`ID` = user_conversation.`id_user` && user_conversation.`id_user` != :user && user_conversation.`id_conversation` = :id_conv;");
-            $req_active->execute(array(':user' => $id_user[0], ':id_conv' => $result[$i]['ID']));
-            
-            $result[$i]['users'] = $req_active->fetchAll();
+            $result[$i]['users'] = ConversationModel::getOtherUsers($id_user[0], $result[$i]['ID']);
             
             /*var_dump($result[$i]);*/
         }
         
         return $result;
+    }
+    
+    public static function getOtherUsers($id_user, $id_conv){
+        $bdd = Database::connexionBDD();
+        
+        $req_active = $bdd->prepare("SELECT `pseudo`
+        FROM user
+        INNER JOIN user_conversation
+        WHERE user.`ID` = user_conversation.`id_user` && user_conversation.`id_user` != :user && user_conversation.`id_conversation` = :id_conv ;");
+        $req_active->execute(array(':user' => $id_user, ':id_conv' => $id_conv));
+        
+        return $req_active->fetchAll();
     }
 }
 
