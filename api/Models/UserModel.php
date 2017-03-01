@@ -330,6 +330,7 @@ class UserModel {
         // $idUserMaitres = UserModel::findMaitre($pseudo);
         // $idUserApprentis = UserModel::findApprenti($pseudo);
         $idCentreInteret = UserModel::getUserCentreInteret($pseudo);
+        $imax = count($idCentreInteret['hobbies']);
 
         $result= array();
         $i =0;
@@ -348,12 +349,12 @@ class UserModel {
                 $req_id->execute();
 
                 while($idUserCentreInteret = $req_id->fetch(PDO::FETCH_ASSOC)){
-                    $result[''] = array($idUserCentreInteret['id_user'], $idUserCentreInteret['id_interet']);
+                    $result['user_same_interet'][] = array("id_user" => $idUserCentreInteret['id_user'], "id_interet" => $idUserCentreInteret['id_interet']);
                     $arret++;
                     echo 'test';
                 }
                 ++$i;
-            }while(($i < count($idCentreInteret['hobbies'])) && ($arret < 10));
+            }while(($i < $imax) && ($arret < 10));
         }
         else $result = array(0);
 
