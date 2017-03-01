@@ -204,7 +204,7 @@ class UserModel {
         $bdd = Database::connexionBDD();
         $idUser = UserModel::getUserId();
 
-        $req_idPays = $bdd->prepare('SELECT id_pays FROM table_pays WHERE fr = '.$namePays.'"');
+        $req_idPays = $bdd->prepare('SELECT id_pays FROM table_pays WHERE fr = "'.$namePays.'"');
         $req_idPays->execute();
         $id_pays = $req_idPays->fetch(PDO::FETCH_ASSOC);
 
@@ -212,10 +212,10 @@ class UserModel {
         $req_active->execute();
     }
 
-    
-    public static function userResearch($searched) { //La variable $searched est ce que l'utilisateur a entré dans le champ de recherche
+    /*Recherche par pseudo*/
+    public static function userResearch($searched) { /*La variable $searched est ce que l'utilisateur a entré dans le champ de recherche*/
         $bdd = Database::connexionBDD();
-        // On cherche tous les pseudos contenant la suite de caractères entrée
+        /* On cherche tous les pseudos contenant la suite de caractères entrée */
         $searchResults = $bdd->prepare('SELECT pseudo FROM user WHERE pseudo LIKE "%'.$searched.'%"');
         $searchResults->execute();
 
@@ -229,6 +229,23 @@ class UserModel {
         return $result;
     }
 
+    /* Recherche/filtre pour match */
+    public static function filterResearch($filterData){ /* tableau json contenant les filtres choisis par le user */
+    	/* Tableau de la forme [ageMin,ageMax,sexe]
+        La fonction filtrant les hobbies et langues est faite par Adrien */
+    	$bdd = Database::connexionBDD();
+    	$filterResults = $bdd->prepare('SELECT pseudo FROM user WHERE age >="'.$filterData['ageMin'].'"AND age <="'.$filterData['ageMax'].'"AND sexe ="'.$filterData['sexe'].'"');
+    	$filterResults->execute();
+
+    	if(searchResults->fetch()){
+    		$result = $filterResults->fetch();
+    	}
+    	else{
+    		$result = array("Error", "Error: We can't find anybody with this caracteristics ! Please change your filter.");
+    	}
+    	return $result;
+
+    }
 
 
     /*Récupère les langues maitrisées (2) par un utilisateur*/
