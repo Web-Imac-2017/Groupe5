@@ -10,6 +10,7 @@ import Login from './components/Login.vue'
 import Register from './components/Register.vue'
 import Profil from './components/ProfilCPN.vue'
 import SearchBar from './components/SearchBarCPN.vue'
+import Header from './components/Header.vue'
 
 import Messages from './components/Messages.vue'
 
@@ -47,6 +48,11 @@ var router = new Router({
 			name: 'searchBar',
 			path: '/searchBar',
 			component: SearchBar
+		},
+		{
+			name : 'header',
+			path: '/header/',
+			component: Header
 		},
 		{
 			name: 'messages',

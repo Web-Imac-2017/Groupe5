@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <header-component></header-component>
+    <!-- <header-component></header-component> -->
     <router-view keep-alive></router-view>
     <profil-component v-if="profilShowed === 'true'"></profil-component>
     <footer-component></footer-component>
