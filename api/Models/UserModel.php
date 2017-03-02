@@ -234,8 +234,6 @@ class UserModel {
     	$filterResults = $bdd->prepare('SELECT pseudo FROM user WHERE age >= "'.$filterData['ageMin'].'" AND age <= "'.$filterData['ageMax'].'" AND sexe ="'.$filterData['sexe'].'"');
     	$filterResults->execute();
         $result=$filterResults->fetchAll();
-        var_dump($result);
-
     	if($result==NULL){
             $result = array("Error", "Error: We can't find anybody with this caracteristics ! Please change your filter.");
         }

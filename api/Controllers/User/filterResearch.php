@@ -7,9 +7,9 @@
 	include "../../Models/UserModel.php";
 
 	$json = json_decode(file_get_contents('php://input'), true);
-	var_dump($json);	
 
-	$data = UserModel::filterResearch($json);
+	$pseudo = UserModel::filterResearch($json);
+	$data = UserModel::getUser($pseudo['0']['pseudo']);
 
   echo json_encode($data);
 
