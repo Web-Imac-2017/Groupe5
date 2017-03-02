@@ -1,4 +1,6 @@
 <?php 
+	session_start();
+
 	header('Access-Control-Allow-Origin:*');
 	header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
 	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
@@ -28,6 +30,8 @@
 	}
 	else $data = array("Error", "Error: POST.");
 
+
+	$_SESSION["login"] = "kingofimac";
   
   echo json_encode($data);
 

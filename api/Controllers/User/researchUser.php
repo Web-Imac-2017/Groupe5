@@ -6,9 +6,11 @@
 
 	include "../../Models/UserModel.php";
 
-	$searched = "";
+	$json = json_decode(file_get_contents('php://input'), true);
+	$searched=$json['searched'];
 
-	$data = UserModel::userResearch($searched);
+	$pseudo = UserModel::userResearch($searched);
+	$data = UserModel::getUser($pseudo['0']['pseudo']);
 
   echo json_encode($data);
 
