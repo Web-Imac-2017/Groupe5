@@ -37,7 +37,7 @@ export default {
   methods: {
     searchUsers: function () {
       var _this = this;
-      fetch(apiRoot() + 'Controllers/User/searchUser.php', {
+      fetch(apiRoot() + 'Controllers/User/researchUser.php', {
         method: 'POST',
         headers: {
           'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
