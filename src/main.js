@@ -11,6 +11,7 @@ import Register from './components/Register.vue'
 import Profil from './components/ProfilCPN.vue'
 import SearchBar from './components/SearchBarCPN.vue'
 import Header from './components/Header.vue'
+import MyProfile from './components/MyProfile.vue'
 
 import Messages from './components/Messages.vue'
 
@@ -63,6 +64,11 @@ var router = new Router({
 			name: 'messages',
 			path: '/messages/:conversationID',
 			component: Messages
+		},
+		{
+			name: 'myProfile',
+			path: 'myProfile',
+			component: MyProfile
 		},
 		{
 			path: '*',

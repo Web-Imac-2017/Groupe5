@@ -1,4 +1,4 @@
 export function apiRoot(){
-    var projectRoot = "http://localhost/WebS4/Plume/";
+    var projectRoot = "http://localhost/PLUME/";
     return projectRoot + "api/";
 }
