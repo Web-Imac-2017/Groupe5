@@ -14,6 +14,11 @@ import Header from './components/Header.vue'
 
 import Messages from './components/Messages.vue'
 
+//Font Awesome
+import Icon from 'vue-awesome/components/Icon.vue'
+import 'vue-awesome/icons/flag'
+import 'vue-awesome/icons'
+
 // install router
 Vue.use(Router)
 

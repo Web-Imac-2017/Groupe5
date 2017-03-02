@@ -72,7 +72,10 @@ export default {
 </script>
 
 
-<style type="scss">
+<style lang="scss">
+
+$profil_color: #C3272F;
+$profil_color_light: #C3272F;
 
 .conversation ul {
   padding: 0;
@@ -82,7 +85,7 @@ export default {
   outline: none;
   resize: none;
   overflow: auto;
-  background-color: #facbd1;
+  background-color: $profil_color;
   width: 100%;
   border: 2px solid #000;
   border-radius: 10px;
@@ -109,7 +112,7 @@ export default {
 
 .user_me .messageContent {
   color: #ffffff;
-  background-color: #f05665;
+  background-color: $profil_color;
   float: right;
 }
 
