@@ -424,7 +424,7 @@ class UserModel {
     
     public static function getUserName($pseudo) {
         $bdd = Database::connexionBDD();
-        $id = UserModel::getUserId($pseudo);
+        $id = getUserId($pseudo);
         
         if($id !== 0){
             $req_active = $bdd->prepare('SELECT prenom FROM user WHERE ID ='.$id);
@@ -439,7 +439,7 @@ class UserModel {
     
     public static function getUserLastname($pseudo) {
         $bdd = Database::connexionBDD();
-        $id = UserModel::getUserId($pseudo);
+        $id = getUserId($pseudo);
         
         if($id !== 0){
             $req_active = $bdd->prepare('SELECT nom FROM user WHERE ID ='.$id);
