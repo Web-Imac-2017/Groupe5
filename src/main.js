@@ -11,7 +11,7 @@ import Register from './components/Register.vue'
 import Profil from './components/ProfilCPN.vue'
 import SearchBar from './components/SearchBarCPN.vue'
 import Header from './components/Header.vue'
-import MyProfile from './component/MyProfile.vue'
+import MyProfile from './components/MyProfile.vue'
 
 import Messages from './components/Messages.vue'
 
