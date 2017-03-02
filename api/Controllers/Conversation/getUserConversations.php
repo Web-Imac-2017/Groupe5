@@ -1,21 +1,23 @@
 <?php
 
-session_start();
+	session_start();
 
-header('Access-Control-Allow-Origin:*');
-header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
-header('Content-Type: application/json;charset=utf-8');
+	header('Access-Control-Allow-Origin:*');
+	header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
+	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
+	header('Content-Type: application/json;charset=utf-8');
 
-include "../../Models/ConversationModel.php";
+	include "../../Models/ConversationModel.php";
 
-$pseudo = $_SESSION['pseudo'];
+	//$pseudo = $_SESSION['login'];
 
-$result_conv = [];
+	$pseudo = "kingofimac";
 
-/*all conv*/
-$result_conv = ConversationModel::getConvOfUser($pseudo);
+	$result_conv = [];
 
-echo json_encode($result_conv);
+	/*all conv*/
+	$result_conv["conversations"] = ConversationModel::getConvOfUser($pseudo);
+
+	echo json_encode($result_conv);
 
 ?>

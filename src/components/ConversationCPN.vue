@@ -44,7 +44,7 @@ export default {
       getConversation: function() {
         var _this = this;
         var _conversationID = this.$route.params.conversationID;
-        fetch(apiRoot() + 'Controllers/Conversation/getMessages.php', {
+        fetch(apiRoot() + 'Controllers/Conversation/getAllMessages.php', {
           method: 'POST',
           headers: {
             'Accept': 'application/json, application/xml, text/plain, text/html, *.*',

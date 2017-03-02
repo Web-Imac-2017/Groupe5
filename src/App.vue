@@ -78,7 +78,7 @@ export default {
           'Content-Type': 'application/json; charset=utf-8'
         },
         dataType: 'JSON',
-        body: JSON.stringify({pseudoUserToGet: _this.selectedUser.pseudo})
+        body: JSON.stringify({pseudo: _this.selectedUser.pseudo})
       }).then(function(response) {
         return response.json();
       }).then(function(data){

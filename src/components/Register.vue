@@ -6,19 +6,19 @@
     <form class="col-sm-5" id="formRegistration" method="post" action="" v-on:submit.prevent>
 
         <label class="form-text" for="firstName">First Name* :</label>
-        <input class="form-control" name="firstName" id="firstName" type="text" minlength="2" maxlength="30" required="required" v-model="user.firstname"  />
+        <input class="form-control" name="firstName" id="firstName" type="text" minlength="2" maxlength="50" required="required" v-model="user.firstname"  />
         <p>{{ user.firstname }}</p>
         <span class="tooltip">Lastname must have minimum 2 characters</span>
         <br /><br />
 
         <label class="form-text" for="lastName">Name* :</label>
-        <input class="form-control" name="lastName" id="lastName" type="text" minlength="2" maxlength = "30" required="required" v-model="user.name"  />
+        <input class="form-control" name="lastName" id="lastName" type="text" minlength="2" maxlength="50" required="required" v-model="user.name"  />
         <p>{{ user.name }}</p>
         <span class="tooltip">Lastname must have minimum 2 characters</span>
         <br /><br />
 
         <label class="form-text" for="pseudo">Pseudo* :</label>
-        <input class="form-control" name="pseudo" id="login" type="text" minlength="2" maxlength = "30" required="required" v-model="user.pseudo" />
+        <input class="form-control" name="pseudo" id="login" type="text" minlength="2" maxlength="20" required="required" v-model="user.pseudo" />
         <p>{{ user.pseudo }}</p>
         <br /><br />
 

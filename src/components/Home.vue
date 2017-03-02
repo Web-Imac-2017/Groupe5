@@ -1,5 +1,9 @@
 <template>
 	<div id="home">
+		<a v-on:click.prevent="$parent.changeSelectedUser('kingofimac')">Kingofimac</a>
+
+
+
   		<div class="bg" v-bind:style="{backgroundImage: 'url(./static/img/bg.jpg)' }">
   			<div id="centerwrapper">
   				<img v-bind:src="'/static/img/logo.png'" class="homeLogo"><br/>
