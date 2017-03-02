@@ -218,7 +218,6 @@ class UserModel {
         $searchResults = $bdd->prepare('SELECT pseudo FROM user WHERE pseudo LIKE "%'.$searched.'%"');
         $searchResults->execute();
         $result=$searchResults->fetchAll();
-        var_dump($result);
 
         if($result==NULL){
             $result = array("Error", "Error: We can't find what you searched");
@@ -232,15 +231,12 @@ class UserModel {
     	/* Tableau de la forme [ageMin,ageMax,sexe]
         La fonction filtrant les hobbies et langues est faite par Adrian */
     	$bdd = Database::connexionBDD();
-    	$filterResults = $bdd->prepare('SELECT pseudo FROM user WHERE age BETWEEN "'.$filterData['ageMin'].'" AND "'.$filterData['ageMax'].'"AND sexe ="'.$filterData['sexe'].'"');
+    	$filterResults = $bdd->prepare('SELECT pseudo FROM user WHERE age >= "'.$filterData['ageMin'].'" AND age <= "'.$filterData['ageMax'].'" AND sexe ="'.$filterData['sexe'].'"');
     	$filterResults->execute();
-
-    	if($filterResults->fetch()){
-    		$result = $filterResults->fetch();
-    	}
-    	else{
-    		$result = array("Error", "Error: We can't find anybody with this caracteristics ! Please change your filter.");
-    	}
+        $result=$filterResults->fetchAll();
+    	if($result==NULL){
+            $result = array("Error", "Error: We can't find anybody with this caracteristics ! Please change your filter.");
+        }
     	return $result;
 
     }
@@ -679,6 +675,25 @@ class UserModel {
         else $result = array(0);
 
         return $result;  
+    }
+
+    public static function getUser($pseudo){
+        $data = array();
+        
+        $data["pseudo"] = $pseudo;
+        $data["avatar"] = "";
+        $data["name"] = UserModel::getUserLastName($pseudo);
+        $data["age"] = UserModel::getUserAge($pseudo);
+        $data["sexe"] = UserModel::getUserSex($pseudo);
+        $data["prenom"] = UserModel::getUserName($pseudo);
+        $data["description"] = UserModel::getUserDescription($pseudo);
+        $data["ville"] = UserModel::getUserCity($pseudo);
+        $data["pays"] = UserModel::getUserPays($pseudo);
+        $data["hobbies"] = UserModel::getUserHobbies($pseudo);
+        $data["languages"]["spokenLang"] = UserModel::getUserLangueMaitrisee($pseudo);
+        $data["languages"]["learningLang"] = UserModel::getUserLangueAApprendre($pseudo);
+
+        return $data;
     }
 }
 
