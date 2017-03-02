@@ -21,6 +21,8 @@
     $description = "";
     $pays = "";
     $id_etat_activ = "";
+    $arr_hobbies = array();
+    $arr_langues = array();
 
 	if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	{	
@@ -29,11 +31,8 @@
 
 		if(isset($json['nom']) && $json['nom'] != '' && isset($json['prenom']) && $json['prenom'] != ''
           && isset($json['pseudo']) && $json['pseudo'] != '' && isset($json['email']) && $json['email'] != ''
-          && isset($json['password']) && $json['password'] != '' && isset($json['avatar']) && $json['avatar'] != ''
-           && isset($json['age']) && $json['age'] != '' && isset($json['sexe']) && $json['sexe'] != ''
-           && isset($json['ville']) && $json['ville'] != '' && isset($json['couleur']) && $json['couleur'] != ''
-           && isset($json['date_inscription']) && $json['date_inscription'] != ''
-          && isset($json['description']) && $json['description'] != '' && isset($json['pays']) && $json['pays'] != '') {
+          && isset($json['password']) && $json['password'] != '' && isset($json['age']) && $json['age'] != '' 
+           && isset($json['date_inscription']) && $json['date_inscription'] != ''&& isset($json['pays']) && $json['pays'] != '') {
             
             $nom = $json['nom'];
             $prenom = $json['prenom'];
@@ -50,11 +49,13 @@
             $description = $json['description'];
             $pays = $json['pays'];
             $id_etat_activ = 1;
-
+            $arr_hobbies = $json['hobbies'];
+            $arr_langues = $json['languages'];
+            
 	  }
 	  else $data = array("Error", "Error: One var empty.");
 
-	  $data = UserModel::setUserProfil($nom, $prenom, $pseudo, $email, $password, $avatar, $age, $sexe, $ville, $couleur, $date_inscription, $last_connection, $description, $pays, $id_etat_activ);
+	  $data = UserModel::setUserProfil($nom, $prenom, $pseudo, $email, $password, $avatar, $age, $sexe, $ville, $couleur, $date_inscription, $last_connection, $description, $pays, $id_etat_activ, $arr_hobbies, $arr_langues);
         
 	}
 	else $data = array("Error", "Error: POST.");
