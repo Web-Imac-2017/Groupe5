@@ -40,8 +40,8 @@ export default {
   data() {
     return {
       user : {
-        pseudo: '',
-        name: '',
+        pseudo: 'Hellowizz',
+        name: 'Héloïse',
         age: '',
         country: '',
         city: '',
