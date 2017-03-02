@@ -8,28 +8,22 @@
         <form id="formRegistration" method="post" action="" v-on:submit.prevent>
             
             <!-- FIRST NAME -->
-            <input name="firstName" type="text" minlength="5" maxlength="20" required="required" placeholder="FIRST NAME" v-model="user.firstname"  />
-            <span class="tooltip">This field must have between 5 and 20 characters</span>
+            <input name="firstName" type="text" minlength="2" maxlength="20" required="required" placeholder="FIRST NAME" v-model="user.firstname"  />
+            <span class="tooltip">This field must have between 2 and 20 characters</span>
             
-            <br /><br />
+            <!-- LAST NAME -->
+            <input name="lastName" type="text" minlength="2" maxlength = "20" required="required" placeholder="LAST NAME" v-model="user.name"  />
+            <span class="tooltip">This field must have minimum 2 characters</span>
 
-            <label class="form-text" for="lastName">Name* :</label>
-            <input name="lastName" id="lastName" type="text" minlength="2" maxlength = "30" required="required" v-model="user.name"  />
-            <p>{{ user.name }}</p>
-            <span class="tooltip">Lastname must have minimum 2 characters</span>
+            <!-- PSEUDO -->
+            <input name="pseudo" type="text" minlength="5" maxlength = "20" required="required" placeholder="USERNAME" v-model="user.pseudo" />
+            <span class="tooltip">The username must have minimum 2 characters</span>
 
-            <br /><br />
-
-            <label class="form-text" for="pseudo">Pseudo* :</label>
-            <input name="pseudo" id="login" type="text" minlength="2" maxlength = "30" required="required" v-model="user.pseudo" />
-            <p>{{ user.pseudo }}</p>
-
-            <br /><br />
-
+            <!-- AVATAR -->
             <div id="chargeImg">
                 <div v-if="!image">
-                    <label class="form-text" for="avatar">Select your avatar :</label>
-                    <input class="form-control-file" type="file" @change="">
+                    <input type="file" name="file" id="file" class="inputfile" />
+                    <label for="file">Choose a file</label>
                 </div>
                 <div v-else>
                     <img :src="image" />
@@ -232,8 +226,8 @@ function getTooltip(elements) {
 
         .maintitle
         {
-            margin-top: 80px;
-            margin-bottom: 80px;
+            margin-top: 120px;
+            margin-bottom: 40px;
             font-size: 3em;
             font-weight: 700;
             letter-spacing: 5px;
@@ -255,6 +249,8 @@ function getTooltip(elements) {
                 padding: 0 5px;
                 font-weight: 600;
             }
+
+       
         }
     }
 
