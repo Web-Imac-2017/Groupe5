@@ -1,5 +1,4 @@
 <?php 
-	session_start();
 	header('Access-Control-Allow-Origin:*');
 	header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
 	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
@@ -7,14 +6,10 @@
 
 	include "../../Models/UserModel.php";
 
-	$pseudo = "";
-	
-	if(isset($_SESSION['login'])) {
-        $pseudo = $_SESSION['login'];
-    }
+	$filter = "";
 
-  	$data = UserModel::getUserAge($pseudo);
+	$data = UserModel::filterResearch($filter);
 
-  	echo json_encode($data);
+  echo json_encode($data);
 
 ?>
