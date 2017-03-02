@@ -374,7 +374,7 @@ class UserModel {
 
     
     /* Création du profil (première connexion) */
-    public static function setUserProfil($nom, $prenom, $pseudo, $email, $password, $avatar, $age, $sexe, $ville, $couleur, $date_inscription, $last_connection, $description, $pays, $id_etat_activ) {
+    public static function setUserProfil($nom, $prenom, $pseudo, $email, $password, $avatar, $age, $sexe, $ville, $couleur, $date_inscription, $last_connection, $description, $pays, $id_etat_activ, $arr_hobbies, $arr_langues) {
         $bdd = Database::connexionBDD();
         
         /* Recherche si le pseudo existe :*/
@@ -396,9 +396,46 @@ class UserModel {
                 $req_idPays = $bdd->prepare('SELECT id_pays FROM table_pays WHERE fr = "'.$pays.'"');
                 $req_idPays->execute();
                 $id_pays = $req_idPays->fetch(PDO::FETCH_ASSOC);
+                
+                $password_hach = md5($password);
+                /* Enregistrement de infos dans table users*/
+                $req_user = $bdd->prepare('INSERT INTO user (ID, nom, prenom, pseudo, email, password, avatar, age, sexe, ville, couleur,  date_inscription, derniere_connexion, description, id_pays, id_etat_activite) VALUES (NULL, '.$nom.', '.$prenom.', '.$pseudo.', '.$email.', '.$password_hach.', '.$avatar.', '.$age.', '.$sexe.', '.$ville.', '.$couleur.', '.$date_inscription.', '.$last_connection.', '.$description.', '.$id_pays['id_pays'].', '.$id_etat_activ.')');
+                $req_user->execute(); 
+                
+                /* Enregistrement des hobbies */
+                foreach($arr_hobbies as &$value){
+                    $search_name_hobbies = $bdd->prepare('SELECT ID FROM centre_interet WHERE nom = "'.$value.'"');
+                    $search_name_hobbies->execute();
+                    
+                    $id_user = getUserId($pseudo);
+                    
+                    $id_hobbie = $search_name_hobbies->fetch(PDO::FETCH_ASSOC);
+                    $insere_hobbie = $bdd->prepare('INSERT INTO user_centre_interet(ID, id_user, id_interet) VALUES (NULL,'.$id_user.','.$id_hobbie['id_interet'].')');
+                    $insere_hobbie->execute();
+                }
+                
+                /* Enregistrement des Langues */
+                
+                /* Langues maitrisées */
+                foreach($arr_langues[0] as &$value){
+                    $search_id_langue = $bdd->prepare('SELECT ID FROM langue WHERE Nom = "'.$value.'"');
+                    $search_id_langue->execute();
+                    
+                    $id_langue = $search_id_langue->fetch(PDO::FETCH_ASSOC);
+                    
+                    $insere_langue = $bdd->prepare('INSERT INTO user_langue(ID, id_user, id_langue, maitrise) VALUES (NULL ,'.$id_user.','.$id_langue['ID'].', 2)');
+                }
+                
+                /* Langues à apprendre */
+                foreach($arr_langues[1] as &$value){
+                    $search_id_langue = $bdd->prepare('SELECT ID FROM langue WHERE Nom = "'.$value.'"');
+                    $search_id_langue->execute(); 
+                
+                    $id_langue = $search_id_langue->fetch(PDO::FETCH_ASSOC);
+                    
+                    $insere_langue = $bdd->prepare('INSERT INTO user_langue(ID, id_user, id_langue, maitrise) VALUES (NULL ,'.$id_user.','.$id_langue['ID'].', 1)');
+                }
 
-                $req_active = $bdd->prepare('INSERT INTO user (ID, nom, prenom, pseudo, email, password, avatar, age, sexe, ville, couleur,  date_inscription, derniere_connexion, description, id_pays, id_etat_activite) VALUES (NULL, '.$nom.', '.$prenom.', '.$pseudo.', '.$email.', '.$password.', '.$avatar.', '.$age.', '.$sexe.', '.$ville.', '.$couleur.', '.$date_inscription.', '.$last_connection.', '.$description.', '.$id_pays['id_pays'].', '.$id_etat_activ.')');
-                $req_active->execute(); 
                 $result = array(0);
             }
         }
