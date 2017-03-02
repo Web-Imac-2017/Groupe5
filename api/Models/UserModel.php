@@ -424,7 +424,7 @@ class UserModel {
     
     public static function getUserName($pseudo) {
         $bdd = Database::connexionBDD();
-        $id = getUserId($pseudo);
+        $id = UserModel::getUserId($pseudo);
         
         if($id !== 0){
             $req_active = $bdd->prepare('SELECT prenom FROM user WHERE ID ='.$id);
@@ -439,7 +439,7 @@ class UserModel {
     
     public static function getUserLastname($pseudo) {
         $bdd = Database::connexionBDD();
-        $id = getUserId($pseudo);
+        $id = UserModel::getUserId($pseudo);
         
         if($id !== 0){
             $req_active = $bdd->prepare('SELECT nom FROM user WHERE ID ='.$id);
@@ -641,6 +641,25 @@ class UserModel {
         else $result = array(0);
 
         return $result;  
+    }
+
+    public static function getUser($pseudo){
+        $data = array();
+        
+        $data["pseudo"] = $pseudo;
+        $data["avatar"] = "";
+        $data["name"] = UserModel::getUserLastName($pseudo);
+        $data["age"] = UserModel::getUserAge($pseudo);
+        $data["sexe"] = UserModel::getUserSex($pseudo);
+        $data["prenom"] = UserModel::getUserName($pseudo);
+        $data["description"] = UserModel::getUserDescription($pseudo);
+        $data["ville"] = UserModel::getUserCity($pseudo);
+        $data["pays"] = UserModel::getUserPays($pseudo);
+        $data["hobbies"] = UserModel::getUserHobbies($pseudo);
+        $data["languages"]["spokenLang"] = UserModel::getUserLangueMaitrisee($pseudo);
+        $data["languages"]["learningLang"] = UserModel::getUserLangueAApprendre($pseudo);
+
+        return $data;
     }
 }
 
