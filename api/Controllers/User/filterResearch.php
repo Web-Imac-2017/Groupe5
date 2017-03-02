@@ -7,7 +7,7 @@
 	include "../../Models/UserModel.php";
 
 	$json = json_decode(file_get_contents('php://input'), true);
-	print_r($json);	
+	var_dump($json);	
 
 	$data = UserModel::filterResearch($json);
 

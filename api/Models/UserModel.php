@@ -219,7 +219,6 @@ class UserModel {
         $searchResults = $bdd->prepare('SELECT pseudo FROM user WHERE pseudo LIKE "%'.$searched.'%"');
         $searchResults->execute();
         $result=$searchResults->fetchAll();
-        var_dump($result);
 
         if($result==NULL){
             $result = array("Error", "Error: We can't find what you searched");
@@ -233,15 +232,14 @@ class UserModel {
     	/* Tableau de la forme [ageMin,ageMax,sexe]
         La fonction filtrant les hobbies et langues est faite par Adrian */
     	$bdd = Database::connexionBDD();
-    	$filterResults = $bdd->prepare('SELECT pseudo FROM user WHERE age BETWEEN "'.$filterData['ageMin'].'" AND "'.$filterData['ageMax'].'"AND sexe ="'.$filterData['sexe'].'"');
+    	$filterResults = $bdd->prepare('SELECT pseudo FROM user WHERE age >= "'.$filterData['ageMin'].'" AND age <= "'.$filterData['ageMax'].'" AND sexe ="'.$filterData['sexe'].'"');
     	$filterResults->execute();
+        $result=$filterResults->fetchAll();
+        var_dump($result);
 
-    	if($filterResults->fetch()){
-    		$result = $filterResults->fetch();
-    	}
-    	else{
-    		$result = array("Error", "Error: We can't find anybody with this caracteristics ! Please change your filter.");
-    	}
+    	if($result==NULL){
+            $result = array("Error", "Error: We can't find anybody with this caracteristics ! Please change your filter.");
+        }
     	return $result;
 
     }
