@@ -11,8 +11,8 @@
     $id_conv = "";
     $data = array();
 
-    /*$_SESSION['id_conv'] = 1;
-    $_SESSION['pseudo'] = "kingofimac";*/
+    $_SESSION['id_conv'] = 1;
+    $_SESSION['pseudo'] = "kingofimac";
 	
 	if(isset($_SESSION['id_conv'])) {
         $id_conv = $_SESSION['id_conv'];
