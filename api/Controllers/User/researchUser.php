@@ -7,7 +7,9 @@
 
 	include "../../Models/UserModel.php";
 
-	$searched = "";
+	$json = json_decode(file_get_contents('php://input'), true);
+	$searched=$json['searched'];
+	echo $searched;
 
 	$data = UserModel::userResearch($searched);
 
