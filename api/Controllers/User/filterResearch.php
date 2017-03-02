@@ -6,9 +6,10 @@
 
 	include "../../Models/UserModel.php";
 
-	$filter = "";
+	$json = json_decode(file_get_contents('php://input'), true);
+	print_r($json);	
 
-	$data = UserModel::filterResearch($filter);
+	$data = UserModel::filterResearch($json);
 
   echo json_encode($data);
 

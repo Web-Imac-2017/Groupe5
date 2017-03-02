@@ -218,11 +218,10 @@ class UserModel {
         /* On cherche tous les pseudos contenant la suite de caractères entrée */
         $searchResults = $bdd->prepare('SELECT pseudo FROM user WHERE pseudo LIKE "%'.$searched.'%"');
         $searchResults->execute();
+        $result=$searchResults->fetchAll();
+        var_dump($result);
 
-        if($searchResults->fetch()){
-            $result = $searchResults->fetch();
-        }
-        else {
+        if($result==NULL){
             $result = array("Error", "Error: We can't find what you searched");
         }
         
@@ -232,12 +231,12 @@ class UserModel {
     /* Recherche/filtre pour match */
     public static function filterResearch($filterData){ /* tableau json contenant les filtres choisis par le user */
     	/* Tableau de la forme [ageMin,ageMax,sexe]
-        La fonction filtrant les hobbies et langues est faite par Adrien */
+        La fonction filtrant les hobbies et langues est faite par Adrian */
     	$bdd = Database::connexionBDD();
-    	$filterResults = $bdd->prepare('SELECT pseudo FROM user WHERE age >="'.$filterData['ageMin'].'"AND age <="'.$filterData['ageMax'].'"AND sexe ="'.$filterData['sexe'].'"');
+    	$filterResults = $bdd->prepare('SELECT pseudo FROM user WHERE age BETWEEN "'.$filterData['ageMin'].'" AND "'.$filterData['ageMax'].'"AND sexe ="'.$filterData['sexe'].'"');
     	$filterResults->execute();
 
-    	if(searchResults->fetch()){
+    	if($filterResults->fetch()){
     		$result = $filterResults->fetch();
     	}
     	else{
