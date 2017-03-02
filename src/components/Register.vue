@@ -221,3 +221,4 @@ function getTooltip(elements) {
     .displayNo{opacity:0;}
     .errorSpan{color:red;}
 </style>
+
