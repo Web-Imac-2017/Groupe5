@@ -76,45 +76,49 @@ export default {
 
 $profil_color: rgb(195,39,47);
 $profil_color_light: rgb(225,146,150);
+.conversation{
+  ul {
+    padding: 0;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  textarea {
+    outline: none;
+    resize: none;
+    overflow: auto;
+    background-color: $profil_color_light;
+    width: 100%;
+    border: 2px solid #000;
+    border-radius: 10px;
+  }
 
-.conversation ul {
-  padding: 0;
+  .user_other, .user_me {
+    list-style: none;
+    width: 100%;
+    display: inline-block;
+  }
+
+  .user_other .messageContent, .user_me .messageContent {
+    padding: 10px;
+    border-radius: 10px;
+    display: block;
+    max-width: 60%;
+  }
+
+  .user_other .messageContent {
+    color: #000000;
+    background-color: #cdcccc;
+    float: left;
+  }
+
+  .user_me .messageContent {
+    color: #ffffff;
+    background-color: $profil_color;
+    float: right;
+  }
 }
 
-.conversation textarea {
-  outline: none;
-  resize: none;
-  overflow: auto;
-  background-color: $profil_color_light;
-  width: 100%;
-  border: 2px solid #000;
-  border-radius: 10px;
-}
-
-.user_other, .user_me {
-  list-style: none;
-  width: 100%;
-  display: inline-block;
-}
-
-.user_other .messageContent, .user_me .messageContent {
-  padding: 10px;
-  border-radius: 10px;
-  display: block;
-  max-width: 60%;
-}
-
-.user_other .messageContent {
-  color: #000000;
-  background-color: #cdcccc;
-  float: left;
-}
-
-.user_me .messageContent {
-  color: #ffffff;
-  background-color: $profil_color;
-  float: right;
-}
 
 
 </style>

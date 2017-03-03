@@ -7,10 +7,10 @@
     <ul>
       <li v-for="conversation in conversations" class="row">
         <router-link v-bind:to="'/messages/' + conversation.id" :class=getActiveConversation(conversation.id) class="user">
-          <span class="col-md-2 avatar">
+          <span class="avatar">
             <img src="../../static/avatar/maureeniz.jpg">
           </span>
-          <span v-for="user in conversation.users" class="col-md-10">
+          <span v-for="user in conversation.users" class="text-conv">
             <p class="titleConversation userPseudo">{{ user.pseudo }}</p>
             <p class="lastMessage">{{ conversation.lastMessage }}</p>
           </span>
@@ -18,14 +18,14 @@
       </li>
       <li class="row addPlume">
         <router-link v-bind:to="'/messages/' + 0" class="user">
-            <span class="col-md-2">
-              <div class="plus">
-                <icon name="plus"></icon>
-              </div>
-            </span>
-            <span class="col-md-10">
-              <p class="userPseudo">New Plume</p>
-            </span>
+          <span class="avatar">
+            <div class="plus">
+              <icon name="plus"></icon>
+            </div>
+          </span>
+          <span class="text-conv">
+            <p class="userPseudo">New Plume</p>
+          </span>
         </router-link>
       </li>
     </ul>
@@ -90,7 +90,7 @@ export default {
 
 $profil_color: rgb(195,39,47);
 $profil_color_light: rgb(225,146,150);
-$avatar_size: 60px;
+$avatar_size: 80px;
 
 
 .conversationsMenu {
@@ -101,7 +101,8 @@ $avatar_size: 60px;
     margin: 10px 0;
   }
   span{
-    display: block;
+    display: inline-block;
+    margin: auto 0;
   }
   p{
     margin: 0;
@@ -110,6 +111,7 @@ $avatar_size: 60px;
   overflow-x: hidden;
   overflow-y: auto;
   border-right: 1px solid #000;
+  height: 100%;
 
   .CMHeader{
     text-align: center;
@@ -123,25 +125,33 @@ $avatar_size: 60px;
     .CMLogo{
       width: 150px;
     }
+    .fa-icon{
+      margin-right: 10px;
+    }
   }
 
   .user{
-    display: block;
     height: $avatar_size;
+    display: flex;
+
+    .avatar {
+      vertical-align: middle;
+      img{
+        height: $avatar_size;
+        width: $avatar_size;
+        border: 1px solid #000;
+      }
+    }
+
+    .text-conv{
+      margin-left: 15px;
+    }
   }
 
   .user.router-link-active.active {
     background-color: $profil_color_light;
   }
 
-  .avatar {
-    vertical-align: middle;
-    img{
-      height: $avatar_size;
-      width: $avatar_size;
-      border: 1px solid #000;
-    }
-  }
 
   .userPseudo {
     text-transform: uppercase;
@@ -154,7 +164,6 @@ $avatar_size: 60px;
     font-size: 12px;
   }
 
-
   .addPlume{
     .plus{
       width: $avatar_size;
@@ -162,7 +171,10 @@ $avatar_size: 60px;
       border: 1px solid #000;
       background-color: $profil_color_light;
       text-align: center;
-      vertical-align: middle;
+      display: flex;
+      .fa-icon{
+        margin: auto;
+      }
     }
   }
 
