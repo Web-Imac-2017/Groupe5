@@ -6,6 +6,20 @@
         <!-- <h2>{{ titleForm }}</h2> -->
 
         <form id="formRegistration" method="post" action="" v-on:submit.prevent>
+
+            <!-- AVATAR -->
+            <div id="chargeImg">
+                <div v-if="!image">
+                    <input type="file" name="file" id="file" class="inputfile" />
+                    <label class="filebutton" for="file" v-bind:style="{backgroundImage: 'url(../../static/img/import.png'}"></label>
+                    <br/>
+                    <p class="filebuttontext">Import your avatar</p>
+                </div>
+                <div v-else>
+                    <img :src="image" />
+                    <button @click="">Remove image</button>
+                </div>
+            </div>
             
             <!-- FIRST NAME -->
             <input name="firstName" type="text" minlength="2" maxlength="20" required="required" placeholder="FIRST NAME" v-model="user.firstname"  />
@@ -18,32 +32,13 @@
             <!-- PSEUDO -->
             <input name="pseudo" type="text" minlength="5" maxlength = "20" required="required" placeholder="USERNAME" v-model="user.pseudo" />
             <span class="tooltip">The username must have minimum 2 characters</span>
-
-            <!-- AVATAR -->
-            <div id="chargeImg">
-                <div v-if="!image">
-                    <input type="file" name="file" id="file" class="inputfile" />
-                    <label for="file">Choose a file</label>
-                </div>
-                <div v-else>
-                    <img :src="image" />
-                    <button @click="">Remove image</button>
-                </div>
-            </div>
         
-            <br/><br/>
+            <!-- AGE -->
+            <input name="age" id="age" type="number" min="16" max="120" required="required" placeholder="YOUR AGE" v-model="user.age" />
+            <span class="tooltip">You have to be between 16 and 120 years old</span>
 
-            <label class="form-text" for="age">Age* :</label>
-            <input name="age" id="age" type="number" min="2" max="120" required="required" v-model="user.age" />
-            <p>{{ user.age }}</p>
-            <span class="tooltip">The age has to be between 15 and 120 years</span>
-
-            <br /><br />
-
-            <label class="form-text" for="email">Email* :</label>
-            <input name="email" id="email" type="email"  required="required" v-model="user.email" />
-            <p>{{ user.email }}</p>
-            <br /><br />
+            <!-- EMAIL -->
+            <input name="email" id="email" type="email" required="required" placeholder="YOUR EMAIL" v-model="user.email" />
 
             <label class="form-text" for="pwd1">Password :</label>
             <input name="pwd1" title="Password must contain at least 6 characters, including UPPER/lowercase and numbers" id="pwd1" type="password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" onchange="this.setCustomValidity(this.validity.patternMismatch ? this.title : '');
@@ -127,89 +122,79 @@
 </template>
 
 <script>
+	export default
+    {
+	    name: 'registration',
+        data ()
+        {
+	       	return
+           	{
+    	        msgRegistration: 'WELCOME',
+    	        titleForm: 'Registration',
+    	        countryList: ["Afghanistan", "Algeria", "Australia", "Brasil", "Canada", "France", "Japan",	"Germany", "Spain"],
+	            user : {
+        	       	firstname:'',
+        	       	name:'',
+        	       	pseudo:'',
+        	       	age:'',
+                   	email:'',
+        	       	password:'',
+        	       	country:'',
+        	       	city:'',
+        	       	languages : {
+	       				mLang : [],
+	              		lLang : []
+            		},
+	        		hobbies : []
+	      		}
+	    	}
+	  	};
+     	methods:
+     	{
+        	submitForm: function(user)
+        	{
+            	var form = document.getElementById("formRegistration");
+            	var sizeM = user.languages.mLang.length;
+            	var sizeL = user.languages.lLang.length;
+            	var errorM = document.getElementById("errorLanguageM");
+            	var errorL = document.getElementById("errorLanguageL");
 
-	export default {
-	  name: 'registration',
-	  data () {
-	    return {
-	      msgRegistration: 'WELCOME',
-	      titleForm : 'Registration',
-	      countryList: [
-	      		"Afghanistan",
-	      		"Algeria",
-	      		"Australia",
-	      		"Brasil",
-	      		"Canada",
-	      		"France",
-	      		"Japan",
-	      		"Germany",
-	      		"Spain"
-	      		]
-	      ,
-	      user : {
-	      	firstname:'',
-	      	name:'',
-	        pseudo:'',
-	        age:'',
-            email:'',
-	        password:'',
-	        country:'',
-	        city:'',
-	        languages : {
-              mLang : [],
-              lLang : []
-            },
-	        hobbies : []
-	      },
-	    }
-	  },
-      methods:{
-        submitForm: function(user){
-            var form = document.getElementById("formRegistration");
-            var sizeM = user.languages.mLang.length;
-            var sizeL = user.languages.lLang.length;
-            var errorM = document.getElementById("errorLanguageM");
-            var errorL = document.getElementById("errorLanguageL");
-
-            if(sizeM == 0 || sizeL == 0 ){
-                if(sizeM == 0){
-                   errorM.style.opacity = 1;
-                }
-                if(sizeL == 0){
-                   errorL.style.opacity = 1;
-                }
-            }else{
-                errorM.style.opacity = 0;
-                errorL.style.opacity = 0;
-                form.submit();
-            }
-        }
-
-      }
+            	if (sizeM == 0 || sizeL == 0 )
+            	{
+            	    if (sizeM == 0) errorM.style.opacity = 1;
+                	if (sizeL == 0) errorL.style.opacity = 1;
+            	}
+            	else
+            	{
+            	    errorM.style.opacity = 0;
+            	    errorL.style.opacity = 0;
+            	    form.submit();
+            	}
+        	}
+      	}
 	}
 
+	// basic javascript
 
-//basic javascript
+	function desactivateTooltips()
+	{
+	    var tooltips = document.querySelectorAll('.tooltip'),
+	    tooltipsLength = tooltips.length;
+	    for (var i = 0; i < tooltipsLength; i++)
+	    {
+	        tooltips[i].style.display = 'none';
+	    }
 
-function desactivateTooltips() {
+	}
 
-    var tooltips = document.querySelectorAll('.tooltip'),
-        tooltipsLength = tooltips.length;
-
-    for (var i = 0; i < tooltipsLength; i++) {
-        tooltips[i].style.display = 'none';
-    }
-
-}
-
-function getTooltip(elements) {
-    while (elements = elements.nextSibling) {
-        if (elements.className === 'tooltip') {
-            return elements;
-        }
-    }
-    return false;
-}
+	function getTooltip(elements)
+	{
+	    while (elements = elements.nextSibling)
+	    {
+	        if (elements.className === 'tooltip') return elements;
+	    }
+	    return false;
+	}
 
 </script>
 
@@ -223,6 +208,7 @@ function getTooltip(elements) {
         margin: 0;
         background-size: cover;
         background-position: center center;
+        text-align: center;
 
         .maintitle
         {
@@ -235,7 +221,6 @@ function getTooltip(elements) {
 
         form
         {
-            background-color: orange;
             position: relative;
             left: 50%;
             transform: translateX(-50%);
@@ -248,9 +233,40 @@ function getTooltip(elements) {
                 font-size: 1.5em;
                 padding: 0 5px;
                 font-weight: 600;
+                text-transform: uppercase;
+                margin-bottom: 8px;
+                border: 3px solid #333333;
             }
 
-       
+            .inputfile
+            {
+                display: none;
+            }
+
+            .filebutton
+            {
+                background-color: rgb(140, 190, 230);
+                width: 100px;
+                height: 100px;
+                border-radius: 50%;
+                cursor: pointer;
+                transition: .2s;
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-position: center center;
+                
+                &:hover
+                {
+                    background-color: rgb(170, 220, 255);
+                }
+            }
+
+            .filebuttontext
+            {
+                margin-bottom: 35px;
+                font-size: 0.8em;
+                font-style: italic;
+            }
         }
     }
 
