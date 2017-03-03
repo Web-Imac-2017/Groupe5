@@ -127,7 +127,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import 'assets/scss/design.scss';
 @import 'assets/scss/reset.css';
+@import 'assets/scss/design.scss';
 
 </style>

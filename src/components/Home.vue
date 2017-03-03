@@ -1,13 +1,9 @@
 <template>
 	<div id="home">
-		<a v-on:click.prevent="$parent.changeSelectedUser('kingofimac')">Kingofimac</a>
-
-
-
-  		<div class="bg" v-bind:style="{backgroundImage: 'url(./static/img/bg.jpg)' }">
+  		<div class="bg" v-bind:style="{backgroundImage: 'url(/static/img/bg.jpg)' }">
   			<div id="centerwrapper">
   				<img v-bind:src="'/static/img/logo.png'" class="homeLogo"><br/>
-	    		<router-link v-if="$parent.connected === ''" v-bind:to="'/login/'" class="test" id="sign">
+	    		<router-link v-if="$parent.connected === ''" v-bind:to="'/login/'" id="sign">
 	    			<span>SIGN UP</span>
 	    			<p>or</p>
 	    			<span>SIGN IN</span>
@@ -42,16 +38,6 @@
 		{
 			width: 500px;
 			margin-bottom: 30px;
-		}
-
-		.test
-		{
-			color: black;
-		}
-
-		.test:hover
-		{
-			text-decoration: none;
 		}
 
 		p
