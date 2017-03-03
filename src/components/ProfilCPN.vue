@@ -54,6 +54,7 @@ $profil_color: #C3272F;
   right: 0;
   min-height: 100%;
   box-shadow: 0px 0 40px 0px #706f6f;
+  background-color: #fff;
 
   img.avatarProfil{
     width: 100%;
