@@ -10,7 +10,14 @@
 	$searched=$json['searched'];
 
 	$pseudo = UserModel::userResearch($searched);
-	$data = UserModel::getUser($pseudo['0']['pseudo']);
+
+	$data = array();
+	$data['users'] = array();
+
+	foreach ($pseudo as $key => $user) {
+		array_push($data['users'], UserModel::getUser($user['pseudo']));
+	}
+	
 
   echo json_encode($data);
 
