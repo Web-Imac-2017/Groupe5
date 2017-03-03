@@ -1,155 +1,154 @@
 <template>
-  <div class="register">
-        <h1 class="maintitle">{{ msgRegistration }}</h1>
-        <!-- <h2>{{ titleForm }}</h2> -->
+  	<div class="register">
+  		<div class="wrapper">
 
-        <form id="formRegistration" method="post" action="" v-on:submit.prevent>
+  			<!-- BG -->
+  			<div class="bg" v-bind:style="{backgroundImage: 'url(/static/img/bg.jpg)' }"></div>
+		
+			<!-- TITLE -->
+        	<h1 class="maintitle">{{ msgRegistration }}</h1>
 
-            <!-- AVATAR -->
-            <div id="chargeImg">
-                <div v-if="!image">
-                    <input type="file" name="file" id="file" class="inputfile" />
-                    <label class="filebutton" for="file" v-bind:style="{backgroundImage: 'url(../../static/img/import.png'}"></label>
-                    <br/>
-                    <p class="filebuttontext">Import your avatar</p>
-                </div>
-                <div v-else>
-                    <img :src="user.avatar" />
-                    <button @click="">Remove image</button>
-                </div>
-            </div>
-            
-            <!-- FIRST NAME -->
-            <input name="firstName" type="text" minlength="2" maxlength="20" required="required" placeholder="FIRST NAME" v-model="user.firstname"  />
-            <span class="tooltip">This field must have between 2 and 20 characters</span>
-            
-            <!-- LAST NAME -->
-            <input name="lastName" type="text" minlength="2" maxlength = "20" required="required" placeholder="LAST NAME" v-model="user.name"  />
-            <span class="tooltip">This field must have minimum 2 characters</span>
+        	<form id="formRegistration" method="post" action="" v-on:submit.prevent>
 
-            <!-- PSEUDO -->
-            <input name="pseudo" type="text" minlength="5" maxlength = "20" required="required" placeholder="USERNAME" v-model="user.pseudo" />
-            <span class="tooltip">The username must have minimum 2 characters</span>
-        
-            <!-- AGE -->
-            <input name="age" id="age" type="number" min="16" max="120" required="required" placeholder="YOUR AGE" v-model="user.age" />
-            <span class="tooltip">You have to be between 16 and 120 years old</span>
+	            <!-- AVATAR -->
+	            <div id="chargeImg">
+	                <div v-if="!image">
+	                    <input type="file" name="file" id="file" class="inputfile" />
+	                    <label class="filebutton" for="file" v-bind:style="{backgroundImage: 'url(../../static/img/import.png'}"></label>
+	                    <br/>
+	                    <p class="filebuttontext">Import your avatar</p>
+	                </div>
+	                <div v-else>
+	                    <img :src="user.avatar" />
+	                    <button @click="">Remove image</button>
+	                </div>
+	            </div>
+	            
+	            <!-- FIRST NAME -->
+	            <input name="firstName" type="text" minlength="2" maxlength="20" required="required" placeholder="FIRST NAME" v-model="user.firstname"  />
+	            <span class="tooltip">This field must have between 2 and 20 characters</span>
+	            
+	            <!-- LAST NAME -->
+	            <input name="lastName" type="text" minlength="2" maxlength = "20" required="required" placeholder="LAST NAME" v-model="user.name"  />
+	            <span class="tooltip">This field must have minimum 2 characters</span>
 
-            <!-- EMAIL -->
-            <input name="email" id="email" type="email" required="required" placeholder="YOUR EMAIL" v-model="user.email" />
+	            <!-- AGE -->
+	            <input name="age" id="age" type="number" min="16" max="120" required="required" placeholder="YOUR AGE" v-model="user.age" />
+	            <span class="tooltip">You have to be between 16 and 120 years old</span>
 
-            <label class="form-text" for="pwd1">Password :</label>
-            <input name="pwd1" title="Password must contain at least 6 characters, including UPPER/lowercase and numbers" id="pwd1" type="password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" onchange="this.setCustomValidity(this.validity.patternMismatch ? this.title : '');
-      if(this.checkValidity()) form.pwd2.pattern = this.value;" v-model="user.password" />
-            <p>{{ user.password }}</p>
-            <span class="tooltip errorPseudo">Le mot de passe ne doit pas faire moins de 6 caractères</span>
+	            <!-- PSEUDO -->
+	            <input name="pseudo" type="text" minlength="5" maxlength = "20" required="required" placeholder="USERNAME" v-model="user.pseudo" />
+	            <span class="tooltip">The username must have minimum 2 characters</span>
+	        
+	            <!-- EMAIL -->
+	            <input name="email" id="email" type="email" required="required" placeholder="YOUR EMAIL" v-model="user.email" />
 
-            <br /><br />
+	            <!-- PWD -->
+	            <input name="pwd1" id="pwd1" type="password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" placeholder="PASSWORD" v-model="user.password" />
+	            <span class="tooltip errorPseudo">Your pwd must have at least 6 characters</span>
 
-            <label class="form-text" for="pwd2">Password (confirmation) :</label>
-            <input name="pwd2" title="Please enter the same Password as above" id="pwd2" type="password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" onchange="  this.setCustomValidity(this.validity.patternMismatch ? this.title : '');" />
-            <span class="tooltip">Le mot de passe de confirmation doit être identique à celui d'origine</span>
+	            <input name="pwd2" id="pwd2" type="password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" placeholder="CONFIRM PASSWORD" />
+	            <span class="tooltip">Le mot de passe de confirmation doit être identique à celui d'origine</span>
 
-            <br /><br />
+	            <label class="form-text" for="country">YOUR COUNTRY :</label>
+	            <select name="country" id="country" v-model="user.country">
+	            	<option v-for="value in countryList">{{ value }}</option>
+	        	</select>
+	        	<p>{{ user.country }}</p>
+	            <span class="tooltip">Vous devez sélectionner votre pays de résidence</span>
+	            <br /><br />
 
-            <label class="form-text" for="country">Country :</label>
-            <select name="country" id="country" v-model="user.country">
-            	<option v-for="value in countryList">{{ value }}</option>
-        	</select>
-        	<p>{{ user.country }}</p>
-            <span class="tooltip">Vous devez sélectionner votre pays de résidence</span>
-            <br /><br />
-
-            <div class="form-group">            
-                <label class="form-check-label" for="sex">Sex* </label><br/>
-                <span class="errorSpan displayNo" id="errorSex">You have to select your sex</span><br/>
-                <input class="form-check-input" type="radio" id="woman" value="1" v-model="user.sex">
-                <label class="form-check-label" for="woman">Woman</label>
-                
-                <input class="form-check-input" type="radio" id="man" value="2" v-model="user.sex">
-                <label class="form-check-label" for="man">Man</label>
-                
-                <input class="form-check-input" type="radio" id="other" value="3" v-model="user.sex">
-                <label class="form-check-label" for="other">Other</label>
-            </div>
-            <br/><br/>
+	            <div class="form-group">            
+	                <label class="form-check-label" for="sex">Sex* </label><br/>
+	                <span class="errorSpan displayNo" id="errorSex">You have to select your sex</span><br/>
+	                <input class="form-check-input" type="radio" id="woman" value="1" v-model="user.sex">
+	                <label class="form-check-label" for="woman">Woman</label>
+	                
+	                <input class="form-check-input" type="radio" id="man" value="2" v-model="user.sex">
+	                <label class="form-check-label" for="man">Man</label>
+	                
+	                <input class="form-check-input" type="radio" id="other" value="3" v-model="user.sex">
+	                <label class="form-check-label" for="other">Other</label>
+	            </div>
+	            <br/><br/>
 
 
-            <div class="form-group">            
-                <label class="form-check-label" for="color">Color* </label><br/>
-                <span class="errorSpan displayNo" id="errorSex">You have to select your color</span><br/>
-                <input class="form-check-input" type="radio" id="color1" value="#FFFFFF" v-model="user.color">
-                <label class="form-check-label" for="color1">Blanc</label>
-                
-                <input class="form-check-input" type="radio" id="color2" value="#000000" v-model="user.color">
-                <label class="form-check-label" for="color2">Noir</label>
-                
-                <input class="form-check-input" type="radio" id="color3" value="#F0F0F0" v-model="user.color">
-                <label class="form-check-label" for="color3">Gris</label>
-            </div>
-            <br/><br/>
+	            <div class="form-group">            
+	                <label class="form-check-label" for="color">Color* </label><br/>
+	                <span class="errorSpan displayNo" id="errorSex">You have to select your color</span><br/>
+	                <input class="form-check-input" type="radio" id="color1" value="#FFFFFF" v-model="user.color">
+	                <label class="form-check-label" for="color1">Blanc</label>
+	                
+	                <input class="form-check-input" type="radio" id="color2" value="#000000" v-model="user.color">
+	                <label class="form-check-label" for="color2">Noir</label>
+	                
+	                <input class="form-check-input" type="radio" id="color3" value="#F0F0F0" v-model="user.color">
+	                <label class="form-check-label" for="color3">Gris</label>
+	            </div>
+	            <br/><br/>
 
 
-            <label class="form-text" for="description">description:</label>
-            <input name="description" title="" id="description" type="text" v-model="user.description" />
+	            <label class="form-text" for="description">description:</label>
+	            <input name="description" title="" id="description" type="text" v-model="user.description" />
 
 
-            <label class="form-text" for="city">City :</label>
-            <input v-model="user.city"></input>
-        	<p>{{ user.city }}</p>
-            <span class="tooltip">Vous devez sélectionner votre pays de résidence</span>
-            <br/><br/>
+	            <label class="form-text" for="city">City :</label>
+	            <input v-model="user.city"></input>
+	        	<p>{{ user.city }}</p>
+	            <span class="tooltip">Vous devez sélectionner votre pays de résidence</span>
+	            <br/><br/>
 
-            <div class="form-group">            
-                <label class="form-check-label" for="languageM">Language(s) spoken* :</label><br/>
-                <span class="errorSpan displayNo" id="errorLanguageM">You have to select one language</span><br/>
-                 <input class="form-check-input" type="checkbox" id="english" value="English" v-model="user.languages.spokenLang">
-                <label class="form-check-label" for="english">English</label>
-                <input class="form-check-input" type="checkbox" id="French" value="French" v-model="user.languages.spokenLang">
-                <label  class="form-check-label"for="french">French</label>
-                <input class="form-check-input" type="checkbox" id="spanish" value="Spanish" v-model="user.languages.spokenLang">
-                <label class="form-check-label" for="spanish">Spanish</label>
-                <br>
-                <span>Checked languages:</span>
-                <span v-for="value in user.languages.spokenLang"> {{ value }} </span>
-    		</div>
-            <br/><br/>
+	            <div class="form-group">            
+	                <label class="form-check-label" for="languageM">Language(s) spoken* :</label><br/>
+	                <span class="errorSpan displayNo" id="errorLanguageM">You have to select one language</span><br/>
+	                 <input class="form-check-input" type="checkbox" id="english" value="English" v-model="user.languages.spokenLang">
+	                <label class="form-check-label" for="english">English</label>
+	                <input class="form-check-input" type="checkbox" id="French" value="French" v-model="user.languages.spokenLang">
+	                <label  class="form-check-label"for="french">French</label>
+	                <input class="form-check-input" type="checkbox" id="spanish" value="Spanish" v-model="user.languages.spokenLang">
+	                <label class="form-check-label" for="spanish">Spanish</label>
+	                <br>
+	                <span>Checked languages:</span>
+	                <span v-for="value in user.languages.spokenLang"> {{ value }} </span>
+	    		</div>
+	            <br/><br/>
 
-            <div class="form-group">
-                <label class="form-check-label" for="languageL">Language(s) you want to learn* :</label><br/>
-                <span class="errorSpan displayNo" id="errorLanguageL">You have to select one language</span><br/>
-                <input class="form-check-input" type="checkbox" id="english" value="English" v-model="user.languages.learningLang">
-                <label class="form-check-label" for="english">English</label>
-                <input class="form-check-input"  type="checkbox" id="French" value="French" v-model="user.languages.learningLang">
-                <label class="form-check-label" for="french">French</label>
-                <input  class="form-check-input" type="checkbox" id="spanish" value="Spanish" v-model="user.languages.learningLang">
-                <label class="form-check-label" for="spanish">Spanish</label>
-                <br />
-                <span>Checked languages:</span>
-                <span v-for="value in user.languages.learningLang"> {{ value }} </span>
-            </div>
-            <br/><br/>
+	            <div class="form-group">
+	                <label class="form-check-label" for="languageL">Language(s) you want to learn* :</label><br/>
+	                <span class="errorSpan displayNo" id="errorLanguageL">You have to select one language</span><br/>
+	                <input class="form-check-input" type="checkbox" id="english" value="English" v-model="user.languages.learningLang">
+	                <label class="form-check-label" for="english">English</label>
+	                <input class="form-check-input"  type="checkbox" id="French" value="French" v-model="user.languages.learningLang">
+	                <label class="form-check-label" for="french">French</label>
+	                <input  class="form-check-input" type="checkbox" id="spanish" value="Spanish" v-model="user.languages.learningLang">
+	                <label class="form-check-label" for="spanish">Spanish</label>
+	                <br />
+	                <span>Checked languages:</span>
+	                <span v-for="value in user.languages.learningLang"> {{ value }} </span>
+	            </div>
+	            <br/><br/>
 
-            <div class="form-group">
-                <label lass="form-check-label" for="hobbies">Interest center(s) :</label><br/>
-                <input class="form-check-input" type="checkbox" id="music" value="Music" v-model="user.hobbies">
-                <label class="form-check-label" for="music">Music</label><br/>
-                <input type="checkbox" id="cinema" value="Cinema" v-model="user.hobbies">
-                <label class="form-check-label" for="cinema">Cinema</label><br/>
-                <input class="form-check-input" type="checkbox" id="travel" value="Travel" v-model="user.hobbies">
-                <label class="form-check-label" for="travel">Travel</label><br/>
-                <input class="form-check-input" type="checkbox" id="arts" value="Arts" v-model="user.hobbies">
-                <label for="arts">Arts</label><br/>
-                
-                <br>
-                <span>Checked hobbies:</span>
-                <span v-for="value in user.hobbies"> {{ value }} </span>
+	            <div class="form-group">
+	                <label lass="form-check-label" for="hobbies">Interest center(s) :</label><br/>
+	                <input class="form-check-input" type="checkbox" id="music" value="Music" v-model="user.hobbies">
+	                <label class="form-check-label" for="music">Music</label><br/>
+	                <input type="checkbox" id="cinema" value="Cinema" v-model="user.hobbies">
+	                <label class="form-check-label" for="cinema">Cinema</label><br/>
+	                <input class="form-check-input" type="checkbox" id="travel" value="Travel" v-model="user.hobbies">
+	                <label class="form-check-label" for="travel">Travel</label><br/>
+	                <input class="form-check-input" type="checkbox" id="arts" value="Arts" v-model="user.hobbies">
+	                <label for="arts">Arts</label><br/>
+	                
+	                <br>
+	                <span>Checked hobbies:</span>
+	                <span v-for="value in user.hobbies"> {{ value }} </span>
 
-            </div>
+	            </div>
 
-            <span class="form_col col-sm-4"></span>
-            <button type="submit" value="Register" v-on:click="submitForm(user)">Register</button> <button type="reset" value="Reinit form">Reinit</button>
-        </form>
+	            <span class="form_col col-sm-4"></span>
+	            <button type="submit" value="Register" v-on:click="submitForm(user)">Register</button> <button type="reset" value="Reinit form">Reinit</button>
+        	</form>
+        </div>
     </div>
 </template>
 
@@ -275,9 +274,23 @@
         width: 100vw;
         height: 100vh;
         margin: 0;
-        background-size: cover;
-        background-position: center center;
         text-align: center;
+        position: absolute;
+        overflow-x: hidden;
+        color: black;
+
+        .wrapper
+        {
+        	.bg
+        	{
+        		background-color: red;
+        		width: 100vw;
+	        	height: 100vh;
+	        	position: fixed;
+	        	top: 0;
+	        	z-index: -5;
+        	}
+        }
 
         .maintitle
         {
@@ -305,6 +318,11 @@
                 text-transform: uppercase;
                 margin-bottom: 8px;
                 border: 3px solid #333333;
+            }
+            
+            input#age
+            {
+            	margin-bottom: 30px;
             }
 
             .inputfile
