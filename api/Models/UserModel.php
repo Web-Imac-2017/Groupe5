@@ -759,6 +759,7 @@ class UserModel {
         $data["description"] = UserModel::getUserDescription($pseudo);
         $data["ville"] = UserModel::getUserCity($pseudo);
         $data["pays"] = UserModel::getUserPays($pseudo);
+        $data["state"] = UserModel::getUserState($pseudo);
         $data["hobbies"] = UserModel::getUserHobbies($pseudo);
         $data["languages"]["spokenLang"] = UserModel::getUserLangueMaitrisee($pseudo);
         $data["languages"]["learningLang"] = UserModel::getUserLangueAApprendre($pseudo);
