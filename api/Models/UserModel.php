@@ -440,6 +440,32 @@ class UserModel {
         return $result;
     }
 
+    /* Récupère un tableau d'utilisateur et les tris selon le nombre de centres d'interet en commun*/
+    public static function ClasseUserMatch($listUserMatched){
+        if(isset($listUserMatched)){
+            $iMax = count ($listUserMatched['id_langue']);
+            $temp = array('id_user' => '', 'count' => 0, 'id_interet' => array());
+
+            for($i = 0; $i < $iMax; $i++){
+                $jMaxUser = count($listUserMatched['users'][$i]);
+                for($j = 0; $j < $jMaxUser; $j++){
+                    $kMax = count($temp);
+                    for ($k = 0; $k < $kMax; $k++){
+                        if($listUserMatched['users'][$i][$j]['id_user'] == $temp[$k]["id_user"]){
+                            $temp[$k]["count"] += 1;
+                            var_dump($listUserMatched['users'][$i][$j]['id_interet']);
+                            $temp[$k]["id_interet"][] = $listUserMatched['users'][$i][$j]['id_interet'];
+                        }
+                        else {
+                            $temp[] = array('id_user' => $temp[$k]["id_user"], 'count' => 1, 'id_interet' => array($listUserMatched['users'][$i][$j]['id_interet']));
+                            //var_dump($temp);
+                        }
+                    }
+                 }
+            }
+        }
+    }
+
 
     
     /* Création du profil (première connexion) */

@@ -27,6 +27,11 @@
 
 	 $data = UserModel::getUserMatch("Robibidu77","2");
 
+	 var_dump($data['langue']['users']);
+
+
+	 $data = UserModel::ClasseUserMatch($data['langue']);
+
 
   echo json_encode($data, JSON_PRETTY_PRINT);
 
