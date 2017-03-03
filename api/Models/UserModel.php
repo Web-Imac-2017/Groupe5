@@ -357,7 +357,6 @@ class UserModel {
                 $matchRole = 1;
             }
             $imaxLangues = count($idLangues);
-            var_dump($imaxLangues);
         }
         
         $idCentreInteret = UserModel::getUserCentreInteret($pseudo);
