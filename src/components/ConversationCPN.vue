@@ -74,8 +74,8 @@ export default {
 
 <style lang="scss">
 
-$profil_color: #C3272F;
-$profil_color_light: #C3272F;
+$profil_color: rgb(195,39,47);
+$profil_color_light: rgb(225,146,150);
 
 .conversation ul {
   padding: 0;
@@ -85,7 +85,7 @@ $profil_color_light: #C3272F;
   outline: none;
   resize: none;
   overflow: auto;
-  background-color: $profil_color;
+  background-color: $profil_color_light;
   width: 100%;
   border: 2px solid #000;
   border-radius: 10px;

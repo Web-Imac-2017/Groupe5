@@ -1,7 +1,5 @@
 <template>
-    <div class="register" v-bind:style="{backgroundImage: 'url(../../static/img/bg.jpg)'}">
-
-        <br/>
+  <div class="register">
         <h1 class="maintitle">{{ msgRegistration }}</h1>
         <!-- <h2>{{ titleForm }}</h2> -->
 
@@ -16,7 +14,7 @@
                     <p class="filebuttontext">Import your avatar</p>
                 </div>
                 <div v-else>
-                    <img :src="image" />
+                    <img :src="user.avatar" />
                     <button @click="">Remove image</button>
                 </div>
             </div>
@@ -62,6 +60,40 @@
             <span class="tooltip">Vous devez sélectionner votre pays de résidence</span>
             <br /><br />
 
+            <div class="form-group">            
+                <label class="form-check-label" for="sex">Sex* </label><br/>
+                <span class="errorSpan displayNo" id="errorSex">You have to select your sex</span><br/>
+                <input class="form-check-input" type="radio" id="woman" value="1" v-model="user.sex">
+                <label class="form-check-label" for="woman">Woman</label>
+                
+                <input class="form-check-input" type="radio" id="man" value="2" v-model="user.sex">
+                <label class="form-check-label" for="man">Man</label>
+                
+                <input class="form-check-input" type="radio" id="other" value="3" v-model="user.sex">
+                <label class="form-check-label" for="other">Other</label>
+            </div>
+            <br/><br/>
+
+
+            <div class="form-group">            
+                <label class="form-check-label" for="color">Color* </label><br/>
+                <span class="errorSpan displayNo" id="errorSex">You have to select your color</span><br/>
+                <input class="form-check-input" type="radio" id="color1" value="#FFFFFF" v-model="user.color">
+                <label class="form-check-label" for="color1">Blanc</label>
+                
+                <input class="form-check-input" type="radio" id="color2" value="#000000" v-model="user.color">
+                <label class="form-check-label" for="color2">Noir</label>
+                
+                <input class="form-check-input" type="radio" id="color3" value="#F0F0F0" v-model="user.color">
+                <label class="form-check-label" for="color3">Gris</label>
+            </div>
+            <br/><br/>
+
+
+            <label class="form-text" for="description">description:</label>
+            <input name="description" title="" id="description" type="text" v-model="user.description" />
+
+
             <label class="form-text" for="city">City :</label>
             <input v-model="user.city"></input>
         	<p>{{ user.city }}</p>
@@ -71,30 +103,30 @@
             <div class="form-group">            
                 <label class="form-check-label" for="languageM">Language(s) spoken* :</label><br/>
                 <span class="errorSpan displayNo" id="errorLanguageM">You have to select one language</span><br/>
-                 <input class="form-check-input" type="checkbox" id="english" value="English" v-model="user.languages.mLang">
+                 <input class="form-check-input" type="checkbox" id="english" value="English" v-model="user.languages.spokenLang">
                 <label class="form-check-label" for="english">English</label>
-                <input class="form-check-input" type="checkbox" id="French" value="French" v-model="user.languages.mLang">
+                <input class="form-check-input" type="checkbox" id="French" value="French" v-model="user.languages.spokenLang">
                 <label  class="form-check-label"for="french">French</label>
-                <input class="form-check-input" type="checkbox" id="spanish" value="Spanish" v-model="user.languages.mLang">
+                <input class="form-check-input" type="checkbox" id="spanish" value="Spanish" v-model="user.languages.spokenLang">
                 <label class="form-check-label" for="spanish">Spanish</label>
                 <br>
                 <span>Checked languages:</span>
-                <span v-for="value in user.languages.mLang"> {{ value }} </span>
+                <span v-for="value in user.languages.spokenLang"> {{ value }} </span>
     		</div>
             <br/><br/>
 
             <div class="form-group">
                 <label class="form-check-label" for="languageL">Language(s) you want to learn* :</label><br/>
                 <span class="errorSpan displayNo" id="errorLanguageL">You have to select one language</span><br/>
-                <input class="form-check-input" type="checkbox" id="english" value="English" v-model="user.languages.lLang">
+                <input class="form-check-input" type="checkbox" id="english" value="English" v-model="user.languages.learningLang">
                 <label class="form-check-label" for="english">English</label>
-                <input class="form-check-input"  type="checkbox" id="French" value="French" v-model="user.languages.lLang">
+                <input class="form-check-input"  type="checkbox" id="French" value="French" v-model="user.languages.learningLang">
                 <label class="form-check-label" for="french">French</label>
-                <input  class="form-check-input" type="checkbox" id="spanish" value="Spanish" v-model="user.languages.lLang">
+                <input  class="form-check-input" type="checkbox" id="spanish" value="Spanish" v-model="user.languages.learningLang">
                 <label class="form-check-label" for="spanish">Spanish</label>
                 <br />
                 <span>Checked languages:</span>
-                <span v-for="value in user.languages.lLang"> {{ value }} </span>
+                <span v-for="value in user.languages.learningLang"> {{ value }} </span>
             </div>
             <br/><br/>
 
@@ -122,56 +154,93 @@
 </template>
 
 <script>
-	export default
-    {
-	    name: 'registration',
-        data ()
-        {
-	       	return
-           	{
-    	        msgRegistration: 'WELCOME',
-    	        titleForm: 'Registration',
-    	        countryList: ["Afghanistan", "Algeria", "Australia", "Brasil", "Canada", "France", "Japan",	"Germany", "Spain"],
-	            user : {
-        	       	firstname:'',
-        	       	name:'',
-        	       	pseudo:'',
-        	       	age:'',
-                   	email:'',
-        	       	password:'',
-        	       	country:'',
-        	       	city:'',
-        	       	languages : {
-	       				mLang : [],
-	              		lLang : []
+
+    import {apiRoot} from '../../config/localhost/settings.js'
+	export default {
+	  	name: 'registration',
+	  	data () {
+	    	return {
+	      		msgRegistration: 'WELCOME',
+	      		titleForm : 'Registration',
+	      		countryList: [
+	      			"Afghanistan",
+	      			"Algeria",
+	      			"Australia",
+	      			"Brasil",
+	      			"Canada",
+	      			"France",
+	      			"Japan",
+	      			"Germany",
+	      			"Spain"
+	      			],
+	      		user : {
+	      			firstname:'',
+	      			name:'',
+			        pseudo:'',
+			        age:'',
+		            email:'',
+			        password:'',
+			        country:'',
+		            avatar: '',
+		            sex: '',
+		            color: '',
+		            description: '',
+			        city:'',
+			        languages : {
+              			spokenLang : [],
+              			learningLang : []
             		},
 	        		hobbies : []
-	      		}
+	      		},
 	    	}
-	  	};
-     	methods:
-     	{
-        	submitForm: function(user)
-        	{
-            	var form = document.getElementById("formRegistration");
-            	var sizeM = user.languages.mLang.length;
-            	var sizeL = user.languages.lLang.length;
-            	var errorM = document.getElementById("errorLanguageM");
-            	var errorL = document.getElementById("errorLanguageL");
+	  	},
+      	methods:{
+        submitForm: function(user){
+            var form = document.getElementById("formRegistration");
+            var sizeM = user.languages.spokenLang.length;
+            var sizeL = user.languages.learningLang.length;
+            var errorM = document.getElementById("errorLanguageM");
+            var errorL = document.getElementById("errorLanguageL");
 
-            	if (sizeM == 0 || sizeL == 0 )
-            	{
-            	    if (sizeM == 0) errorM.style.opacity = 1;
-                	if (sizeL == 0) errorL.style.opacity = 1;
-            	}
-            	else
-            	{
-            	    errorM.style.opacity = 0;
-            	    errorL.style.opacity = 0;
-            	    form.submit();
-            	}
-        	}
-      	}
+            if (sizeM == 0 || sizeL == 0 ){
+                if (sizeM == 0){
+                	errorM.style.opacity = 1;
+                }
+                if (sizeL == 0){
+                   	errorL.style.opacity = 1;
+                }
+            }
+            else {
+                errorM.style.opacity = 0;
+                errorL.style.opacity = 0;
+                //form.submit();
+
+                var _this = this;
+                
+                fetch(apiRoot() + 'Controllers/User/setUserProfil.php', {
+                  method: 'POST',
+                  headers: {
+                    'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+                    'Content-Type': 'application/json; charset=utf-8'
+                  },
+                  dataType: 'JSON',
+                  body: JSON.stringify({lastname : _this.user.name, firstname: _this.user.firstname, pseudo: _this.user.pseudo, age: _this.user.age, email: _this.user.email, password: _this.user.password, country: _this.user.country, city: _this.user.city, languages: _this.user.languages, hobbies: _this.user.hobbies, avatar: _this.user.avatar, color: _this.user.color, sex: _this.user.sex, description: _this.user.description})
+                }).then(function(response) {
+                  return response.json();
+                }).then(function(data){
+                  if(data[0] == "Error"){
+                    console.log("ERREUR !!");
+                  }
+                  else {
+                    _this.conversations = data['conversations'];
+                  }
+                });
+
+
+            }
+        }
+
+      }
 	}
 
 	// basic javascript

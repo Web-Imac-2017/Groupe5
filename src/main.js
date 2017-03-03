@@ -16,9 +16,11 @@ import MyProfile from './components/MyProfile.vue'
 import Messages from './components/Messages.vue'
 
 //Font Awesome
-import Icon from 'vue-awesome/components/Icon.vue'
 import 'vue-awesome/icons/flag'
 import 'vue-awesome/icons'
+import Icon from 'vue-awesome/components/Icon.vue'
+Vue.component('icon', Icon)
+
 
 // install router
 Vue.use(Router)

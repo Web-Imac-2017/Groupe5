@@ -88,8 +88,8 @@ export default {
 
 <style lang="scss">
 
-$profil_color: #C3272F;
-$profil_color_light: #C3272F;
+$profil_color: rgb(195,39,47);
+$profil_color_light: rgb(225,146,150);
 $avatar_size: 60px;
 
 
@@ -131,7 +131,7 @@ $avatar_size: 60px;
   }
 
   .user.router-link-active.active {
-    background-color: $profil_color;
+    background-color: $profil_color_light;
   }
 
   .avatar {
@@ -160,7 +160,7 @@ $avatar_size: 60px;
       width: $avatar_size;
       height: $avatar_size;
       border: 1px solid #000;
-      background-color: $profil_color;
+      background-color: $profil_color_light;
       text-align: center;
       vertical-align: middle;
     }
