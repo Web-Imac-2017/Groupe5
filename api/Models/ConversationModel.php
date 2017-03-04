@@ -26,10 +26,9 @@ class ConversationModel{
         
         /*var_dump($result);*/
 
-        for($i=0; $i < count($result); $i++){        
-            $result[$i]['user'] = UserModel::getPseudoById($result[$i]['id_user']);
-            
-            /*var_dump($result[$i]);*/
+        for($i=0; $i < count($result); $i++){
+            $num_id = intval($result[$i]['id_user']);
+            $result[$i]['user'] = UserModel::getPseudoById($num_id);
         }
        
         return $result;
@@ -79,6 +78,7 @@ class ConversationModel{
     }
 
     /*la fonction prend en paramètre un tableau des pseudos sous forme de chaines de caractères*/
+    /*A MODIFIER = SUPPR CONV_EXIST => GET LAST LIGN INSERTED*/
     public static function createConv($pseudo_array){
         /*array size*/
         /*si 1 SEUL pseudo => erreur */
