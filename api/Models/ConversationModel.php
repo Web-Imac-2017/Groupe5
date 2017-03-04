@@ -19,14 +19,14 @@ class ConversationModel{
         $bdd = Database::connexionBDD();
         $result = [];
 
-        $req_active = $bdd->prepare("SELECT `id_user`, `date`, `ID`, `contenu` as `content` FROM `message` WHERE `id_conversation` = :conv ORDER BY `date`DESC;");
+        $req_active = $bdd->prepare("SELECT `id_user`, `date`, `ID`, `contenu` as `content` FROM `message` WHERE `id_conversation` = :conv ORDER BY `date` ASC;");
         $req_active->execute(array(':conv' => $id_conv));
         
         $result = $req_active->fetchAll();
         
         /*var_dump($result);*/
 
-        for($i=0; $i < count($result); $i++){        
+        for($i=0; $i < count($result); $i++){
             $result[$i]['user'] = UserModel::getPseudoById($result[$i]['id_user']);
             
             /*var_dump($result[$i]);*/
@@ -39,7 +39,7 @@ class ConversationModel{
         $bdd = Database::connexionBDD();
         $result = [];
 
-        $req_active = $bdd->prepare("SELECT `contenu`, `id_user` FROM `message` WHERE `id_conversation` = :conv && `ID` > :last_message ORDER BY `date`DESC;");
+        $req_active = $bdd->prepare("SELECT `contenu`, `id_user` FROM `message` WHERE `id_conversation` = :conv && `ID` > :last_message ORDER BY `date` ASC;");
         $req_active->execute(array(':conv' => $id_conv, ":last_message" => $id_last_message));
         
         $result = $req_active->fetchAll();

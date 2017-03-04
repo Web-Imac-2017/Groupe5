@@ -14,8 +14,10 @@
     $_SESSION['id_conv'] = 1;
     $_SESSION['pseudo'] = "kingofimac";
 	
-	if(isset($_SESSION['id_conv'])) {
-        $id_conv = $_SESSION['id_conv'];
+    $json = json_decode(file_get_contents('php://input'), true);
+    if(!is_array($json)) $data = array("Error", "Error: POST.");
+    else {
+        $id_conv = $json['conv'];
         $data["messages"] = ConversationModel::getAllMessagesOfConv($id_conv);
         
         $id_user = UserModel::getUserId($_SESSION["pseudo"]);
@@ -24,10 +26,6 @@
         
         $data["id"] = $id_conv;
     }
-    else{
-        $data = array("Error", "Error: the conversation doesn't exist.");
-    }
-
   echo json_encode($data);
 
 ?>

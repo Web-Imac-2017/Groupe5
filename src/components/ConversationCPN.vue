@@ -7,7 +7,7 @@
         </div>
       </li>
     </ul>
-    <textarea></textarea>
+    <textarea v-on:keyup.enter="sendMessage();" v-model="newMessage"></textarea>
   </div>
 
 </template>
@@ -22,7 +22,8 @@ export default {
       return {
       	messages : '',
         users : '',
-        me : ''
+        me : '',
+        newMessage: ''
       }
     },
     watch: {
@@ -51,7 +52,7 @@ export default {
             'Content-Type': 'application/json; charset=utf-8'
           },
           dataType: 'JSON',
-          body: JSON.stringify({conversation : _conversationID})
+          body: JSON.stringify({conv : _conversationID})
         }).then(function(response) {
           return response.json();
         }).then(function(data){
@@ -61,10 +62,33 @@ export default {
           else {
             _this.messages = data['messages'];
             _this.users = data['users'];
+            console.log(data);
           }
         });
 
-        this.me = { pseudo : "Coralie" }
+        this.me = { pseudo : "kingofimac" }
+      },
+      sendMessage() {
+        var _this = this;
+        var _conversationID = this.$route.params.conversationID;
+        fetch(apiRoot() + 'Controllers/Conversation/addMessage.php', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+            'Content-Type': 'application/json; charset=utf-8'
+          },
+          dataType: 'JSON',
+          body: JSON.stringify({message: _this.newMessage, conv: _conversationID})
+        }).then(function(response) {
+          return response.json();
+        }).then(function(data){
+          if(data[0] == "Error"){
+            console.log("ERREUR !!");
+          }
+          else {
+            location.reload();
+          }
+        });
       }
     }
   }
