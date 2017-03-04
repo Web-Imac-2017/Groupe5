@@ -8,7 +8,8 @@ header('Content-Type: application/json;charset=utf-8');
 
 include "../../Models/ConversationModel.php";
 
-$pseudo = $_SESSION['pseudo'];
+/*$pseudo = $_SESSION['pseudo'];*/
+$pseudo = "kingofimac";
 
 $result_conv = [];
 

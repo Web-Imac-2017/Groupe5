@@ -62,7 +62,7 @@ class ConversationModel{
     public static function convExist($conv_name){
         $bdd = Database::connexionBDD();
 	
-        $req_active = $bdd->prepare("SELECT `ID` FROM `conversation` WHERE `conversation_name` = :name");
+        $req_active = $bdd->prepare("SELECT `ID` FROM `conversation` WHERE `titre` = :name");
         $req_active->execute(array(':name' => $conv_name));
 
         if($req_active->rowcount()){
@@ -99,7 +99,7 @@ class ConversationModel{
         if(!$test_conv){
             /*ajouter string dans table*/
             $bdd = Database::connexionBDD();
-            $req_active = $bdd->prepare("INSERT INTO `conversation`(`ID`, `conversation_name`) VALUES (NULL, :name);");
+            $req_active = $bdd->prepare("INSERT INTO `conversation`(`ID`, `titre`) VALUES (NULL, :name);");
             $req_active->execute(array(':name' => $conv_name));
 
             /*aller chercher la dernière conv grace à la string*/

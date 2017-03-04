@@ -237,7 +237,7 @@ class UserModel {
     	$filterResults = $bdd->prepare('SELECT pseudo FROM user WHERE age >="'.$filterData['ageMin'].'"AND age <="'.$filterData['ageMax'].'"AND sexe ="'.$filterData['sexe'].'"');
     	$filterResults->execute();
 
-    	if(searchResults->fetch()){
+    	if($searchResults->fetch()){
     		$result = $filterResults->fetch();
     	}
     	else{
