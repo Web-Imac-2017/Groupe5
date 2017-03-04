@@ -10,8 +10,13 @@ class ConversationModel{
         
         $id_user = UserModel::getUserId($pseudo);
         
-        $req_active = $bdd->prepare("INSERT INTO message (`contenu`, `date`, `id_user`, `id_conversation`) VALUES (:contenu, now(), :user, :conv);");
+        $req_active = $bdd->prepare("INSERT INTO message (`contenu`, `date`, `id_user`, `id_conversation`) VALUES (:contenu, now(), :user, :conv); ");
+        $bdd->beginTransaction();
         $req_active->execute(array(':contenu' => $contenu, ':user' => $id_user, ':conv' => $id_conv));
+        $result = $bdd->lastInsertId();
+        $bdd->commit();
+        
+        return intval($result);
     }
 
     /*cette fonction renvoie un tableau contenant les messages classés du + récent au + ancient */
@@ -38,12 +43,17 @@ class ConversationModel{
         $bdd = Database::connexionBDD();
         $result = [];
 
-        $req_active = $bdd->prepare("SELECT `contenu`, `id_user` FROM `message` WHERE `id_conversation` = :conv && `ID` > :last_message ORDER BY `date`DESC;");
+        $req_active = $bdd->prepare("SELECT `id_user`, `date`, `ID`, `contenu` as `content` FROM `message` WHERE `id_conversation` = :conv && `ID` > :last_message ORDER BY `date` DESC;");
         $req_active->execute(array(':conv' => $id_conv, ":last_message" => $id_last_message));
         
         $result = $req_active->fetchAll();
         
         /*var_dump($result);*/
+        
+        for($i=0; $i < count($result); $i++){
+            $num_id = intval($result[$i]['id_user']);
+            $result[$i]['user'] = UserModel::getPseudoById($num_id);
+        }
         
         return $result;
     }

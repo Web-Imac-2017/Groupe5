@@ -25,10 +25,11 @@
                 $id_conv = $json['id'];
                 $_SESSION['conv'] = $id_conv;
                 
+                /*contenu message*/
                 $data["messages"] = ConversationModel::getAllMessagesOfConv($id_conv);
         
                 $id_user = UserModel::getUserId($_SESSION["login"]);
-
+                /*liste des users de la conv*/
                 $data["users"] = ConversationModel::getOtherUsers($id_user, $id_conv);
                 $current_user = array();
                 $current_user["pseudo"] = $_SESSION["login"];

@@ -21,14 +21,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     }else{
         
         if(isset($json['message']) && $json['message'] != ''){
-                $message = $json['message'];
-                ConversationModel::addMessage($message, $pseudo, $id_conv);
-                $data = array(0);
+            $message = $json['message'];
+            $data = ConversationModel::addMessage($message, $pseudo, $id_conv);
+            $_SESSION['last_message'] = $data;
+            $data = array(0);
             
         }else{
             $data = array("Error", "Error: Message empty.");
         }
     }
+
+var_dump($_SESSION['last_message']);
     
 }
 else $data = array("Error", "Error: POST.");
