@@ -9,7 +9,7 @@ header('Content-Type: application/json;charset=utf-8');
 include "../../Models/ConversationModel.php";
 
 $message = "";
-$pseudo = $_SESSION['pseudo'];
+$pseudo = $_SESSION['login'];
 $id_conv = $_SESSION['conv'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST')

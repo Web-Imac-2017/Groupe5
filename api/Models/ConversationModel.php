@@ -19,13 +19,19 @@ class ConversationModel{
         $bdd = Database::connexionBDD();
         $result = [];
 
-        $req_active = $bdd->prepare("SELECT `id_user`, `date`, `ID`, `contenu` FROM `message` WHERE `id_conversation` = :conv ORDER BY `date`DESC;");
+        $req_active = $bdd->prepare("SELECT `id_user`, `date`, `ID`, `contenu` as `content` FROM `message` WHERE `id_conversation` = :conv ORDER BY `date`DESC;");
         $req_active->execute(array(':conv' => $id_conv));
         
         $result = $req_active->fetchAll();
         
-        var_dump($result);
-        
+        /*var_dump($result);*/
+
+        for($i=0; $i < count($result); $i++){        
+            $result[$i]['user'] = UserModel::getPseudoById($result[$i]['id_user']);
+            
+            /*var_dump($result[$i]);*/
+        }
+       
         return $result;
     }
     
@@ -130,19 +136,19 @@ class ConversationModel{
         $result = [];
         
         $bdd = Database::connexionBDD();
-        $req_active = $bdd->prepare("SELECT `ID`
+        $req_active = $bdd->prepare("SELECT `ID` as `id`
         FROM conversation
         INNER JOIN user_conversation
-        WHERE conversation.`ID` = user_conversation.`id_conversation` && user_conversation.`id_user` = :user ;");
+        WHERE conversation.`id` = user_conversation.`id_conversation` && user_conversation.`id_user` = :user ;");
         $req_active->execute(array(':user' => $id_user[0]));
         
         $result = $req_active->fetchAll();
         
         for($i=0; $i < count($result); $i++){
             /*last message*/
-            $result[$i]['lastMessage'] = ConversationModel::getLastMessageOfConv($result[$i]['ID']);
+            $result[$i]['lastMessage'] = ConversationModel::getLastMessageOfConv($result[$i]['id']);
             
-            $result[$i]['users'] = ConversationModel::getOtherUsers($id_user[0], $result[$i]['ID']);
+            $result[$i]['users'] = ConversationModel::getOtherUsers($id_user[0], $result[$i]['id']);
             
             /*var_dump($result[$i]);*/
         }

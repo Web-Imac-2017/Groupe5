@@ -4,15 +4,15 @@
 	header('Access-Control-Allow-Origin:*');
 	header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
 	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
-	//header('Content-Type: application/json;charset=utf-8');
+	header('Content-Type: application/json;charset=utf-8');
 
 	include "../../Models/ConversationModel.php";
 
     $id_conv = "";
     $data = array();
 
-    /*$_SESSION['id_conv'] = 1;
-    $_SESSION['pseudo'] = "kingofimac";*/
+    $_SESSION['id_conv'] = 1;
+    $_SESSION['login'] = "kingofimac";
 	
 	if(isset($_SESSION['id_conv'])) {
         $id_conv = $_SESSION['id_conv'];

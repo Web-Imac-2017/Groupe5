@@ -6,58 +6,56 @@
 
 	include "../../Models/UserModel.php";
 
-    $nom = "";
-    $prenom = "";
+    $lastname = "";
+    $firstname = "";
     $pseudo = "";
     $email = "";
     $password = "";
     $avatar = "";
     $age = "";
-    $sexe = "";
-    $ville = "";
-    $couleur = "";
+    $sex = "";
+    $city = "";
+    $color = "";
     $date_inscription = "";
     $last_connection = "";
     $description = "";
-    $pays = "";
+    $country = "";
     $id_etat_activ = "";
+    $arr_hobbies;
+    $arr_languesSpoken;
+    $arr_languesLearning;
 
 	if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	{	
 		$json = json_decode(file_get_contents('php://input'), true);
-		if(!is_array($json)) $data = array("Error", "Error: POST.");
+		if(!is_array($json)) $data = array("Error", "Error: POST1.");
+        else {
+            print_r($json);
 
-		if(isset($json['nom']) && $json['nom'] != '' && isset($json['prenom']) && $json['prenom'] != ''
-          && isset($json['pseudo']) && $json['pseudo'] != '' && isset($json['email']) && $json['email'] != ''
-          && isset($json['password']) && $json['password'] != '' && isset($json['avatar']) && $json['avatar'] != ''
-           && isset($json['age']) && $json['age'] != '' && isset($json['sexe']) && $json['sexe'] != ''
-           && isset($json['ville']) && $json['ville'] != '' && isset($json['couleur']) && $json['couleur'] != ''
-           && isset($json['date_inscription']) && $json['date_inscription'] != ''
-          && isset($json['description']) && $json['description'] != '' && isset($json['pays']) && $json['pays'] != '') {
-            
-            $nom = $json['nom'];
-            $prenom = $json['prenom'];
+            $lastname = $json['lastname'];
+            $firstname = $json['firstname'];
             $pseudo = $json['pseudo'];
             $email = $json['email'];
             $password = $json['password'];
             $avatar = $json['avatar'];
             $age = $json['age'];
-            $sexe = $json['sexe'];
-            $ville = $json['ville'];
-            $couleur = $json['couleur'];
-            $date_inscription = date("Y-M-d H:i:s");
-            $last_connection = date("Y-M-d H:i:s");
+            $sex = $json['sex'];
+            $city = $json['city'];
+            $color = $json['color'];
+            $date_inscription = date("Y-m-d");
+            $last_connection = date("Y-m-d");
             $description = $json['description'];
-            $pays = $json['pays'];
+            $country = $json['country'];
             $id_etat_activ = 1;
-
-	  }
-	  else $data = array("Error", "Error: One var empty.");
-
-	  $data = UserModel::setUserProfil($nom, $prenom, $pseudo, $email, $password, $avatar, $age, $sexe, $ville, $couleur, $date_inscription, $last_connection, $description, $pays, $id_etat_activ);
+            $arr_hobbies = $json['hobbies'];
+            $arr_languesSpoken = $json['languages']['spokenLang'];
+            $arr_languesLearning = $json['languages']['learningLang'];
+            
+            $data = UserModel::setUserProfil($lastname, $firstname, $pseudo, $email, $password, $avatar, $age, $sex, $city, $color, $date_inscription, $last_connection, $description, $country, $id_etat_activ, $arr_hobbies, $arr_languesSpoken, $arr_languesLearning);
+        }
         
 	}
-	else $data = array("Error", "Error: POST.");
+	else $data = array("Error", "Error: POST2.");
 
   
   echo json_encode($data);

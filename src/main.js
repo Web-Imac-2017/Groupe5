@@ -8,7 +8,19 @@ import App from './App.vue'
 import Home from './components/Home.vue'
 import Login from './components/Login.vue'
 import Register from './components/Register.vue'
-import Profil from './components/Profil.vue'
+import Profil from './components/ProfilCPN.vue'
+import SearchBar from './components/SearchBarCPN.vue'
+import Header from './components/Header.vue'
+import MyProfile from './components/MyProfile.vue'
+
+import Messages from './components/Messages.vue'
+
+//Font Awesome
+import 'vue-awesome/icons/flag'
+import 'vue-awesome/icons'
+import Icon from 'vue-awesome/components/Icon.vue'
+Vue.component('icon', Icon)
+
 
 // install router
 Vue.use(Router)
@@ -22,7 +34,7 @@ var router = new Router({
 	routes: [
 		{
 			name: 'home',
-			path: '/home/',
+			path: '/home',
 			component: Home
 		},
 		{
@@ -39,6 +51,26 @@ var router = new Router({
 			name : 'register',
 			path: '/register/',
 			component: Register
+		},
+		{
+			name: 'searchBar',
+			path: '/searchBar',
+			component: SearchBar
+		},
+		{
+			name : 'header',
+			path: '/header/',
+			component: Header
+		},
+		{
+			name: 'messages',
+			path: '/messages/:conversationID',
+			component: Messages
+		},
+		{
+			name: 'myProfile',
+			path: 'myProfile',
+			component: MyProfile
 		},
 		{
 			path: '*',

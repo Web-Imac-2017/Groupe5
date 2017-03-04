@@ -4,6 +4,15 @@ require_once(__DIR__.'/../Database.php');
 
 class UserModel {
 
+    public static function getPseudoById($id) {
+        $bdd = Database::connexionBDD();
+        
+        $req_ident = $bdd->prepare('SELECT pseudo FROM user WHERE `ID` = "'.$id.'"');
+        $req_ident->execute();
+
+        $result = $req_ident->fetch(PDO::FETCH_ASSOC);
+    }
+
    public static function login($pseudo, $password) {
         $bdd = Database::connexionBDD();
         
@@ -25,7 +34,7 @@ class UserModel {
 
                 $result = array($idUser['ID'], $pseudo);
 
-                UserModel::initUserSession($pseudo);
+                $_SESSION['login'] = $pseudo;
             }
             else {
                 $result = array("Error", "Error: the password isn't correct.");
@@ -45,11 +54,6 @@ class UserModel {
         $req_active->execute();
     }
 
-    public static function initUserSession($pseudo) {
-        session_start();
-        $_SESSION['login'] = $pseudo;
-    }
-
     public static function logout($pseudo) {
         setUserState($pseudo, 0);
         UserModel::deleteUserSession();
@@ -59,18 +63,13 @@ class UserModel {
         session_destroy();
     }
 
-    public static function getUserState() {
+    public static function getUserState($pseudo) {
         $bdd = Database::connexionBDD();
+        $req_id = $bdd->prepare('SELECT id_etat_activite FROM user WHERE pseudo = "'.$pseudo.'"');
+        $req_id->execute();
+        $idUser = $req_id->fetch(PDO::FETCH_ASSOC);
 
-        session_start();
-        if(isset($_SESSION['login'])) {
-            $req_id = $bdd->prepare('SELECT id_etat_activite FROM user WHERE pseudo = "'.$_SESSION['login'].'"');
-            $req_id->execute();
-            $idUser = $req_id->fetch(PDO::FETCH_ASSOC);
-
-            $result = array($idUser['id_etat_activite']);
-        }
-        else $result = array(0);
+        $result = array($idUser['id_etat_activite']);
 
         return $result;
     }
@@ -218,11 +217,9 @@ class UserModel {
         /* On cherche tous les pseudos contenant la suite de caractères entrée */
         $searchResults = $bdd->prepare('SELECT pseudo FROM user WHERE pseudo LIKE "%'.$searched.'%"');
         $searchResults->execute();
+        $result=$searchResults->fetchAll();
 
-        if($searchResults->fetch()){
-            $result = $searchResults->fetch();
-        }
-        else {
+        if($result==NULL){
             $result = array("Error", "Error: We can't find what you searched");
         }
         
@@ -232,9 +229,9 @@ class UserModel {
     /* Recherche/filtre pour match */
     public static function filterResearch($filterData){ /* tableau json contenant les filtres choisis par le user */
     	/* Tableau de la forme [ageMin,ageMax,sexe]
-        La fonction filtrant les hobbies et langues est faite par Adrien */
+        La fonction filtrant les hobbies et langues est faite par Adrian */
     	$bdd = Database::connexionBDD();
-    	$filterResults = $bdd->prepare('SELECT pseudo FROM user WHERE age >="'.$filterData['ageMin'].'"AND age <="'.$filterData['ageMax'].'"AND sexe ="'.$filterData['sexe'].'"');
+    	$filterResults = $bdd->prepare('SELECT pseudo FROM user WHERE age >= "'.$filterData['ageMin'].'" AND age <= "'.$filterData['ageMax'].'" AND sexe ="'.$filterData['sexe'].'"');
     	$filterResults->execute();
 
     	if($searchResults->fetch()){
@@ -243,6 +240,11 @@ class UserModel {
     	else{
     		$result = array("Error", "Error: We can't find anybody with this caracteristics ! Please change your filter.");
     	}
+
+        $result=$filterResults->fetchAll();
+    	if($result==NULL){
+            $result = array("Error", "Error: We can't find anybody with this caracteristics ! Please change your filter.");
+        }
     	return $result;
 
     }
@@ -253,14 +255,16 @@ class UserModel {
         $bdd = Database::connexionBDD(); 
 
         $idUser = UserModel::getUserId($pseudo);
-        var_dump($idUser);
-        $req_id = $bdd->prepare('SELECT DISTINCT id_langue FROM user, user_langue, langue WHERE user_langue.maitrise = 2 AND user.ID=user_langue.id_user AND user.ID='.$idUser.'');
-        $req_id->execute();
 
-        $i = 0;
-        while($idLangueMaitrisee = $req_id->fetch(PDO::FETCH_ASSOC)){
-           $result[$i] .= $idLangueMaitrisee["id_langue"];
-           $i++;
+        $result= array('spokenLang' => array());
+
+        if($idUser == NULL) return $result = array(0);
+        else {
+            $req_id = $bdd->prepare('SELECT DISTINCT id_langue, langue.Nom FROM user, user_langue, langue WHERE user_langue.maitrise = 2 AND user.ID=user_langue.id_user AND user.ID='.$idUser.' AND langue.ID = user_langue.id_langue');
+            $req_id->execute();
+            while($idLangueMaitrisee = $req_id->fetch(PDO::FETCH_ASSOC)){
+                $result['spokenLang'][] = array('id_langue' => $idLangueMaitrisee["id_langue"], 'nom' => $idLangueMaitrisee['Nom']);
+            }
         }
 
         return $result;
@@ -270,110 +274,203 @@ class UserModel {
     public static function getUserLangueAApprendre($pseudo) {
         $bdd = Database::connexionBDD();  
         
-        session_start();
-        if(isset($_SESSION['login'])) {
-            $idUser = getUserId($pseudo);
+        $idUser = UserModel::getUserId($pseudo);
 
-            $req_id = $bdd->prepare('SELECT DISTINCT id_langue FROM user, user_langue, langue WHERE user_langue.maitrise =1 AND user_langue.id_langue='.$idUser.'');
+        $result= array('learningLang' => array());
+
+        if($idUser == NULL) return $result = array(0);
+        else {
+            $req_id = $bdd->prepare('SELECT DISTINCT id_langue, langue.Nom FROM user, user_langue, langue WHERE user_langue.maitrise = 1 AND user.ID=user_langue.id_user AND user.ID='.$idUser.' AND langue.ID = user_langue.id_langue');
             $req_id->execute();
-            $i =0;
             while($idLangueAApprendre = $req_id->fetch(PDO::FETCH_ASSOC)){
-               $result[$i] .= $idLangueAApprendre["id_langue"];
-               $i++;
+                $result['learningLang'][] = array('id_langue' => $idLangueAApprendre["id_langue"], 'nom' => $idLangueAApprendre['Nom']);
             }
         }
-        else $result = array(0);
 
         return $result;
     }
 
     /*Récupère les possibles "Maitres" pour une langue donnée*/
     public static function findMaitre($pseudo, $idLangue) {
-        $bdd = Database::connexionBDD();  
-        
-        session_start();
-        if(isset($_SESSION['login'])) {
-            $idUser = getUserId($pseudo);
+        $bdd = Database::connexionBDD(); 
 
-            $req_id = $bdd->prepare('SELECT DISTINCT id_user, pseudo FROM user, user_langue, langue WHERE user_langue.maitrise=2 AND user_langue.id_langue='.$idLangue.' AND user.ID=user_langue.id_user ');
-            $req_id->execute();
-            $idUserMaitre = $req_id->fetch(PDO::FETCH_ASSOC);
+        $idUser = UserModel::getUserId($pseudo);
 
-            $result = array($idUserMaitre['id_user']);
+        $req_id = $bdd->prepare('SELECT DISTINCT pseudo FROM user, user_langue, langue WHERE user_langue.maitrise=2 AND user_langue.id_langue='.$idLangue.' AND user.ID=user_langue.id_user AND user_langue.id_user !='.$idUser.' AND langue.ID = user_langue.id_langue');
+        $req_id->execute();
+
+        $result= array('maitres' => array());
+        while($maitres = $req_id->fetch(PDO::FETCH_ASSOC)){
+            $result['maitres'][] = $maitres['pseudo'];
         }
-        else $result = array(0);
-
         return $result;
     }
 
     /*Récupère les possibles "Apprentis" pour une langue donnée*/
     public static function findApprenti($pseudo, $idLangue) {
-        $bdd = Database::connexionBDD();  
-        
-        session_start();
-        if(isset($_SESSION['login'])) {
-            $idUser = getUserId($pseudo);
-            $req_id = $bdd->prepare('SELECT DISTINCT id_user FROM user, user_langue, langue WHERE user_langue.maitrise=1 AND user_langue.id_langue='.$idLangue.' AND user.ID=user_langue.id_user ');
-            $req_id->execute();
+        $bdd = Database::connexionBDD(); 
 
-            $idUserApprenti = $req_id->fetch(PDO::FETCH_ASSOC);
+        $idUser = UserModel::getUserId($pseudo);
+        $req_id = $bdd->prepare('SELECT DISTINCT pseudo FROM user, user_langue, langue WHERE user_langue.maitrise=1 AND user_langue.id_langue='.$idLangue.' AND user.ID=user_langue.id_user AND user_langue.id_user !='.$idUser.' AND langue.ID = user_langue.id_langue');
+        $req_id->execute();
 
-            $result = array($idUserApprenti['id_user']);
+        $result= array('apprentis' => array());       
+        while($apprentis = $req_id->fetch(PDO::FETCH_ASSOC)){
+            $result['apprentis'][] = $apprentis['pseudo'];
         }
-        else $result = array(0);
 
         return $result;
     }
 
     /*Récupère les centres d'interet d'un utilisateur*/
-    public static function getUserCentreInteret($pseuso) {
+    public static function getUserCentreInteret($pseudo) {
         $bdd = Database::connexionBDD();  
         
-        session_start();
-        if(isset($_SESSION['login'])) {
-            $idUser = getUserId($pseudo);
-            $req_id = $bdd->prepare('SELECT DISTINCT id_interet FROM user, user_centre_interet, centre_interet WHERE user_centre_interet.id_user ='.$idUser.'');
-            $req_id->execute();
-            $idCentreInteret = $req_id->fetch(PDO::FETCH_ASSOC);
+        $idUser = UserModel::getUserId($pseudo);
+        $req_id = $bdd->prepare('SELECT DISTINCT id_interet FROM user, user_centre_interet, centre_interet WHERE user_centre_interet.id_user ='.$idUser.' AND centre_interet.ID = centre_interet.ID AND user.ID = user_centre_interet.id_user');
+        $req_id->execute();
 
-            $result = array($idCentreInteret['id_interet']);
+        $result= array('hobbies' => array());
+        while($idUserCentreInteret = $req_id->fetch(PDO::FETCH_ASSOC)){
+            $result['hobbies'][] = $idUserCentreInteret["id_interet"];
+        }
+
+        return $result;
+    }
+
+    /*Filtre les utilisateurs ayant des matchs de langues et de centres d'interet*/
+    public static function getUserMatch($pseudo, $role) {
+        $bdd = Database::connexionBDD();
+
+        $idUser = UserModel::getUserId($pseudo);
+
+        if(isset($role)){
+            if($role == "1") {
+                $idLangues = UserModel::getUserLangueAApprendre($pseudo);
+                $idLangues = $idLangues['learningLang'];
+                $matchRole = 2;
+            }
+            else {
+                $idLangues = UserModel::getUserLangueMaitrisee($pseudo);
+                $idLangues = $idLangues['spokenLang'];
+                $matchRole = 1;
+            }
+            $imaxLangues = count($idLangues);
+        }
+        
+        $idCentreInteret = UserModel::getUserCentreInteret($pseudo);
+        $imaxCentreInteret = count($idCentreInteret['hobbies']);
+
+        $result= array('langue' => array("id_langue" => array(), "nom_langue" => array(), "users" =>array() ));
+
+        if(isset($idCentreInteret)){           
+            for($j = 0; $j < $imaxLangues; $j++){
+                $arret=0;
+                $i =0;
+                $result['langue']['id_langue'][$j] = $idLangues[$j];
+                do {
+                    $req_id = $bdd->prepare('SELECT DISTINCT user.ID, user_centre_interet.id_interet FROM user, user_centre_interet, user_langue WHERE user_centre_interet.id_interet ='.$idCentreInteret['hobbies'][$i].' AND user_centre_interet.id_user != '.$idUser.' AND user_langue.id_langue ='.$idLangues[$j]['id_langue'].' AND user_langue.maitrise='.$matchRole.' AND user.ID=user_langue.id_user AND user_centre_interet.id_user=user.ID');
+                    $req_id->execute();
+
+                    if($req_id!= NULL){
+                        while($idUserMatched = $req_id->fetch(PDO::FETCH_ASSOC)){
+                            $result['langue']['users'][$j][] = array("id_user" => $idUserMatched['ID'], "id_interet" => $idUserMatched['id_interet']);
+                            $arret++;
+                        }
+                    }
+                    ++$i;
+                }while(($i < $imaxCentreInteret) && ($arret < 10));
+            }
         }
         else $result = array(0);
 
         return $result;
     }
 
-    public static function getUserMatch($pseudo) {
+    /*Classe les utilisateurs ayant des matchs de langues et de centres d'interet, par tranche d'age et sexe défini*/
+    public static function getUserMatchComplete($pseudo, $role, $gender, $agemin, $agemax, $id_etat_activ) {
         $bdd = Database::connexionBDD();
 
-        session_start();
-        if(isset($_SESSION['login'])) {
-
-            $idUser = getUserId($pseudo);
-            $idCentreInteret = getUserCentreInteret($pseudo);
-
-            if($idCentreInteret != NULL){
-                $arret=0;
-                do {
-                    $req_id = $bdd->prepare('SELECT DISTINCT id_user, id_interet FROM user, user_centre_interet, centre_interet WHERE user_centre_interet.id_interet ='.$idCentreInteret['id_interet'][$i].'');
-                    $req_id->execute();
-                    $idUserCentreInteret = $req_id->fetch(PDO::FETCH_ASSOC);
-
-                    $result = array($idUserCentreInteret['id_interet'], $idUserCentreInteret['id_interet']);
-                    $arret++;
-                }while(($idCentreInteret['id_interet'] != NULL) || ($arret < 10));
+        $idUser = UserModel::getUserId($pseudo);
+         if(isset($role)){
+            if($role == "1") {
+                $idLangues = UserModel::getUserLangueAApprendre($pseudo);
+                $idLangues = $idLangues['learningLang'];
             }
-            else $result = array(0);
+            else {
+                $idLangues = UserModel::getUserLangueMaitrisee($pseudo);
+                $idLangues = $idLangues['spokenLang'];
+            }
+            $imaxLangues = count($idLangues);
         }
+
+
+        // $idUserMaitres = UserModel::findMaitre($pseudo);
+        // $idUserApprentis = UserModel::findApprenti($pseudo);
+        $idCentreInteret = UserModel::getUserCentreInteret($pseudo);
+        $imax = count($idCentreInteret['hobbies']);
+
+        $result= array();
+        $i =0;
+
+        // var_dump($idLanguesAApprendre);
+        // var_dump($idLanguesMaitrisees);
+        // var_dump($idUserMaitres);
+        // var_dump($idUserApprentis);        
+        var_dump($idCentreInteret);
+
+        if(isset($idCentreInteret)){
+            $arret=0;
+            echo('test');
+            do {
+                $req_id = $bdd->prepare('SELECT DISTINCT id_user, id_interet FROM user, user_centre_interet, centre_interet WHERE user_centre_interet.id_interet ='.$idCentreInteret['hobbies'][$i].' AND user_centre_interet.id_user != '.$idUser.' AND user.sexe ='.$gender.' AND user.age >='.$minOld.' AND user.age <='.$maxOld.' AND user.id_etat_activite');
+                $req_id->execute();
+
+                while($idUserCentreInteret = $req_id->fetch(PDO::FETCH_ASSOC)){
+                    $result['user_same_interet'][] = array("id_user" => $idUserCentreInteret['id_user'], "id_interet" => $idUserCentreInteret['id_interet']);
+                    $arret++;
+                    echo 'test';
+                }
+                ++$i;
+            }while(($i < $imax-1) && ($arret < 10));
+        }
+        else $result = array(0);
 
         return $result;
     }
 
+    /* Récupère un tableau d'utilisateur et les tris selon le nombre de centres d'interet en commun*/
+    public static function ClasseUserMatch($listUserMatched){
+        if(isset($listUserMatched)){
+            $iMax = count ($listUserMatched['id_langue']);
+            $temp = array('id_user' => '', 'count' => 0, 'id_interet' => array());
+
+            for($i = 0; $i < $iMax; $i++){
+                $jMaxUser = count($listUserMatched['users'][$i]);
+                for($j = 0; $j < $jMaxUser; $j++){
+                    $kMax = count($temp);
+                    for ($k = 0; $k < $kMax; $k++){
+                        if($listUserMatched['users'][$i][$j]['id_user'] == $temp[$k]["id_user"]){
+                            $temp[$k]["count"] += 1;
+                            var_dump($listUserMatched['users'][$i][$j]['id_interet']);
+                            $temp[$k]["id_interet"][] = $listUserMatched['users'][$i][$j]['id_interet'];
+                        }
+                        else {
+                            $temp[] = array('id_user' => $temp[$k]["id_user"], 'count' => 1, 'id_interet' => array($listUserMatched['users'][$i][$j]['id_interet']));
+                            //var_dump($temp);
+                        }
+                    }
+                 }
+            }
+        }
+    }
+
+
     
     /* Création du profil (première connexion) */
-    public static function setUserProfil($nom, $prenom, $pseudo, $email, $password, $avatar, $age, $sexe, $ville, $couleur, $date_inscription, $last_connection, $description, $pays, $id_etat_activ) {
+    public static function setUserProfil($nom, $prenom, $pseudo, $email, $password, $avatar, $age, $sexe, $ville, $couleur, $date_inscription, $last_connection, $description, $pays, $id_etat_activ, $arr_hobbies, $arr_languesSpoken, $arr_languesLearning) {
         $bdd = Database::connexionBDD();
-        
+
         /* Recherche si le pseudo existe :*/
         $req_pseudo = $bdd->prepare('SELECT ID FROM user WHERE pseudo = "'.$pseudo.'"');
         $req_pseudo->execute();
@@ -381,8 +478,7 @@ class UserModel {
         if($donnees = $req_pseudo->fetch(PDO::FETCH_ASSOC)){
             $result = array("Error", "Error: Pseudo already taken");
         }
-        
-        else{
+        else {
             /* Recherche si le mail deja used :*/
             $req_mail = $bdd->prepare('SELECT email FROM user WHERE pseudo = "'.$pseudo.'"');
             $req_mail->execute();
@@ -393,9 +489,52 @@ class UserModel {
                 $req_idPays = $bdd->prepare('SELECT id_pays FROM table_pays WHERE fr = "'.$pays.'"');
                 $req_idPays->execute();
                 $id_pays = $req_idPays->fetch(PDO::FETCH_ASSOC);
+                
+                $password_hach = md5($password);
 
-                $req_active = $bdd->prepare('INSERT INTO user (ID, nom, prenom, pseudo, email, password, avatar, age, sexe, ville, couleur,  date_inscription, derniere_connexion, description, id_pays, id_etat_activite) VALUES (NULL, '.$nom.', '.$prenom.', '.$pseudo.', '.$email.', '.$password.', '.$avatar.', '.$age.', '.$sexe.', '.$ville.', '.$couleur.', '.$date_inscription.', '.$last_connection.', '.$description.', '.$id_pays['id_pays'].', '.$id_etat_activ.')');
-                $req_active->execute(); 
+                /* Enregistrement de infos dans table users*/
+                $req_user = $bdd->prepare('INSERT INTO user (nom, prenom, pseudo, email, password, avatar, age, sexe, ville, couleur,  date_inscription, derniere_connexion, description, id_pays, id_etat_activite) VALUES ("'.$nom.'", "'.$prenom.'", "'.$pseudo.'", "'.$email.'", "'.$password_hach.'", "'.$avatar.'", '.$age.', '.$sexe.', "'.$ville.'", "'.$couleur.'", '.$date_inscription.', '.$last_connection.', "'.$description.'", '.$id_pays['id_pays'].', '.$id_etat_activ.')');
+                $req_user->execute(); 
+                print_r($date_inscription);
+                print_r($req_user->errorInfo());
+                
+                /* Enregistrement des hobbies */
+                foreach($arr_hobbies as &$value){
+                    $search_name_hobbies = $bdd->prepare('SELECT ID FROM centre_interet WHERE nom = "'.$value.'"');
+                    $search_name_hobbies->execute();
+                    
+                    $id_user = UserModel::getUserId($pseudo);
+                    
+                    $id_hobbie = $search_name_hobbies->fetch(PDO::FETCH_ASSOC)['ID'];
+
+                    $insere_hobbie = $bdd->prepare('INSERT INTO user_centre_interet(ID, id_user, id_interet) VALUES (NULL,'.$id_user.','.$id_hobbie.')');
+                    $insere_hobbie->execute();
+                }
+                
+                /* Enregistrement des Langues */
+                
+                /* Langues maitrisées */
+                foreach($arr_languesSpoken as &$value){
+                    $search_id_langue = $bdd->prepare('SELECT ID FROM langue WHERE Nom = "'.$value.'"');
+                    $search_id_langue->execute();
+                    
+                    $id_langue = $search_id_langue->fetch(PDO::FETCH_ASSOC);
+                    
+                    $insere_langue = $bdd->prepare('INSERT INTO user_langue(ID, id_user, id_langue, maitrise) VALUES (NULL ,'.$id_user.','.$id_langue['ID'].', 2)');
+                    $insere_langue->execute();
+                }
+                
+                /* Langues à apprendre */
+                foreach($arr_languesLearning as &$value){
+                    $search_id_langue = $bdd->prepare('SELECT ID FROM langue WHERE Nom = "'.$value.'"');
+                    $search_id_langue->execute(); 
+                
+                    $id_langue = $search_id_langue->fetch(PDO::FETCH_ASSOC);
+                    
+                    $insere_langue = $bdd->prepare('INSERT INTO user_langue(ID, id_user, id_langue, maitrise) VALUES (NULL ,'.$id_user.','.$id_langue['ID'].', 1)');
+                    $insere_langue->execute();
+                }
+
                 $result = array(0);
             }
         }
@@ -405,26 +544,26 @@ class UserModel {
     public static function getUserId($pseudo) {
         $bdd = Database::connexionBDD();
 
-        $req_active = $bdd->prepare('SELECT ID FROM user WHERE pseudo = "'.$pseudo.'"');
+        $req_active = $bdd->prepare('SELECT ID FROM user WHERE `pseudo` = "'.$pseudo.'"');
         $req_active->execute();
-       
-        if( $id_user = $req_active->fetch(PDO::FETCH_ASSOC)){  
-        $result = $id_user['ID'];
+
+        if($id_user = $req_active->fetch(PDO::FETCH_ASSOC)){  
+            $result = $id_user['ID'];
         }
-        else $result = array(0);
+        else $result = 0;
         
         return $result;
     }
     
     public static function getUserName($pseudo) {
         $bdd = Database::connexionBDD();
-        $id = getUserId($pseudo);
+        $id = UserModel::getUserId($pseudo);
         
         if($id !== 0){
             $req_active = $bdd->prepare('SELECT prenom FROM user WHERE ID ='.$id);
             $req_active->execute();
             $user_name = $req_active->fetch(PDO::FETCH_ASSOC);
-            $result = array($user_name['prenom']);
+            $result = $user_name['prenom'];
         }
         else $result = array(0);
         
@@ -433,13 +572,13 @@ class UserModel {
     
     public static function getUserLastname($pseudo) {
         $bdd = Database::connexionBDD();
-        $id = getUserId($pseudo);
+        $id = UserModel::getUserId($pseudo);
         
         if($id !== 0){
             $req_active = $bdd->prepare('SELECT nom FROM user WHERE ID ='.$id);
             $req_active->execute();
             $user_lastname = $req_active->fetch(PDO::FETCH_ASSOC);
-            $result = array($user_lastname['nom']);
+            $result = $user_lastname['nom'];
         }
         else $result = array(0);
         
@@ -448,13 +587,13 @@ class UserModel {
     
     public static function getUserDescription($pseudo) {
         $bdd = Database::connexionBDD();
-        $id = getUserId($pseudo);
+        $id = UserModel::getUserId($pseudo);
         
         if($id !== 0){
             $req_active = $bdd->prepare('SELECT description FROM user WHERE ID ='.$id);
             $req_active->execute();
             $user_desc = $req_active->fetch(PDO::FETCH_ASSOC);
-            $result = array($user_desc['description']);
+            $result = $user_desc['description'];
         }
         else $result = array(0);
         
@@ -463,13 +602,13 @@ class UserModel {
 
     public static function getUserAvatar($pseudo) {
         $bdd = Database::connexionBDD();
-        $id = getUserId($pseudo);
+        $id = UserModel::getUserId($pseudo);
         
         if($id !== 0){
             $req_active = $bdd->prepare('SELECT avatar FROM user WHERE ID ='.$id);
             $req_active->execute();
             $user_avatar = $req_active->fetch(PDO::FETCH_ASSOC);
-            $result = array($user_avatar['avatar']);
+            $result = $user_avatar['avatar'];
         }
         else $result = array(0);
         
@@ -478,13 +617,13 @@ class UserModel {
 
     public static function getUserAge($pseudo) {
         $bdd = Database::connexionBDD();
-        $id = getUserId($pseudo);
+        $id = UserModel::getUserId($pseudo);
         
         if($id !== 0){
             $req_active = $bdd->prepare('SELECT age FROM user WHERE ID ='.$id);
             $req_active->execute();
             $user_age = $req_active->fetch(PDO::FETCH_ASSOC);
-            $result = array($user_age['age']);
+            $result = $user_age['age'];
         }
         else $result = array(0);
         
@@ -493,13 +632,13 @@ class UserModel {
 
     public static function getUserSex($pseudo) {
         $bdd = Database::connexionBDD();
-        $id = getUserId($pseudo);
+        $id = UserModel::getUserId($pseudo);
         
         if($id !== 0){
             $req_active = $bdd->prepare('SELECT sexe FROM user WHERE ID ='.$id);
             $req_active->execute();
             $user_sex = $req_active->fetch(PDO::FETCH_ASSOC);
-            $result = array($user_sex['sexe']);
+            $result = $user_sex['sexe'];
         }
         else $result = array(0);
         
@@ -508,13 +647,13 @@ class UserModel {
 
     public static function getUserColor($pseudo) {
         $bdd = Database::connexionBDD();
-        $id = getUserId($pseudo);
+        $id = UserModel::getUserId($pseudo);
         
         if($id !== 0){
             $req_active = $bdd->prepare('SELECT couleur FROM user WHERE ID ='.$id);
             $req_active->execute();
             $user_color = $req_active->fetch(PDO::FETCH_ASSOC);
-            $result = array($user_color['couleur']);
+            $result = $user_color['couleur'];
         }
         else $result = array(0);
         
@@ -523,13 +662,13 @@ class UserModel {
 
     public static function getUserCity($pseudo) {
         $bdd = Database::connexionBDD();
-        $id = getUserId($pseudo);
+        $id = UserModel::getUserId($pseudo);
         
         if($id !== 0){
             $req_active = $bdd->prepare('SELECT ville FROM user WHERE ID ='.$id);
             $req_active->execute();
             $user_city = $req_active->fetch(PDO::FETCH_ASSOC);
-            $result = array($user_city['ville']);
+            $result = $user_city['ville'];
         }
         else $result = array(0);
         
@@ -540,17 +679,17 @@ class UserModel {
         $bdd = Database::connexionBDD();
         
         $req_active = $bdd->prepare('SELECT Nom FROM centre_interet WHERE ID = '.$id_hobbies);
-        $req_active->e.xecute();
+        $req_active->execute();
         
         $hobbies = $req_active->fetch(PDO::FETCH_ASSOC);
-        $result = array($hobbies['Nom']);
+        $result = $hobbies['Nom'];
         
         return $result;
     }
     
     public static function getUserHobbies($pseudo) {
         $bdd = Database::connexionBDD();
-        $user_id = getUserId($pseudo);
+        $user_id = UserModel::getUserId($pseudo);
         $donnees = array();
         $i = 0;
         
@@ -563,7 +702,7 @@ class UserModel {
         
         /* Renvoyer les noms des hobbies du user */
         while($result = $req_active->fetch(PDO::FETCH_ASSOC)){
-            $hobbies = getHobbies($result['id_interet']);
+            $hobbies = UserModel::getHobbies($result['id_interet']);
             $donnees[$i] = $hobbies;
             $i++;
             }
@@ -572,7 +711,7 @@ class UserModel {
     
     public static function getUserDateInscription($pseudo) {
         $bdd = Database::connexionBDD();
-        $id = getUserId($pseudo);
+        $id = UserModel::getUserId($pseudo);
         
         if($id !== 0){
             $req_active = $bdd->prepare('SELECT date_inscription FROM user WHERE ID ='.$id);
@@ -587,7 +726,7 @@ class UserModel {
     
     public static function getUserMail($pseudo) {
         $bdd = Database::connexionBDD();
-        $id = getUserId($pseudo);
+        $id = UserModel::getUserId($pseudo);
         
         if($id !== 0){
             $req_active = $bdd->prepare('SELECT email FROM user WHERE ID ='.$id);
@@ -602,7 +741,7 @@ class UserModel {
     
     public static function getUserLastConnexion($pseudo) {
         $bdd = Database::connexionBDD();
-        $id = getUserId($pseudo);
+        $id = UserModel::getUserId($pseudo);
         
         if($id !== 0){
             $req_active = $bdd->prepare('SELECT derniere_connexion FROM user WHERE ID ='.$id);
@@ -617,7 +756,7 @@ class UserModel {
     
     public static function getUserPays($pseudo) {
         $bdd = Database::connexionBDD();
-        $id = getUserId($pseudo);
+        $id = UserModel::getUserId($pseudo);
         
         /* Recupere l'ID du pays dans la table user */
         if($id !== 0){
@@ -627,7 +766,7 @@ class UserModel {
             $idPays = array($user_pays['id_pays']);
             
             /* Recuperation du nom dans la table Pays */
-            $req_nomPays = $bdd->prepare('SELECT fr FROM table_pays WHERE id_pays = '.$idPays['id_pays']);
+            $req_nomPays = $bdd->prepare('SELECT fr FROM table_pays WHERE id_pays = '.$user_pays['id_pays']);
             $req_nomPays->execute();
             $nom_pays = $req_nomPays->fetch(PDO::FETCH_ASSOC);
             $result = array($nom_pays['fr']);
@@ -635,6 +774,26 @@ class UserModel {
         else $result = array(0);
 
         return $result;  
+    }
+
+    public static function getUser($pseudo){
+        $data = array();
+        
+        $data["pseudo"] = $pseudo;
+        $data["avatar"] = "";
+        $data["name"] = UserModel::getUserLastName($pseudo);
+        $data["age"] = UserModel::getUserAge($pseudo);
+        $data["sexe"] = UserModel::getUserSex($pseudo);
+        $data["prenom"] = UserModel::getUserName($pseudo);
+        $data["description"] = UserModel::getUserDescription($pseudo);
+        $data["ville"] = UserModel::getUserCity($pseudo);
+        $data["pays"] = UserModel::getUserPays($pseudo);
+        $data["state"] = UserModel::getUserState($pseudo);
+        $data["hobbies"] = UserModel::getUserHobbies($pseudo);
+        $data["languages"]["spokenLang"] = UserModel::getUserLangueMaitrisee($pseudo);
+        $data["languages"]["learningLang"] = UserModel::getUserLangueAApprendre($pseudo);
+
+        return $data;
     }
 }
 
