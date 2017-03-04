@@ -261,10 +261,10 @@ class UserModel {
 
         if($idUser == NULL) return $result = array(0);
         else {
-            $req_id = $bdd->prepare('SELECT DISTINCT id_langue FROM user, user_langue, langue WHERE user_langue.maitrise = 2 AND user.ID=user_langue.id_user AND user.ID='.$idUser.'');
+            $req_id = $bdd->prepare('SELECT DISTINCT id_langue, langue.Nom FROM user, user_langue, langue WHERE user_langue.maitrise = 2 AND user.ID=user_langue.id_user AND user.ID='.$idUser.' AND langue.ID = user_langue.id_langue');
             $req_id->execute();
             while($idLangueMaitrisee = $req_id->fetch(PDO::FETCH_ASSOC)){
-                $result['spokenLang'][] = $idLangueMaitrisee["id_langue"];
+                $result['spokenLang'][] = array('id_langue' => $idLangueMaitrisee["id_langue"], 'nom' => $idLangueMaitrisee['Nom']);
             }
         }
 
@@ -281,10 +281,10 @@ class UserModel {
 
         if($idUser == NULL) return $result = array(0);
         else {
-            $req_id = $bdd->prepare('SELECT DISTINCT id_langue FROM user, user_langue, langue WHERE user_langue.maitrise = 1 AND user.ID=user_langue.id_user AND user.ID='.$idUser.'');
+            $req_id = $bdd->prepare('SELECT DISTINCT id_langue, langue.Nom FROM user, user_langue, langue WHERE user_langue.maitrise = 1 AND user.ID=user_langue.id_user AND user.ID='.$idUser.' AND langue.ID = user_langue.id_langue');
             $req_id->execute();
             while($idLangueAApprendre = $req_id->fetch(PDO::FETCH_ASSOC)){
-                $result['learningLang'] = $idLangueAApprendre["id_langue"];
+                $result['learningLang'][] = array('id_langue' => $idLangueAApprendre["id_langue"], 'nom' => $idLangueAApprendre['Nom']);
             }
         }
 
@@ -297,7 +297,7 @@ class UserModel {
 
         $idUser = UserModel::getUserId($pseudo);
 
-        $req_id = $bdd->prepare('SELECT DISTINCT pseudo FROM user, user_langue, langue WHERE user_langue.maitrise=2 AND user_langue.id_langue='.$idLangue.' AND user.ID=user_langue.id_user AND user_langue.id_user !='.$idUser.'');
+        $req_id = $bdd->prepare('SELECT DISTINCT pseudo FROM user, user_langue, langue WHERE user_langue.maitrise=2 AND user_langue.id_langue='.$idLangue.' AND user.ID=user_langue.id_user AND user_langue.id_user !='.$idUser.' AND langue.ID = user_langue.id_langue');
         $req_id->execute();
 
         $result= array('maitres' => array());
@@ -308,11 +308,11 @@ class UserModel {
     }
 
     /*Récupère les possibles "Apprentis" pour une langue donnée*/
-    public static function findApprenti($idUser, $idLangue) {
+    public static function findApprenti($pseudo, $idLangue) {
         $bdd = Database::connexionBDD(); 
 
         $idUser = UserModel::getUserId($pseudo);
-        $req_id = $bdd->prepare('SELECT DISTINCT pseudo FROM user, user_langue, langue WHERE user_langue.maitrise=1 AND user_langue.id_langue='.$idLangue.' AND user.ID=user_langue.id_user AND user_langue.id_user !='.$idUser.'');
+        $req_id = $bdd->prepare('SELECT DISTINCT pseudo FROM user, user_langue, langue WHERE user_langue.maitrise=1 AND user_langue.id_langue='.$idLangue.' AND user.ID=user_langue.id_user AND user_langue.id_user !='.$idUser.' AND langue.ID = user_langue.id_langue');
         $req_id->execute();
 
         $result= array('apprentis' => array());       
@@ -328,7 +328,7 @@ class UserModel {
         $bdd = Database::connexionBDD();  
         
         $idUser = UserModel::getUserId($pseudo);
-        $req_id = $bdd->prepare('SELECT DISTINCT id_interet FROM user, user_centre_interet, centre_interet WHERE user_centre_interet.id_user ='.$idUser.'');
+        $req_id = $bdd->prepare('SELECT DISTINCT id_interet FROM user, user_centre_interet, centre_interet WHERE user_centre_interet.id_user ='.$idUser.' AND centre_interet.ID = centre_interet.ID AND user.ID = user_centre_interet.id_user');
         $req_id->execute();
 
         $result= array('hobbies' => array());
@@ -370,7 +370,7 @@ class UserModel {
                 $i =0;
                 $result['langue']['id_langue'][$j] = $idLangues[$j];
                 do {
-                    $req_id = $bdd->prepare('SELECT DISTINCT user.ID, user_centre_interet.id_interet FROM user, user_centre_interet, user_langue WHERE user_centre_interet.id_interet ='.$idCentreInteret['hobbies'][$i].' AND user_centre_interet.id_user != '.$idUser.' AND user_langue.id_langue ='.$idLangues[$j].' AND user_langue.maitrise='.$matchRole.' AND user.ID=user_langue.id_user AND user_centre_interet.id_user=user.ID');
+                    $req_id = $bdd->prepare('SELECT DISTINCT user.ID, user_centre_interet.id_interet FROM user, user_centre_interet, user_langue WHERE user_centre_interet.id_interet ='.$idCentreInteret['hobbies'][$i].' AND user_centre_interet.id_user != '.$idUser.' AND user_langue.id_langue ='.$idLangues[$j]['id_langue'].' AND user_langue.maitrise='.$matchRole.' AND user.ID=user_langue.id_user AND user_centre_interet.id_user=user.ID');
                     $req_id->execute();
 
                     if($req_id!= NULL){

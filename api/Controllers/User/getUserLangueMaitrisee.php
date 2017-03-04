@@ -27,7 +27,6 @@
 
   $data = UserModel::getUserLangueMaitrisee('Robibidu77');
 
-
   echo json_encode($data);
 
 ?>
