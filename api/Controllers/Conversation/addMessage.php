@@ -9,8 +9,6 @@ header('Content-Type: application/json;charset=utf-8');
 include "../../Models/ConversationModel.php";
 
 $message = "";
-//$pseudo = $_SESSION['pseudo'];
-$pseudo = "kingofimac";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST')
 {	
@@ -19,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
   if(isset($json['message']) && $json['message'] != ''){
     $message = $json['message'];
+    $pseudo = $json['pseudo'];
     $id_conv = $json['conv'];
     ConversationModel::addMessage($message, $pseudo, $id_conv);
   	$data = array(0);

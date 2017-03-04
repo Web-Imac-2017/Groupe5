@@ -30,8 +30,6 @@
 		$json = json_decode(file_get_contents('php://input'), true);
 		if(!is_array($json)) $data = array("Error", "Error: POST1.");
         else {
-            print_r($json);
-
             $lastname = $json['lastname'];
             $firstname = $json['firstname'];
             $pseudo = $json['pseudo'];

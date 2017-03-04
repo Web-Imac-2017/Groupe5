@@ -12,7 +12,7 @@
 
 	            <!-- AVATAR -->
 	            <div id="chargeImg">
-	                <div v-if="!image">
+	                <div v-if="!user.avatar">
 	                    <input type="file" name="file" id="file" class="inputfile" />
 	                    <label class="filebutton" for="file" v-bind:style="{backgroundImage: 'url(../../static/img/import.png'}"></label>
 	                    <br/>
@@ -61,10 +61,10 @@
 	            <div class="form-group">            
 	                <label class="form-check-label" for="sex">Sex* </label><br/>
 	                <span class="errorSpan displayNo" id="errorSex">You have to select your sex</span><br/>
-	                <input class="form-check-input" type="radio" id="woman" value="1" v-model="user.sex">
+	                <input class="form-check-input" type="radio" id="woman" value="2" v-model="user.sex">
 	                <label class="form-check-label" for="woman">Woman</label>
 	                
-	                <input class="form-check-input" type="radio" id="man" value="2" v-model="user.sex">
+	                <input class="form-check-input" type="radio" id="man" value="1" v-model="user.sex">
 	                <label class="form-check-label" for="man">Man</label>
 	                
 	                <input class="form-check-input" type="radio" id="other" value="3" v-model="user.sex">
@@ -227,10 +227,14 @@
                   return response.json();
                 }).then(function(data){
                   if(data[0] == "Error"){
-                    console.log("ERREUR !!");
+                    console.log(data[1]);
                   }
                   else {
-                    _this.conversations = data['conversations'];
+                    _this.$parent.setCookie("PLUME_pseudo", _this.user.pseudo, 10);
+            				_this.$parent.setUserState(_this.user.pseudo, "true");
+            				_this.$parent.setConnectedUser(_this.$parent.getCookie("PLUME_pseudo"));
+            				console.log(_this.$parent.connectedUser);
+            				_this.$router.push('/home/');
                   }
                 });
 

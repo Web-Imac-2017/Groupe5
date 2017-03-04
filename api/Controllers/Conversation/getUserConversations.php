@@ -7,16 +7,27 @@
 	header('Content-Type: application/json;charset=utf-8');
 
 	include "../../Models/ConversationModel.php";
+	
+	$data = array();
 
-	//$pseudo = $_SESSION['login'];
+	if ($_SERVER['REQUEST_METHOD'] == 'POST')
+	{	
+		$json = json_decode(file_get_contents('php://input'), true);
+		if(!is_array($json)) $data = array("Error", "Error: Post");
+		else {
+			if(isset($json['pseudo']) && $json['pseudo'] != '') {
+				$pseudo = $json['pseudo'];
 
-	$pseudo = "kingofimac";
+				$data["conversations"] = ConversationModel::getConvOfUser($pseudo);
 
-	$result_conv = [];
+			}
+			else {
+				$data = array("Error", "Error: Pseudo");
+			}
+		}
+	}
+	else $data = array("Error", "Error: Post");
 
-	/*all conv*/
-	$result_conv["conversations"] = ConversationModel::getConvOfUser($pseudo);
-
-	echo json_encode($result_conv);
+	echo json_encode($data);
 
 ?>

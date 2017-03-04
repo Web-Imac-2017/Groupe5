@@ -22,16 +22,18 @@ export default {
       return {
       	messages : '',
         users : '',
-        me : '',
+        me : {},
         newMessage: ''
       }
     },
     watch: {
       '$route': function() {
+        this.me = this.$parent.connectedUser;
         this.getConversation();
       }
     },
     created: function() {
+      this.me = this.$parent.connectedUser;
       this.getConversation();
     },
     methods: {
@@ -44,6 +46,7 @@ export default {
       },
       getConversation: function() {
         var _this = this;
+
         var _conversationID = this.$route.params.conversationID;
         fetch(apiRoot() + 'Controllers/Conversation/getAllMessages.php', {
           method: 'POST',
@@ -52,7 +55,7 @@ export default {
             'Content-Type': 'application/json; charset=utf-8'
           },
           dataType: 'JSON',
-          body: JSON.stringify({id : _conversationID})
+          body: JSON.stringify({id : _conversationID, pseudo: _this.me.pseudo})
         }).then(function(response) {
           return response.json();
         }).then(function(data){
@@ -62,11 +65,8 @@ export default {
           else {
             _this.messages = data['messages'];
             _this.users = data['users'];
-            console.log(data);
           }
         });
-
-        this.me = { pseudo : "kingofimac" }
       },
       sendMessage() {
         var _this = this;
@@ -78,7 +78,7 @@ export default {
             'Content-Type': 'application/json; charset=utf-8'
           },
           dataType: 'JSON',
-          body: JSON.stringify({message: _this.newMessage, conv: _conversationID})
+          body: JSON.stringify({message: _this.newMessage, conv: _conversationID, pseudo: _this.me.pseudo})
         }).then(function(response) {
           return response.json();
         }).then(function(data){

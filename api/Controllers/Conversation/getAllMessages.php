@@ -11,30 +11,24 @@
     $id_conv = "";
     $data = array();
 
-    $_SESSION['conv'] = 1;
-    $_SESSION['login'] = "kingofimac";
-	
     $json = json_decode(file_get_contents('php://input'), true);
     if(!is_array($json)) $data = array("Error", "Error: POST.");
     else {
         if(isset($json['id']) && $json['id'] != ''){
             $id_conv = $json['id'];
-            $_SESSION['conv'] = $id_conv;
             
             $data["messages"] = ConversationModel::getAllMessagesOfConv($id_conv);
 
-            $id_user = UserModel::getUserId($_SESSION["login"]);
+            $id_user = UserModel::getUserId($json['pseudo']);
 
             $data["users"] = ConversationModel::getOtherUsers($id_user, $id_conv);
             $current_user = array();
-            $current_user["pseudo"] = $_SESSION["login"];
+            $current_user["pseudo"] = $json['pseudo'];
             array_push($data["users"], $current_user);
 
-            $data["id"] = $id_conv;
-            
-            $_SESSION['last_message'] = $data['messages'][0]["ID"];
-            
-        }else{
+            $data["id"] = $id_conv;    
+        }
+        else{
             $data = array("Error", "Error: the conversation id doesn't exist.");
         }
     }

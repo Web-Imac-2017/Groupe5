@@ -9,12 +9,20 @@
 
 	$pseudo = "";
 	
-	if(isset($_SESSION['login'])) {
-        $pseudo = $_SESSION['login'];
-    }
+	$pseudo = "";
+	if ($_SERVER['REQUEST_METHOD'] == 'POST')
+  {   
+    $json = json_decode(file_get_contents('php://input'), true);
+    if(!is_array($json)) $data = array("Error", "Error: POST.");
+			if(isset($json['pseudo'])) {
+		    $pseudo = $json['pseudo'];
+  			$data = UserModel::getUserColor($pseudo);
+		  }
+		}
+		else $data = array("Error", "Error: POST.");
+	} else $data = array("Error", "Error: POST.");
 
-  	$data = UserModel::getUserColor($pseudo);
+	echo json_encode($data);
 
-  	echo json_encode($data);
 
 ?>

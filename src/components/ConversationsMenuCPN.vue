@@ -42,13 +42,19 @@ import Header from './Header.vue'
 export default {
   data : function () {
     return {
-      conversations : ''
+      conversations : '',
+      me : {}
     }
   },
   watch: {
     '$route': function() {
-      this.getMessages();
+      this.me = this.$parent.connectedUser;
+      this.getConversations();
     }
+  },
+  created: function() {
+    this.me = this.$parent.connectedUser;
+    this.getConversations();
   },
   methods: {
     getActiveConversation: function(id) {
@@ -58,15 +64,17 @@ export default {
       }
       return theClass;
     },
-    getMessages: function() {
+    getConversations: function() {
       var _this = this;
+
       fetch(apiRoot() + 'Controllers/Conversation/getUserConversations.php', {
         method: 'POST',
         headers: {
           'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
           'Content-Type': 'application/json; charset=utf-8'
         },
-        dataType: 'JSON'
+        dataType: 'JSON',
+        body: JSON.stringify({pseudo: _this.me.pseudo})
       }).then(function(response) {
         return response.json();
       }).then(function(data){
@@ -78,9 +86,6 @@ export default {
         }
       });
     }
-  },
-  created: function() {
-    this.getMessages();
   }
 }
 </script>
