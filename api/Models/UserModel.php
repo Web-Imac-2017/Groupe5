@@ -11,6 +11,8 @@ class UserModel {
         $req_ident->execute();
 
         $result = $req_ident->fetch(PDO::FETCH_ASSOC);
+        
+        return $result['pseudo'];
     }
 
    public static function login($pseudo, $password) {
@@ -60,6 +62,7 @@ class UserModel {
     }
 
     public static function deleteUserSession() {
+        session_unset();
         session_destroy();
     }
 
@@ -233,7 +236,6 @@ class UserModel {
     	$bdd = Database::connexionBDD();
     	$filterResults = $bdd->prepare('SELECT pseudo FROM user WHERE age >= "'.$filterData['ageMin'].'" AND age <= "'.$filterData['ageMax'].'" AND sexe ="'.$filterData['sexe'].'"');
     	$filterResults->execute();
-
 
     	if($searchResults->fetch()){
     		$result = $filterResults->fetch();

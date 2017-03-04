@@ -1,5 +1,4 @@
 <?php
-
 	session_start();
 
 	header('Access-Control-Allow-Origin:*');
@@ -9,9 +8,9 @@
 
 	include "../../Models/ConversationModel.php";
 
-	//$pseudo = $_SESSION['login'];
+	$pseudo = $_SESSION['login'];
 
-	$pseudo = "kingofimac";
+	//$pseudo = "kingofimac";
 
 	$result_conv = [];
 
