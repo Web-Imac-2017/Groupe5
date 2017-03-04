@@ -52,7 +52,7 @@ export default {
             'Content-Type': 'application/json; charset=utf-8'
           },
           dataType: 'JSON',
-          body: JSON.stringify({conv : _conversationID})
+          body: JSON.stringify({id : _conversationID})
         }).then(function(response) {
           return response.json();
         }).then(function(data){
