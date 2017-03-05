@@ -6,7 +6,7 @@ header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 header('Content-Type: application/json;charset=utf-8');
 
 $json = json_decode(file_get_contents('php://input'), true);
-$pseudo = $json['pseudoUserToGet'];
+$pseudo = $json['pseudo'];
 
 if($pseudo == "maureeniz") {
   echo '

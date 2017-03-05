@@ -25,7 +25,7 @@ import ConversationComponent from './ConversationCPN.vue'
   export default {
     data : function () {
       return {
-
+        connectedUser: {}
       }
     },
     components: {
@@ -33,6 +33,9 @@ import ConversationComponent from './ConversationCPN.vue'
       ConversationComponent
     },
     methods: {
+    },
+    created: function() {
+      this.connectedUser = this.$parent.connectedUser;
     }
   }
 </script>

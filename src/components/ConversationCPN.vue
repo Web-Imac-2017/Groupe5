@@ -10,7 +10,7 @@
         </div>
       </li>
     </ul>
-    <textarea></textarea>
+    <textarea v-on:keyup.enter="sendMessage();" v-model="newMessage"></textarea>
   </div>
 
 </template>
@@ -25,17 +25,21 @@ export default {
     return {
       messages : '',
       users : '',
-      me : ''
+      me : {},
+      newMessage: ''
     }
   },
   watch: {
     '$route': function() {
+      this.me = this.$parent.connectedUser;
       this.getConversation();
     }
   },
   created: function() {
+    this.me = this.$parent.connectedUser;
     this.getConversation();
   },
+
   methods: {
     getUser: function(user) {
       var theClass = 'user_other';
@@ -46,6 +50,7 @@ export default {
     },
     getConversation: function() {
       var _this = this;
+
       var _conversationID = this.$route.params.conversationID;
       fetch(apiRoot() + 'Controllers/Conversation/getAllMessages.php', {
         method: 'POST',
@@ -54,7 +59,7 @@ export default {
           'Content-Type': 'application/json; charset=utf-8'
         },
         dataType: 'JSON',
-        body: JSON.stringify({conversation : _conversationID})
+        body: JSON.stringify({id : _conversationID, pseudo: _this.me.pseudo})
       }).then(function(response) {
         return response.json();
       }).then(function(data){
@@ -66,8 +71,28 @@ export default {
           _this.users = data['users'];
         }
       });
-
-      this.me = { pseudo : "Coralie" }
+    },
+    sendMessage() {
+      var _this = this;
+      var _conversationID = this.$route.params.conversationID;
+      fetch(apiRoot() + 'Controllers/Conversation/addMessage.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({message: _this.newMessage, conv: _conversationID, pseudo: _this.me.pseudo})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+        if(data[0] == "Error"){
+          console.log("ERREUR !!");
+        }
+        else {
+          location.reload();
+        }
+      });
     }
   }
 }
@@ -79,6 +104,7 @@ export default {
 
 $profil_color: rgb(195,39,47);
 $profil_color_light: rgb(225,146,150);
+
 .conversation{
   ul {
     padding: 0;
@@ -123,7 +149,6 @@ $profil_color_light: rgb(225,146,150);
       background-color: #cdcccc;
       float: left;
     }
-
   }
 
   .user_me {

@@ -11,7 +11,7 @@
             <img src="../../static/avatar/maureeniz.jpg">
           </span>
           <span v-for="user in conversation.users" class="text-conv">
-            <p class="titleConversation userPseudo">{{ user.pseudo }}</p>
+            <p class="titleConversation userPseudo" :class=getUserState(user)>{{ user.pseudo }} <icon name="circle"></icon></p>
             <p class="lastMessage">{{ conversation.lastMessage }}</p>
           </span>
           <span v-on:click="deleteConv(conversation.id)" class="quit">
@@ -45,13 +45,19 @@ import Header from './Header.vue'
 export default {
   data : function () {
     return {
-      conversations : ''
+      conversations : '',
+      me : {}
     }
   },
   watch: {
     '$route': function() {
-      this.getMessages();
+      this.me = this.$parent.connectedUser;
+      this.getConversations();
     }
+  },
+  created: function() {
+    this.me = this.$parent.connectedUser;
+    this.getConversations();
   },
   methods: {
     getActiveConversation: function(id) {
@@ -61,42 +67,65 @@ export default {
       }
       return theClass;
     },
-    getMessages: function() {
+    getUserState: function(user) {
+      var theClass = 'userNonConnected';
       var _this = this;
-      fetch(apiRoot() + 'Controllers/Conversation/getUserConversations.php', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
-          'Content-Type': 'application/json; charset=utf-8'
-        },
-        dataType: 'JSON'
-      }).then(function(response) {
-        return response.json();
-      }).then(function(data){
-        if(data[0] == "Error"){
-          console.log("ERREUR !!");
-        }
-        else {
-          _this.conversations = data['conversations'];
-        }
-      });
-    },
-    deleteConv: function(id){
-      var _conversationID = id;
-      fetch(apiRoot() + 'Controllers/Conversation/getAllMessages.php', {
+      fetch(apiRoot() + 'Controllers/User/getUserState.php', {
         method: 'POST',
         headers: {
           'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
           'Content-Type': 'application/json; charset=utf-8'
         },
         dataType: 'JSON',
-        body: JSON.stringify({conversation : _conversationID})
-      });
-    }
+        body: JSON.stringify({pseudo: user.pseudo})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+        if(data[0] == "Error"){
+        }
+        else {
+          if(data[0] == 2) theClass = "userConnected";
+        }
+      }
+    );
+    return theClass;
   },
-  created: function() {
-    this.getMessages();
+  getConversations: function() {
+
+    var _this = this;
+    console.log(this.me);
+    fetch(apiRoot() + 'Controllers/Conversation/getUserConversations.php', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+        'Content-Type': 'application/json; charset=utf-8'
+      },
+      dataType: 'JSON',
+      body: JSON.stringify({pseudo: _this.me.pseudo})
+    }).then(function(response) {
+      return response.json();
+    }).then(function(data){
+      if(data[0] == "Error"){
+        console.log("ERREUR !!");
+      }
+      else {
+        _this.conversations = data['conversations'];
+      }
+    });
+  },
+  deleteConv: function(id){
+    var _conversationID = id;
+    fetch(apiRoot() + 'Controllers/Conversation/getAllMessages.php', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+        'Content-Type': 'application/json; charset=utf-8'
+      },
+      dataType: 'JSON',
+      body: JSON.stringify({conversation : _conversationID})
+    });
   }
+}
 }
 </script>
 
@@ -108,7 +137,12 @@ $profil_color_light: rgb(225,146,150);
 $avatar_size: 80px;
 
 
-.conversationsMenu {
+.conversationsMenu{
+  overflow-x: hidden;
+  overflow-y: auto;
+  border-right: 1px solid #000;
+  height: 100%;
+
   [class*="col"]{
     padding: 0;
   }
@@ -123,10 +157,6 @@ $avatar_size: 80px;
     margin: 0;
     vertical-align: middle;
   }
-  overflow-x: hidden;
-  overflow-y: auto;
-  border-right: 1px solid #000;
-  height: 100%;
 
   .CMHeader{
     text-align: center;
@@ -165,6 +195,12 @@ $avatar_size: 80px;
         text-transform: uppercase;
         font-weight: 600;
         font-size: 20px;
+        &.userConnected svg {
+          color: #38B647;
+        }
+        &.userNonConnected svg {
+          color: #C02029;
+        }
       }
       .lastMessage {
         display: block;
@@ -177,23 +213,24 @@ $avatar_size: 80px;
       right: 10px;
       top: -15px;
     }
-  }
-  .user.router-link-active.active {
-    background-color: $profil_color_light;
-  }
-  .addPlume{
-    .plus{
-      width: $avatar_size;
-      height: $avatar_size;
-      border: 1px solid #000;
+
+    .user.router-link-active.active {
       background-color: $profil_color_light;
-      text-align: center;
-      display: flex;
-      .fa-icon{
-        margin: auto;
+    }
+    .addPlume{
+      .plus{
+        width: $avatar_size;
+        height: $avatar_size;
+        border: 1px solid #000;
+        background-color: $profil_color_light;
+        text-align: center;
+        display: flex;
+        .fa-icon{
+          margin: auto;
+        }
       }
     }
-  }
 
+  }
 }
 </style>

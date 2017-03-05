@@ -43,8 +43,10 @@ import Header from './Header.vue'
             _this.loginError = data[1];
           }
           else {
+            _this.$parent.setCookie("PLUME_pseudo", _this.pseudo, 10)
+            _this.$parent.setUserState(_this.pseudo, "true");
+            _this.$parent.setConnectedUser(_this.$parent.getCookie("PLUME_pseudo"));
             _this.$router.push('/home/');
-            _this.$parent.getUserState();
           }
         });
       }

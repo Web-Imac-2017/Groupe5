@@ -12,7 +12,7 @@
 
 	            <!-- AVATAR -->
 	            <div id="chargeImg">
-	                <div v-if="!image">
+	                <div v-if="!user.avatar">
 	                    <input type="file" name="file" id="file" class="inputfile" />
 	                    <label class="filebutton" for="file" v-bind:style="{backgroundImage: 'url(../../static/img/import.png'}"></label>
 	                    <br/>
@@ -52,8 +52,8 @@
 
 	            <label class="form-text" for="country">YOUR COUNTRY :</label>
 	            <select name="country" id="country" v-model="user.country">
-	            	<option v-for="value in countryList">{{ value }}</option>
-	        	</select>
+	            	<option v-for="value in countryList">{{ value.name }}</option>
+	        		</select>
 	        	<p>{{ user.country }}</p>
 	            <span class="tooltip">Vous devez sélectionner votre pays de résidence</span>
 	            <br /><br />
@@ -61,10 +61,10 @@
 	            <div class="form-group">            
 	                <label class="form-check-label" for="sex">Sex* </label><br/>
 	                <span class="errorSpan displayNo" id="errorSex">You have to select your sex</span><br/>
-	                <input class="form-check-input" type="radio" id="woman" value="1" v-model="user.sex">
+	                <input class="form-check-input" type="radio" id="woman" value="2" v-model="user.sex">
 	                <label class="form-check-label" for="woman">Woman</label>
 	                
-	                <input class="form-check-input" type="radio" id="man" value="2" v-model="user.sex">
+	                <input class="form-check-input" type="radio" id="man" value="1" v-model="user.sex">
 	                <label class="form-check-label" for="man">Man</label>
 	                
 	                <input class="form-check-input" type="radio" id="other" value="3" v-model="user.sex">
@@ -101,13 +101,10 @@
 	            <div class="form-group">            
 	                <label class="form-check-label" for="languageM">Language(s) spoken* :</label><br/>
 	                <span class="errorSpan displayNo" id="errorLanguageM">You have to select one language</span><br/>
-	                 <input class="form-check-input" type="checkbox" id="english" value="English" v-model="user.languages.spokenLang">
-	                <label class="form-check-label" for="english">English</label>
-	                <input class="form-check-input" type="checkbox" id="French" value="French" v-model="user.languages.spokenLang">
-	                <label  class="form-check-label"for="french">French</label>
-	                <input class="form-check-input" type="checkbox" id="spanish" value="Spanish" v-model="user.languages.spokenLang">
-	                <label class="form-check-label" for="spanish">Spanish</label>
-	                <br>
+	                <div v-for="language in languagesList">
+		                <input class="form-check-input" type="checkbox" :id="language.name" :value="language.name" v-model="user.languages.spokenLang">
+		                <label class="form-check-label" :for="language.name" >{{language.name}}</label>
+	                </div>
 	                <span>Checked languages:</span>
 	                <span v-for="value in user.languages.spokenLang"> {{ value }} </span>
 	    		</div>
@@ -116,13 +113,10 @@
 	            <div class="form-group">
 	                <label class="form-check-label" for="languageL">Language(s) you want to learn* :</label><br/>
 	                <span class="errorSpan displayNo" id="errorLanguageL">You have to select one language</span><br/>
-	                <input class="form-check-input" type="checkbox" id="english" value="English" v-model="user.languages.learningLang">
-	                <label class="form-check-label" for="english">English</label>
-	                <input class="form-check-input"  type="checkbox" id="French" value="French" v-model="user.languages.learningLang">
-	                <label class="form-check-label" for="french">French</label>
-	                <input  class="form-check-input" type="checkbox" id="spanish" value="Spanish" v-model="user.languages.learningLang">
-	                <label class="form-check-label" for="spanish">Spanish</label>
-	                <br />
+	                <div v-for="language in languagesList">
+		                <input class="form-check-input" type="checkbox" :id="language.name" :value="language.name" v-model="user.languages.learningLang">
+		                <label class="form-check-label" :for="language.name" >{{language.name}}</label>
+	                </div>
 	                <span>Checked languages:</span>
 	                <span v-for="value in user.languages.learningLang"> {{ value }} </span>
 	            </div>
@@ -130,15 +124,10 @@
 
 	            <div class="form-group">
 	                <label lass="form-check-label" for="hobbies">Interest center(s) :</label><br/>
-	                <input class="form-check-input" type="checkbox" id="music" value="Music" v-model="user.hobbies">
-	                <label class="form-check-label" for="music">Music</label><br/>
-	                <input type="checkbox" id="cinema" value="Cinema" v-model="user.hobbies">
-	                <label class="form-check-label" for="cinema">Cinema</label><br/>
-	                <input class="form-check-input" type="checkbox" id="travel" value="Travel" v-model="user.hobbies">
-	                <label class="form-check-label" for="travel">Travel</label><br/>
-	                <input class="form-check-input" type="checkbox" id="arts" value="Arts" v-model="user.hobbies">
-	                <label for="arts">Arts</label><br/>
-	                
+	                <div v-for="hobby in hobbiesList">
+		                <input class="form-check-input" type="checkbox" :id="hobby.name" :value="hobby.name" v-model="user.hobbies">
+		                <label class="form-check-label" :for="hobby.name" >{{hobby.name}}</label>
+	                </div>               
 	                <br>
 	                <span>Checked hobbies:</span>
 	                <span v-for="value in user.hobbies"> {{ value }} </span>
@@ -153,7 +142,6 @@
 </template>
 
 <script>
-
     import {apiRoot} from '../../config/localhost/settings.js'
 	export default {
 	  	name: 'registration',
@@ -161,17 +149,7 @@
 	    	return {
 	      		msgRegistration: 'WELCOME',
 	      		titleForm : 'Registration',
-	      		countryList: [
-	      			"Afghanistan",
-	      			"Algeria",
-	      			"Australia",
-	      			"Brasil",
-	      			"Canada",
-	      			"France",
-	      			"Japan",
-	      			"Germany",
-	      			"Spain"
-	      			],
+	      		countryList: [],
 	      		user : {
 	      			firstname:'',
 	      			name:'',
@@ -191,9 +169,11 @@
             		},
 	        		hobbies : []
 	      		},
+	      		hobbiesList: [],
+	      		languagesList: []
 	    	}
 	  	},
-      	methods:{
+      methods:{
         submitForm: function(user){
             var form = document.getElementById("formRegistration");
             var sizeM = user.languages.spokenLang.length;
@@ -228,17 +208,88 @@
                   return response.json();
                 }).then(function(data){
                   if(data[0] == "Error"){
-                    console.log("ERREUR !!");
+                    console.log(data[1]);
                   }
                   else {
-                    _this.conversations = data['conversations'];
+                    _this.$parent.setCookie("PLUME_pseudo", _this.user.pseudo, 10);
+            				_this.$parent.setUserState(_this.user.pseudo, "true");
+            				_this.$parent.setConnectedUser(_this.$parent.getCookie("PLUME_pseudo"));
+            				console.log(_this.$parent.connectedUser);
+            				_this.$router.push('/home/');
                   }
                 });
 
 
             }
+        },
+        getLanguages: function() {
+        	var _this = this;
+                
+          fetch(apiRoot() + 'Controllers/General/getAllLanguages.php', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+              'Content-Type': 'application/json; charset=utf-8'
+            },
+            dataType: 'JSON'
+          }).then(function(response) {
+            return response.json();
+          }).then(function(data){
+            if(data[0] == "Error"){
+              console.log(data[1]);
+            }
+            else {
+              _this.languagesList = data['languages'];
+            }
+          });
+        },
+        getHobbies: function() {
+        	var _this = this;
+                
+          fetch(apiRoot() + 'Controllers/General/getAllHobbies.php', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+              'Content-Type': 'application/json; charset=utf-8'
+            },
+            dataType: 'JSON'
+          }).then(function(response) {
+            return response.json();
+          }).then(function(data){
+            if(data[0] == "Error"){
+              console.log(data[1]);
+            }
+            else {
+              _this.hobbiesList = data['hobbies'];
+            }
+          });
+        },
+        getCountries: function() {
+        	var _this = this;
+                
+          fetch(apiRoot() + 'Controllers/General/getAllCountries.php', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+              'Content-Type': 'application/json; charset=utf-8'
+            },
+            dataType: 'JSON'
+          }).then(function(response) {
+            return response.json();
+          }).then(function(data){
+            if(data[0] == "Error"){
+              console.log(data[1]);
+            }
+            else {
+              _this.countryList = data['countries'];
+            }
+          });
         }
-
+      },
+      created: function() {
+      	this.getLanguages();
+      	this.getHobbies();
+      	this.getCountries();
       }
 	}
 
