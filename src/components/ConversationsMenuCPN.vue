@@ -11,7 +11,7 @@
             <img src="../../static/avatar/maureeniz.jpg">
           </span>
           <span v-for="user in conversation.users" class="col-md-10">
-            <p class="titleConversation userPseudo">{{ user.pseudo }}</p>
+            <p class="titleConversation userPseudo" :class=getUserState(user)>{{ user.pseudo }} <icon name="circle"></icon></p> 
             <p class="lastMessage">{{ conversation.lastMessage }}</p>
           </span>
         </router-link>
@@ -64,9 +64,33 @@ export default {
       }
       return theClass;
     },
-    getConversations: function() {
+    getUserState: function(user) {
+      var theClass = 'userNonConnected';
       var _this = this;
-
+      fetch(apiRoot() + 'Controllers/User/getUserState.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({pseudo: user.pseudo})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+          if(data[0] == "Error"){
+          }
+          else {
+            if(data[0] == 2) theClass = "userConnected";
+          }
+        }
+      );
+      return theClass;
+    },
+    getConversations: function() {
+      
+      var _this = this;
+console.log(this.me);
       fetch(apiRoot() + 'Controllers/Conversation/getUserConversations.php', {
         method: 'POST',
         headers: {
@@ -152,6 +176,13 @@ $avatar_size: 60px;
     text-transform: uppercase;
     font-weight: 600;
     font-size: 20px;
+
+    &.userConnected svg {
+      color: #38B647;
+    }
+    &.userNonConnected svg {
+      color: #C02029;
+    }
   }
   .lastMessage {
     display: block;
