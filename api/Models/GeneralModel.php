@@ -8,26 +8,30 @@ class GeneralModel{
     public static function getAllHobbies(){
         $bdd = Database::connexionBDD();
         
-        $req_get = $bdd->prepare('SELECT nom FROM centre_interet');
+        $req_get = $bdd->prepare('SELECT Nom as name FROM centre_interet');
         $req_get->execute();
-        
-        $result= array('Hobbies' => array());
-        while($req_get = $req_get->fetch(PDO::FETCH_ASSOC)){
-            $result['Hobbies'][] = $req_get["Nom"];
-        }
+        $result = array();
+        $result['hobbies'] = $req_get->fetchAll();
         return $result;  
     }
     
     public static function getAllLanguages(){
         $bdd = Database::connexionBDD();
         
-        $req_get = $bdd->prepare('SELECT Nom FROM langue');
+        $req_get = $bdd->prepare('SELECT Nom as name FROM langue');
         $req_get->execute();
+        $result = array();
+        $result['languages'] = $req_get->fetchAll();
+        return $result;  
+    }
+
+    public static function getAllCountries(){
+        $bdd = Database::connexionBDD();
         
-        $result= array('Languages' => array());
-        while($req_get = $req_get->fetch(PDO::FETCH_ASSOC)){
-            $result['Languages'][] = $req_get["Nom"];
-        }
+        $req_get = $bdd->prepare('SELECT nom_pays as name FROM table_pays WHERE code != "00"');
+        $req_get->execute();
+        $result = array();
+        $result['countries'] = $req_get->fetchAll();
         return $result;  
     }
 }
