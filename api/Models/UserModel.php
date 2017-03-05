@@ -36,7 +36,11 @@ class UserModel {
 
                 $result = array($idUser['ID'], $pseudo);
 
-                $_SESSION['login'] = $pseudo;
+                /*ob_start();
+                setcookie("PLUME_pseudo", $pseudo);
+                ob_end_flush();
+
+                print_r($_COOKIE['PLUME_pseudo']);*/
             }
             else {
                 $result = array("Error", "Error: the password isn't correct.");
@@ -62,8 +66,9 @@ class UserModel {
     }
 
     public static function deleteUserSession() {
-        session_unset();
-        session_destroy();
+        //session_unset();
+        //session_destroy();
+        unset($_COOKIE['PLUME_pseudo']);
     }
 
     public static function getUserState($pseudo) {
@@ -73,7 +78,6 @@ class UserModel {
         $idUser = $req_id->fetch(PDO::FETCH_ASSOC);
 
         $result = array($idUser['id_etat_activite']);
-
         return $result;
     }
 
@@ -498,8 +502,6 @@ class UserModel {
                 /* Enregistrement de infos dans table users*/
                 $req_user = $bdd->prepare('INSERT INTO user (nom, prenom, pseudo, email, password, avatar, age, sexe, ville, couleur,  date_inscription, derniere_connexion, description, id_pays, id_etat_activite) VALUES ("'.$nom.'", "'.$prenom.'", "'.$pseudo.'", "'.$email.'", "'.$password_hach.'", "'.$avatar.'", '.$age.', '.$sexe.', "'.$ville.'", "'.$couleur.'", '.$date_inscription.', '.$last_connection.', "'.$description.'", '.$id_pays['id_pays'].', '.$id_etat_activ.')');
                 $req_user->execute(); 
-                print_r($date_inscription);
-                print_r($req_user->errorInfo());
                 
                 /* Enregistrement des hobbies */
                 foreach($arr_hobbies as &$value){
