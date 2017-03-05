@@ -14,6 +14,9 @@
             <p class="titleConversation userPseudo">{{ user.pseudo }}</p>
             <p class="lastMessage">{{ conversation.lastMessage }}</p>
           </span>
+          <span v-on:click="deleteConv(conversation.id)" class="quit">
+            <icon name="times"></icon>
+          </span>
         </router-link>
       </li>
       <li class="row addPlume">
@@ -76,6 +79,18 @@ export default {
         else {
           _this.conversations = data['conversations'];
         }
+      });
+    },
+    deleteConv: function(id){
+      var _conversationID = id;
+      fetch(apiRoot() + 'Controllers/Conversation/getAllMessages.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({conversation : _conversationID})
       });
     }
   },
@@ -145,25 +160,27 @@ $avatar_size: 80px;
 
     .text-conv{
       margin-left: 15px;
+      width: 100%;
+      .userPseudo {
+        text-transform: uppercase;
+        font-weight: 600;
+        font-size: 20px;
+      }
+      .lastMessage {
+        display: block;
+        font-style: italic;
+        font-size: 12px;
+      }
+    }
+    .quit{
+      position: relative;
+      right: 10px;
+      top: -15px;
     }
   }
-
   .user.router-link-active.active {
     background-color: $profil_color_light;
   }
-
-
-  .userPseudo {
-    text-transform: uppercase;
-    font-weight: 600;
-    font-size: 20px;
-  }
-  .lastMessage {
-    display: block;
-    font-style: italic;
-    font-size: 12px;
-  }
-
   .addPlume{
     .plus{
       width: $avatar_size;
