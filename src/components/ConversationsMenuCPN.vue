@@ -20,7 +20,7 @@
         </router-link>
       </li>
       <li class="row addPlume">
-        <router-link v-bind:to="'/messages/' + 0" class="user">
+        <router-link v-bind:to="'/home/'" class="user">
           <span class="avatar">
             <div class="plus">
               <icon name="plus"></icon>
@@ -213,24 +213,22 @@ $avatar_size: 80px;
       right: 10px;
       top: -15px;
     }
-
-    .user.router-link-active.active {
+  }
+  .user.router-link-active.active {
+    background-color: $profil_color_light;
+  }
+  .addPlume{
+    .plus{
+      width: $avatar_size;
+      height: $avatar_size;
+      border: 1px solid #000;
       background-color: $profil_color_light;
-    }
-    .addPlume{
-      .plus{
-        width: $avatar_size;
-        height: $avatar_size;
-        border: 1px solid #000;
-        background-color: $profil_color_light;
-        text-align: center;
-        display: flex;
-        .fa-icon{
-          margin: auto;
-        }
+      text-align: center;
+      display: flex;
+      .fa-icon{
+        margin: auto;
       }
     }
-
   }
 }
 </style>

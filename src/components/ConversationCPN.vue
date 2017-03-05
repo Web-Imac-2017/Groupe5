@@ -50,7 +50,6 @@ export default {
     },
     getConversation: function() {
       var _this = this;
-
       var _conversationID = this.$route.params.conversationID;
       fetch(apiRoot() + 'Controllers/Conversation/getAllMessages.php', {
         method: 'POST',
