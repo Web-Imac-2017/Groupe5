@@ -62,7 +62,7 @@ var router = new Router({
 		},
 		{
 			name: 'myProfile',
-			path: 'myProfile',
+			path: '/myProfile/',
 			component: MyProfile
 		},
 		{
