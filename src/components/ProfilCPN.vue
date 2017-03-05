@@ -15,13 +15,13 @@
         <p class="llabel">I speak</p>
         <ul class="spoken-lang">
           <li v-for="spokenLang in $parent.selectedUser.languages.spokenLang">
-            <img v-bind:src="$parent.languagesToFlag(spokenLang)">
+            <img v-bind:src="$parent.languagesToFlag(spokenLang.name)">
           </li>
         </ul>
         <p class="llabel">I'm learning</p>
         <ul class="learning-lang">
           <li v-for="learningLang in $parent.selectedUser.languages.learningLang">
-            <img v-bind:src="$parent.languagesToFlag(learningLang)">
+            <img v-bind:src="$parent.languagesToFlag(learningLang.name)">
           </li>
         </ul>
       </div>
@@ -54,6 +54,7 @@ $profil_color: #C3272F;
   right: 0;
   min-height: 100%;
   box-shadow: 0px 0 40px 0px #706f6f;
+  background-color: #fff;
 
   img.avatarProfil{
     width: 100%;

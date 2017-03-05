@@ -37,14 +37,14 @@ export default {
   methods: {
     searchUsers: function () {
       var _this = this;
-      fetch(apiRoot() + 'Controllers/User/searchUser.php', {
+      fetch(apiRoot() + 'Controllers/User/researchUser.php', {
         method: 'POST',
         headers: {
           'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
           'Content-Type': 'application/json; charset=utf-8'
         },
         dataType: 'JSON',
-        body: JSON.stringify({pseudoToSearch : _this.search})
+        body: JSON.stringify({searched : _this.search})
       }).then(function(response) {
         return response.json();
       }).then(function(data){

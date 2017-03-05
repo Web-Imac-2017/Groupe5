@@ -7,7 +7,7 @@
         </div>
       </li>
     </ul>
-    <textarea></textarea>
+    <textarea v-on:keyup.enter="sendMessage();" v-model="newMessage"></textarea>
   </div>
 
 </template>
@@ -22,15 +22,18 @@ export default {
       return {
       	messages : '',
         users : '',
-        me : ''
+        me : {},
+        newMessage: ''
       }
     },
     watch: {
       '$route': function() {
+        this.me = this.$parent.connectedUser;
         this.getConversation();
       }
     },
     created: function() {
+      this.me = this.$parent.connectedUser;
       this.getConversation();
     },
     methods: {
@@ -43,15 +46,16 @@ export default {
       },
       getConversation: function() {
         var _this = this;
+
         var _conversationID = this.$route.params.conversationID;
-        fetch(apiRoot() + 'Controllers/Conversation/getMessages.php', {
+        fetch(apiRoot() + 'Controllers/Conversation/getAllMessages.php', {
           method: 'POST',
           headers: {
             'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
             'Content-Type': 'application/json; charset=utf-8'
           },
           dataType: 'JSON',
-          body: JSON.stringify({conversation : _conversationID})
+          body: JSON.stringify({id : _conversationID, pseudo: _this.me.pseudo})
         }).then(function(response) {
           return response.json();
         }).then(function(data){
@@ -63,8 +67,28 @@ export default {
             _this.users = data['users'];
           }
         });
-
-        this.me = { pseudo : "Coralie" }
+      },
+      sendMessage() {
+        var _this = this;
+        var _conversationID = this.$route.params.conversationID;
+        fetch(apiRoot() + 'Controllers/Conversation/addMessage.php', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+            'Content-Type': 'application/json; charset=utf-8'
+          },
+          dataType: 'JSON',
+          body: JSON.stringify({message: _this.newMessage, conv: _conversationID, pseudo: _this.me.pseudo})
+        }).then(function(response) {
+          return response.json();
+        }).then(function(data){
+          if(data[0] == "Error"){
+            console.log("ERREUR !!");
+          }
+          else {
+            location.reload();
+          }
+        });
       }
     }
   }
@@ -72,7 +96,10 @@ export default {
 </script>
 
 
-<style type="scss">
+<style lang="scss">
+
+$profil_color: rgb(195,39,47);
+$profil_color_light: rgb(225,146,150);
 
 .conversation ul {
   padding: 0;
@@ -82,7 +109,7 @@ export default {
   outline: none;
   resize: none;
   overflow: auto;
-  background-color: #facbd1;
+  background-color: $profil_color_light;
   width: 100%;
   border: 2px solid #000;
   border-radius: 10px;
@@ -109,7 +136,7 @@ export default {
 
 .user_me .messageContent {
   color: #ffffff;
-  background-color: #f05665;
+  background-color: $profil_color;
   float: right;
 }
 

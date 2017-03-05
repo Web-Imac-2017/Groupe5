@@ -38,15 +38,32 @@ export default {
           learningLang: ''
         }
       },
-      profilShowed: ''
+      profilShowed: '',
+      connectedUser: {
+        id : '',
+        pseudo: '',
+        avatar: '',
+        firstname: '',
+        lastname: '',
+        age: '',
+        country: '',
+        description: '',
+        city: '',
+        hobbies: '',
+        languages: {
+          spokenLang: '',
+          learningLang: ''
+        }
+      },
     }
   },
   methods: {
     logout: function(){
-      this.connected = '';
-      this.$route.router.go('/home/');
+      document.cookie = "PLUME_pseudo=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+      this.setUserState(this.connectedUser.pseudo, '');
+      this.$router.push('/home/');
     },
-    getUserState: function() {
+    getUserState: function(pseudo) {
       var _this = this;
 
       fetch(apiRoot() + 'Controllers/User/getUserState.php', {
@@ -55,7 +72,8 @@ export default {
           'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
           'Content-Type': 'application/json; charset=utf-8'
         },
-        dataType: 'JSON'
+        dataType: 'JSON',
+        body: JSON.stringify({pseudo: pseudo})
       }).then(function(response) {
         return response.json();
       }).then(function(data){
@@ -63,8 +81,33 @@ export default {
             _this.loginError = data[1];
           }
           else {
-            if(data[0] == 0) _this.connected = "";
-            else _this.connected = "true";
+            if(data[0] == 2) _this.connected = "true";
+            else _this.connected = "";
+          }
+        }
+      );
+    },
+    setUserState: function(pseudo, connected) {
+      this.connected = connected;
+
+      var state;
+      if(connected == "true") state = 2;
+      else state = 1;
+
+      var _this = this;
+      fetch(apiRoot() + 'Controllers/User/setUserState.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({pseudo: pseudo, state: state})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+          if(data[0] == "Error"){
+            _this.loginError = data[1];
           }
         }
       );
@@ -78,7 +121,7 @@ export default {
           'Content-Type': 'application/json; charset=utf-8'
         },
         dataType: 'JSON',
-        body: JSON.stringify({pseudoUserToGet: _this.selectedUser.pseudo})
+        body: JSON.stringify({pseudo: _this.selectedUser.pseudo})
       }).then(function(response) {
         return response.json();
       }).then(function(data){
@@ -117,17 +160,64 @@ export default {
         this.selectedUser.pseudo = '';
         this.profilShowed = "false";
       }
+    },
+    getCookie: function(cname) {
+      var name = cname + "=";
+      var ca = document.cookie.split(';');
+      for(var i = 0; i <ca.length; i++) {
+          var c = ca[i];
+          while (c.charAt(0)==' ') {
+              c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+              return c.substring(name.length,c.length);
+          }
+      }
+      return "";
+    },
+    setCookie: function(cname, cvalue, exdays) {
+      var d = new Date();
+      d.setTime(d.getTime() + (exdays*24*60*60*1000));
+      var expires = "expires="+ d.toUTCString();
+      document.cookie = cname + "=" + cvalue + "; " + expires;
+    },
+    setConnectedUser: function(pseudo) {
+      var _this = this;
+      fetch(apiRoot() + 'Controllers/User/getUser.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({pseudo: pseudo})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+        _this.connectedUser.pseudo = data['pseudo'];
+        _this.connectedUser.avatar = data['avatar'];
+        _this.connectedUser.firstname = data['firstname'];
+        _this.connectedUser.lastname = data['lastname'];
+        _this.connectedUser.age = data['age'];
+        _this.connectedUser.country = data['country'];
+        _this.connectedUser.city = data['city'];
+        _this.connectedUser.description = data['description'];
+        _this.connectedUser.color = data['color'];
+        _this.connectedUser.hobbies = data['hobbies'];
+        _this.connectedUser.languages = data['languages'];
+      });
     }
   },
   created: function(){
     this.profilShowed = "false";
-    this.getUserState();
+    this.getUserState(this.getCookie("PLUME_pseudo"));
+    this.setConnectedUser(this.getCookie("PLUME_pseudo"));
   }
 }
 </script>
 
 <style lang="scss">
-@import 'assets/scss/design.scss';
 @import 'assets/scss/reset.css';
+@import 'assets/scss/design.scss';
 
 </style>
