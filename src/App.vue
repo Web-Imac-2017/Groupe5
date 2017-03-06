@@ -12,12 +12,14 @@ import {apiRoot} from '../config/localhost/settings.js'
 import HeaderComponent from './components/Header.vue'
 import FooterComponent from './components/Footer.vue'
 import ProfilComponent from './components/ProfilCPN.vue'
+import MatchComponent from './components/Match.vue'
 
 export default {
   components: {
     HeaderComponent,
     FooterComponent,
-    ProfilComponent
+    ProfilComponent,
+    MatchComponent
   },
   data(){
     return {
@@ -140,13 +142,13 @@ export default {
     },
     languagesToFlag: function(country) {
       var flag = {
-        portuguese : '/static/flags/portugal.png',
-        english : '/static/flags/united-kingdom.png',
-        chinese : '/static/flags/china.png',
-        french : '/static/flags/france.png',
-        japanese : '/static/flags/japan.png',
-        german : '/static/flags/germany.png',
-        spanish : '/static/flags/spain.png'
+        Portuguese : '/static/flags/portugal.png',
+        English : '/static/flags/united-kingdom.png',
+        Chinese : '/static/flags/china.png',
+        French : '/static/flags/france.png',
+        Japanese : '/static/flags/japan.png',
+        German : '/static/flags/germany.png',
+        Spanish : '/static/flags/spain.png'
       }
       return flag[country];
     },
