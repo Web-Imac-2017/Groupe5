@@ -791,6 +791,7 @@ class UserModel {
         $data["sexe"] = UserModel::getUserSex($pseudo);
         $data["prenom"] = UserModel::getUserName($pseudo);
         $data["description"] = UserModel::getUserDescription($pseudo);
+        $date["couleur"] = UserModel::getUserColor($pseudo);
         $data["ville"] = UserModel::getUserCity($pseudo);
         $data["pays"] = UserModel::getUserPays($pseudo);
         $data["state"] = UserModel::getUserState($pseudo);
