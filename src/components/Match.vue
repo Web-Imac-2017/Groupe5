@@ -24,7 +24,8 @@ export default{
 			selectedFilter : [],
 			users : [],
 			isConnected : 'true',
-			userActif: ''
+			userActif: '',
+			master:''
 
 		}
 	},
@@ -56,7 +57,17 @@ export default{
           	}
         	});
   		},
-		getUserMatch: function(){
+  		getSearch: function(){
+  			var men = document.getElementById('searchBox_master');
+
+  			if(men.isChecked()){
+  				alert("c'est coché");
+  			}
+
+  			getUserMatch();
+
+  		},
+		getUserMatch: function(filters){
   		var _this = this;
   		        fetch(apiRoot() + 'Controllers/User/getUserMatch.php', {
 	          method: 'POST',
@@ -65,7 +76,7 @@ export default{
 	            'Content-Type': 'application/json; charset=utf-8'
 	          },
 	          dataType: 'JSON',
-	          body: JSON.stringify({ selectedFilter : _this.selectedFilter })
+	          body: JSON.stringify({ selectedFilter : filters })
 	        }).then(function(response) {
 	          return response.json();
 	        }).then(function(data){

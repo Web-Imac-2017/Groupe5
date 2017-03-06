@@ -6,15 +6,34 @@
 		</div>
 		<div id="filterMatch">
 			<h2>Filters </h2>
-			<input v-model="$parent.selectedFilter"  class="form-check-input" type="checkbox" id="women" value="Women" >
-      <label  class="form-check-label" for="women">Women</label>
-      <input v-model="$parent.selectedFilter" class="form-check-input" type="checkbox" id="men" value="Men" >
-      <label  class="form-check-label" for="men">Men</label>
+
+
+			<p style="display:inline-block">You search : </p>
+			<input id="searchBox_master"  v-model="$parent.master"  class="form-check-input" type="checkbox" value="1" >
+			{{ $parent.master }}
+		     <label  class="form-check-label" for="master">Master</label>
+		     <input v-model="$parent.selectedFilter.apprentice" class="form-check-input" type="checkbox" id="apprentice" value="2" >
+		    <label  class="form-check-label" for="apprentices">Apprentices</label>
+		    <br/>
+			<input v-model="$parent.selectedFilter.woman"  class="form-check-input" type="checkbox" id="women" value="Women" >
+		     <label  class="form-check-label" for="women">Women</label>
+		     <input v-model="$parent.selectedFilter.man" class="form-check-input" type="checkbox" id="men" value="Men" >
+		    <label  class="form-check-label" for="men">Men</label>
+		    <div id="rangeSlider">
+    			<vue-slider v-model="value" min="10" max="120" ></vue-slider>
+    		</div>
+
 		</div>
     {{  $parent.selectedFilter }}
+
+    {{ value  }}
+
+
+    	
+
 		<div id="btnSM">
 			<button class="btn btn-default" type="button">Quit</button>
-			<button v-on:click="$parent.getUserMatch()" class="btn btn-default" type="button">Search</button>
+			<button v-on:click="$parent.getSearch()" class="btn btn-default" type="button">Search</button>
 		</div>
 		
 
@@ -27,6 +46,7 @@
 
 import {apiRoot} from '../../config/localhost/settings.js'
 import Header from './Header.vue'
+import vueSlider from 'vue-slider-component';
 
 export default {
   data () {
@@ -45,7 +65,9 @@ export default {
 	        },
 		    hobbies : []
       	},
-      	users : ''
+      	users : '',
+      	value: [10,120],
+
 
        }
 
@@ -75,6 +97,9 @@ export default {
   },
   created: function() {
   	this.getUser();
+  },
+  components:{
+  	vueSlider
   }
 
 
@@ -146,6 +171,10 @@ export default {
 
 #btnSM button:nth-child(2){
 	margin-left:8%;
+}
+
+#rangeSlider{
+	margin-top:30px;
 }
 
 </style>
