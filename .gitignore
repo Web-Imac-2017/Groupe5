@@ -7,3 +7,5 @@ api/secure/
 logs/
 access.log
 config/localhost/settings.js
+settings.js
+config/localhost/settings.js

@@ -11,10 +11,20 @@ import Register from './components/Register.vue'
 import Profil from './components/ProfilCPN.vue'
 import SearchBar from './components/SearchBarCPN.vue'
 import Header from './components/Header.vue'
+import MyProfile from './components/MyProfile.vue'
 
 import Messages from './components/Messages.vue'
 
+<<<<<<< HEAD
 import Match from './components/Match.vue'
+=======
+//Font Awesome
+import 'vue-awesome/icons/flag'
+import 'vue-awesome/icons'
+import Icon from 'vue-awesome/components/Icon.vue'
+Vue.component('icon', Icon)
+
+>>>>>>> b85bfa5c32e550d24c09ed69b4b3b340b093f728
 
 // install router
 Vue.use(Router)
@@ -65,6 +75,11 @@ var router = new Router({
 			name: 'messages',
 			path: '/messages/:conversationID',
 			component: Messages
+		},
+		{
+			name: 'myProfile',
+			path: '/myProfile/',
+			component: MyProfile
 		},
 		{
 			path: '*',
