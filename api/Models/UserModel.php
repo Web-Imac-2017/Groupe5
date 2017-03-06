@@ -77,7 +77,7 @@ class UserModel {
         $req_id->execute();
         $idUser = $req_id->fetch(PDO::FETCH_ASSOC);
 
-        $result = array($idUser['id_etat_activite']);
+        $result = $idUser['id_etat_activite'];
         return $result;
     }
 
@@ -270,7 +270,7 @@ class UserModel {
             $req_id = $bdd->prepare('SELECT DISTINCT id_langue, langue.Nom FROM user, user_langue, langue WHERE user_langue.maitrise = 2 AND user.ID=user_langue.id_user AND user.ID='.$idUser.' AND langue.ID = user_langue.id_langue');
             $req_id->execute();
             while($idLangueMaitrisee = $req_id->fetch(PDO::FETCH_ASSOC)){
-                $result['spokenLang'][] = array('id_langue' => $idLangueMaitrisee["id_langue"], 'nom' => $idLangueMaitrisee['Nom']);
+                $result['spokenLang'][] = array('id_langue' => $idLangueMaitrisee["id_langue"], 'name_langue' => $idLangueMaitrisee['Nom']);
             }
         }
 
@@ -290,7 +290,7 @@ class UserModel {
             $req_id = $bdd->prepare('SELECT DISTINCT id_langue, langue.Nom FROM user, user_langue, langue WHERE user_langue.maitrise = 1 AND user.ID=user_langue.id_user AND user.ID='.$idUser.' AND langue.ID = user_langue.id_langue');
             $req_id->execute();
             while($idLangueAApprendre = $req_id->fetch(PDO::FETCH_ASSOC)){
-                $result['learningLang'][] = array('id_langue' => $idLangueAApprendre["id_langue"], 'nom' => $idLangueAApprendre['Nom']);
+                $result['learningLang'][] = array('id_langue' => $idLangueAApprendre["id_langue"], 'name_langue' => $idLangueAApprendre['Nom']);
             }
         }
 
@@ -371,13 +371,14 @@ class UserModel {
         $idCentreInteret = UserModel::getUserCentreInteret($pseudo);
         $imaxCentreInteret = count($idCentreInteret['hobbies']);
 
-        $result= array('langue' => array("id_langue" => array(), "nom_langue" => array(), "users" =>array() ));
+        $result= array('langue' => array("id_langue" => array(), "name_langue" => array(), "users" =>array() ));
 
         if(isset($idCentreInteret)){           
             for($j = 0; $j < $imaxLangues; $j++){
                 $arret=0;
                 $i =0;
-                $result['langue']['id_langue'][$j] = $idLangues[$j];
+                $result['langue']['id_langue'][$j] = $idLangues[$j]['id_langue'];
+                $result['langue']['name_langue'][$j] = $idLangues[$j]['name_langue'];
                 do {
                     $req_id = $bdd->prepare($requete);
                     $req_id->execute(array(':id_user' => $idUser, ':id_interet' => $idCentreInteret['hobbies'][$i], ':id_langue' => $idLangues[$j]['id_langue'], ':role' => $matchRole));
@@ -391,6 +392,7 @@ class UserModel {
                     ++$i;
                 }while(($i < $imaxCentreInteret) && ($arret < 10));
             }
+            $result = UserModel::ClasseUserMatch($result['langue']);
         }
         else $result = array(0);
 
@@ -780,7 +782,7 @@ class UserModel {
             $req_nomPays = $bdd->prepare('SELECT nom_pays FROM table_pays WHERE id_pays = '.$idPays);
             $req_nomPays->execute();
             $nom_pays = $req_nomPays->fetch(PDO::FETCH_ASSOC);
-            $result = array($nom_pays['nom_pays']);
+            $result = $nom_pays['nom_pays'];
         }
         else $result = array(0);
 
@@ -797,14 +799,11 @@ class UserModel {
         $data["age"] = UserModel::getUserAge($pseudo);
         $data["sex"] = UserModel::getUserSex($pseudo);
         $data["description"] = UserModel::getUserDescription($pseudo);
-<<<<<<< HEAD
         $data["town"] = UserModel::getUserCity($pseudo);
         $data["country"] = UserModel::getUserPays($pseudo);
-=======
         $date["couleur"] = UserModel::getUserColor($pseudo);
         $data["ville"] = UserModel::getUserCity($pseudo);
         $data["pays"] = UserModel::getUserPays($pseudo);
->>>>>>> 07534d42456c924ee03a4609f63f98d8a614e7cf
         $data["state"] = UserModel::getUserState($pseudo);
         $data["hobbies"] = UserModel::getUserHobbies($pseudo);
         $data["languages"][] = UserModel::getUserLangueMaitrisee($pseudo);
