@@ -447,8 +447,6 @@ class UserModel {
     /* Récupère un tableau d'utilisateur et les tris selon le nombre de centres d'interet en commun*/
     public static function ClasseUserMatch($listUserMatched){
         if(isset($listUserMatched)){
-            var_dump($listUserMatched['users']);
-            echo " BASE RECUE";
             $iMax = count ($listUserMatched['id_langue']); //Nombre d'utilisateur pour cette langue
             $temp = array('users' => array());
 
@@ -456,23 +454,23 @@ class UserModel {
             for($i = 0; $i < $iMax; $i++){
                 $jMaxUser = count($listUserMatched['users'][$i]); //Nombre d'utilisateur pour la langue i
 
+
                 for($j = 0; $j < $jMaxUser; $j++){
                     $kMax = count($temp['users']); //Nombre d'utilisateur déjà triés pour la langue i
 
-                    for ($k = 0; $k <= $kMax; $k++){
+                    for ($k = 0; ($k < $kMax) || ($k == 0); $k++){
                         if(($kMax != 0) && ($listUserMatched['users'][$i][$j]['id_user'] == $temp['users'][$k]["id_user"])){
                             $temp['users'][$k]["nbCommuns"] += 1;
                             //var_dump($listUserMatched['users'][$i][$j]['id_interet']);
                             $temp['users'][$k]["id_interet"][] = $listUserMatched['users'][$i][$j]['id_interet'];
                         }
                         else {
-                            $temp['users'][] = array('id_user' => $listUserMatched['users'][$i][$j]["id_user"], 'nbCommuns' => 1, 'id_interet' => array($listUserMatched['users'][$i][$j]['id_interet']));
+                            $temp['users'][] = array('id_user' => $listUserMatched['users'][$i][$j]["id_user"], 'nbCommuns' => 1, 'id_interet' => array($listUserMatched['users'][$i][$j]['id_interet']), "infos" => userModel::getUser(userModel::getPseudoById($listUserMatched['users'][$i][$j]["id_user"])));
                             //var_dump($temp);
                         }
                     }
                  }     
-                 $listUserMatched['users'][$i] = $temp['users'];
-                 var_dump($listUserMatched['users']);                 
+                 $listUserMatched['users'][$i] = $temp['users'];                       
                 $temp = array('users' => array()); //Réinitialisation du tableau temporaire
             }
         }
@@ -776,10 +774,10 @@ class UserModel {
             $req_active = $bdd->prepare('SELECT id_pays FROM user WHERE ID ='.$id);
             $req_active->execute();
             $user_pays = $req_active->fetch(PDO::FETCH_ASSOC);
-            $idPays = array($user_pays['id_pays']);
+            $idPays = $user_pays['id_pays'];
             
             /* Recuperation du nom dans la table Pays */
-            $req_nomPays = $bdd->prepare('SELECT nom_pays FROM table_pays WHERE id_pays = '.$user_pays['id_pays']);
+            $req_nomPays = $bdd->prepare('SELECT nom_pays FROM table_pays WHERE id_pays = '.$idPays);
             $req_nomPays->execute();
             $nom_pays = $req_nomPays->fetch(PDO::FETCH_ASSOC);
             $result = array($nom_pays['nom_pays']);
@@ -794,17 +792,17 @@ class UserModel {
         
         $data["pseudo"] = $pseudo;
         $data["avatar"] = "";
-        $data["name"] = UserModel::getUserLastName($pseudo);
+        $data["name"] = UserModel::getUserLastName($pseudo);        
+        $data["firstname"] = UserModel::getUserName($pseudo);
         $data["age"] = UserModel::getUserAge($pseudo);
-        $data["sexe"] = UserModel::getUserSex($pseudo);
-        $data["prenom"] = UserModel::getUserName($pseudo);
+        $data["sex"] = UserModel::getUserSex($pseudo);
         $data["description"] = UserModel::getUserDescription($pseudo);
-        $data["ville"] = UserModel::getUserCity($pseudo);
-        $data["pays"] = UserModel::getUserPays($pseudo);
+        $data["town"] = UserModel::getUserCity($pseudo);
+        $data["country"] = UserModel::getUserPays($pseudo);
         $data["state"] = UserModel::getUserState($pseudo);
         $data["hobbies"] = UserModel::getUserHobbies($pseudo);
-        $data["languages"]["spokenLang"] = UserModel::getUserLangueMaitrisee($pseudo);
-        $data["languages"]["learningLang"] = UserModel::getUserLangueAApprendre($pseudo);
+        $data["languages"][] = UserModel::getUserLangueMaitrisee($pseudo);
+        $data["languages"][] = UserModel::getUserLangueAApprendre($pseudo);
 
         return $data;
     }
