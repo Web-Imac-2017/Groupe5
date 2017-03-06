@@ -15,12 +15,16 @@ import MyProfile from './components/MyProfile.vue'
 
 import Messages from './components/Messages.vue'
 
+<<<<<<< HEAD
+import Match from './components/Match.vue'
+=======
 //Font Awesome
 import 'vue-awesome/icons/flag'
 import 'vue-awesome/icons'
 import Icon from 'vue-awesome/components/Icon.vue'
 Vue.component('icon', Icon)
 
+>>>>>>> b85bfa5c32e550d24c09ed69b4b3b340b093f728
 
 // install router
 Vue.use(Router)
@@ -53,6 +57,11 @@ var router = new Router({
 			component: Register
 		},
 		{
+			name : 'match',
+			path: '/match/',
+			component: Match
+		},
+		{
 			name: 'searchBar',
 			path: '/searchBar',
 			component: SearchBar
@@ -69,7 +78,7 @@ var router = new Router({
 		},
 		{
 			name: 'myProfile',
-			path: 'myProfile',
+			path: '/myProfile/',
 			component: MyProfile
 		},
 		{

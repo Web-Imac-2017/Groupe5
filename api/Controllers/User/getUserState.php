@@ -4,6 +4,6 @@
 	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 	header('Content-Type: application/json;charset=utf-8');
 	
-	echo "1";
+	echo '["1"]';
 
 ?>
