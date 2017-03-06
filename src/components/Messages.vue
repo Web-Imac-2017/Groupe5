@@ -1,7 +1,7 @@
 <template>
   <div class="messages">
       <div class="container-fluid">
-        <div class="row">   
+        <div class="row">
           <div class="col-md-4">
             <conversations-menu-component></conversations-menu-component>
           </div>

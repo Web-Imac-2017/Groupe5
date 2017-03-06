@@ -1,11 +1,9 @@
 <template>
   <div class="conversation">
-    <ul>
+    <ul ref="messages" class="messages" id="messages">
       <li v-for="message in messages" :class=getUser(message.user)>
-        <div class="messageDate">
-          {{ "["+message.date+"]" }}
-        </div>
         <div class="messageContent">
+          <span>{{ "["+message.date+"]" }}</span>
           {{ message.content }}
         </div>
       </li>
@@ -38,6 +36,9 @@ export default {
   created: function() {
     this.me = this.$parent.connectedUser;
     this.getConversation();
+  },
+  updated: function(){
+    this.scrollBottomAuto();
   },
 
   methods: {
@@ -92,10 +93,13 @@ export default {
           location.reload();
         }
       });
+    },
+    scrollBottomAuto: function(){
+      var container = this.$el.querySelector("#messages");
+        container.scrollTop = container.scrollHeight;
     }
   }
 }
-
 </script>
 
 
@@ -105,20 +109,25 @@ $profil_color: rgb(195,39,47);
 $profil_color_light: rgb(225,146,150);
 
 .conversation{
+
   ul {
     padding: 0;
-    height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
+    background-color: #fff;
+    height: calc(100vh - 100px);
   }
   textarea {
     outline: none;
     resize: none;
-    overflow: auto;
     background-color: $profil_color_light;
-    width: 100%;
     border: 2px solid #000;
     border-radius: 10px;
+    width: 100%;
+    position: relative;
+    bottom: 0;
+    right: 0;
+    left: 0;
   }
 
   .user_other, .user_me {
@@ -135,10 +144,10 @@ $profil_color_light: rgb(225,146,150);
       display: block;
       max-width: 60%;
     }
-    .messageDate{
+    span{
       font-size: 10px;
-      display: inline;
-      margin: 0 10px;
+      display: block;
+      margin-bottom: 10px;
     }
   }
 
@@ -156,10 +165,10 @@ $profil_color_light: rgb(225,146,150);
       background-color: $profil_color;
       float: right;
     }
+    .messageDate{
+
+    }
   }
 
 }
-
-
-
 </style>

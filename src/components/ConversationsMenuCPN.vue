@@ -115,14 +115,20 @@ export default {
   },
   deleteConv: function(id){
     var _conversationID = id;
-    fetch(apiRoot() + 'Controllers/Conversation/getAllMessages.php', {
+    fetch(apiRoot() + 'Controllers/Conversation/deleteConversation.php', {
       method: 'POST',
       headers: {
         'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
         'Content-Type': 'application/json; charset=utf-8'
       },
       dataType: 'JSON',
-      body: JSON.stringify({conversation : _conversationID})
+      body: JSON.stringify({id : id})
+    }).then(function(response) {
+      return response.json();
+    }).then(function(data){
+      if(data[0] == "Error"){
+        console.log("ERREUR !!");
+      }
     });
   }
 }
@@ -141,7 +147,7 @@ $avatar_size: 80px;
   overflow-x: hidden;
   overflow-y: auto;
   border-right: 1px solid #000;
-  height: 100%;
+  height: 100vh;
 
   [class*="col"]{
     padding: 0;
