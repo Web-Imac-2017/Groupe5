@@ -15,7 +15,6 @@
     else {
         if(isset($json['id']) && $json['id'] != ''){
             $id_conv = $json['id'];
-            
             $data["messages"] = ConversationModel::getAllMessagesOfConv($id_conv);
 
             $id_user = UserModel::getUserId($json['pseudo']);

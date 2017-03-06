@@ -210,7 +210,7 @@ class UserModel {
         $bdd = Database::connexionBDD();
         $idUser = UserModel::getUserId();
 
-        $req_idPays = $bdd->prepare('SELECT id_pays FROM table_pays WHERE fr = "'.$namePays.'"');
+        $req_idPays = $bdd->prepare('SELECT id_pays FROM table_pays WHERE nom_pays = "'.$namePays.'"');
         $req_idPays->execute();
         $id_pays = $req_idPays->fetch(PDO::FETCH_ASSOC);
 
@@ -771,10 +771,10 @@ class UserModel {
             $idPays = array($user_pays['id_pays']);
             
             /* Recuperation du nom dans la table Pays */
-            $req_nomPays = $bdd->prepare('SELECT fr FROM table_pays WHERE id_pays = '.$user_pays['id_pays']);
+            $req_nomPays = $bdd->prepare('SELECT nom_pays FROM table_pays WHERE id_pays = '.$user_pays['id_pays']);
             $req_nomPays->execute();
             $nom_pays = $req_nomPays->fetch(PDO::FETCH_ASSOC);
-            $result = array($nom_pays['fr']);
+            $result = array($nom_pays['nom_pays']);
         }
         else $result = array(0);
 
@@ -791,6 +791,7 @@ class UserModel {
         $data["sexe"] = UserModel::getUserSex($pseudo);
         $data["prenom"] = UserModel::getUserName($pseudo);
         $data["description"] = UserModel::getUserDescription($pseudo);
+        $date["couleur"] = UserModel::getUserColor($pseudo);
         $data["ville"] = UserModel::getUserCity($pseudo);
         $data["pays"] = UserModel::getUserPays($pseudo);
         $data["state"] = UserModel::getUserState($pseudo);
