@@ -797,8 +797,14 @@ class UserModel {
         $data["age"] = UserModel::getUserAge($pseudo);
         $data["sex"] = UserModel::getUserSex($pseudo);
         $data["description"] = UserModel::getUserDescription($pseudo);
+<<<<<<< HEAD
         $data["town"] = UserModel::getUserCity($pseudo);
         $data["country"] = UserModel::getUserPays($pseudo);
+=======
+        $date["couleur"] = UserModel::getUserColor($pseudo);
+        $data["ville"] = UserModel::getUserCity($pseudo);
+        $data["pays"] = UserModel::getUserPays($pseudo);
+>>>>>>> 07534d42456c924ee03a4609f63f98d8a614e7cf
         $data["state"] = UserModel::getUserState($pseudo);
         $data["hobbies"] = UserModel::getUserHobbies($pseudo);
         $data["languages"][] = UserModel::getUserLangueMaitrisee($pseudo);
