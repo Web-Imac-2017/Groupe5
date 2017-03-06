@@ -6,6 +6,8 @@ $blue: #6A91C9;
 $blue-light: #D0DBF3;
 $red: #BA232A;
 $red-light: #E19296;
+$green: #3AAB3C;
+$green-light: #ABFF97;
 
 .red
 {
@@ -17,6 +19,11 @@ $red-light: #E19296;
 	background-color : $blue;
 }
 
+.green
+{
+  background-color: $green;
+}
+
 .red-light
 {
 	background-color : $red-light;
@@ -25,6 +32,11 @@ $red-light: #E19296;
 .blue-light
 {
 	background-color : $blue-light;
+}
+
+.green-light
+{
+  background-color: $green-light;
 }
 
 body{

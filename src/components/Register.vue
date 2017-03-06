@@ -23,6 +23,21 @@
 	                    <button @click="">Remove image</button>
 	                </div>
 	            </div>
+
+	            <!-- SEX -->
+	            <div class="form-group">            
+	                <label class="form-check-label" for="sex">You are</label><br/>
+	                <div id="woman" class="type">
+		                <input class="form-check-input check" type="radio" value="1" v-model="user.sex"><br />
+		                <label class="form-check-label" for="woman">A woman</label>	
+	                </div><div id="man" class="type">     
+		                <input class="form-check-input check" type="radio" value="2" v-model="user.sex"><br />
+		                <label class="form-check-label" for="man">A man</label>
+	                </div><div id="other" class="type">
+		                <input class="form-check-input check" type="radio" value="3" v-model="user.sex"><br />
+		                <label class="form-check-label" for="other">Other</label>
+	                </div>
+	            </div>
 	            
 	            <!-- FIRST NAME -->
 	            <input name="firstName" type="text" minlength="2" maxlength="20" required="required" placeholder="FIRST NAME" v-model="user.firstname"  />
@@ -51,87 +66,31 @@
 	            <span class="tooltip">Le mot de passe de confirmation doit être identique à celui d'origine</span>
 
 	            <!-- COUNTRY -->
-	            <label class="form-text" for="country">Where are you from ? :</label>
+	            <label class="form-text" for="country">Your country</label>
 	            <br />
 	            <select name="country" id="country" v-model="user.country">
-	            	<option v-for="value in countryList">{{ value }}</option>
+	            	<option v-for="value in countryList">{{ value.name }}</option>
 	        	</select>
 	            <span class="tooltip">Please choose your home country</span>
 
-	            <!-- SEX -->
-	            <div class="form-group">            
-	                <label class="form-check-label" for="sex">You are</label><br/>
-	                <div id="woman" class="type">
-		                <input class="form-check-input check" type="radio" value="1" v-model="user.sex"><br />
-		                <label class="form-check-label" for="woman">A woman</label>	
-	                </div><div id="man" class="type">     
-		                <input class="form-check-input check" type="radio" value="2" v-model="user.sex"><br />
-		                <label class="form-check-label" for="man">A man</label>
-	                </div><div id="other" class="type">
-		                <input class="form-check-input check" type="radio" value="3" v-model="user.sex"><br />
-		                <label class="form-check-label" for="other">Other</label>
-	                </div>
-	            </div>
+	            <!-- CITY -->
+	            <label class="form-text" for="city">Your city</label>
+	            <input id="city" v-model="user.city"></input>
+	            <span class="tooltip">What city do you live in ?</span>
 
 	            <!-- COLOR THEME -->
-	            <div class="form-group">            
+	            <div id="colorwrapper" class="form-group">            
 	                <label class="form-check-label" for="color">Your theme color</label><br/>
-                  	<div v-for="color in colorsList">
+                  	<div class="colors" v-for="color in colorsList">
                     	<input class="form-check-input" type="radio" :id="color.name" :value="color.name" name="color" v-model="user.color">
-                    	<label class="form-check-label" :for="color.name" :class="color.name">{{color.name}}</label>
+                    	<label class="form-check-label" :for="color.name" :class="color.name" onclick="colorChecked(this)"></label>
                   	</div>
 	            </div>
-	        
 
-
-	            <label class="form-text" for="description">description:</label>
-	            <input name="description" title="" id="description" type="text" v-model="user.description" />
-
-
-	            <label class="form-text" for="city">City :</label>
-	            <input v-model="user.city"></input>
-	        	<p>{{ user.city }}</p>
-	            <span class="tooltip">Vous devez sélectionner votre pays de résidence</span>
-	            <br/><br/>
-
-	            <div class="form-group">            
-	                <label class="form-check-label" for="languageM">Language(s) spoken* :</label><br/>
-	                <span class="errorSpan displayNo" id="errorLanguageM">You have to select one language</span><br/>
-	                <div v-for="language in languagesList">
-		                <input class="form-check-input" type="checkbox" :id="language.name" :value="language.name" v-model="user.languages.spokenLang">
-		                <label class="form-check-label" :for="language.name" >{{language.name}}</label>
-	                </div>
-	                <span>Checked languages:</span>
-	                <span v-for="value in user.languages.spokenLang"> {{ value }} </span>
-	    		</div>
-	            <br/><br/>
-
-	            <div class="form-group">
-	                <label class="form-check-label" for="languageL">Language(s) you want to learn* :</label><br/>
-	                <span class="errorSpan displayNo" id="errorLanguageL">You have to select one language</span><br/>
-	                <div v-for="language in languagesList">
-		                <input class="form-check-input" type="checkbox" :id="language.name" :value="language.name" v-model="user.languages.learningLang">
-		                <label class="form-check-label" :for="language.name" >{{language.name}}</label>
-	                </div>
-	                <span>Checked languages:</span>
-	                <span v-for="value in user.languages.learningLang"> {{ value }} </span>
-	            </div>
-	            <br/><br/>
-
-	            <div class="form-group">
-	                <label lass="form-check-label" for="hobbies">Interest center(s) :</label><br/>
-	                <div v-for="hobby in hobbiesList">
-		                <input class="form-check-input" type="checkbox" :id="hobby.name" :value="hobby.name" v-model="user.hobbies">
-		                <label class="form-check-label" :for="hobby.name" >{{hobby.name}}</label>
-	                </div>               
-	                <br>
-	                <span>Checked hobbies:</span>
-	                <span v-for="value in user.hobbies"> {{ value }} </span>
-
-	            </div>
-
-	            <span class="form_col col-sm-4"></span>
-	            <button type="submit" value="Register" v-on:click="submitForm(user)">Register</button> <button type="reset" value="Reinit form">Reinit</button>
+	            <!-- SUBMIT -->
+	            <button id="submitbutton" type="submit" value="Register" v-on:click="submitForm(user)"></button>
+	            <label id="submitbuttonlabel" for="submitbutton">I'M READY</label>
+	            <!-- <button type="reset" value="Reinit form">Reinit</button> -->
         	</form>
         </div>
     </div>
@@ -307,7 +266,8 @@
       	this.getLanguages();
       	this.getHobbies();
       	this.getCountries();
-      }
+      	this.getColors();
+      },
 	}
 
 	// basic javascript
@@ -332,6 +292,11 @@
 	    return false;
 	}
 
+	function colorChecked(element)
+	{
+		element.css("border", "3px solid black");
+	}
+
 </script>
 
 <style lang="scss">
@@ -351,8 +316,7 @@
         {
         	.bg
         	{
-        		background-color: red;
-        		width: 100vw;
+	        		width: 100vw;
 	        	height: 100vh;
 	        	position: fixed;
 	        	top: 0;
@@ -390,12 +354,11 @@
                 font-size: 1.5em;
                 padding: 0 5px;
                 font-weight: 600;
-                text-transform: uppercase;
                 margin-bottom: 8px;
                 border: 3px solid #333333;
             }
             
-            input#age, input#pwd2, #country
+            input#age, input#pwd2
             {
             	margin-bottom: 30px;
             }
@@ -436,6 +399,7 @@
             	height: 40px;
             	border: 3px solid black;
             	font-size: 1.5em;
+            	margin-bottom: 20px;
             }
 
             .type
@@ -461,24 +425,50 @@
             	}
             }
 
-            .color
+            .colors
             {
-            	background-color: black;
-            	width: 60px;
-            	height: 60px;
             	display: inline-block;
-
+            	margin: 1px 4px;
 
             	& > input
             	{
             		display: none;
             	}
 
-            	.colorfill
+            	& > label
             	{
-            		width: 100%;
-            		height: 100%;
             		cursor: pointer;
+            		width: 70px;
+            		height: 50px;
+            		margin: 0;
+            	}
+            }
+
+            #city, #colorwrapper, #description
+            {
+            	margin-bottom: 20px;
+            }
+
+            #submitbutton
+            {
+            	display: none;
+            }
+
+            #submitbuttonlabel
+            {
+            	margin-top: 50px;
+            	margin-bottom: 120px;
+            	font-size: 3em;
+            	padding: 0 15px;
+            	background-color: rgba(255, 255, 255, .6);
+            	border: 3px solid black;
+            	cursor: pointer;
+            	font-weight: 900;
+            	transition: .1s;
+
+            	&:hover
+            	{
+            		transform: scale(1.05);
             	}
             }
         }

@@ -1,6 +1,6 @@
 export function apiRoot(){
 
-    var projectRoot = "http://localhost/Plume/PLUME/";
+    var projectRoot = "http://localhost/PLUME/";
 
     return projectRoot + "api/";
 }
