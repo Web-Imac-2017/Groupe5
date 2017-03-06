@@ -20,8 +20,8 @@
             $pseudo = $json['pseudo'];
         }
 
-	    if(isset($json['ville']) && $json['ville'] != '') { /*A voir avec le front*/
-	    $userCity = $json['ville'];
+	    if(isset($json['city']) && $json['city'] != '') { /*A voir avec le front*/
+	    $userCity = $json['city'];
 	  }
 	  else $data = array("Error", "Error");
 

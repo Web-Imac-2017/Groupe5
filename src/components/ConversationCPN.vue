@@ -49,49 +49,6 @@ export default {
       return theClass;
     },
     getConversation: function() {
-      var _this = this;
-
-      var _conversationID = this.$route.params.conversationID;
-      fetch(apiRoot() + 'Controllers/Conversation/getAllMessages.php', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
-          'Content-Type': 'application/json; charset=utf-8'
-        },
-        dataType: 'JSON',
-        body: JSON.stringify({id : _conversationID, pseudo: _this.me.pseudo})
-      }).then(function(response) {
-        return response.json();
-      }).then(function(data){
-        if(data[0] == "Error"){
-          console.log("ERREUR !!");
-        }
-        else {
-          _this.messages = data['messages'];
-          _this.users = data['users'];
-        }
-      });
-    },
-    sendMessage() {
-      var _this = this;
-      var _conversationID = this.$route.params.conversationID;
-      fetch(apiRoot() + 'Controllers/Conversation/addMessage.php', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
-          'Content-Type': 'application/json; charset=utf-8'
-        },
-        dataType: 'JSON',
-        body: JSON.stringify({message: _this.newMessage, conv: _conversationID, pseudo: _this.me.pseudo})
-      }).then(function(response) {
-        return response.json();
-      }).then(function(data){
-        if(data[0] == "Error"){
-          console.log("ERREUR !!");
-        }
-        return theClass;
-      },
-      getConversation: function() {
         var _this = this;
 
         var _conversationID = this.$route.params.conversationID;
@@ -114,29 +71,28 @@ export default {
             _this.users = data['users'];
           }
         });
-      },
-      sendMessage() {
-        var _this = this;
-        var _conversationID = this.$route.params.conversationID;
-        fetch(apiRoot() + 'Controllers/Conversation/addMessage.php', {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
-            'Content-Type': 'application/json; charset=utf-8'
-          },
-          dataType: 'JSON',
-          body: JSON.stringify({message: _this.newMessage, conv: _conversationID, pseudo: _this.me.pseudo})
-        }).then(function(response) {
-          return response.json();
-        }).then(function(data){
-          if(data[0] == "Error"){
-            console.log("ERREUR !!");
-          }
-          else {
-            location.reload();
-          }
-        });
-      }
+    },
+    sendMessage() {
+      var _this = this;
+      var _conversationID = this.$route.params.conversationID;
+      fetch(apiRoot() + 'Controllers/Conversation/addMessage.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({message: _this.newMessage, conv: _conversationID, pseudo: _this.me.pseudo})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+        if(data[0] == "Error"){
+          console.log("ERREUR !!");
+        }
+        else {
+          location.reload();
+        }
+      });
     }
   }
 }

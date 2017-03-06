@@ -308,6 +308,7 @@
       	this.getLanguages();
       	this.getHobbies();
       	this.getCountries();
+        this.getColors();
       }
 	}
 

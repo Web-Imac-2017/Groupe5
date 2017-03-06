@@ -92,8 +92,8 @@ export default {
     },
     getConversations: function() {
 
-      var _this = this;
       console.log(this.me);
+      var _this = this;
       fetch(apiRoot() + 'Controllers/Conversation/getUserConversations.php', {
         method: 'POST',
         headers: {
@@ -187,7 +187,6 @@ $avatar_size: 80px;
         border: 1px solid #000;
       }
     }
-<<<<<<< HEAD
   }
 
   .userPseudo {
@@ -207,8 +206,6 @@ $avatar_size: 80px;
     font-style: italic;
     font-size: 12px;
   }
-=======
->>>>>>> refs/remotes/origin/front
 
     .text-conv{
       margin-left: 15px;
@@ -254,5 +251,4 @@ $avatar_size: 80px;
     }
 
   }
-}
 </style>

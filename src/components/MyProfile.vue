@@ -24,11 +24,11 @@
             		<p v-if="editing == 'false'">{{ user.firstname }}</p>
             		<p v-if="editing == 'false'">{{ user.lastname }}</p>
             		<p v-if="editing == 'false'">{{ user.city }}</p>
-            		<p v-if="editing == 'false'">{{ user.country }}</p>
+            		<p v-if="editing == 'false'">{{ user.country[0] }}</p>
             		<input v-if="editing == 'true'" type="text" v-model="user.firstname">
             		<input v-if="editing == 'true'" type="text" v-model="user.lastname">
             		<input v-if="editing == 'true'" type="text" v-model="user.city">
-            		<input v-if="editing == 'true'" type="text" v-model="user.country">
+            		<input v-if="editing == 'true'" type="text" v-model="user.country[0]">
             	</div>
 
             	<div class="col-sm-12" id="clickToEdit">
@@ -117,12 +117,12 @@ export default {
   	this.addLearningLanguage = "false";
   	this.changeUserColor = "false";
   	this.addHobby = "false";
-  	this.user = this.$parent.connectedUser;
-  	console.log(this.user);
   	this.getLanguages();
     this.getHobbies();
     this.getCountries();
     this.getColors();
+
+  	this.user = this.$parent.connectedUser;
   }, 
   methods: {
   	editProfile: function() {
@@ -130,6 +130,12 @@ export default {
   	},
   	saveProfile: function() {
   		this.editing = "false";
+  		this.updateFirstname();
+  		this.updateLastname();
+  		this.updateCity();
+			this.updateColor();
+			this.updateHobbies();
+			this.updateLanguages();
   	},
   	getLanguages: function() {
     	var _this = this;
@@ -226,6 +232,157 @@ export default {
     },
     changeColor: function() {
     	this.changeUserColor = "true";
+    },
+    updateFirstname: function() {
+    	var _this = this;
+                
+      fetch(apiRoot() + 'Controllers/User/updateUserFirstname.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({pseudo: _this.user.pseudo, firstname: _this.user.firstname})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+        if(data[0] == "Error"){
+          console.log(data[1]);
+        }
+        else {
+
+        }
+      });
+    },
+    updateLastname: function() {
+    	var _this = this;
+                
+      fetch(apiRoot() + 'Controllers/User/updateUserLastname.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({pseudo: _this.user.pseudo, lastname: _this.user.lastname})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+        if(data[0] == "Error"){
+          console.log(data[1]);
+        }
+        else {
+
+        }
+      });
+    },
+    updateCity: function() {
+    	var _this = this;
+                
+      fetch(apiRoot() + 'Controllers/User/updateUserCity.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({pseudo: _this.user.pseudo, city: _this.user.city})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+        if(data[0] == "Error"){
+          console.log(data[1]);
+        }
+        else {
+
+        }
+      });
+    },
+    updateColor: function() {
+    	var _this = this;
+                
+      fetch(apiRoot() + 'Controllers/User/updateUserColor.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({pseudo: _this.user.pseudo, color: _this.user.color})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+        if(data[0] == "Error"){
+          console.log(data[1]);
+        }
+        else {
+
+        }
+      });
+    },
+    updateHobbies: function() {
+    	var _this = this;
+                
+      fetch(apiRoot() + 'Controllers/User/setUserHobbies.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({pseudo: _this.user.pseudo, hobbies: _this.user.hobbies})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+        if(data[0] == "Error"){
+          console.log(data[1]);
+        }
+        else {
+
+        }
+      });
+    },
+    updateLanguages: function() {
+    	var _this = this;
+                
+      fetch(apiRoot() + 'Controllers/User/setUserLang.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({pseudo: _this.user.pseudo, languages: _this.user.languages.learningLang, level: 1})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+        if(data[0] == "Error"){
+          console.log(data[1]);
+        }
+        else {
+
+        }
+      });
+
+      fetch(apiRoot() + 'Controllers/User/setUserLang.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({pseudo: _this.user.pseudo, languages: _this.user.languages.spokenLang, level: 2})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+        if(data[0] == "Error"){
+          console.log(data[1]);
+        }
+        else {
+
+        }
+      });
     }
   }
 }
@@ -241,7 +398,6 @@ export default {
 	img
 	{
 		width: 100%;
-		border: 1px solid black;
 	}
 }
 
