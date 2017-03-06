@@ -13,7 +13,8 @@ if($pseudo == "maureeniz") {
   {
     "pseudo": "maureeniz",
     "avatar": "maureeniz.jpg",
-    "name": "maureen roche",
+    "firstname": "Maureen",
+    "lastname": "Roche",
     "age": "21",
     "country": "France",
     "city": "bordeaux",
@@ -31,16 +32,18 @@ else {
   {
     "pseudo": "CoralieBurton",
     "avatar": "maureeniz.jpg",
-    "name": "Coralie Goldbaum",
+    "firstname": "Coralie",
+    "lastname": "Goldbaum",
     "age": "21",
     "country": "France",
     "city": "Paris",
     "description": "I loooove dogs and Tim Burton!",
-    "hobbies" : ["music", "cinema", "science", "arts"],
+    "hobbies" : ["Music", "Cinema"],
     "languages" : {
-      "spokenLang" : ["french", "english"],
-      "learningLang" : ["spanish", "german"]
-    }
+      "spokenLang" : ["French", "English"],
+      "learningLang" : ["Spanish", "German"]
+    },
+    "color": "blue"
   }
   ';
 }
