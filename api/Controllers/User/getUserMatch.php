@@ -25,9 +25,7 @@
 	 }
 	 else $data = array("Error", "Error");
 
-	 $data = UserModel::getUserMatch("Robibidu77","2");
-
-	 var_dump($data['langue']['users']);
+	 $data = UserModel::getUserMatch("PAdu77","2");
 
 
 	 $data = UserModel::ClasseUserMatch($data['langue']);

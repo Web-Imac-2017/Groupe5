@@ -347,6 +347,7 @@ class UserModel {
 
     /*Filtre les utilisateurs ayant des matchs de langues et de centres d'interet*/
     public static function getUserMatch($pseudo, $role) {
+        $requete = "SELECT DISTINCT user.ID, user_centre_interet.id_interet FROM user, user_centre_interet, user_langue WHERE user_centre_interet.id_interet = :id_interet AND user_centre_interet.id_user != :id_user AND user_langue.id_langue = :id_langue AND user_langue.maitrise= :role AND user.ID=user_langue.id_user AND user_centre_interet.id_user=user.ID";
         $bdd = Database::connexionBDD();
 
         $idUser = UserModel::getUserId($pseudo);
@@ -364,6 +365,8 @@ class UserModel {
             }
             $imaxLangues = count($idLangues);
         }
+
+
         
         $idCentreInteret = UserModel::getUserCentreInteret($pseudo);
         $imaxCentreInteret = count($idCentreInteret['hobbies']);
@@ -376,8 +379,8 @@ class UserModel {
                 $i =0;
                 $result['langue']['id_langue'][$j] = $idLangues[$j];
                 do {
-                    $req_id = $bdd->prepare('SELECT DISTINCT user.ID, user_centre_interet.id_interet FROM user, user_centre_interet, user_langue WHERE user_centre_interet.id_interet ='.$idCentreInteret['hobbies'][$i].' AND user_centre_interet.id_user != '.$idUser.' AND user_langue.id_langue ='.$idLangues[$j]['id_langue'].' AND user_langue.maitrise='.$matchRole.' AND user.ID=user_langue.id_user AND user_centre_interet.id_user=user.ID');
-                    $req_id->execute();
+                    $req_id = $bdd->prepare($requete);
+                    $req_id->execute(array(':id_user' => $idUser, ':id_interet' => $idCentreInteret['hobbies'][$i], ':id_langue' => $idLangues[$j]['id_langue'], ':role' => $matchRole));
 
                     if($req_id!= NULL){
                         while($idUserMatched = $req_id->fetch(PDO::FETCH_ASSOC)){
@@ -395,42 +398,37 @@ class UserModel {
     }
 
     /*Classe les utilisateurs ayant des matchs de langues et de centres d'interet, par tranche d'age et sexe défini*/
-    public static function getUserMatchComplete($pseudo, $role, $gender, $agemin, $agemax, $id_etat_activ) {
+    public static function getUserMatchComplete($pseudo, $role, $gender, $agemin, $agemax) {
         $bdd = Database::connexionBDD();
 
         $idUser = UserModel::getUserId($pseudo);
-         if(isset($role)){
-            if($role == "1") {
+         if(isset($role)){ 
+            if($role == "1") { //Cherche des langues pour trouver des maitres
                 $idLangues = UserModel::getUserLangueAApprendre($pseudo);
                 $idLangues = $idLangues['learningLang'];
             }
-            else {
+            else { //Cherche des langues pour trouver des apprentis
                 $idLangues = UserModel::getUserLangueMaitrisee($pseudo);
                 $idLangues = $idLangues['spokenLang'];
             }
             $imaxLangues = count($idLangues);
         }
 
-
-        // $idUserMaitres = UserModel::findMaitre($pseudo);
-        // $idUserApprentis = UserModel::findApprenti($pseudo);
         $idCentreInteret = UserModel::getUserCentreInteret($pseudo);
         $imax = count($idCentreInteret['hobbies']);
 
         $result= array();
         $i =0;
 
-        // var_dump($idLanguesAApprendre);
-        // var_dump($idLanguesMaitrisees);
-        // var_dump($idUserMaitres);
-        // var_dump($idUserApprentis);        
+
+
         var_dump($idCentreInteret);
 
         if(isset($idCentreInteret)){
             $arret=0;
             echo('test');
             do {
-                $req_id = $bdd->prepare('SELECT DISTINCT id_user, id_interet FROM user, user_centre_interet, centre_interet WHERE user_centre_interet.id_interet ='.$idCentreInteret['hobbies'][$i].' AND user_centre_interet.id_user != '.$idUser.' AND user.sexe ='.$gender.' AND user.age >='.$minOld.' AND user.age <='.$maxOld.' AND user.id_etat_activite');
+                $req_id = $bdd->prepare('SELECT DISTINCT id_user, id_interet FROM user, user_centre_interet, centre_interet WHERE user_centre_interet.id_interet ='.$idCentreInteret['hobbies'][$i].' AND user_centre_interet.id_user != '.$idUser.' AND user.sexe ='.$gender.' AND user.age >='.$minOld.' AND user.age <='.$maxOld.' AND user.id_etat_activite = 1');
                 $req_id->execute();
 
                 while($idUserCentreInteret = $req_id->fetch(PDO::FETCH_ASSOC)){
@@ -449,28 +447,38 @@ class UserModel {
     /* Récupère un tableau d'utilisateur et les tris selon le nombre de centres d'interet en commun*/
     public static function ClasseUserMatch($listUserMatched){
         if(isset($listUserMatched)){
-            $iMax = count ($listUserMatched['id_langue']);
-            $temp = array('id_user' => '', 'count' => 0, 'id_interet' => array());
+            var_dump($listUserMatched['users']);
+            echo " BASE RECUE";
+            $iMax = count ($listUserMatched['id_langue']); //Nombre d'utilisateur pour cette langue
+            $temp = array('users' => array());
+
 
             for($i = 0; $i < $iMax; $i++){
-                $jMaxUser = count($listUserMatched['users'][$i]);
+                $jMaxUser = count($listUserMatched['users'][$i]); //Nombre d'utilisateur pour la langue i
+
                 for($j = 0; $j < $jMaxUser; $j++){
-                    $kMax = count($temp);
-                    for ($k = 0; $k < $kMax; $k++){
-                        if($listUserMatched['users'][$i][$j]['id_user'] == $temp[$k]["id_user"]){
-                            $temp[$k]["count"] += 1;
-                            var_dump($listUserMatched['users'][$i][$j]['id_interet']);
-                            $temp[$k]["id_interet"][] = $listUserMatched['users'][$i][$j]['id_interet'];
+                    $kMax = count($temp['users']); //Nombre d'utilisateur déjà triés pour la langue i
+
+                    for ($k = 0; $k <= $kMax; $k++){
+                        if(($kMax != 0) && ($listUserMatched['users'][$i][$j]['id_user'] == $temp['users'][$k]["id_user"])){
+                            $temp['users'][$k]["nbCommuns"] += 1;
+                            //var_dump($listUserMatched['users'][$i][$j]['id_interet']);
+                            $temp['users'][$k]["id_interet"][] = $listUserMatched['users'][$i][$j]['id_interet'];
                         }
                         else {
-                            $temp[] = array('id_user' => $temp[$k]["id_user"], 'count' => 1, 'id_interet' => array($listUserMatched['users'][$i][$j]['id_interet']));
+                            $temp['users'][] = array('id_user' => $listUserMatched['users'][$i][$j]["id_user"], 'nbCommuns' => 1, 'id_interet' => array($listUserMatched['users'][$i][$j]['id_interet']));
                             //var_dump($temp);
                         }
                     }
-                 }
+                 }     
+                 $listUserMatched['users'][$i] = $temp['users'];
+                 var_dump($listUserMatched['users']);                 
+                $temp = array('users' => array()); //Réinitialisation du tableau temporaire
             }
         }
-    }
+
+        return $listUserMatched;
+    }/**/
 
 
     
