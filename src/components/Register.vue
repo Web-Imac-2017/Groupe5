@@ -50,42 +50,55 @@
 	            <input name="pwd2" id="pwd2" type="password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" placeholder="CONFIRM PASSWORD" />
 	            <span class="tooltip">Le mot de passe de confirmation doit être identique à celui d'origine</span>
 
-	            <label class="form-text" for="country">YOUR COUNTRY :</label>
+	            <!-- COUNTRY -->
+	            <label class="form-text" for="country">Where are you from ? :</label>
+	            <br />
 	            <select name="country" id="country" v-model="user.country">
 	            	<option v-for="value in countryList">{{ value }}</option>
 	        	</select>
-	        	<p>{{ user.country }}</p>
-	            <span class="tooltip">Vous devez sélectionner votre pays de résidence</span>
-	            <br /><br />
+	            <span class="tooltip">Please choose your home country</span>
 
+	            <!-- SEX -->
 	            <div class="form-group">            
-	                <label class="form-check-label" for="sex">Sex* </label><br/>
-	                <span class="errorSpan displayNo" id="errorSex">You have to select your sex</span><br/>
-	                <input class="form-check-input" type="radio" id="woman" value="1" v-model="user.sex">
-	                <label class="form-check-label" for="woman">Woman</label>
-	                
-	                <input class="form-check-input" type="radio" id="man" value="2" v-model="user.sex">
-	                <label class="form-check-label" for="man">Man</label>
-	                
-	                <input class="form-check-input" type="radio" id="other" value="3" v-model="user.sex">
-	                <label class="form-check-label" for="other">Other</label>
+	                <label class="form-check-label" for="sex">You are</label><br/>
+	                <div id="woman" class="type">
+		                <input class="form-check-input check" type="radio" value="1" v-model="user.sex"><br />
+		                <label class="form-check-label" for="woman">A woman</label>	
+	                </div><div id="man" class="type">     
+		                <input class="form-check-input check" type="radio" value="2" v-model="user.sex"><br />
+		                <label class="form-check-label" for="man">A man</label>
+	                </div><div id="other" class="type">
+		                <input class="form-check-input check" type="radio" value="3" v-model="user.sex"><br />
+		                <label class="form-check-label" for="other">Other</label>
+	                </div>
 	            </div>
-	            <br/><br/>
 
-
+	            <!-- COLOR THEME -->
 	            <div class="form-group">            
-	                <label class="form-check-label" for="color">Color* </label><br/>
-	                <span class="errorSpan displayNo" id="errorSex">You have to select your color</span><br/>
-	                <input class="form-check-input" type="radio" id="color1" value="#FFFFFF" v-model="user.color">
-	                <label class="form-check-label" for="color1">Blanc</label>
-	                
-	                <input class="form-check-input" type="radio" id="color2" value="#000000" v-model="user.color">
-	                <label class="form-check-label" for="color2">Noir</label>
-	                
-	                <input class="form-check-input" type="radio" id="color3" value="#F0F0F0" v-model="user.color">
-	                <label class="form-check-label" for="color3">Gris</label>
+	                <label class="form-check-label" for="color">Choose your color theme</label><br/>
+	                <div class="color">
+	                	<input class="form-check-input" type="radio" id="color1" value="#FFFFFF" v-model="user.color">
+	                	<label class="colorfill colorfill1" for="color1" v-on:click="checked()"></label>
+	                </div>
+	                <div class="color">
+	                	<input class="form-check-input" type="radio" id="color2" value="#000000" v-model="user.color">
+	                	<label class="colorfill colorfill2" for="color2"></label>
+	                </div>
+	                <div class="color">
+	                	<input class="form-check-input" type="radio" id="color3" value="#333333" v-model="user.color">
+	                	<label class="colorfill colorfill3" for="color3"></label>
+	                </div>
+	                <div class="color">
+	                	<input class="form-check-input" type="radio" id="color4" value="#666666" v-model="user.color">
+	                	<label class="colorfill colorfill4" for="color4"></label>
+	                </div>
+	                <div class="color">
+	                	<input class="form-check-input" type="radio" id="color5" value="#C1D5D9" v-model="user.color">
+	                	<label class="colorfill colorfill5" for="color5"></label>
+	                </div>
+
 	            </div>
-	            <br/><br/>
+	        
 
 
 	            <label class="form-text" for="description">description:</label>
@@ -193,7 +206,7 @@
 	      		},
 	    	}
 	  	},
-      	methods:{
+      	methods: {
         submitForm: function(user){
             var form = document.getElementById("formRegistration");
             var sizeM = user.languages.spokenLang.length;
@@ -217,29 +230,29 @@
                 var _this = this;
                 
                 fetch(apiRoot() + 'Controllers/User/setUserProfil.php', {
-                  method: 'POST',
-                  headers: {
-                    'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
-                    'Content-Type': 'application/json; charset=utf-8'
-                  },
-                  dataType: 'JSON',
-                  body: JSON.stringify({lastname : _this.user.name, firstname: _this.user.firstname, pseudo: _this.user.pseudo, age: _this.user.age, email: _this.user.email, password: _this.user.password, country: _this.user.country, city: _this.user.city, languages: _this.user.languages, hobbies: _this.user.hobbies, avatar: _this.user.avatar, color: _this.user.color, sex: _this.user.sex, description: _this.user.description})
-                }).then(function(response) {
-                  return response.json();
+                  	method: 'POST',
+                  	headers: {
+                    	'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+                    	'Content-Type': 'application/json; charset=utf-8'
+                  	},
+                  	dataType: 'JSON',
+                  	body: JSON.stringify({lastname : _this.user.name, firstname: _this.user.firstname, pseudo: _this.user.pseudo, age: _this.user.age, email: _this.user.email, password: _this.user.password, country: _this.user.country, city: _this.user.city, languages: _this.user.languages, hobbies: _this.user.hobbies, avatar: _this.user.avatar, color: _this.user.color, sex: _this.user.sex, description: _this.user.description})
+                }).then(function(response){
+                  	return response.json();
                 }).then(function(data){
-                  if(data[0] == "Error"){
-                    console.log("ERREUR !!");
-                  }
-                  else {
-                    _this.conversations = data['conversations'];
-                  }
+                  	if(data[0] == "Error"){
+                    	console.log("ERREUR !!");
+                  	}
+                  	else {
+                    	_this.conversations = data['conversations'];
+                  	}
                 });
-
-
             }
         }
-
-      }
+      	},
+      	checked: function(){
+      		alert('coucou');
+      	}
 	}
 
 	// basic javascript
@@ -308,6 +321,13 @@
             transform: translateX(-50%);
             width: 400px;
 
+            label
+            {
+            	font-size: 1.5em;
+            	font-weight: 400;
+            	margin-bottom: 10px;
+            }
+
             input
             {
                 width: 100%;
@@ -320,7 +340,7 @@
                 border: 3px solid #333333;
             }
             
-            input#age
+            input#age, input#pwd2, #country
             {
             	margin-bottom: 30px;
             }
@@ -353,6 +373,58 @@
                 margin-bottom: 35px;
                 font-size: 0.8em;
                 font-style: italic;
+            }
+
+            select#country
+            {
+            	width: 100%;
+            	height: 40px;
+            	border: 3px solid black;
+            	font-size: 1.5em;
+            }
+
+            .type
+            {
+            	display: inline-block;
+            	width: 33.333%;
+            	margin: 0;
+            	text-align: center;
+
+            	& > label
+            	{
+            		font-size: 1em;
+            	}
+
+            	& > br
+            	{
+            		height: 10px;
+            	}
+
+            	.check
+            	{
+            		width: 30px;
+            	}
+            }
+
+            .color
+            {
+            	background-color: black;
+            	width: 60px;
+            	height: 60px;
+            	display: inline-block;
+
+
+            	& > input
+            	{
+            		display: none;
+            	}
+
+            	.colorfill
+            	{
+            		width: 100%;
+            		height: 100%;
+            		cursor: pointer;
+            	}
             }
         }
     }
