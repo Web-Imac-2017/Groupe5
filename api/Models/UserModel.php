@@ -366,6 +366,31 @@ class UserModel {
             $imaxLangues = count($idLangues);
         }
 
+        if(isset($sex)){
+            switch ($sex) {
+                case '0':
+                $sexrequest = "AND user.sexe = :sex";
+                    break;
+
+                case '1':
+                # code...
+                    break;
+
+                case '2':
+                # code...
+                    break;
+                case '3':
+                # code...
+                    break;
+                
+                default:
+                    # code...
+                    break;
+            }
+        }
+
+
+
 
         
         $idCentreInteret = UserModel::getUserCentreInteret($pseudo);
@@ -400,7 +425,7 @@ class UserModel {
     }
 
     /*Classe les utilisateurs ayant des matchs de langues et de centres d'interet, par tranche d'age et sexe défini*/
-    public static function getUserMatchComplete($pseudo, $role, $gender, $agemin, $agemax) {
+    public static function getUserMatchComplete($pseudo, $role, $sex, $agemin, $agemax) {
         $bdd = Database::connexionBDD();
 
         $idUser = UserModel::getUserId($pseudo);
@@ -430,7 +455,7 @@ class UserModel {
             $arret=0;
             echo('test');
             do {
-                $req_id = $bdd->prepare('SELECT DISTINCT id_user, id_interet FROM user, user_centre_interet, centre_interet WHERE user_centre_interet.id_interet ='.$idCentreInteret['hobbies'][$i].' AND user_centre_interet.id_user != '.$idUser.' AND user.sexe ='.$gender.' AND user.age >='.$minOld.' AND user.age <='.$maxOld.' AND user.id_etat_activite = 1');
+                $req_id = $bdd->prepare('SELECT DISTINCT id_user, id_interet FROM user, user_centre_interet, centre_interet WHERE user_centre_interet.id_interet ='.$idCentreInteret['hobbies'][$i].' AND user_centre_interet.id_user != '.$idUser.' AND user.sexe ='.$sex.' AND user.age >='.$minOld.' AND user.age <='.$maxOld.' AND user.id_etat_activite = 1');
                 $req_id->execute();
 
                 while($idUserCentreInteret = $req_id->fetch(PDO::FETCH_ASSOC)){
