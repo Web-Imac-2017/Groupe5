@@ -14,6 +14,8 @@ import Header from './components/Header.vue'
 
 import Messages from './components/Messages.vue'
 
+import Match from './components/Match.vue'
+
 // install router
 Vue.use(Router)
 
@@ -43,6 +45,11 @@ var router = new Router({
 			name : 'register',
 			path: '/register/',
 			component: Register
+		},
+		{
+			name : 'match',
+			path: '/match/',
+			component: Match
 		},
 		{
 			name: 'searchBar',

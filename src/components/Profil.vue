@@ -45,10 +45,8 @@ export default {
         age: '',
         country: '',
         city: '',
-        languages : {
-          mLang : [],
-          lLang : []
-        },
+        spokenLang : [],
+        learningLang : [],
         hobbies : []
       }
     }
