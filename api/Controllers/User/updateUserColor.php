@@ -20,8 +20,8 @@
             $pseudo = $json['pseudo'];
         }
 
-	    if(isset($json['couleur']) && $json['couleur'] != '') { /*A voir avec le front*/
-	    $userColor = $json['couleur'];
+	    if(isset($json['color']) && $json['color'] != '') { /*A voir avec le front*/
+	    $userColor = $json['color'];
 	  }
 	  else $data = array("Error", "Error");
 

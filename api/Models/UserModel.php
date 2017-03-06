@@ -85,15 +85,15 @@ class UserModel {
     public static function updateUserLastname($pseudo, $userLastname){
         $bdd = Database::connexionBDD();
         
-        $req_active = $bdd->prepare('UPDATE user SET nom = '.$userLastname.' WHERE pseudo = "'.$pseudo.'"');
+        $req_active = $bdd->prepare('UPDATE user SET nom = "'.$userLastname.'" WHERE pseudo = "'.$pseudo.'"');
         $req_active->execute();
     }
 
     /*Mettre à jour le prénom de l'utilisateur*/
-    public static function updateUserName($pseudo, $userName){
+    public static function updateUserFirstName($pseudo, $userFirstname){
         $bdd = Database::connexionBDD();
         
-        $req_active = $bdd->prepare('UPDATE user SET prenom = '.$userName.' WHERE pseudo = "'.$pseudo.'"');
+        $req_active = $bdd->prepare('UPDATE user SET prenom = "'.$userFirstname.'" WHERE pseudo = "'.$pseudo.'"');
         $req_active->execute();
     }
 
@@ -125,7 +125,7 @@ class UserModel {
     public static function updateUserCity($pseudo, $userCity){
         $bdd = Database::connexionBDD();
         
-        $req_active = $bdd->prepare('UPDATE user SET ville = '.$userCity.' WHERE pseudo = "'.$pseudo.'"');
+        $req_active = $bdd->prepare('UPDATE user SET ville = "'.$userCity.'" WHERE pseudo = "'.$pseudo.'"');
         $req_active->execute();
     }
 
@@ -133,7 +133,7 @@ class UserModel {
     public static function updateUserColor($pseudo, $userColor){
         $bdd = Database::connexionBDD();
         
-        $req_active = $bdd->prepare('UPDATE user SET couleur = '.$userColor.' WHERE pseudo = "'.$pseudo.'"');
+        $req_active = $bdd->prepare('UPDATE user SET couleur = "'.$userColor.'" WHERE pseudo = "'.$pseudo.'"');
         $req_active->execute();
     }
 
@@ -156,59 +156,59 @@ class UserModel {
     /*Ajouter un hobby à l'utilisateur*/
     public static function setUserHobbies($pseudo, $nameHobby){
         $bdd = Database::connexionBDD();
-        $idUser = UserModel::getUserId();
+        $idUser = UserModel::getUserId($pseudo);
 
         $req_idHobby = $bdd->prepare('SELECT ID FROM centre_interet WHERE Nom = "'.$nameHobby.'"');
         $req_idHobby->execute();
         $id_Hobby = $req_idHobby->fetch(PDO::FETCH_ASSOC);
 
-        $req_active = $bdd->prepare('INSERT INTO user_centre_interet (ID, id_interet, id_user) VALUES (NULL,'.$idHobby['ID'].','.idUser.')');
+        $req_active = $bdd->prepare('INSERT INTO user_centre_interet (ID, id_interet, id_user) VALUES (NULL,'.$id_Hobby['ID'].','.$idUser.')');
         $req_active->execute();
     }
 
     /*Supprimer un hobby à l'utilisateur*/
     public static function deleteUserHobbies($pseudo, $nameHobby){
         $bdd = Database::connexionBDD();
-        $idUser = UserModel::getUserId();
+        $idUser = UserModel::getUserId($pseudo);
 
         $req_idHobby = $bdd->prepare('SELECT ID FROM centre_interet WHERE Nom = "'.$nameHobby.'"');
         $req_idHobby->execute();
         $id_Hobby = $req_idHobby->fetch(PDO::FETCH_ASSOC);
 
-        $req_active = $bdd->prepare('DELETE FROM user_centre_interet WHERE id_interet = '.$id_Hobby.' AND id_user = "'.$idUser.'"');
+        $req_active = $bdd->prepare('DELETE FROM user_centre_interet WHERE id_interet = '.$id_Hobby['ID'].' AND id_user = '.$idUser);
         $req_active->execute();
     }
 
     /*Ajouter une langue à l'utilisateur*/
     public static function setUserLang($pseudo, $nameLang, $master){
         $bdd = Database::connexionBDD();
-        $idUser = UserModel::getUserId();
+        $idUser = UserModel::getUserId($pseudo);
 
         $req_idLang = $bdd->prepare('SELECT ID FROM langue WHERE Nom = "'.$nameLang.'"');
         $req_idLang->execute();
         $id_lang = $req_idLang->fetch(PDO::FETCH_ASSOC);
 
-        $req_active = $bdd->prepare('INSERT INTO user_langue (ID, id_user, id_langue, maitrise) VALUES (NULL,'.idUser.','.$idLang['ID'].','.$master.')');
+        $req_active = $bdd->prepare('INSERT INTO user_langue (ID, id_user, id_langue, maitrise) VALUES (NULL,'.$idUser.','.$id_lang['ID'].','.$master.')');
         $req_active->execute();
     }
 
     /*Enlever une langue à l'utilisateur*/
     public static function deleteUserLang($pseudo, $nameLang){
         $bdd = Database::connexionBDD();
-        $idUser = UserModel::getUserId();
+        $idUser = UserModel::getUserId($pseudo);
 
         $req_idLang = $bdd->prepare('SELECT ID FROM langue WHERE Nom = "'.$nameLang.'"');
         $req_idLang->execute();
         $id_lang = $req_idLang->fetch(PDO::FETCH_ASSOC);
 
-        $req_active = $bdd->prepare('DELETE FROM user_langue WHERE id_langue = '.$id_lang.' AND id_user = "'.$idUser.'"');
+        $req_active = $bdd->prepare('DELETE FROM user_langue WHERE id_langue = '.$id_lang['ID'].' AND id_user = '.$idUser);
         $req_active->execute();
     }
 
     /*Modifier le pays de l'utilisateur*/
     public static function updateUserPays($pseudo, $namePays){
         $bdd = Database::connexionBDD();
-        $idUser = UserModel::getUserId();
+        $idUser = UserModel::getUserId($pseudo);
 
         $req_idPays = $bdd->prepare('SELECT id_pays FROM table_pays WHERE nom_pays = "'.$namePays.'"');
         $req_idPays->execute();
@@ -270,7 +270,7 @@ class UserModel {
             $req_id = $bdd->prepare('SELECT DISTINCT id_langue, langue.Nom FROM user, user_langue, langue WHERE user_langue.maitrise = 2 AND user.ID=user_langue.id_user AND user.ID='.$idUser.' AND langue.ID = user_langue.id_langue');
             $req_id->execute();
             while($idLangueMaitrisee = $req_id->fetch(PDO::FETCH_ASSOC)){
-                $result['spokenLang'][] = array('id_langue' => $idLangueMaitrisee["id_langue"], 'name_langue' => $idLangueMaitrisee['Nom']);
+                array_push($result['spokenLang'],$idLangueMaitrisee['Nom']);
             }
         }
 
@@ -290,10 +290,10 @@ class UserModel {
             $req_id = $bdd->prepare('SELECT DISTINCT id_langue, langue.Nom FROM user, user_langue, langue WHERE user_langue.maitrise = 1 AND user.ID=user_langue.id_user AND user.ID='.$idUser.' AND langue.ID = user_langue.id_langue');
             $req_id->execute();
             while($idLangueAApprendre = $req_id->fetch(PDO::FETCH_ASSOC)){
-                $result['learningLang'][] = array('id_langue' => $idLangueAApprendre["id_langue"], 'name_langue' => $idLangueAApprendre['Nom']);
+                array_push($result['learningLang'], $idLangueAApprendre['Nom']);
+
             }
         }
-
         return $result;
     }
 

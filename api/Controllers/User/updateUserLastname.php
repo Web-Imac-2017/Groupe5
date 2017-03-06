@@ -20,8 +20,8 @@
             $pseudo = $json['pseudo'];
         }
 
-	    if(isset($json['nom']) && $json['nom'] != '') {
-	    $userLastName = $json['nom'];
+	    if(isset($json['lastname']) && $json['lastname'] != '') {
+	    $userLastName = $json['lastname'];
 	  }
 	  else $data = array("Error", "Error");
 
