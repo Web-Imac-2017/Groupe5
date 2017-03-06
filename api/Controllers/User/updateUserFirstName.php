@@ -8,7 +8,7 @@
 	include "../../Models/UserModel.php";
 
 	$pseudo = "";
-	$userPassword = "";
+	$firstname = "";
 	$data = "";
 
 	if ($_SERVER['REQUEST_METHOD'] == 'POST')
@@ -20,13 +20,13 @@
             $pseudo = $json['pseudo'];
         }
 
-	    if(isset($json['prenom']) && $json['prenom'] != '') {
-	    $userPassword = $json['prenom'];
+	    if(isset($json['firstname']) && $json['firstname'] != '') {
+	    $firstname = $json['firstname'];
 	  }
 	  else $data = array("Error", "Error");
 
 
-	  UserModel::updateUserPassword($pseudo, $userPassword);
+	  UserModel::updateUserFirstname($pseudo, $firstname);
 
 	}
 	else $data = array("Error", "Error");

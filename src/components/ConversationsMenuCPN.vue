@@ -7,25 +7,28 @@
     <ul>
       <li v-for="conversation in conversations" class="row">
         <router-link v-bind:to="'/messages/' + conversation.id" :class=getActiveConversation(conversation.id) class="user">
-          <span class="col-md-2 avatar">
+          <span class="avatar">
             <img src="../../static/avatar/maureeniz.jpg">
           </span>
           <span v-for="user in conversation.users" class="col-md-10">
-            <p class="titleConversation userPseudo">{{ user.pseudo }}</p>
+            <p class="titleConversation userPseudo" :class=getUserState(user)>{{ user.pseudo }} <icon name="circle"></icon></p> 
             <p class="lastMessage">{{ conversation.lastMessage }}</p>
+          </span>
+          <span v-on:click="deleteConv(conversation.id)" class="quit">
+            <icon name="times"></icon>
           </span>
         </router-link>
       </li>
       <li class="row addPlume">
         <router-link v-bind:to="'/messages/' + 0" class="user">
-            <span class="col-md-2">
-              <div class="plus">
-                <icon name="plus"></icon>
-              </div>
-            </span>
-            <span class="col-md-10">
-              <p class="userPseudo">New Plume</p>
-            </span>
+          <span class="avatar">
+            <div class="plus">
+              <icon name="plus"></icon>
+            </div>
+          </span>
+          <span class="text-conv">
+            <p class="userPseudo">New Plume</p>
+          </span>
         </router-link>
       </li>
     </ul>
@@ -64,9 +67,33 @@ export default {
       }
       return theClass;
     },
-    getConversations: function() {
+    getUserState: function(user) {
+      var theClass = 'userNonConnected';
       var _this = this;
+      fetch(apiRoot() + 'Controllers/User/getUserState.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({pseudo: user.pseudo})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+          if(data[0] == "Error"){
+          }
+          else {
+            if(data[0] == 2) theClass = "userConnected";
+          }
+        }
+      );
+      return theClass;
+    },
+    getConversations: function() {
 
+      console.log(this.me);
+      var _this = this;
       fetch(apiRoot() + 'Controllers/Conversation/getUserConversations.php', {
         method: 'POST',
         headers: {
@@ -85,6 +112,18 @@ export default {
           _this.conversations = data['conversations'];
         }
       });
+    },
+    deleteConv: function(id){
+      var _conversationID = id;
+      fetch(apiRoot() + 'Controllers/Conversation/getAllMessages.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({conversation : _conversationID})
+      });
     }
   }
 }
@@ -95,10 +134,15 @@ export default {
 
 $profil_color: rgb(195,39,47);
 $profil_color_light: rgb(225,146,150);
-$avatar_size: 60px;
+$avatar_size: 80px;
 
 
-.conversationsMenu {
+.conversationsMenu{
+  overflow-x: hidden;
+  overflow-y: auto;
+  border-right: 1px solid #000;
+  height: 100%;
+
   [class*="col"]{
     padding: 0;
   }
@@ -106,15 +150,13 @@ $avatar_size: 60px;
     margin: 10px 0;
   }
   span{
-    display: block;
+    display: inline-block;
+    margin: auto 0;
   }
   p{
     margin: 0;
     vertical-align: middle;
   }
-  overflow-x: hidden;
-  overflow-y: auto;
-  border-right: 1px solid #000;
 
   .CMHeader{
     text-align: center;
@@ -128,23 +170,22 @@ $avatar_size: 60px;
     .CMLogo{
       width: 150px;
     }
+    .fa-icon{
+      margin-right: 10px;
+    }
   }
 
   .user{
-    display: block;
     height: $avatar_size;
-  }
+    display: flex;
 
-  .user.router-link-active.active {
-    background-color: $profil_color_light;
-  }
-
-  .avatar {
-    vertical-align: middle;
-    img{
-      height: $avatar_size;
-      width: $avatar_size;
-      border: 1px solid #000;
+    .avatar {
+      vertical-align: middle;
+      img{
+        height: $avatar_size;
+        width: $avatar_size;
+        border: 1px solid #000;
+      }
     }
   }
 
@@ -152,6 +193,13 @@ $avatar_size: 60px;
     text-transform: uppercase;
     font-weight: 600;
     font-size: 20px;
+
+    &.userConnected svg {
+      color: #38B647;
+    }
+    &.userNonConnected svg {
+      color: #C02029;
+    }
   }
   .lastMessage {
     display: block;
@@ -159,17 +207,48 @@ $avatar_size: 60px;
     font-size: 12px;
   }
 
-
-  .addPlume{
-    .plus{
-      width: $avatar_size;
-      height: $avatar_size;
-      border: 1px solid #000;
-      background-color: $profil_color_light;
-      text-align: center;
-      vertical-align: middle;
+    .text-conv{
+      margin-left: 15px;
+      width: 100%;
+      .userPseudo {
+        text-transform: uppercase;
+        font-weight: 600;
+        font-size: 20px;
+        &.userConnected svg {
+          color: #38B647;
+        }
+        &.userNonConnected svg {
+          color: #C02029;
+        }
+      }
+      .lastMessage {
+        display: block;
+        font-style: italic;
+        font-size: 12px;
+      }
     }
-  }
+    .quit{
+      position: relative;
+      right: 10px;
+      top: -15px;
+    }
 
-}
+    .user.router-link-active.active {
+      background-color: $profil_color_light;
+    }
+    .addPlume{
+      .plus{
+        width: $avatar_size;
+        height: $avatar_size;
+        border: 1px solid #000;
+        background-color: $profil_color_light;
+        text-align: center;
+        display: flex;
+        .fa-icon{
+          margin: auto;
+        }
+      }
+    }
+
+  }
 </style>
