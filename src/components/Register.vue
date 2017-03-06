@@ -75,15 +75,11 @@
 
 	            <div class="form-group">            
 	                <label class="form-check-label" for="color">Color* </label><br/>
-	                <span class="errorSpan displayNo" id="errorSex">You have to select your color</span><br/>
-	                <input class="form-check-input" type="radio" id="color1" value="#FFFFFF" v-model="user.color">
-	                <label class="form-check-label" for="color1">Blanc</label>
-	                
-	                <input class="form-check-input" type="radio" id="color2" value="#000000" v-model="user.color">
-	                <label class="form-check-label" for="color2">Noir</label>
-	                
-	                <input class="form-check-input" type="radio" id="color3" value="#F0F0F0" v-model="user.color">
-	                <label class="form-check-label" for="color3">Gris</label>
+	                <span class="errorSpan displayNo" id="errorColor">You have to select your color</span><br/>
+                  <div v-for="color in colorsList">
+                    <input class="form-check-input" type="radio" :id="color.name" :value="color.name" name="color" v-model="user.color">
+                    <label class="form-check-label" :for="color.name" :class="color.name">{{color.name}}</label>
+                  </div>
 	            </div>
 	            <br/><br/>
 
@@ -170,7 +166,8 @@
 	        		hobbies : []
 	      		},
 	      		hobbiesList: [],
-	      		languagesList: []
+	      		languagesList: [],
+            colorsList: []
 	    	}
 	  	},
       methods:{
@@ -284,7 +281,28 @@
               _this.countryList = data['countries'];
             }
           });
-        }
+        },
+        getColors: function() {
+          var _this = this;
+                
+          fetch(apiRoot() + 'Controllers/General/getAllColors.php', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+              'Content-Type': 'application/json; charset=utf-8'
+            },
+            dataType: 'JSON'
+          }).then(function(response) {
+            return response.json();
+          }).then(function(data){
+            if(data[0] == "Error"){
+              console.log(data[1]);
+            }
+            else {
+              _this.colorsList = data['colors'];
+            }
+          });
+        },
       },
       created: function() {
       	this.getLanguages();
