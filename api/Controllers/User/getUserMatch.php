@@ -25,14 +25,12 @@
 	 }
 	 else $data = array("Error", "Error");
 
-	 $data = UserModel::getUserMatch("Robibidu77","2");
-
-	 var_dump($data['langue']['users']);
-
-
-	 $data = UserModel::ClasseUserMatch($data['langue']);
+	 $data = UserModel::getUserMatch("PAdu77","2");
+	 
+	 var_dump($data);
 
 
-  echo json_encode($data, JSON_PRETTY_PRINT);
+
+  echo json_encode($data);
 
 ?>

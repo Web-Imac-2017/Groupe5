@@ -140,13 +140,13 @@ export default {
     },
     languagesToFlag: function(country) {
       var flag = {
-        portuguese : '/static/flags/portugal.png',
-        english : '/static/flags/united-kingdom.png',
-        chinese : '/static/flags/china.png',
-        french : '/static/flags/france.png',
-        japanese : '/static/flags/japan.png',
-        german : '/static/flags/germany.png',
-        spanish : '/static/flags/spain.png'
+        Portuguese : '/static/flags/portugal.png',
+        English : '/static/flags/united-kingdom.png',
+        Chinese : '/static/flags/china.png',
+        French : '/static/flags/france.png',
+        Japanese : '/static/flags/japan.png',
+        German : '/static/flags/germany.png',
+        Spanish : '/static/flags/spain.png'
       }
       return flag[country];
     },
@@ -194,6 +194,7 @@ export default {
       }).then(function(response) {
         return response.json();
       }).then(function(data){
+        console.log(data);
         _this.connectedUser.pseudo = data['pseudo'];
         _this.connectedUser.avatar = data['avatar'];
         _this.connectedUser.firstname = data['firstname'];
@@ -204,7 +205,8 @@ export default {
         _this.connectedUser.description = data['description'];
         _this.connectedUser.color = data['color'];
         _this.connectedUser.hobbies = data['hobbies'];
-        _this.connectedUser.languages = data['languages'];
+        _this.connectedUser.languages.spokenLang = data['languages']['spokenLang']['spokenLang'];
+        _this.connectedUser.languages.learningLang = data['languages']['learningLang']['learningLang'];
       });
     }
   },
@@ -212,6 +214,8 @@ export default {
     this.profilShowed = "false";
     this.getUserState(this.getCookie("PLUME_pseudo"));
     this.setConnectedUser(this.getCookie("PLUME_pseudo"));
+
+    console.log(this.connectedUser);
   }
 }
 </script>
