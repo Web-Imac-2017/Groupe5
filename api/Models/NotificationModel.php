@@ -10,18 +10,9 @@ class NotificationModel{
         
         $id_user1 = UserModel::getUserId($pseudo1);
         $id_user2 = UserModel::getUserId($pseudo2);
-
-        $req_active = $bdd->prepare("INSERT INTO notification (`ID`, `ID_user1`, `ID_user2`,`contenu`, `date`) VALUES (NULL, :user1, :user2,:contenu, now()); ");
+        var_dump($id_user2);
+        $req_active = $bdd->prepare("INSERT INTO notification (`ID`, `ID_user1`, `ID_user2`,`contenu`, `date`) VALUES (NULL, :user1, :user2,:contenu, now())");
         $req_active->execute(array(':contenu' => $contenu, ':user1' => $id_user1, ':user2' => $id_user2));
-        $result = $req_active->fetchAll();
-
-        if ($result == FALSE){
-            $data = array("Error", "Error: the request doesn't work.");
-        }
-        else{
-             $data = array(0);
-        }
-        return $data;
     }
 
     /*cette fonction renvoie un tableau contenant les notifications classés du + récent au + ancient */
@@ -30,11 +21,10 @@ class NotificationModel{
         $result = [];
 
         $id_user = UserModel::getUserId($pseudo);
-
-        $req_active = $bdd->prepare("SELECT `ID`, `ID_user1`, `date`, `contenu` as `content` FROM `notification` WHERE `ID_user2` = :user ORDER BY `date` ASC;");
-        $req_active->execute(array(':user' => $id_user));
-        
+        $req_active = $bdd->prepare('SELECT `ID`, `ID_user1`, `date`, `contenu` as `content` FROM `notification` WHERE `ID_user2` = '.$id_user.' ORDER BY `date` ASC');
+        $req_active->execute();
         $result = $req_active->fetchAll();
+        
         
         /*var_dump($result);*/
 
@@ -51,16 +41,7 @@ class NotificationModel{
 
         $req_active = $bdd->prepare('DELETE FROM notification WHERE ID = "'.$idNotif.'"');
         $req_active->execute();
-        $result = $req_active->fetchAll();
-
-        if ($result == FALSE){
-            $data = array("Error", "Error:  the request doesn't work.");
-        }
-        else{
-             $data = array(0);
-        }
-        return $data;
     }
-    
+}  
  
 ?>

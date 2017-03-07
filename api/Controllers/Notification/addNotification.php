@@ -9,17 +9,20 @@
 
 
     $json = json_decode(file_get_contents('php://input'), true);
-    $pseudo=$json['pseudo'];
+    $contenu=$json['contenu'];
+    $emetteur=$json['pseudo1'];
+    $recepteur=$json['pseudo2'];
+
 
 
     if(!is_array($json)) $data = array("Error", "Error: POST.");
     else {
-        if($pseudo==NULL){
-            $data = array("Error", "Error: there is no notification.");
+        if($contenu==NULL){
+            $data = array("Error", "Error: there is no content in the notification.");
         }
 
         else{
-            $data=NotificationModel::getAllNotif($pseudo);
+            $data=NotificationModel::addNotification($contenu,$emetteur,$recepteur);
         }
     }
 

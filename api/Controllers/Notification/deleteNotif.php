@@ -9,17 +9,18 @@
 
 
     $json = json_decode(file_get_contents('php://input'), true);
-    $pseudo=$json['pseudo'];
+    $id_notif=$json['ID'];
+
 
 
     if(!is_array($json)) $data = array("Error", "Error: POST.");
     else {
-        if($pseudo==NULL){
-            $data = array("Error", "Error: there is no notification.");
+        if($id_notif==NULL){
+            $data = array("Error", "Error: this notification doesn't exist.");
         }
 
         else{
-            $data=NotificationModel::getAllNotif($pseudo);
+            $data=NotificationModel::deleteNotif($id_notif);
         }
     }
 
