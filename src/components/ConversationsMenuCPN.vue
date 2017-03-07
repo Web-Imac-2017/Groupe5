@@ -224,6 +224,7 @@ $avatar_size: 80px;
     background-color: $profil_color_light;
   }
   .addPlume{
+    margin-bottom: 50px;
     .plus{
       width: $avatar_size;
       height: $avatar_size;
@@ -236,5 +237,8 @@ $avatar_size: 80px;
       }
     }
   }
+
+  /*ScrollBar*/
+
 }
 </style>
