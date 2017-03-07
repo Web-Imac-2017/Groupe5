@@ -10,7 +10,7 @@
           <span class="avatar">
             <img src="../../static/avatar/maureeniz.jpg">
           </span>
-          <span v-for="user in conversation.users" class="col-md-10">
+          <span v-for="user in conversation.users" class="text-conv">
             <p class="titleConversation userPseudo" :class=getUserState(user)>{{ user.pseudo }} <icon name="circle"></icon></p> 
             <p class="lastMessage">{{ conversation.lastMessage }}</p>
           </span>
@@ -45,8 +45,9 @@ import Header from './Header.vue'
 export default {
   data : function () {
     return {
-      conversations : '',
-      me : {}
+      conversations : [],
+      me : {},
+      otherUser: {}
     }
   },
   watch: {
@@ -57,7 +58,22 @@ export default {
   },
   created: function() {
     this.me = this.$parent.connectedUser;
+    /*while(this.me.pseudo == "") {
+      this.me = this.$parent.connectedUser;
+      console.log(this.me.pseudo);
+    }*/
+    //console.log(this.$parent.connectedUser.pseudo);
     this.getConversations();
+    /*this.conversations.map(function(conversation, key) {
+      console.log(conversation);
+
+      if(conversation.id == this.$route.params.conversationID) {
+        this.otherUser = conversation.users[0][0];
+
+        console.log(this.otherUser);
+      }
+    }); */     
+
   },
   methods: {
     getActiveConversation: function(id) {
@@ -91,7 +107,7 @@ export default {
       return theClass;
     },
     getConversations: function() {
-
+      console.log("Conv ");
       console.log(this.me);
       var _this = this;
       fetch(apiRoot() + 'Controllers/Conversation/getUserConversations.php', {
@@ -101,6 +117,7 @@ export default {
           'Content-Type': 'application/json; charset=utf-8'
         },
         dataType: 'JSON',
+        async: false,
         body: JSON.stringify({pseudo: _this.me.pseudo})
       }).then(function(response) {
         return response.json();

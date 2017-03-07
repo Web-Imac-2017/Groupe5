@@ -1,6 +1,6 @@
 <template>
   <div class="conversation">
-    <ul ref="messages" class="messages" id="messages">
+    <ul id="messages">
       <li v-for="message in messages" :class=getUser(message.user)>
         <div class="messageContent">
           <span>{{ "["+message.date+"]" }}</span>
@@ -90,7 +90,8 @@ export default {
           console.log("ERREUR !!");
         }
         else {
-          location.reload();
+          _this.newMessage="";
+          _this.getConversation();
         }
       });
     },

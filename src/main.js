@@ -12,10 +12,9 @@ import Profil from './components/ProfilCPN.vue'
 import SearchBar from './components/SearchBarCPN.vue'
 import Header from './components/Header.vue'
 import MyProfile from './components/MyProfile.vue'
-
 import Messages from './components/Messages.vue'
-
 import Match from './components/Match.vue'
+
 //Font Awesome
 import 'vue-awesome/icons/flag'
 import 'vue-awesome/icons'
@@ -68,8 +67,13 @@ var router = new Router({
 			component: Header
 		},
 		{
-			name: 'messages',
+			name: 'messagesConversation',
 			path: '/messages/:conversationID',
+			component: Messages
+		},
+		{
+			name: 'messages',
+			path: '/messages/',
 			component: Messages
 		},
 		{

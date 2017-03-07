@@ -12,14 +12,12 @@ import {apiRoot} from '../config/localhost/settings.js'
 import HeaderComponent from './components/Header.vue'
 import FooterComponent from './components/Footer.vue'
 import ProfilComponent from './components/ProfilCPN.vue'
-import MatchComponent from './components/Match.vue'
 
 export default {
   components: {
     HeaderComponent,
     FooterComponent,
-    ProfilComponent,
-    MatchComponent
+    ProfilComponent
   },
   data(){
     return {
@@ -57,6 +55,14 @@ export default {
           learningLang: ''
         }
       },
+    }
+  },
+  created: function(){
+    this.profilShowed = "false";
+    var pseudo = this.getCookie("PLUME_pseudo");
+    if(pseudo != "") {
+      this.getUserState(pseudo);
+      this.setConnectedUser(pseudo);
     }
   },
   methods: {
@@ -127,17 +133,23 @@ export default {
       }).then(function(response) {
         return response.json();
       }).then(function(data){
-        _this.selectedUser.pseudo = data['pseudo'];
-        _this.selectedUser.avatar = data['avatar'];
-        _this.selectedUser.firstname = data['firstname'];
-        _this.selectedUser.lastname = data['lastname'];
-        _this.selectedUser.age = data['age'];
-        _this.selectedUser.country = data['country'];
-        _this.selectedUser.city = data['city'];
-        _this.selectedUser.description = data['description'];
-        _this.selectedUser.color = data['color'];
-        _this.selectedUser.hobbies = data['hobbies'];
-        _this.selectedUser.languages = data['languages'];
+        if(data[0] == "Error") {
+
+        }
+        else {
+          _this.selectedUser.pseudo = data['pseudo'];
+          _this.selectedUser.avatar = data['avatar'];
+          _this.selectedUser.firstname = data['firstname'];
+          _this.selectedUser.lastname = data['lastname'];
+          _this.selectedUser.age = data['age'];
+          _this.selectedUser.country = data['country'];
+          _this.selectedUser.city = data['city'];
+          _this.selectedUser.description = data['description'];
+          _this.selectedUser.color = data['color'];
+          _this.selectedUser.hobbies = data['hobbies'];
+          _this.selectedUser.languages = data['languages'];  
+        }
+        
       });
     },
     languagesToFlag: function(country) {
@@ -192,32 +204,34 @@ export default {
           'Content-Type': 'application/json; charset=utf-8'
         },
         dataType: 'JSON',
+        async: false,
         body: JSON.stringify({pseudo: pseudo})
       }).then(function(response) {
         return response.json();
       }).then(function(data){
-        console.log(data);
-        _this.connectedUser.pseudo = data['pseudo'];
-        _this.connectedUser.avatar = data['avatar'];
-        _this.connectedUser.firstname = data['firstname'];
-        _this.connectedUser.lastname = data['lastname'];
-        _this.connectedUser.age = data['age'];
-        _this.connectedUser.country = data['country'];
-        _this.connectedUser.city = data['city'];
-        _this.connectedUser.description = data['description'];
-        _this.connectedUser.color = data['color'];
-        _this.connectedUser.hobbies = data['hobbies'];
-        _this.connectedUser.languages.spokenLang = data['languages']['spokenLang']['spokenLang'];
-        _this.connectedUser.languages.learningLang = data['languages']['learningLang']['learningLang'];
+        if(data[0] == "Error") {
+          console.log("Error");
+        } 
+        else {
+          _this.connectedUser.pseudo = data['pseudo'];
+          _this.connectedUser.avatar = data['avatar'];
+          _this.connectedUser.firstname = data['firstname'];
+          _this.connectedUser.lastname = data['lastname'];
+          _this.connectedUser.age = data['age'];
+          _this.connectedUser.country = data['country'];
+          _this.connectedUser.city = data['city'];
+          _this.connectedUser.description = data['description'];
+          _this.connectedUser.color = data['color'];
+          _this.connectedUser.hobbies = data['hobbies'];
+          _this.connectedUser.languages.spokenLang = data['languages']['spokenLang']['spokenLang'];
+          _this.connectedUser.languages.learningLang = data['languages']['learningLang']['learningLang'];  
+
+          console.log("App ");
+          console.log(_this.connectedUser);
+        }
+        
       });
     }
-  },
-  created: function(){
-    this.profilShowed = "false";
-    this.getUserState(this.getCookie("PLUME_pseudo"));
-    this.setConnectedUser(this.getCookie("PLUME_pseudo"));
-
-    console.log(this.connectedUser);
   }
 }
 </script>
