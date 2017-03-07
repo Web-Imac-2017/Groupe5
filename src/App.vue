@@ -12,12 +12,14 @@ import {apiRoot} from '../config/localhost/settings.js'
 import HeaderComponent from './components/Header.vue'
 import FooterComponent from './components/Footer.vue'
 import ProfilComponent from './components/ProfilCPN.vue'
+import MatchComponent from './components/Match.vue'
 
 export default {
   components: {
     HeaderComponent,
     FooterComponent,
-    ProfilComponent
+    ProfilComponent,
+    MatchComponent
   },
   data(){
     return {
