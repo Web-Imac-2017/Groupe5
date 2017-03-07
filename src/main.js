@@ -73,6 +73,11 @@ var router = new Router({
 			component: MyProfile
 		},
 		{
+			name: 'admin',
+			path: '/admin/',
+			component: Admin
+		},
+		{
 			path: '*',
 			redirect: '/home'
 		}
