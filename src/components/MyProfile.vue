@@ -28,7 +28,9 @@
             		<input v-if="editing == 'true'" type="text" v-model="user.firstname">
             		<input v-if="editing == 'true'" type="text" v-model="user.lastname">
             		<input v-if="editing == 'true'" type="text" v-model="user.city">
-            		<input v-if="editing == 'true'" type="text" v-model="user.country[0]">
+            		<select name="country" id="country" v-if="editing == 'true'" v-model="user.country[0]">
+                  <option v-for="country in countries">{{ country.name }}</option>
+                </select>
             	</div>
 
             	<div class="col-sm-12" id="clickToEdit">
@@ -136,6 +138,7 @@ export default {
 			this.updateColor();
 			this.updateHobbies();
 			this.updateLanguages();
+      this.updateCountry();
   	},
   	getLanguages: function() {
     	var _this = this;
@@ -288,6 +291,28 @@ export default {
         },
         dataType: 'JSON',
         body: JSON.stringify({pseudo: _this.user.pseudo, city: _this.user.city})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+        if(data[0] == "Error"){
+          console.log(data[1]);
+        }
+        else {
+
+        }
+      });
+    },
+    updateCountry: function() {
+      var _this = this;
+                
+      fetch(apiRoot() + 'Controllers/User/updateUserCountry.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({pseudo: _this.user.pseudo, country: _this.user.country[0]})
       }).then(function(response) {
         return response.json();
       }).then(function(data){
