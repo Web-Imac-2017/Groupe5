@@ -31,15 +31,15 @@ class NotificationModel{
 
         $id_user = UserModel::getUserId($pseudo);
 
-        $req_active = $bdd->prepare("SELECT `ID`, `ID_user2`, `date`, `contenu` as `content` FROM `notification` WHERE `ID_user1` = :user1 ORDER BY `date` ASC;");
-        $req_active->execute(array(':user1' => $id_user));
+        $req_active = $bdd->prepare("SELECT `ID`, `ID_user1`, `date`, `contenu` as `content` FROM `notification` WHERE `ID_user2` = :user ORDER BY `date` ASC;");
+        $req_active->execute(array(':user' => $id_user));
         
         $result = $req_active->fetchAll();
         
         /*var_dump($result);*/
 
         for($i=0; $i < count($result); $i++){
-            $num_id = intval($result[$i]['ID_user2']);
+            $num_id = intval($result[$i]['ID_user1']);
             $result[$i]['user'] = UserModel::getPseudoById($num_id);
         }
        
