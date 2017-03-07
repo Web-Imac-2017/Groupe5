@@ -3,7 +3,7 @@
 	header('Access-Control-Allow-Origin:*');
 	header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
 	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
-	//header('Content-Type: application/json;charset=utf-8');
+	header('Content-Type: application/json;charset=utf-8');
 
 	include "../../Models/UserModel.php";
 
@@ -20,19 +20,22 @@
             $pseudo = $json['pseudo'];
 
             $data = UserModel::getUserMatch($pseudo);
+
+            //var_dump($data['langue']['users']);
+
+
+            $data = UserModel::ClasseUserMatch($data['langue']);
+
         }
 
 	 }
 	 else $data = array("Error", "Error");
 
-	 $data = UserModel::getUserMatch("Robibidu77","2");
+	 //$data = UserModel::getUserMatch("Robibidu77","2");
 
-	 var_dump($data['langue']['users']);
-
-
-	 $data = UserModel::ClasseUserMatch($data['langue']);
-
+	 
 
   echo json_encode($data, JSON_PRETTY_PRINT);
+
 
 ?>

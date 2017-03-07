@@ -16,6 +16,46 @@ echo '{
             "name" : "red",
             "normal" : "#BA232A",
             "light" : "#E19296"
+        },
+        {
+            "name" : "green",
+            "normal" : "#3AAB3C",
+            "light" : "#ABFF97"
+        },
+        {
+            "name" : "green",
+            "normal" : "#3AAB3C",
+            "light" : "#ABFF97"
+        },
+        {
+            "name" : "green",
+            "normal" : "#3AAB3C",
+            "light" : "#ABFF97"
+        },
+        {
+            "name" : "green",
+            "normal" : "#3AAB3C",
+            "light" : "#ABFF97"
+        },
+        {
+            "name" : "green",
+            "normal" : "#3AAB3C",
+            "light" : "#ABFF97"
+        },
+        {
+            "name" : "green",
+            "normal" : "#3AAB3C",
+            "light" : "#ABFF97"
+        },
+        {
+            "name" : "green",
+            "normal" : "#3AAB3C",
+            "light" : "#ABFF97"
+        },
+        {
+            "name" : "green",
+            "normal" : "#3AAB3C",
+            "light" : "#ABFF97"
         }
     ]
 }';

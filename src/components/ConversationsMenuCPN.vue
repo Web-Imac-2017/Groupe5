@@ -20,7 +20,7 @@
         </router-link>
       </li>
       <li class="row addPlume">
-        <router-link v-bind:to="'/messages/' + 0" class="user">
+        <router-link v-bind:to="'/home/'" class="user">
           <span class="avatar">
             <div class="plus">
               <icon name="plus"></icon>
@@ -125,6 +125,7 @@ export default {
         body: JSON.stringify({conversation : _conversationID})
       });
     }
+
   }
 }
 </script>
@@ -141,7 +142,7 @@ $avatar_size: 80px;
   overflow-x: hidden;
   overflow-y: auto;
   border-right: 1px solid #000;
-  height: 100%;
+  height: 100vh;
 
   [class*="col"]{
     padding: 0;
@@ -232,23 +233,21 @@ $avatar_size: 80px;
       right: 10px;
       top: -15px;
     }
-
-    .user.router-link-active.active {
+  }
+  .user.router-link-active.active {
+    background-color: $profil_color_light;
+  }
+  .addPlume{
+    .plus{
+      width: $avatar_size;
+      height: $avatar_size;
+      border: 1px solid #000;
       background-color: $profil_color_light;
-    }
-    .addPlume{
-      .plus{
-        width: $avatar_size;
-        height: $avatar_size;
-        border: 1px solid #000;
-        background-color: $profil_color_light;
-        text-align: center;
-        display: flex;
-        .fa-icon{
-          margin: auto;
-        }
+      text-align: center;
+      display: flex;
+      .fa-icon{
+        margin: auto;
       }
     }
-
   }
 </style>
