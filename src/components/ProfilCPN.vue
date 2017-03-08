@@ -1,6 +1,6 @@
 <template>
   <div class="Profil">
-    <div class="overlay"></div>
+    <div class="overlay" v-on:click="$parent.changeSelectedUser('')"></div>
     <div class="profilCPN">
       <div class="avatarProfil" v-bind:style="{borderBottom:4+'px '+'solid '+ $parent.selectedUser.color,backgroundImage:'url(/static/avatar/' + $parent.selectedUser.avatar+')'}">
       </div>
@@ -41,6 +41,9 @@ export default {
     return {
     }
   },
+  methods: {
+
+  }
 }
 
 </script>
