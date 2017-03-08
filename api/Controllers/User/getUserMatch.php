@@ -25,7 +25,7 @@
 	 }
 	 else $data = array("Error", "Error");
 
-	 $data = UserModel::getUserMatch("PAdu77","2");
+	 $data = UserModel::getUserMatch("PAdu77","2",null, 2,null);
 	 
 	 var_dump($data);
 

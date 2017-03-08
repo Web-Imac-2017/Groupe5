@@ -270,7 +270,7 @@ class UserModel {
             $req_id = $bdd->prepare('SELECT DISTINCT id_langue, langue.Nom FROM user, user_langue, langue WHERE user_langue.maitrise = 2 AND user.ID=user_langue.id_user AND user.ID='.$idUser.' AND langue.ID = user_langue.id_langue');
             $req_id->execute();
             while($idLangueMaitrisee = $req_id->fetch(PDO::FETCH_ASSOC)){
-                array_push($result['spokenLang'],$idLangueMaitrisee['Nom']);
+                $result['spokenLang'][] = array('id_langue' => $idLangueMaitrisee["id_langue"], 'name_langue' => $idLangueMaitrisee['Nom']);
             }
         }
 
@@ -290,7 +290,7 @@ class UserModel {
             $req_id = $bdd->prepare('SELECT DISTINCT id_langue, langue.Nom FROM user, user_langue, langue WHERE user_langue.maitrise = 1 AND user.ID=user_langue.id_user AND user.ID='.$idUser.' AND langue.ID = user_langue.id_langue');
             $req_id->execute();
             while($idLangueAApprendre = $req_id->fetch(PDO::FETCH_ASSOC)){
-                array_push($result['learningLang'], $idLangueAApprendre['Nom']);
+                $result['learningLang'][] = array('id_langue' => $idLangueAApprendre["id_langue"], 'name_langue' => $idLangueAApprendre['Nom']);
 
             }
         }
@@ -346,14 +346,20 @@ class UserModel {
     }
 
     /*Filtre les utilisateurs ayant des matchs de langues et de centres d'interet*/
-    public static function getUserMatch($pseudo, $role, $sex) {
+    public static function getUserMatch($pseudo, $role, $sex, $minOld, $maxOld) {
+
+        //Requête de base du match (PSEUDO et ROLE transmis OBLIGATOIREMENT) :
         $requete = "SELECT DISTINCT user.ID, user_centre_interet.id_interet FROM user, user_centre_interet, user_langue WHERE user_centre_interet.id_interet = :id_interet AND user_centre_interet.id_user != :id_user AND user_langue.id_langue = :id_langue AND user_langue.maitrise= :role AND user.ID=user_langue.id_user AND user_centre_interet.id_user=user.ID";
+
         $bdd = Database::connexionBDD();
-
         $idUser = UserModel::getUserId($pseudo);
+        $arrayPrep = array(':id_user' => $idUser); //Tableau qui sera transmis à la fonction execute pour vérifier les données passées à la requête
 
-        if(isset($role)){ //Le role est forcément transmis : Maitre (2) ou Apprenti (1)
-            if($role == "1") {
+        if(!isset($idUser)) return 404; //Si l'identiifiant retourné est null (utilisateur non trouvé), retourne une erreur.
+
+        //Utilisation du rôle
+        if(isset($role)){ //Récupère les langues que l'utilisateur maitrise (2) ou souhaite apprendre (1) selon le rôle choisis
+            if($role == "1") { //
                 $idLangues = UserModel::getUserLangueAApprendre($pseudo);
                 $idLangues = $idLangues['learningLang'];
                 $matchRole = 2;
@@ -363,24 +369,34 @@ class UserModel {
                 $idLangues = $idLangues['spokenLang'];
                 $matchRole = 1;
             }
-            $imaxLangues = count($idLangues);
+            $imaxLangues = count($idLangues);//La taille du tableau de langues retournées permet de boucler la recherche de de maitre ou apprentis pour chaque langue lors de l'execution de la requête
+        }
+
+        //Prise en compte de l'age, s'il est transmis.
+        if(isset($minOld)&&($minOld != "")){
+            echo 'test AGZFZEGZ';
+            $requete =+ "AND user.age >= :minAge ";
+            $arrayPrep[":minOld"] = $minOld;
+        }
+        if(isset($maxOld)&&($maxOld != "")){
+            echo 'test AGZFZEGZ2';
+            $requete =+ "AND user.age <= :maxAge ";
+            $arrayPrep[":maxOld"] = $maxOld;
         }
 
         //Prise en compte du ou des sexes transmis lors de la demande de match
         if(isset($sex)){ //Si aucun sexe n'est transmis alors les utilisateurs de tous les sexes seront pris en compte
+        echo "tests sex";
             $requeteSex = "";
             if(is_array($sex)){
-                for($i = 0; $i < count($sex); $i++) $requireSex =+ 'AND user.sexe= :sex'.$i+1.' ';
+                for($i = 0; $i < count($sex); $i++) $requireSex =+ 'AND user.sexe= :sex'.($i+1).' ';
             }
             else { //Pas de filtre : tous les utilisateurs sont sélectionnés
                 $requeteSex = "";
             }
         }
 
-
-
-
-        
+        var_dump($idLangues);        
         $idCentreInteret = UserModel::getUserCentreInteret($pseudo);
         $imaxCentreInteret = count($idCentreInteret['hobbies']);
 
@@ -392,9 +408,12 @@ class UserModel {
                 $i =0;
                 $result['langue']['id_langue'][$j] = $idLangues[$j]['id_langue'];
                 $result['langue']['name_langue'][$j] = $idLangues[$j]['name_langue'];
+                $arrayPrep[':id_langue'] = $idLangues[$j]['id_langue'];
+
                 do {
+                    $arrayPrep[':id_interet'] = $idCentreInteret['hobbies'][$i];
                     $req_id = $bdd->prepare($requete);
-                    $req_id->execute(array(':id_user' => $idUser, ':id_interet' => $idCentreInteret['hobbies'][$i], ':id_langue' => $idLangues[$j]['id_langue'], ':role' => $matchRole));
+                    $req_id->execute($arrayPrep);
 
                     if($req_id!= NULL){
                         while($idUserMatched = $req_id->fetch(PDO::FETCH_ASSOC)){
@@ -408,6 +427,7 @@ class UserModel {
             $result = UserModel::ClasseUserMatch($result['langue']);
         }
         else $result = array(0);
+    
 
         return $result;
     }
