@@ -37,41 +37,44 @@
 		                <input class="form-check-input check" type="radio" value="3" v-model="user.sex"><br />
 		                <label class="form-check-label" for="other">Other</label>
 	                </div>
+                  <p id="error_Genre" class="errorMsg">You must select an gender</p>
 	            </div>
 	            
 	            <!-- FIRST NAME -->
-	            <input name="firstName" type="text" minlength="2" maxlength="20" required="required" placeholder="FIRST NAME" v-model="user.firstname"  />
-	            <span class="tooltip">This field must have between 2 and 20 characters</span>
+	            <input name="firstName" type="text" minlength="3" maxlength="20" required="required" placeholder="FIRST NAME" v-model="user.firstname"  />
+              <p id="error_FirstName" class="errorMsg">This field is not correct. It must have between 3 and 20 characters</p>
 	            
 	            <!-- LAST NAME -->
-	            <input name="lastName" type="text" minlength="2" maxlength = "20" required="required" placeholder="LAST NAME" v-model="user.name"  />
-	            <span class="tooltip">This field must have minimum 2 characters</span>
+	            <input name="lastName" type="text" minlength="3" maxlength = "20" required="required" placeholder="LAST NAME" v-model="user.name"  />
+	            <p id="error_LastName" class="errorMsg">This field is not correct. It must have between 3 and 20 characters</p>
 
 	            <!-- AGE -->
-	            <input name="age" id="age" type="number" min="16" max="120" required="required" placeholder="YOUR AGE" v-model="user.age" />
-	            <span class="tooltip">You have to be between 16 and 120 years old</span>
+	            <input name="age" id="age" type="number" min="16" max="120" required="required" placeholder="YOUR AGE" v-model="user.age"/>
+	            <p id="error_Age" class="errorMsg">This age is not correct. Minimum 16 years</p>
 
 	            <!-- PSEUDO -->
-	            <input name="pseudo" type="text" minlength="5" maxlength = "20" required="required" placeholder="USERNAME" v-model="user.pseudo" />
-	            <span class="tooltip">The username must have minimum 2 characters</span>
+	            <input id="pseudo" name="pseudo" type="text" minlength="3" maxlength="20" required="required" placeholder="USERNAME" v-model="user.pseudo" />
+              <p id="error_Pseudo" class="errorMsg">This field is not correct. It must have between 3 and 20 characters</p>
 	        
 	            <!-- EMAIL -->
 	            <input name="email" id="email" type="email" required="required" placeholder="YOUR EMAIL" v-model="user.email" />
+              <p id="error_Mail" class="errorMsg">This mail is not correct</p>
 
 	            <!-- PWD -->
-	            <input name="pwd1" id="pwd1" type="password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" placeholder="PASSWORD" v-model="user.password" />
-	            <span class="tooltip errorPseudo">Your pwd must have at least 6 characters</span>
+	            <input name="pwd1" id="pwd1" required="required" type="password" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" placeholder="PASSWORD" v-model="user.password"  />
+	            <p id="error_Psw" class="errorMsg">This password is not sure</p>
 
-	            <input name="pwd2" id="pwd2" type="password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" placeholder="CONFIRM PASSWORD" />
-	            <span class="tooltip">Le mot de passe de confirmation doit être identique à celui d'origine</span>
+
+	            <input name="pwd2" required="required" id="pwd2" type="password" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" placeholder="CONFIRM PASSWORD" v-model="user.password2" />
+	            <p id="error_Psw2" class="errorMsg">This fiels is not correct. It must be the same as password field</p>
+
 
 	            <!-- COUNTRY -->
-	            <label class="form-text" for="country">Your country</label>
+	            <label id="countryLabel" class="form-text" for="country">Your country</label>
 	            <br />
 	            <select name="country" id="country" v-model="user.country">
 	            	<option v-for="value in countryList">{{ value.name }}</option>
 	        	</select>
-	            <span class="tooltip">Please choose your home country</span>
 
 	            <!-- CITY -->
 	            <label class="form-text" for="city">Your city</label>
@@ -110,18 +113,19 @@
 	      			name:'',
 			        pseudo:'',
 			        age:'',
-		            email:'',
+		          email:'',
 			        password:'',
+              password2:'',
 			        country:'',
-		            avatar: '',
-		            sex: '',
-		            color: '',
-		            description: '',
+		          avatar: '',
+		          sex: '',
+		          color: '',
+		          description: '',
 			        city:'',
 			        languages : {
-              			spokenLang : [],
-              			learningLang : []
-            		},
+              		spokenLang : [],
+              		learningLang : []
+            	},
 	        		hobbies : []
 	      		},
 	      		hobbiesList: [],
@@ -131,25 +135,110 @@
 	  	},
       	methods: {
         submitForm: function(user){
-            var form = document.getElementById("formRegistration");
-            var sizeM = user.languages.spokenLang.length;
-            var sizeL = user.languages.learningLang.length;
-            var errorM = document.getElementById("errorLanguageM");
-            var errorL = document.getElementById("errorLanguageL");
+          var formCorrect = 1;
 
-            if (sizeM == 0 || sizeL == 0 ){
-                if (sizeM == 0){
-                	errorM.style.opacity = 1;
-                }
-                if (sizeL == 0){
-                   	errorL.style.opacity = 1;
-                }
+          //Regex Definition
+
+          var regexName = new RegExp("^([a-zA-Z0-9_-]){3,30}$","i");
+          var regexEmail = new RegExp("^([a-zA-Z0-9_-])+([.]?[a-zA-Z0-9_-]{1,})*@([a-zA-Z0-9-_]{2,}[.])+[a-zA-Z]{2,3}\\s*$","i");
+
+          var regexPSW = new RegExp("^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$");
+          //simple security
+
+          /* other possibilities
+          regex password ++ : "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
+          Minimum 8 characters at least 1 Uppercase Alphabet, 1 Lowercase Alphabet and 1 Number:
+
+          regex password +++ :
+          Minimum 8 and Maximum 10 characters at least 1 Uppercase Alphabet, 1 Lowercase Alphabet, 1 Number and 1 Special Character
+          */
+
+          //verification for gender
+            if(!((user.sex == 1) || (user.sex == 2) || (user.sex == 3))){
+                formCorrect = 0;
+                document.getElementById("error_Genre").style.display = 'block';
+            }else{
+              document.getElementById("error_Genre").style.display = 'none';
             }
-            else {
-                errorM.style.opacity = 0;
-                errorL.style.opacity = 0;
-                //form.submit();
 
+            //verification for firstname
+
+            if(!regexName.test(user.firstname)){
+              formCorrect = 0;
+              document.getElementById("error_FirstName").style.display = 'block';
+            }else{
+              document.getElementById("error_FirstName").style.display = 'none';
+            }
+
+            //verification for lastname
+
+            if(!regexName.test(user.name)){
+              formCorrect = 0;
+              document.getElementById("error_LastName").style.display = 'block';
+            }
+            else{
+              document.getElementById("error_LastName").style.display = 'none';
+            }
+
+            //verification age
+
+            if(user.age < 16 || user.age > 120){
+              formCorrect = 0;
+              document.getElementById("error_Age").style.display = 'block';
+            }
+            else{
+              document.getElementById("error_Age").style.display = 'none';
+            }
+
+            //verification pseudo
+            if(!regexName.test(user.pseudo)){
+              formCorrect = 0;
+              document.getElementById("error_Pseudo").style.display = 'block';
+            }
+            else{
+              document.getElementById("error_Pseudo").style.display = 'none';
+            }
+
+            //verification mail
+
+            if(!regexEmail.test(user.email)){
+              formCorrect = 0;
+              document.getElementById("error_Mail").style.display = 'block';
+            }else{
+              document.getElementById("error_Mail").style.display = 'none';
+            }
+
+            //verification password1
+
+            if(!regexPSW.test(user.password)){
+              formCorrect = 0;
+              document.getElementById("error_Psw").style.display = 'block';
+            }else{
+              document.getElementById("error_Psw").style.display = 'none';
+            }
+
+            //verification password2
+
+            if( user.password != user.password2){
+              formCorrect = 0;
+              document.getElementById("error_Psw2").style.display = 'block';
+            }else{
+              document.getElementById("error_Psw2").style.display = 'none';
+            }
+
+           
+            if(formCorrect != 0){
+
+              document.getElementById("error_Genre").style.display = 'none';
+              document.getElementById("error_FirstName").style.display = 'none';
+              document.getElementById("error_LastName").style.display = 'none';
+              document.getElementById("error_Age").style.display = 'none';
+              document.getElementById("error_Pseudo").style.display = 'none';
+              document.getElementById("error_Mail").style.display = 'none';
+              document.getElementById("error_Psw").style.display = 'none';
+              document.getElementById("error_Psw2").style.display = 'none';
+              document.getElementById("error_Country").style.display = 'none';
+            
                 var _this = this;
                 
                 fetch(apiRoot() + 'Controllers/User/setUserProfil.php', {
@@ -301,6 +390,14 @@
 
 <style lang="scss">
 
+    #error_Genre, #error_FirstName, #error_LastName, #error_Age, #error_Pseudo, #error_Mail, #error_Psw, #error_Psw2, #error_Country{
+      display:none;
+    }
+
+    .errorMsg{
+      color:red;
+    }
+
     .register
     {
         font-family: Montserrat;
@@ -358,9 +455,10 @@
                 border: 3px solid #333333;
             }
             
-            input#age, input#pwd2
+            
+            input#pseudo, abel#countryLabel
             {
-            	margin-bottom: 30px;
+              margin-top: 30px;
             }
 
             .inputfile
