@@ -346,7 +346,7 @@ class UserModel {
     }
 
     /*Filtre les utilisateurs ayant des matchs de langues et de centres d'interet*/
-    public static function getUserMatch($pseudo, $role, $sex, $minOld, $maxOld) {
+    public static function getUserMatch($pseudo, $role, $sex, $minAge, $maxAge) {
 
         //Requête de base du match (PSEUDO et ROLE transmis OBLIGATOIREMENT) :
         $requete = "SELECT DISTINCT user.ID, user_centre_interet.id_interet FROM user, user_centre_interet, user_langue WHERE user_centre_interet.id_interet = :id_interet AND user_centre_interet.id_user != :id_user AND user_langue.id_langue = :id_langue AND user_langue.maitrise= :role AND user.ID=user_langue.id_user AND user_centre_interet.id_user=user.ID";
@@ -355,7 +355,7 @@ class UserModel {
         $idUser = UserModel::getUserId($pseudo);
         $arrayPrep = array(':id_user' => $idUser); //Tableau qui sera transmis à la fonction execute pour vérifier les données passées à la requête
 
-        if(!isset($idUser)) return 404; //Si l'identiifiant retourné est null (utilisateur non trouvé), retourne une erreur.
+        if(!isset($idUser)) return 404; //Si l'identifiant retourné est null (utilisateur non trouvé), retourne un code erreur.
 
         //Utilisation du rôle
         if(isset($role)){ //Récupère les langues que l'utilisateur maitrise (2) ou souhaite apprendre (1) selon le rôle choisis
@@ -369,112 +369,79 @@ class UserModel {
                 $idLangues = $idLangues['spokenLang'];
                 $matchRole = 1;
             }
+            $arrayPrep[":role"] = $matchRole;
             $imaxLangues = count($idLangues);//La taille du tableau de langues retournées permet de boucler la recherche de de maitre ou apprentis pour chaque langue lors de l'execution de la requête
         }
 
         //Prise en compte de l'age, s'il est transmis.
-        if(isset($minOld)&&($minOld != "")){
-            echo 'test AGZFZEGZ';
-            $requete =+ "AND user.age >= :minAge ";
-            $arrayPrep[":minOld"] = $minOld;
+        if(isset($minAge)&&($minAge != "")){
+            $requete =+ " AND user.age >= :minAge ";
+            $arrayPrep[":minAge"] = $minAge;
         }
-        if(isset($maxOld)&&($maxOld != "")){
-            echo 'test AGZFZEGZ2';
-            $requete =+ "AND user.age <= :maxAge ";
-            $arrayPrep[":maxOld"] = $maxOld;
+        if(isset($maxAge)&&($maxAge != "")){
+            $requete =+ " AND user.age <= :maxAge ";
+            $arrayPrep[":maxAge"] = $maxAge;
         }
 
         //Prise en compte du ou des sexes transmis lors de la demande de match
         if(isset($sex)){ //Si aucun sexe n'est transmis alors les utilisateurs de tous les sexes seront pris en compte
         echo "tests sex";
-            $requeteSex = "";
-            if(is_array($sex)){
-                for($i = 0; $i < count($sex); $i++) $requireSex =+ 'AND user.sexe= :sex'.($i+1).' ';
-            }
-            else { //Pas de filtre : tous les utilisateurs sont sélectionnés
-                $requeteSex = "";
+            $requete =+ "";
+            if(is_array($sex)&&(count($sex)!= 4)){
+                $requete =+ " AND (";
+                $i = 0;
+                do {
+                    if($i != 0) $requete =+ " OR ";
+                    $requete =+ 'user.sexe= :sex'.($i + 1).' ';
+                    $arrayPrep['sex'.$i] = $sex[$i];
+                    $i++;
+                }while($i < count($sex));
+
+                $requete =+ ") ";
             }
         }
 
-        var_dump($idLangues);        
+        var_dump($idLangues);
+        var_dump($arrayPrep);
+        var_dump($requete);
+
         $idCentreInteret = UserModel::getUserCentreInteret($pseudo);
         $imaxCentreInteret = count($idCentreInteret['hobbies']);
 
-        $result= array('langue' => array("id_langue" => array(), "name_langue" => array(), "users" =>array() ));
+        $result = array();
 
         if(isset($idCentreInteret)){           
             for($j = 0; $j < $imaxLangues; $j++){
                 $arret=0;
                 $i =0;
-                $result['langue']['id_langue'][$j] = $idLangues[$j]['id_langue'];
-                $result['langue']['name_langue'][$j] = $idLangues[$j]['name_langue'];
+                $result['langue'][$j]['id_langue'] = $idLangues[$j]['id_langue'];
+                $result['langue'][$j]['name_langue'] = $idLangues[$j]['name_langue'];
                 $arrayPrep[':id_langue'] = $idLangues[$j]['id_langue'];
 
-                do {
+                do { //Récupération des utilisateurs selon les filtres du match
                     $arrayPrep[':id_interet'] = $idCentreInteret['hobbies'][$i];
+
                     $req_id = $bdd->prepare($requete);
                     $req_id->execute($arrayPrep);
 
                     if($req_id!= NULL){
                         while($idUserMatched = $req_id->fetch(PDO::FETCH_ASSOC)){
-                            $result['langue']['users'][$j][] = array("id_user" => $idUserMatched['ID'], "id_interet" => $idUserMatched['id_interet']);
+                            $result['langue'][$j]['users'][] = array("id_user" => $idUserMatched['ID'], "id_interet" => $idUserMatched['id_interet']);
                             $arret++;
                         }
                     }
+                    // else {
+                    //     $result['langue'][$j]['users'][] = "None";
+                    // }
                     ++$i;
                 }while(($i < $imaxCentreInteret) && ($arret < 10));
             }
+            echo "MATCH terminée : AVANT classement";
+            var_dump($result);
             $result = UserModel::ClasseUserMatch($result['langue']);
         }
         else $result = array(0);
     
-
-        return $result;
-    }
-
-    /*Classe les utilisateurs ayant des matchs de langues et de centres d'interet, par tranche d'age et sexe défini*/
-    public static function getUserMatchComplete($pseudo, $role, $sex, $agemin, $agemax) {
-        $bdd = Database::connexionBDD();
-
-        $idUser = UserModel::getUserId($pseudo);
-         if(isset($role)){ 
-            if($role == "1") { //Cherche des langues pour trouver des maitres
-                $idLangues = UserModel::getUserLangueAApprendre($pseudo);
-                $idLangues = $idLangues['learningLang'];
-            }
-            else { //Cherche des langues pour trouver des apprentis
-                $idLangues = UserModel::getUserLangueMaitrisee($pseudo);
-                $idLangues = $idLangues['spokenLang'];
-            }
-            $imaxLangues = count($idLangues);
-        }
-
-        $idCentreInteret = UserModel::getUserCentreInteret($pseudo);
-        $imax = count($idCentreInteret['hobbies']);
-
-        $result= array();
-        $i =0;
-
-
-
-        var_dump($idCentreInteret);
-
-        if(isset($idCentreInteret)){
-            $arret=0;
-            echo('test');
-            do {
-                $req_id = $bdd->prepare('SELECT DISTINCT id_user, id_interet FROM user, user_centre_interet, centre_interet WHERE user_centre_interet.id_interet ='.$idCentreInteret['hobbies'][$i].' AND user_centre_interet.id_user != '.$idUser.' AND user.sexe ='.$sex.' AND user.age >='.$minOld.' AND user.age <='.$maxOld.' AND user.id_etat_activite = 1');
-                $req_id->execute();
-
-                while($idUserCentreInteret = $req_id->fetch(PDO::FETCH_ASSOC)){
-                    $result['user_same_interet'][] = array("id_user" => $idUserCentreInteret['id_user'], "id_interet" => $idUserCentreInteret['id_interet']);
-                    $arret++;
-                    echo 'test';
-                }
-                ++$i;
-            }while(($i < $imax-1) && ($arret < 10));
-        }
-        else $result = array(0);
 
         return $result;
     }
@@ -485,10 +452,11 @@ class UserModel {
             $iMax = count ($listUserMatched['id_langue']); //Nombre d'utilisateur pour cette langue
             $temp = array('users' => array());
 
-
             for($i = 0; $i < $iMax; $i++){
+                echo "==== PASSAGE ".$i." =====";
+                var_dump($listUserMatched);
+                if($listUserMatched['users'])
                 $jMaxUser = count($listUserMatched['users'][$i]); //Nombre d'utilisateur pour la langue i
-
 
                 for($j = 0; $j < $jMaxUser; $j++){
                     $kMax = count($temp['users']); //Nombre d'utilisateur déjà triés pour la langue i
