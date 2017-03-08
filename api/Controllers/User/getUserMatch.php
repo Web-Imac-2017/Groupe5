@@ -27,6 +27,10 @@
 
 	 $data = UserModel::getUserMatch("PAdu77", 2, NULL, NULL, NULL);
 	 
+	 //var_dump($data);
+
+
+
   echo json_encode($data);
 
 ?>
