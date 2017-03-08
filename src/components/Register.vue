@@ -86,7 +86,7 @@
 	                <label class="form-check-label" for="color">Your theme color</label><br/>
                   	<div class="colors" v-for="color in colorsList">
                     	<input class="form-check-input" type="radio" :id="color.name" :value="color.name" name="color" v-model="user.color">
-                    	<label class="form-check-label" :for="color.name" :class="color.name" onclick="colorChecked(this)"></label>
+                    	<label class="form-check-label" :for="color.name" :class="color.name" v-on:click="colorChecked"></label>
                   	</div>
 	            </div>
 
@@ -350,13 +350,17 @@
             }
           });
         },
+        colorChecked: function(event)
+      	{
+      		event.target.style.border = "5px solid black";
+      	}
       },
       created: function() {
       	this.getLanguages();
       	this.getHobbies();
       	this.getCountries();
       	this.getColors();
-      },
+      }
 	}
 
 	// basic javascript
@@ -379,11 +383,6 @@
 	        if (elements.className === 'tooltip') return elements;
 	    }
 	    return false;
-	}
-
-	function colorChecked(element)
-	{
-		element.css("border", "3px solid black");
 	}
 
 </script>
