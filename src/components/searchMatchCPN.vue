@@ -20,13 +20,11 @@
 		     <input v-model="$parent.selectedFilter.man" class="form-check-input" type="checkbox" id="men" value="Men" >
 		    <label  class="form-check-label" for="men">Men</label>
 		    <div id="rangeSlider">
-    			<vue-slider v-model="value" min="10" max="120" ></vue-slider>
+    			<vue-slider v-model="value" ></vue-slider>
     		</div>
 
 		</div>
-    {{  $parent.selectedFilter }}
-
-    {{ value  }}
+    
 
 
     	
@@ -66,7 +64,8 @@ export default {
 		    hobbies : []
       	},
       	users : '',
-      	value: [10,120],
+      	value: [0,100]
+      	
 
 
        }
