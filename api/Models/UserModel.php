@@ -346,13 +346,13 @@ class UserModel {
     }
 
     /*Filtre les utilisateurs ayant des matchs de langues et de centres d'interet*/
-    public static function getUserMatch($pseudo, $role) {
+    public static function getUserMatch($pseudo, $role, $sex) {
         $requete = "SELECT DISTINCT user.ID, user_centre_interet.id_interet FROM user, user_centre_interet, user_langue WHERE user_centre_interet.id_interet = :id_interet AND user_centre_interet.id_user != :id_user AND user_langue.id_langue = :id_langue AND user_langue.maitrise= :role AND user.ID=user_langue.id_user AND user_centre_interet.id_user=user.ID";
         $bdd = Database::connexionBDD();
 
         $idUser = UserModel::getUserId($pseudo);
 
-        if(isset($role)){
+        if(isset($role)){ //Le role est forcément transmis : Maitre (2) ou Apprenti (1)
             if($role == "1") {
                 $idLangues = UserModel::getUserLangueAApprendre($pseudo);
                 $idLangues = $idLangues['learningLang'];
@@ -366,26 +366,14 @@ class UserModel {
             $imaxLangues = count($idLangues);
         }
 
-        if(isset($sex)){
-            switch ($sex) {
-                case '0':
-                $sexrequest = "AND user.sexe = :sex";
-                    break;
-
-                case '1':
-                # code...
-                    break;
-
-                case '2':
-                # code...
-                    break;
-                case '3':
-                # code...
-                    break;
-                
-                default:
-                    # code...
-                    break;
+        //Prise en compte du ou des sexes transmis lors de la demande de match
+        if(isset($sex)){ //Si aucun sexe n'est transmis alors les utilisateurs de tous les sexes seront pris en compte
+            $requeteSex = "";
+            if(is_array($sex)){
+                for($i = 0; $i < count($sex); $i++) $requireSex =+ 'AND user.sexe= :sex'.$i+1.' ';
+            }
+            else { //Pas de filtre : tous les utilisateurs sont sélectionnés
+                $requeteSex = "";
             }
         }
 
