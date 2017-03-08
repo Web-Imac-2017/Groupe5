@@ -20,7 +20,7 @@
         </router-link>
       </li>
       <li class="row addPlume">
-        <router-link v-bind:to="'/messages/' + 0" class="user">
+        <router-link v-bind:to="'/home/'" class="user">
           <span class="avatar">
             <div class="plus">
               <icon name="plus"></icon>
@@ -115,14 +115,20 @@ export default {
   },
   deleteConv: function(id){
     var _conversationID = id;
-    fetch(apiRoot() + 'Controllers/Conversation/getAllMessages.php', {
+    fetch(apiRoot() + 'Controllers/Conversation/deleteConversation.php', {
       method: 'POST',
       headers: {
         'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
         'Content-Type': 'application/json; charset=utf-8'
       },
       dataType: 'JSON',
-      body: JSON.stringify({conversation : _conversationID})
+      body: JSON.stringify({id : id})
+    }).then(function(response) {
+      return response.json();
+    }).then(function(data){
+      if(data[0] == "Error"){
+        console.log("ERREUR !!");
+      }
     });
   }
 }
@@ -141,7 +147,7 @@ $avatar_size: 80px;
   overflow-x: hidden;
   overflow-y: auto;
   border-right: 1px solid #000;
-  height: 100%;
+  height: 100vh;
 
   [class*="col"]{
     padding: 0;
@@ -213,24 +219,22 @@ $avatar_size: 80px;
       right: 10px;
       top: -15px;
     }
-
-    .user.router-link-active.active {
+  }
+  .user.router-link-active.active {
+    background-color: $profil_color_light;
+  }
+  .addPlume{
+    .plus{
+      width: $avatar_size;
+      height: $avatar_size;
+      border: 1px solid #000;
       background-color: $profil_color_light;
-    }
-    .addPlume{
-      .plus{
-        width: $avatar_size;
-        height: $avatar_size;
-        border: 1px solid #000;
-        background-color: $profil_color_light;
-        text-align: center;
-        display: flex;
-        .fa-icon{
-          margin: auto;
-        }
+      text-align: center;
+      display: flex;
+      .fa-icon{
+        margin: auto;
       }
     }
-
   }
 }
 </style>
