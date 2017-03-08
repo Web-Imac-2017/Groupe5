@@ -34,16 +34,10 @@
 
             $data = UserModel::getUserMatch($pseudo, $role, $sex, $minAge, $maxAge);
         }
-        $data = array("Error", "Error: pseudo or role not defined.");
+        $data = array("Error", "Error: pseudo or role not defined, can't find match without current user informations.");
 
 	 }
 	 else $data = array("Error", "Error: POST.");
-
-	 $data = UserModel::getUserMatch("PAdu77", 2, NULL, NULL, NULL);
-	 
-	 //var_dump($data);
-
-
 
   echo json_encode($data);
 

@@ -349,7 +349,7 @@ class UserModel {
     public static function getUserMatch($pseudo, $role, $sex, $minAge, $maxAge) {
 
         //Requête de base du match (PSEUDO et ROLE transmis OBLIGATOIREMENT) :
-        $requete = "SELECT DISTINCT user.ID, user_centre_interet.id_interet FROM user, user_centre_interet, user_langue WHERE user_centre_interet.id_interet = :id_interet AND user_centre_interet.id_user != :id_user AND user_langue.id_langue = :id_langue AND user_langue.maitrise= :role AND user.ID=user_langue.id_user AND user_centre_interet.id_user=user.ID ";
+        $requete = "SELECT DISTINCT user.ID, user_centre_interet.id_interet FROM user, user_centre_interet, user_langue WHERE user_centre_interet.id_interet = :id_interet AND user_centre_interet.id_user != :id_user AND user_langue.id_langue = :id_langue AND user_langue.maitrise= :role AND user.ID=user_langue.id_user AND user_centre_interet.id_user=user.ID AND user.id_etat_activite = 2";
 
         $bdd = Database::connexionBDD();
         $idUser = UserModel::getUserId($pseudo);
@@ -431,6 +431,7 @@ class UserModel {
                     ++$i;
                 }while(($i < $imaxCentreInteret) && ($arret < 10));
             }
+            if(!$result) return array('Error', "Error, you didn't register languages for this role. Not matches found.");
             $result = UserModel::ClasseUserMatch($result['langues']);
         }
         else $result = array(0);
