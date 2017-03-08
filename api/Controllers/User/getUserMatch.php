@@ -12,7 +12,7 @@
 		$json = json_decode(file_get_contents('php://input'), true);
 		if(!is_array($json)) $data = array("Error", "Error: Post");
 
-		if(isset($json['pseudo'])&&(isset($json['role']))) {
+		if((isset($json['pseudo']))&&(isset($json['role']))) {
             $pseudo = $json['pseudo'];
             $role = $json['role'];
 
@@ -20,7 +20,7 @@
             $minAge = NULL;
             $maxAge = NULL;
 
-            if(isset($json['sex']){
+            if(isset($json['sex'])){
             	$sex = $json['sex'];
             }
 
