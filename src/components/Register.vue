@@ -84,6 +84,11 @@
 		          	</div>
 		        </div>
 
+		        <!-- BIO -->
+		        <label class="form-text" for="description">Introduce yourself in a few words</label>
+		        <input id="description" v-model="user.description"></input>
+		        <span class="tooltip">Write something about your life</span>
+
 		        <!-- SUBMIT -->
 		        <button id="submitbutton" type="submit" value="Register" v-on:click="submitForm(user)"></button>
 		        <label id="submitbuttonlabel" for="submitbutton">I'M READY</label>
@@ -323,7 +328,13 @@ export default {
     },
     colorChecked: function(event)
     {
-      	console.log(event.target);
+      	var el = document.getElementsByClassName("colors");
+      	var i;
+      	for (i = 0; i < el.length; i++)
+      	{
+      		el[i].childNodes[2].style.border = "0px solid black";
+      	}
+		event.target.style.border = "4px solid black";
     }
   	},
 
