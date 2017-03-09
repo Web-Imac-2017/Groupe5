@@ -1,5 +1,5 @@
-# minimalist openssl.cnf file for use with phpseclib
-
+# This definition stops the following lines choking if HOME isn't
+# defined.
 HOME			= .
 RANDFILE		= $ENV::HOME/.rnd
 
