@@ -121,6 +121,7 @@
 		          sex: '',
 		          color: '',
 		          description: '',
+              description2:'',
 			        city:'',
 			        languages : {
               		spokenLang : [],
@@ -226,6 +227,26 @@
               document.getElementById("error_Psw2").style.display = 'none';
             }
 
+            //verification langages spoken
+/*
+            if (user.languages.spokenLang.length == 0){
+              formCorrect = 0;
+              document.getElementById("error_SpokenLang").style.display = 'block';
+            }else{
+              document.getElementById("error_SpokenLang").style.display = 'none';
+            }
+
+            //verification langages learning
+
+            if (user.languages.learningLang.length == 0){
+              formCorrect = 0;
+              document.getElementById("error_LearningLang").style.display = 'block';
+            }else{
+              document.getElementById("error_LearningLang").style.display = 'none';
+            }
+
+*/          
+             
            
             if(formCorrect != 0){
 
@@ -238,6 +259,9 @@
               document.getElementById("error_Psw").style.display = 'none';
               document.getElementById("error_Psw2").style.display = 'none';
               document.getElementById("error_Country").style.display = 'none';
+
+             //tansform special caracters to html code
+              this.convertToHTML(user.description);
             
                 var _this = this;
                 
@@ -353,7 +377,37 @@
         colorChecked: function(event)
       	{
       		event.target.style.border = "5px solid black";
-      	}
+      	},
+        convertToHTML: function(){
+          var text = this.user.description
+          String.prototype.convertionHTML = function(){
+            return this.replace(/[\']/g,"&apos;")
+                      .replace(/[ ]/g,"&nbsp;")
+                      .replace(/[\"]/g,"&quot;")
+                      .replace(/[\«]/g,"&laquot;")
+                      .replace(/[\»]/g,"&raquot;")
+                      .replace(/[\']/g,"&apos;")
+                      .replace(/[\‹]/g,"&lsaquot;")
+                      .replace(/[\›]/g,"&rsaquot;")
+                      .replace(/[\...]/g,"&hellip;")
+                      .replace(/[\¡]/g,"&iexcl;")
+                      .replace(/[\¿]/g,"&iquest;")
+                      .replace(/[\ˆ]/g,"&circ;")
+                      .replace(/[\&]/g,"&amp;")
+                      .replace(/[\€]/g,"&euro;")
+                      .replace(/[\¢]/g,"&cent;")
+                      .replace(/[\£]/g,"&pound;")
+                      .replace(/[\¥]/g,"&fnof;")
+                      .replace(/[\<]/g,"&lt;")
+                      .replace(/[\>]/g,"&gt;")
+                      .replace(/[\−]/g,"&minus;")
+                      .replace(/[\×]/g,"&times;")
+                      .replace(/[\÷]/g,"&divide;")
+                      .replace(/[\,]/g,"&sbquo;");
+          }
+          var newText = text.convertionHTML();
+          this.user.description = newText;
+        }
       },
       created: function() {
       	this.getLanguages();
