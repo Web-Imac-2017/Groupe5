@@ -1,11 +1,7 @@
 <template>
   <div class="register">
-    <div class="quitButton">
-      <router-link v-bind:to="'/home/'" id="sign">
-        <icon name="times"></icon>
-      </router-link>
-    </div>
     <div class="wrapper">
+
       <div class="bg" v-bind:style="{backgroundImage: 'url(/static/img/bg.jpg)' }"></div>
       <h1 class="maintitle">{{ msgRegistration }}</h1>
 
@@ -38,7 +34,7 @@
             <input class="form-check-input check" type="radio" value="3" v-model="user.sex"><br />
             <label class="form-check-label" for="other">Other</label>
           </div>
-          <p id="error_Genre" class="errorMsg">You must select an gender</p>
+          <p id="error_Genre" class="errorMsg">You must select a gender</p>
         </div>
 
         <!-- FIRST NAME -->
@@ -83,7 +79,7 @@
         <div id="colorwrapper" class="form-group">
           <label class="form-check-label" for="color">Your theme color</label><br/>
           <div class="colors" v-for="color in colorsList">
-            <input class="form-check-input" type="radio" :id="color.name" :value="color.name" name="color" v-model="user.color">
+            <input class="form-check-input" type="radio" :id="color.name" :value="color.normal" name="color" v-model="user.color">
             <label class="form-check-label" :for="color.name" :class="color.name" v-on:click="colorChecked"></label>
           </div>
         </div>
@@ -343,11 +339,26 @@ export default {
     }
   },
 
-  created: function() {
+  created: function()
+  {
     this.getLanguages();
     this.getHobbies();
     this.getCountries();
     this.getColors();
+  },
+
+  mounted: function()
+  {
+    setTimeout(function()
+    {
+      var el = document.getElementsByClassName("colors");
+      var i;
+      for (i = 0; i < el.length; i++)
+      {
+        var bg = el[i].childNodes[0].getAttribute("value");
+        el[i].childNodes[2].style.backgroundColor = bg;
+      }
+    }, 300);
   }
 }
 
@@ -529,7 +540,7 @@ function getTooltip(elements)
       transition: .1s;
       &:hover
       {
-        transform: scale(1.05);
+        transform: scale(1.2) rotate(5deg);
       }
     }
   }
