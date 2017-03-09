@@ -7,27 +7,39 @@
 
 	include "../../Models/UserModel.php";
 
-	$pseudo = "";
-	$namePays = "";
-	$data = "";
-
 	if ($_SERVER['REQUEST_METHOD'] == 'POST'){	
 
 		$json = json_decode(file_get_contents('php://input'), true);
 		if(!is_array($json)) $data = array("Error", "Error: Post");
 
-		if(isset($_SESSION['login'])) {
-            $pseudo = $_SESSION['login'];
+		if((isset($json['pseudo']))&&(isset($json['role']))) {
+            $pseudo = $json['pseudo'];
+            $role = $json['role'];
 
-            $data = UserModel::getUserMatch($pseudo);
+            $sex = NULL;
+            $minAge = NULL;
+            $maxAge = NULL;
+
+            if(isset($json['sex'])){
+            	$sex = $json['sex'];
+            }
+
+            if(isset($json['minAge'])){
+            	$minAge = $json['minAge'];
+            }
+
+            if(isset($json['maxAge'])){
+            	$minAge = $json['maxAge'];
+            }
+
+            $data = UserModel::getUserMatch($pseudo, $role, $sex, $minAge, $maxAge);
         }
+        $data = array("Error", "Error: pseudo or role not defined, can't find match without current user informations.");
 
 	 }
-	 else $data = array("Error", "Error");
-
-	 $data = UserModel::getUserMatch("Robibidu77","2");
+	 else $data = array("Error", "Error: POST.");
 
 
-  echo json_encode($data, JSON_PRETTY_PRINT);
+  echo json_encode($data);
 
 ?>

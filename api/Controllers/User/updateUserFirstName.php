@@ -8,7 +8,7 @@
 	include "../../Models/UserModel.php";
 
 	$pseudo = "";
-	$userPassword = "";
+	$firstname = "";
 	$data = "";
 
 	if ($_SERVER['REQUEST_METHOD'] == 'POST')
@@ -16,17 +16,17 @@
 		$json = json_decode(file_get_contents('php://input'), true);
 		if(!is_array($json)) $data = array("Error", "Error: Post");
 
-		if(isset($_SESSION['login'])) {
-            $pseudo = $_SESSION['login'];
+		if(isset($json['pseudo'])) {
+            $pseudo = $json['pseudo'];
         }
 
-	    if(isset($json['prenom']) && $json['prenom'] != '') {
-	    $userPassword = $json['prenom'];
+	    if(isset($json['firstname']) && $json['firstname'] != '') {
+	    $firstname = $json['firstname'];
 	  }
 	  else $data = array("Error", "Error");
 
 
-	  UserModel::updateUserPassword($pseudo, $userPassword);
+	  UserModel::updateUserFirstname($pseudo, $firstname);
 
 	}
 	else $data = array("Error", "Error");

@@ -8,13 +8,19 @@
 
 	include "../../Models/UserModel.php";
 
-	if(isset($_SESSION['login'])) {
-		$data = UserModel::getUserState($_SESSION['login']);
-	}
-	else {
-		$data = [0];
-	}
+	if ($_SERVER['REQUEST_METHOD'] == 'POST')
+	{	
+		$json = json_decode(file_get_contents('php://input'), true);
+		if(!is_array($json)) $data = array("Error", "Error: POST.");
 
+		if(isset($json['pseudo'])) {
+			$data = UserModel::getUserState($json['pseudo']);
+		}
+		else {
+			$data = [0];
+		}
+	}
+	else $data = array("Error", "Error: POST.");
 
   echo json_encode($data);
 

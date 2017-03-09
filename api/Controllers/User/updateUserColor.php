@@ -16,12 +16,12 @@
 		$json = json_decode(file_get_contents('php://input'), true);
 		if(!is_array($json)) $data = array("Error", "Error: Post");
 
-		if(isset($_SESSION['login'])) {
-            $pseudo = $_SESSION['login'];
+		if(isset($json['pseudo'])) {
+            $pseudo = $json['pseudo'];
         }
 
-	    if(isset($json['couleur']) && $json['couleur'] != '') { /*A voir avec le front*/
-	    $userColor = $json['couleur'];
+	    if(isset($json['color']) && $json['color'] != '') { /*A voir avec le front*/
+	    $userColor = $json['color'];
 	  }
 	  else $data = array("Error", "Error");
 

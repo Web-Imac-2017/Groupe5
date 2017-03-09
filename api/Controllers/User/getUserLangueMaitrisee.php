@@ -16,8 +16,8 @@
 		$json = json_decode(file_get_contents('php://input'), true);
 		if(!is_array($json)) $data = array("Error", "Error: Post");
 
-		if(isset($_SESSION['login'])) {
-            $pseudo = $_SESSION['login'];
+		if(isset($json['pseudo'])) {
+            $pseudo = $json['pseudo'];
 
             $data = UserModel::getUserLangueMaitrisee($pseudo);
         }
@@ -26,7 +26,6 @@
 	 else $data = array("Error", "Error");
 
   $data = UserModel::getUserLangueMaitrisee('Robibidu77');
-
 
   echo json_encode($data);
 

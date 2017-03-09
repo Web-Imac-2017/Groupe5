@@ -30,8 +30,6 @@
 	}
 	else $data = array("Error", "Error: POST.");
 
-
-	$_SESSION["login"] = "kingofimac";
   
   echo json_encode($data);
 

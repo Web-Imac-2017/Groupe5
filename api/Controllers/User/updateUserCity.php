@@ -16,12 +16,12 @@
 		$json = json_decode(file_get_contents('php://input'), true);
 		if(!is_array($json)) $data = array("Error", "Error: Post");
 
-		if(isset($_SESSION['login'])) {
-            $pseudo = $_SESSION['login'];
+		if(isset($json['pseudo'])) {
+            $pseudo = $json['pseudo'];
         }
 
-	    if(isset($json['ville']) && $json['ville'] != '') { /*A voir avec le front*/
-	    $userCity = $json['ville'];
+	    if(isset($json['city']) && $json['city'] != '') { /*A voir avec le front*/
+	    $userCity = $json['city'];
 	  }
 	  else $data = array("Error", "Error");
 
