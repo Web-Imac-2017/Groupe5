@@ -115,12 +115,12 @@ $profil_color_light: rgb(225,146,150);
     overflow-x: hidden;
     overflow-y: auto;
     background-color: #fff;
-    height: calc(100vh - 100px);
+    height: calc(100vh - 90px);
   }
   textarea {
     outline: none;
     resize: none;
-    background-color: $profil_color_light;
+    background-color: #e19296;
     border: 2px solid #000;
     border-radius: 10px;
     width: 100%;
@@ -128,6 +128,9 @@ $profil_color_light: rgb(225,146,150);
     bottom: 0;
     right: 0;
     left: 0;
+    padding: 10px;
+    height: 60px;
+    color: #000;
   }
 
   .user_other, .user_me {

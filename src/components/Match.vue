@@ -2,8 +2,8 @@
 	<div>
 		<div class="col-sm-3">
       <div id="infoProfil">
-        <img v-bind:src="'/static/avatar/' + user.avatar" class="avatar">
-        <p>connected as<br/><span> {{ user.pseudo }} </span></p>
+        <img v-bind:src="'/static/avatar/' + userActif.avatar" class="avatar">
+        <p>connected as<br/><span> {{ userActif.pseudo }} </span></p>
       </div>
       <div id="filterMatch">
         <h2>Filters </h2>
@@ -34,13 +34,13 @@
 			<div class="matchUserList">
         <h2 id="matchTitle">Users matched with your profil</h2>
         <ul>
-          <li v-for="user in $parent.users" >
+          <li v-for="user in users" >
             <div class="profilMatch">
-              <img v-bind:src="'/static/avatar/' + user[0].infos.avatar" class="avatarProfil">
+              <img v-bind:src="'/static/avatar/' + user.infos.avatar" class="avatarProfil">
               <div class="info" :class=getUserState(user)>
-                <h3 class="pseudo">{{ user[0].infos.pseudo }} </h3>
-                <p>{{ user[0].infos.town }}, {{ user[0].infos.country }}</p>
-                <p>{{ user[0].infos.age }} years old</p>
+                <h3 class="pseudo">{{ user.infos.pseudo }} </h3>
+                <p>{{ user.infos.town }}, {{ user.infos.country }}</p>
+                <p>{{ user.infos.age }} years old</p>
                 <icon name="circle"></icon>
               </div>
             </div>
@@ -67,7 +67,7 @@ export default{
         sexWomen: 1
 			},
 			users : [],
-      user : {},
+      userActif : {},
       value: [10,90],
 
 		}
@@ -80,32 +80,12 @@ export default{
 			this.getUserMatch();
 		},
 		getUserMatch: function(){
-  		var _this = this;
-
-      console.log(_this.selectedFilter.role);
-
-  		var role;
-		  fetch(apiRoot() + 'Controllers/User/getUserMatch.php', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
-          'Content-Type': 'application/json; charset=utf-8'
-        },
-        dataType: 'JSON',
-        body: JSON.stringify({pseudo : _this.user.pseudo, role: _this.selectedFilter.role, sex: _this.selectedFilter.sex, minAge: _this.$refs.slider.min, maxAge: _this.$refs.slider.max})
-      }).then(function(response) {
-        return response.json();
-      }).then(function(data){
-        if(data[0] == "Error"){
-          console.log(data[1]);
-        }
-        else {
-          for(var i = 0; i < data.length; i ++) {
-            _this.users.push(data[i]["users"]);
-            console.log(data[i]);
-          }
-      	}
-    	});
+      if(!document.getElementById("women").checked && !document.getElementById("men").checked) {
+        this.getUserMatchSimple();
+      }
+      else {
+        this.getUserMatchComplex();
+      }      
 		},
     getUserState: function(user) {
       var theClass = 'userNonConnected';
@@ -117,7 +97,7 @@ export default{
           'Content-Type': 'application/json; charset=utf-8'
         },
         dataType: 'JSON',
-        body: JSON.stringify({pseudo: user.pseudo})
+        body: JSON.stringify({pseudo: userActif.pseudo})
       }).then(function(response) {
         return response.json();
       }).then(function(data){
@@ -129,10 +109,69 @@ export default{
         }
       );
       return theClass;
+    },
+    getUserMatchSimple: function() {
+      var _this = this;
+      fetch(apiRoot() + 'Controllers/User/getUserMatch.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({pseudo : _this.userActif.pseudo, role: _this.selectedFilter.role})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+        if(data[0] == "Error"){
+          console.log(data[1]);
+        }
+        else {
+          _this.users = [];
+          for(var i = 0; i < data.length; i ++) {
+            if(data[i]["users"].infos) {
+              _this.users.push(data[i]["users"]);
+            }
+          }
+        }
+      });
+    },
+    getUserMatchComplex: function() {
+      var _this = this;
+      var sex = [];
+      if(document.getElementById("women").checked) {
+        sex.push(document.getElementById("women").value);
+      }
+      if(document.getElementById("men").checked) {
+        sex.push(document.getElementById("men").value);
+      }
+      fetch(apiRoot() + 'Controllers/User/getUserMatch.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({pseudo : _this.userActif.pseudo, role: _this.selectedFilter.role, minAge: _this.$refs.slider.min, maxAge: _this.$refs.slider.max})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+        if(data[0] == "Error"){
+          console.log(data[1]);
+        }
+        else {
+          _this.users = [];
+          for(var i = 0; i < data.length; i ++) {
+            if(data[i]["users"].infos) {
+              _this.users.push(data[i]["users"]);
+            }
+          }
+        }
+      });
     }
 	},
 	created: function() {
-		this.user = this.$parent.connectedUser;
+		this.userActif = this.$parent.connectedUser;
   }
 }
 
