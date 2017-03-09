@@ -137,6 +137,22 @@ class ConversationModel{
         
         return $req_active->fetchAll();
     }
+    
+    public static function deleteConversation($id_conv){
+        $bdd = Database::connexionBDD();
+        
+        /* DATA IN USER_CONVERSATION */
+        $req_active = $bdd->prepare("DELETE FROM `user_conversation` WHERE `id_conversation` = :id");
+        $req_active->execute(array(':id' => $id_conv));
+        
+        /* DATA IN MESSAGE */
+        $req_active = $bdd->prepare("DELETE FROM `message` WHERE `id_conversation` = :id");
+        $req_active->execute(array(':id' => $id_conv));
+        
+        /* DATA IN CONVERSATION */
+        $req_active = $bdd->prepare("DELETE FROM `conversation` WHERE `ID` = :id");
+        $req_active->execute(array(':id' => $id_conv));
+    }
 }
 
 ?>
