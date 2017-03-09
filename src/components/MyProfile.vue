@@ -228,7 +228,7 @@ export default {
     	this.addSpokenLanguage = "true";
     },
     addNewLearningLanguage: function() {
-    	this.addSpokenLanguage = "true";
+    	this.addLearningLanguage = "true";
     },
     addNewHobby: function() {
     	this.addHobby = "true";

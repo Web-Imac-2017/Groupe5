@@ -1,36 +1,29 @@
 <template>
 	<div class="searchMatch">
 		<div id="infoProfil">
-			<img v-bind:src="'/static/avatar/' + $parent.userActif.avatar" class="avatar">
-			<p>connected as<br/><span> {{ $parent.userActif.pseudo }} </span></p>
+			<img v-bind:src="'/static/avatar/' + user.avatar" class="avatar">
+			<p>connected as<br/><span> {{ user.pseudo }} </span></p>
 		</div>
 		<div id="filterMatch">
 			<h2>Filters </h2>
-
-
 			<p style="display:inline-block">You search : </p>
-			<input id="searchBox_master"  v-model="$parent.master"  class="form-check-input" type="checkbox" value="1" >
-			{{ $parent.master }}
-		     <label  class="form-check-label" for="master">Master</label>
-		     <input v-model="$parent.selectedFilter.apprentice" class="form-check-input" type="checkbox" id="apprentice" value="2" >
-		    <label  class="form-check-label" for="apprentices">Apprentices</label>
-		    <br/>
-			<input v-model="$parent.selectedFilter.woman"  class="form-check-input" type="checkbox" id="women" value="Women" >
-		     <label  class="form-check-label" for="women">Women</label>
-		     <input v-model="$parent.selectedFilter.man" class="form-check-input" type="checkbox" id="men" value="Men" >
-		    <label  class="form-check-label" for="men">Men</label>
-		    <div id="rangeSlider">
-    			<vue-slider v-model="value" min="10" max="120" ></vue-slider>
-    		</div>
 
+			<input v-model="$parent.selectedFilter.role"  class="form-check-input" type="radio" value="1" >
+	    <label  class="form-check-label" for="master">Master</label>
+	    
+	    <input v-model="$parent.selectedFilter.role" class="form-check-input" type="radio" value="2" >
+	    <label  class="form-check-label" for="apprentices">Apprentices</label>
+			
+			<input v-model="$parent.selectedFilter.sex"  class="form-check-input" type="checkbox" id="women" value="Women" >
+		  <label  class="form-check-label" for="women">Women</label>
+		  
+		  <input v-model="$parent.selectedFilter.sex" class="form-check-input" type="checkbox" id="men" value="Men" >
+		  <label  class="form-check-label" for="men">Men</label>
+		  
+		  <div id="rangeSlider">
+    		<vue-slider v-model="value" :min="10" :max="90" ></vue-slider>
+    	</div>
 		</div>
-    {{  $parent.selectedFilter }}
-
-    {{ value  }}
-
-
-    	
-
 		<div id="btnSM">
 			<button class="btn btn-default" type="button">Quit</button>
 			<button v-on:click="$parent.getSearch()" class="btn btn-default" type="button">Search</button>
@@ -51,52 +44,15 @@ import vueSlider from 'vue-slider-component';
 export default {
   data () {
     return {
-      	user : {
-      		pseudo : 'thePseudo',
-	      	avatar : '',
-	      	lastName : '',
-	      	firstName : '',
-	      	age : '',
-	      	country : '',
-	      	description : '',
-	      	languages : {
-	            spokenLang : [],
-	            learningLang : []
-	        },
-		    hobbies : []
-      	},
-      	users : '',
-      	value: [10,120],
-
-
-       }
-
+    	user : {},
+    	users : '',
+    	value: [10,90],
+    }
   },
   methods : {
-  	getUser: function(){
-  		var _this = this;
-  		        fetch(apiRoot() + 'Controllers/User/getUserActif.php', {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
-            'Content-Type': 'application/json; charset=utf-8'
-          },
-          dataType: 'JSON',
-          body: JSON.stringify({})
-        }).then(function(response) {
-          return response.json();
-        }).then(function(data){
-          if(data[0] == "Error"){
-            console.log("ERREUR !!");
-          }
-          else {
-            _this.users = data['users'];
-          }
-        });
-  	}
   },
   created: function() {
-  	this.getUser();
+  	this.user = this.$parent.userActif;
   },
   components:{
   	vueSlider

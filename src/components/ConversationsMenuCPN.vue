@@ -58,22 +58,11 @@ export default {
   },
   created: function() {
     this.me = this.$parent.connectedUser;
-    /*while(this.me.pseudo == "") {
-      this.me = this.$parent.connectedUser;
-      console.log(this.me.pseudo);
-    }*/
-    //console.log(this.$parent.connectedUser.pseudo);
     this.getConversations();
-    /*this.conversations.map(function(conversation, key) {
-      console.log(conversation);
-
-      if(conversation.id == this.$route.params.conversationID) {
-        this.otherUser = conversation.users[0][0];
-
-        console.log(this.otherUser);
-      }
-    }); */     
-
+  },
+  mounted: function() {
+    this.me = this.$parent.connectedUser;
+    this.getConversations();
   },
   methods: {
     getActiveConversation: function(id) {
@@ -107,31 +96,31 @@ export default {
       return theClass;
     },
     getConversations: function() {
-      console.log("Conv ");
-      console.log(this.me);
       var _this = this;
-      fetch(apiRoot() + 'Controllers/Conversation/getUserConversations.php', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
-          'Content-Type': 'application/json; charset=utf-8'
-        },
-        dataType: 'JSON',
-        async: false,
-        body: JSON.stringify({pseudo: _this.me.pseudo})
-      }).then(function(response) {
-        return response.json();
-      }).then(function(data){
-        if(data[0] == "Error"){
-          console.log("ERREUR !!");
-        }
-        else {
-          _this.conversations = data['conversations'];
-        }
-      });
+      // TO DO : Améliorer ça -- permet de corriger bug afficher conversations    
+      setTimeout(function() {
+        fetch(apiRoot() + 'Controllers/Conversation/getUserConversations.php', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+            'Content-Type': 'application/json; charset=utf-8'
+          },
+          dataType: 'JSON',
+          body: JSON.stringify({pseudo: _this.me.pseudo})
+        }).then(function(response) {
+          return response.json();
+        }).then(function(data){
+          if(data[0] == "Error"){
+            console.log(data[1]);
+          }
+          else {
+            _this.conversations = data['conversations'];
+          }
+        });
+
+      }, 500);
     },
     deleteConv: function(id){
-      var _conversationID = id;
       fetch(apiRoot() + 'Controllers/Conversation/getAllMessages.php', {
         method: 'POST',
         headers: {
@@ -139,7 +128,15 @@ export default {
           'Content-Type': 'application/json; charset=utf-8'
         },
         dataType: 'JSON',
-        body: JSON.stringify({conversation : _conversationID})
+        body: JSON.stringify({conversation : id})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+        if(data[0] == "Error"){
+          console.log(data[1]);
+        }
+        else {
+        }
       });
     }
 

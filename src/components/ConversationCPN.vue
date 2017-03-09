@@ -40,7 +40,6 @@ export default {
   updated: function(){
     this.scrollBottomAuto();
   },
-
   methods: {
     getUser: function(user) {
       var theClass = 'user_other';
@@ -64,7 +63,7 @@ export default {
         return response.json();
       }).then(function(data){
         if(data[0] == "Error"){
-          console.log("ERREUR !!");
+          console.log(data[1]);
         }
         else {
           _this.messages = data['messages'];
@@ -72,7 +71,7 @@ export default {
         }
       });
     },
-    sendMessage() {
+    sendMessage: function() {
       var _this = this;
       var _conversationID = this.$route.params.conversationID;
       fetch(apiRoot() + 'Controllers/Conversation/addMessage.php', {
@@ -87,7 +86,7 @@ export default {
         return response.json();
       }).then(function(data){
         if(data[0] == "Error"){
-          console.log("ERREUR !!");
+          console.log(data[1]);
         }
         else {
           _this.newMessage="";

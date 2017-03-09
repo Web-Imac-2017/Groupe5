@@ -36,6 +36,9 @@ import ConversationComponent from './ConversationCPN.vue'
     },
     created: function() {
       this.connectedUser = this.$parent.connectedUser;
+    },
+    mounted: function() {
+      this.connectedUser = this.$parent.connectedUser;
     }
   }
 </script>

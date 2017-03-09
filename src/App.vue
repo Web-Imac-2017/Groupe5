@@ -204,13 +204,12 @@ export default {
           'Content-Type': 'application/json; charset=utf-8'
         },
         dataType: 'JSON',
-        async: false,
         body: JSON.stringify({pseudo: pseudo})
       }).then(function(response) {
         return response.json();
       }).then(function(data){
         if(data[0] == "Error") {
-          console.log("Error");
+          console.log(data[1]);
         } 
         else {
           _this.connectedUser.pseudo = data['pseudo'];
@@ -225,9 +224,6 @@ export default {
           _this.connectedUser.hobbies = data['hobbies'];
           _this.connectedUser.languages.spokenLang = data['languages']['spokenLang']['spokenLang'];
           _this.connectedUser.languages.learningLang = data['languages']['learningLang']['learningLang'];  
-
-          console.log("App ");
-          console.log(_this.connectedUser);
         }
         
       });
