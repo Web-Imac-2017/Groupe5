@@ -7,7 +7,7 @@
     <ul>
       <li v-for="conversation in conversations" class="row">
         <router-link v-bind:to="'/messages/' + conversation.id" :class=getActiveConversation(conversation.id) class="user">
-          <span class="avatar">
+          <span class="avatar" v-on:click="$parent.$parent.changeSelectedUser('maureeniz')">
             <img src="../../static/avatar/maureeniz.jpg">
           </span>
           <span v-for="user in conversation.users" class="text-conv">
@@ -224,6 +224,7 @@ $avatar_size: 80px;
     background-color: $profil_color_light;
   }
   .addPlume{
+    margin-bottom: 50px;
     .plus{
       width: $avatar_size;
       height: $avatar_size;
@@ -236,5 +237,8 @@ $avatar_size: 80px;
       }
     }
   }
+
+  /*ScrollBar*/
+
 }
 </style>

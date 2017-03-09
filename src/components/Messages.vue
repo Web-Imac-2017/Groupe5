@@ -2,7 +2,7 @@
   <div class="messages">
       <div class="container-fluid">
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-4 convMenu">
             <conversations-menu-component></conversations-menu-component>
           </div>
           <div class="col-md-8">
@@ -41,7 +41,9 @@ import ConversationComponent from './ConversationCPN.vue'
 </script>
 
 
-<style type="scss">
-
+<style lang="scss">
+.convMenu{
+  padding-right: 0;
+}
 
 </style>

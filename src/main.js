@@ -17,6 +17,7 @@ import Admin from './components/Admin.vue'
 import Messages from './components/Messages.vue'
 
 import Match from './components/Match.vue'
+
 //Font Awesome
 import 'vue-awesome/icons/flag'
 import 'vue-awesome/icons'

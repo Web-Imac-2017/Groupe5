@@ -23,7 +23,8 @@ if($pseudo == "maureeniz") {
     "languages" : {
       "spokenLang" : ["french", "english"],
       "learningLang" : ["spanish", "chinese", "german"]
-    }
+    },
+    "color": "#C3272F"
   }
   ';
 }
