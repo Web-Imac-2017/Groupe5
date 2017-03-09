@@ -152,6 +152,16 @@ class UserModel {
         $req_active = $bdd->prepare('UPDATE user SET description = '.$userDescription.' WHERE pseudo = "'.$pseudo.'"');
         $req_active->execute();
     }
+    
+    /*Mettre à jour la public key de l'utilisateur*/
+    public static function updateUserPublicKey($key, $pseudo){
+        $bdd = Database::connexionBDD();
+        
+        $req_get = $bdd->prepare('UPDATE user SET public_key = :key WHERE pseudo = :pseudo');
+        $req_get->execute(array(":key"=>$key, ":pseudo"=>$pseudo));
+        
+        return $req_get->fetchAll();
+    }
 
     /*Ajouter un hobby à l'utilisateur*/
     public static function setUserHobbies($pseudo, $nameHobby){
@@ -690,6 +700,15 @@ class UserModel {
         $result = $hobbies['Nom'];
         
         return $result;
+    }
+    
+    public static function getUserPublicKey($id_user){
+        $bdd = Database::connexionBDD();
+        
+        $req_get = $bdd->prepare('SELECT public_key FROM users WHERE ID = :id');
+        $req_get->execute(array(":id"=>$id_user));
+        
+        return $req_get->fetchAll();
     }
     
     public static function getUserHobbies($pseudo) {
