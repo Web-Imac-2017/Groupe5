@@ -1,14 +1,13 @@
 <template>
     <div class="header">
-        <img v-bind:src="'/static/img/logo.png'" class="headerlogo">
-        <router-link class="item" v-bind:to="'/home/'">Home</router-link>
-        <router-link class="item" v-if="$parent.connected === 'true'" v-bind:to="'/home/'">Messages</router-link>
+        
+        <router-link v-bind:to="'/home/'"><img v-bind:src="'/static/img/logo.png'" class="headerlogo"></router-link>
+        <a class="item" v-on:click.prevent="$parent.logout">Sign out</a>
+        <router-link class="item" v-bind:to="'/home/'">Messages</router-link>
        
-        <router-link class="item" v-if="$parent.connected === 'true'" v-bind:to="'/profil/'">Profil</router-link>
-        <router-link class="item" v-if="$parent.connected === ''" v-bind:to="'/login/'">Sign up / Sign in</router-link>
-        <a class="item" v-if="$parent.connected === 'true'" v-on:click.prevent="$parent.logout">Sign out</a>
-        <router-link class="item" v-if="$parent.connected === ''" v-bind:to="'/register/'">Register</router-link>
+        <router-link class="item" v-bind:to="'/profil/'">Profil</router-link>
         <router-link class="item" v-if="$parent.connected === ''" v-bind:to="'/match/'">Match</router-link>
+
         
     </div>
 </template>
@@ -22,9 +21,11 @@
 
     .header
     {
-        height: 100px;
+        height: 50px;
         width: 100%;
-        position: fixed;
+        position: relative;
+        top: 0;
+        background: #fff;
         box-shadow: 0px 3px 15px rgba(0, 0, 0, .4);
 
         .headerlogo
@@ -44,7 +45,7 @@
             top: 50%;
             transform: translateY(-50%);
             right: 50px;
-            font-size: 2em;
+            font-size: 1.2em;
             margin-left: 25px;
             font-family: Montserrat;
             color: black;

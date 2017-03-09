@@ -12,6 +12,7 @@ import Profil from './components/ProfilCPN.vue'
 import SearchBar from './components/SearchBarCPN.vue'
 import Header from './components/Header.vue'
 import MyProfile from './components/MyProfile.vue'
+import Admin from './components/Admin.vue'
 
 import Messages from './components/Messages.vue'
 
@@ -77,6 +78,11 @@ var router = new Router({
 			name: 'myProfile',
 			path: '/myProfile/',
 			component: MyProfile
+		},
+		{
+			name: 'admin',
+			path: '/admin/',
+			component: Admin
 		},
 		{
 			path: '*',
