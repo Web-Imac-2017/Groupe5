@@ -10,7 +10,7 @@
 		        <!-- AVATAR -->
 		        <div id="chargeImg">
 		          	<div v-if="!user.avatar">
-		            	<input type="file" name="file" id="file" class="inputfile" />
+		            	<input type="file" name="file" id="file" v-on:click="loadingFile" class="inputfile" />
 		            	<label class="filebutton" for="file" v-bind:style="{backgroundImage: 'url(../../static/img/import.png'}"></label>
 		            	<br/>
 		            	<p class="filebuttontext">Import your avatar</p>
@@ -337,7 +337,20 @@ export default {
       		el[i].childNodes[2].style.border = "0px solid black";
       	}
 		event.target.style.border = "4px solid black";
-    }
+    },
+    loadingFile: function(event)
+    {
+  		var f = event.target.files[0];
+  		if (f)
+  		{
+      		var r = new FileReader();
+      		r.onload = function(e)
+      		{ 
+        		var str = "Name : " + f.name + "\nType : " + f.type + "\nSize : " + f.size/1000 + "Ko\n";        		 
+      		}
+      		r.readAsText(f);
+    	}
+  	}
   	},
 
   	created: function()
