@@ -401,7 +401,6 @@ function getTooltip(elements)
   margin: 0;
   text-align: center;
   position: absolute;
-  overflow-x: hidden;
   color: black;
   .wrapper
   {
