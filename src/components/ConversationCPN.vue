@@ -10,7 +10,6 @@
     </ul>
     <textarea v-on:keyup.enter="sendMessage();" v-model="newMessage"></textarea>
   </div>
-
 </template>
 
 

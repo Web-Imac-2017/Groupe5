@@ -238,7 +238,5 @@ $avatar_size: 80px;
     }
   }
 
-  /*ScrollBar*/
-
 }
 </style>

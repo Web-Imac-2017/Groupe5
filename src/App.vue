@@ -208,6 +208,23 @@ export default {
         _this.connectedUser.hobbies = data['hobbies'];
         _this.connectedUser.languages = data['languages'];
       });
+    },
+    getLightColor(color){
+      colors= [
+        {
+            "normal" : "#6A91C9",
+            "light" : "#D0DBF3"
+        },
+        {
+            "normal" : "#BA232A",
+            "light" : "#E19296"
+        },
+        {
+            "normal" : "#3AAB3C",
+            "light" : "#ABFF97"
+        }
+      ];
+
     }
   },
   created: function(){
