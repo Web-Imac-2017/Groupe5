@@ -83,7 +83,7 @@
 	                <label class="form-check-label" for="color">Your theme color</label><br/>
                   	<div class="colors" v-for="color in colorsList">
                     	<input class="form-check-input" type="radio" :id="color.name" :value="color.name" name="color" v-model="user.color">
-                    	<label class="form-check-label" :for="color.name" :class="color.name" v-on:click="colorChecked(this)"></label>
+                    	<label class="form-check-label" :for="color.name" :class="color.name" v-on:click="colorChecked"></label>
                   	</div>
 	            </div>
 
@@ -263,7 +263,7 @@
         },
         colorChecked: function(element)
         {
-          element.css("border", "3px solid black");
+          //element.css("border", "3px solid black");
           console.log("clic OK");
         }
       },

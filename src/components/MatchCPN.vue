@@ -2,64 +2,21 @@
 	<div class="matchUser">
 		<div class="matchUserList">
 		<h2 id="matchTitle">Users matched with your profil</h2>
-		<ul>
-			<li v-for="user in $parent.users" >
-				<div v-on:click="displayUserInfo(user)"  class="profilMatch">
-					<img v-bind:src="'/static/avatar/' + user.avatar" class="avatarProfil">
-					<div class="info">
-						<h3 class="pseudo">{{ user.pseudo }} </h3>{{isConnected}}
-						
-						<p>{{ user.city }} , {{ user.country }}</p>
-						
-						<p>{{ user.age }} years old</p>
-
-
-						
+			<ul>
+				<li v-for="user in $parent.users" >
+					<div class="profilMatch">
+						<img v-bind:src="'/static/avatar/' + user[0].infos.avatar" class="avatarProfil">
+						<div class="info" :class=getUserState(user)>
+							<h3 class="pseudo">{{ user[0].infos.pseudo }} </h3>
+							<p>{{ user[0].infos.town }}, {{ user[0].infos.country }}</p>
+							<p>{{ user[0].infos.age }} years old</p>
+							<icon name="circle"></icon>
+						</div>
 					</div>
-					<div  v-bind:class="[{isConnected} ? activeClass : '', connectedState]"></div>
-
-
-				</div>
-
-			</li>
-		</ul>
+				</li>
+			</ul>
 		</div>
-		<div class="detailOfUser" id="detailUser">
-			<img v-bind:src="'/static/avatar/' + detailUser.avatar" class="avatarProfilDetail">
-			<div class="infoDetail">
-				<h3 class="pseudo">{{ detailUser.pseudo }} 
-					<div  v-bind:class="[{isConnected} ? activeClass : '', connectedState]"></div>
-				</h3>
-				
-
-				<p>Last Name :  {{ detailUser.lastname }}</p>
-				<p>First Name {{ detailUser.firstname }}</p>
-				<p>Age :  {{ detailUser.age }}</p>
-				<p>City :  {{ detailUser.city }}</p>
-				<p>Country :  {{ detailUser.country }}</p>
-				<p>Description {{ detailUser.description }}</p>
-				<ul>
-					<li v-for="hobbies in user.hobbies"> {{ hobbies }} </li>
-				</ul>
-			</div>
-			<div class="languages">
-				<p>Languages spoken : </p>
-				<ul>
-					<li v-for="spokenLang in detailUser.spokenLang">
-						{{ spokenLang }}
-					</li>
-				</ul>
-				<p>Languages learning : </p>
-				<ul>
-					<li v-for="lLang in detailUser.learningLang">
-						{{ lLang }}
-					</li>
-				</ul>
-			</div>
-
-
-		</div>
-   
+  
 	</div>
 	
 </template>
@@ -74,85 +31,48 @@ export default {
  
   data () {
     return {
-      user:'',
-      isConnected :'',
-      activeClass : 'activeConnect',
-      connectedState : 'connectedState',
-      detailUser: {
-        pseudo: '',
-        avatar:'',
-        firstname:'',
-        lastname:'',
-        age: '',
-        country: '',
-        city: '',
-        description:'',
-        spokenLang : [],
-        learningLang : [],
-        hobbies : []
-      }
-
+      user:''
     }
   },
-  computed : {
-  	getUserConnexion : function(pseudo){
-  			var _this = this;
-  		        fetch(apiRoot() + 'Controllers/User/getUserState.php', {
-	          method: 'POST',
-	          headers: {
-	            'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
-	            'Content-Type': 'application/json; charset=utf-8'
-	          },
-	          dataType: 'JSON',
-	          body: JSON.stringify({ pseudo : pseudo })
-	        }).then(function(response) {
-	          return response.json();
-	        }).then(function(data){
-	          if(data[0] == "Error"){
-	            console.log("ERREUR !!");
-	          }
-	          else {
-
-	          	
-
-	          		console.log("la data est : " + data);
-	          	if(data == 1){
-	          		_this.isConnected = true;
-	          		//return true;
-	          	}else{
-	          		_this.isConnected = false;
-	          		//return false;
-	          	}
-
-          	}
-        	});
-
-  		}
-
-  },
   methods : {
-  	displayUserInfo : function(user){
-
-  		document.getElementById('detailUser').style.display = 'inline-block';
-
-  		this.detailUser.pseudo = user.pseudo;
-  		this.detailUser.avatar = user.avatar;
-  		this.detailUser.lastname = user.lastname;
-  		this.detailUser.firstname = user.firstname;
-  		this.detailUser.age = user.age;
-  		this.detailUser.hobbies = user.hobbies;
-  		this.detailUser.spokenLang = user.spokenLang;
-  		this.detailUser.learningLang = user.learningLang;
-
-  	}
+  	getUserState: function(user) {
+      var theClass = 'userNonConnected';
+      var _this = this;
+      fetch(apiRoot() + 'Controllers/User/getUserState.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({pseudo: user.pseudo})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+          if(data[0] == "Error"){
+          }
+          else {
+            if(data[0] == 2) theClass = "userConnected";
+          }
+        }
+      );
+      return theClass;
+    }
   }
 }
-
-
 
 </script>
 
 <style lang="scss">
+
+.info {
+	&.userConnected svg {
+    color: #38B647;
+  }
+  &.userNonConnected svg {
+    color: #C02029;
+  }
+}
 
 .matchUser{
 	width:100%;

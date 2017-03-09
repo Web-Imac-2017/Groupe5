@@ -77,8 +77,12 @@ export default{
           console.log("ERREUR !!");
         }
         else {
-        	console.log(data);
-          _this.users = data['users'];
+          for(var i = 0; i < data.length; i ++) {
+            //console.log(data[i]);
+
+            _this.users.push(data[i]["users"]);
+          }
+                      console.log(_this.users);
       	}
     	});
 		},
