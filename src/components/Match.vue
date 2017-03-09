@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="matchs">
 		<div class="col-sm-3">
       <div id="infoProfil">
         <img v-bind:src="'/static/avatar/' + userActif.avatar" class="avatar">
@@ -33,19 +33,15 @@
 		<div class="col-sm-9">
 			<div class="matchUserList">
         <h2 id="matchTitle">Users matched with your profil</h2>
-        <ul>
-          <li v-for="user in users" >
-            <div class="profilMatch">
-              <img v-bind:src="'/static/avatar/' + user.infos.avatar" class="avatarProfil">
-              <div class="info" :class=getUserState(user)>
-                <h3 class="pseudo">{{ user.infos.pseudo }} </h3>
-                <p>{{ user.infos.town }}, {{ user.infos.country }}</p>
-                <p>{{ user.infos.age }} years old</p>
-                <icon name="circle"></icon>
-              </div>
-            </div>
-          </li>
-        </ul>
+        <div class="profilMatch col-sm-3" v-for="user in users">
+          <img v-bind:src="'/static/avatar/' + user[0].infos.avatar" class="avatarProfil">
+          <div class="info" :class=getUserState(user)>
+            <h3 class="pseudo">{{ user[0].infos.pseudo }} </h3>
+            <p>{{ user[0].infos.town }}, {{ user[0].infos.country }}</p>
+            <p>{{ user[0].infos.age }} years old</p>
+            <icon name="circle"></icon>
+          </div>
+        </div>
       </div>
 		</div>
 	</div>
@@ -80,12 +76,40 @@ export default{
 			this.getUserMatch();
 		},
 		getUserMatch: function(){
-      if(!document.getElementById("women").checked && !document.getElementById("men").checked) {
-        this.getUserMatchSimple();
+      this.users = [];
+   
+      var _this = this;
+      var sex = [];
+      
+      if(document.getElementById("women").checked) {
+        sex.push(document.getElementById("women").value);
       }
-      else {
-        this.getUserMatchComplex();
-      }      
+      if(document.getElementById("men").checked) {
+        sex.push(document.getElementById("men").value);
+      }
+      
+      fetch(apiRoot() + 'Controllers/User/getUserMatch.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({pseudo : _this.userActif.pseudo, role: _this.selectedFilter.role, minAge: _this.$refs.slider.min, maxAge: _this.$refs.slider.max, sex: sex})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+        if(data[0] == "Error"){
+          console.log(data[1]);
+        }
+        else {
+          for(var i = 0; i < data.length; i ++) {
+            if(data[i]["users"].length > 0) {
+              _this.users.push(data[i]["users"]);
+            }
+          }
+        }
+      });
 		},
     getUserState: function(user) {
       var theClass = 'userNonConnected';
@@ -97,7 +121,7 @@ export default{
           'Content-Type': 'application/json; charset=utf-8'
         },
         dataType: 'JSON',
-        body: JSON.stringify({pseudo: userActif.pseudo})
+        body: JSON.stringify({pseudo: user.pseudo})
       }).then(function(response) {
         return response.json();
       }).then(function(data){
@@ -109,65 +133,6 @@ export default{
         }
       );
       return theClass;
-    },
-    getUserMatchSimple: function() {
-      var _this = this;
-      fetch(apiRoot() + 'Controllers/User/getUserMatch.php', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
-          'Content-Type': 'application/json; charset=utf-8'
-        },
-        dataType: 'JSON',
-        body: JSON.stringify({pseudo : _this.userActif.pseudo, role: _this.selectedFilter.role})
-      }).then(function(response) {
-        return response.json();
-      }).then(function(data){
-        if(data[0] == "Error"){
-          console.log(data[1]);
-        }
-        else {
-          _this.users = [];
-          for(var i = 0; i < data.length; i ++) {
-            if(data[i]["users"].infos) {
-              _this.users.push(data[i]["users"]);
-            }
-          }
-        }
-      });
-    },
-    getUserMatchComplex: function() {
-      var _this = this;
-      var sex = [];
-      if(document.getElementById("women").checked) {
-        sex.push(document.getElementById("women").value);
-      }
-      if(document.getElementById("men").checked) {
-        sex.push(document.getElementById("men").value);
-      }
-      fetch(apiRoot() + 'Controllers/User/getUserMatch.php', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
-          'Content-Type': 'application/json; charset=utf-8'
-        },
-        dataType: 'JSON',
-        body: JSON.stringify({pseudo : _this.userActif.pseudo, role: _this.selectedFilter.role, minAge: _this.$refs.slider.min, maxAge: _this.$refs.slider.max})
-      }).then(function(response) {
-        return response.json();
-      }).then(function(data){
-        if(data[0] == "Error"){
-          console.log(data[1]);
-        }
-        else {
-          _this.users = [];
-          for(var i = 0; i < data.length; i ++) {
-            if(data[i]["users"].infos) {
-              _this.users.push(data[i]["users"]);
-            }
-          }
-        }
-      });
     }
 	},
 	created: function() {

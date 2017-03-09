@@ -396,19 +396,22 @@ class UserModel {
         //Prise en compte du ou des sexes transmis lors de la demande de match
         if(isset($sex)){ //Si aucun sexe n'est transmis alors les utilisateurs de tous les sexes seront pris en compte
             $requete .= "";
-            if(is_array($sex)&&(count($sex)!= 4)){
+            if(is_array($sex)&&(count($sex)!= 4) && count($sex)){ //S'il y a un tableau non vide et ne comportant pas 4 sexes (soit tous les sexes), alorsp ersonnaliser la requête
                 $requete .= " AND (";
                 $i = 0;
                 do {
-                    if($i != 0) $requete =+ " OR ";
-                    $requete .= 'user.sexe= :sex'.($i + 1).' ';
-                    $arrayPrep['sex'.$i] = $sex[$i];
+                    if($i != 0) $requete .= " OR ";
+                    $requete .= ' user.sexe= :sex'.($i + 1).' ';
+                    $arrayPrep[':sex'.($i+1)] =  $sex[$i];
                     $i++;
                 }while($i < count($sex));
 
                 $requete .= ") ";
             }
         }
+
+        //var_dump($requete);
+        //var_dump($arrayPrep);
 
         $idCentreInteret = UserModel::getUserCentreInteret($pseudo);
         $imaxCentreInteret = count($idCentreInteret['hobbies']);
