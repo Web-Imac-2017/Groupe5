@@ -110,13 +110,11 @@ export default {
     padding: 0;
     overflow-x: hidden;
     overflow-y: auto;
-    background-color: #fff;
     height: calc(100vh - 90px);
   }
   textarea {
     outline: none;
     resize: none;
-    background-color: #e19296;
     border: 2px solid #000;
     border-radius: 10px;
     width: 100%;
