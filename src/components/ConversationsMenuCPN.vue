@@ -270,5 +270,4 @@ $avatar_size: 80px;
       }
     }
   }
-}
 </style>
