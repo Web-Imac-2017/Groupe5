@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <notifications v-if="connected === 'true'"></notifications>
-    <!-- <header-component></header-component> -->
+    <header-component v-if="connected === 'true'"></header-component>
     <router-view keep-alive></router-view>
     <profil-component v-if="profilShowed === 'true'"></profil-component>
     <footer-component></footer-component>
@@ -34,6 +34,7 @@ export default {
         age: '',
         country: '',
         description: '',
+        color: '',
         city: '',
         hobbies: '',
         languages: {
@@ -51,6 +52,7 @@ export default {
         age: '',
         country: '',
         description: '',
+        color: '#3AAB3C',
         city: '',
         hobbies: '',
         languages: {
@@ -99,8 +101,7 @@ export default {
               _this.logout();
             }
           }
-        }
-      );
+      });
     },
     setUserState: function(pseudo, connected) {
       this.connected = connected;
@@ -121,11 +122,10 @@ export default {
       }).then(function(response) {
         return response.json();
       }).then(function(data){
-          if(data[0] == "Error"){
-            _this.loginError = data[1];
-          }
+        if(data[0] == "Error"){
+          _this.loginError = data[1];
         }
-      );
+      });
     },
     getSelectedUser: function(){
       var _this = this;
@@ -187,13 +187,13 @@ export default {
       var name = cname + "=";
       var ca = document.cookie.split(';');
       for(var i = 0; i <ca.length; i++) {
-          var c = ca[i];
-          while (c.charAt(0)==' ') {
-              c = c.substring(1);
-          }
-          if (c.indexOf(name) == 0) {
-              return c.substring(name.length,c.length);
-          }
+        var c = ca[i];
+        while (c.charAt(0)==' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length,c.length);
+        }
       }
       return "";
     },
@@ -331,13 +331,54 @@ export default {
           _this.getNotifications(_this.connectedUser.pseudo);
         }
       });
+    },
+    getLightColor(color){
+      if (color == "#6A91C9") {
+        return "#D0DBF3";
+      }
+      if (color == "#BA232A") {
+        return "#E19296";
+      }
+      if (color == "#3AAB3C") {
+        return "#ABFF97";
+      }
+      else {
+        return "fff";
+      }
+      // var colors = [
+      //   {
+      //     normal : "#6A91C9",
+      //     light : "#D0DBF3"
+      //   },
+      //   {
+      //     normal : "#BA232A",
+      //     light : "#E19296"
+      //   },
+      //   {
+      //     normal : "#3AAB3C",
+      //     light : "#ABFF97"
+      //   }
+      // ];
+      // //Boucle pas bien : a changer
+      // for (var coloree in colors) {
+      //   if (color == colors[coloree].normal) {
+      //     return colors[coloree].light;
+      //   }else {
+      //     return "erreurboya";
+      //   }
+      // }
+    },
+    created: function(){
+      this.profilShowed = "false";
+      this.getUserState(this.getCookie("PLUME_pseudo"));
+      this.setConnectedUser(this.getCookie("PLUME_pseudo"));
     }
   }
 }
 </script>
 
-<style lang="scss">
-@import 'assets/scss/reset.css';
-@import 'assets/scss/design.scss';
+  <style lang="scss">
+  @import 'assets/scss/reset.css';
+  @import 'assets/scss/design.scss';
 
-</style>
+  </style>
