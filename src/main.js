@@ -14,7 +14,6 @@ import Header from './components/Header.vue'
 import MyProfile from './components/MyProfile.vue'
 import Messages from './components/Messages.vue'
 import Match from './components/Match.vue'
-import Notifications from './components/Notifications.vue'
 
 //Font Awesome
 import 'vue-awesome/icons/flag'
@@ -81,11 +80,6 @@ var router = new Router({
 			name: 'myProfile',
 			path: '/myProfile/',
 			component: MyProfile
-		},
-		{
-			name: 'notifications',
-			path: '/notifications/',
-			component: Notifications
 		},
 		{
 			path: '*',

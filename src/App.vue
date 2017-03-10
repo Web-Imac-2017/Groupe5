@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <notifications v-if="connected === 'true'"></notifications>
     <!-- <header-component></header-component> -->
     <router-view keep-alive></router-view>
     <profil-component v-if="profilShowed === 'true'"></profil-component>
@@ -12,12 +13,14 @@ import {apiRoot} from '../config/localhost/settings.js'
 import HeaderComponent from './components/Header.vue'
 import FooterComponent from './components/Footer.vue'
 import ProfilComponent from './components/ProfilCPN.vue'
+import Notifications from './components/Notifications.vue'
 
 export default {
   components: {
     HeaderComponent,
     FooterComponent,
-    ProfilComponent
+    ProfilComponent,
+    Notifications
   },
   data(){
     return {
@@ -55,6 +58,7 @@ export default {
           learningLang: ''
         }
       },
+      notifications : []
     }
   },
   created: function(){
@@ -226,6 +230,102 @@ export default {
           _this.connectedUser.languages.learningLang = data['languages']['learningLang']['learningLang'];  
         }
         
+      });
+    },
+    getNotifications : function(pseudo) {
+      var _this = this;
+      fetch(apiRoot() + 'Controllers/Notification/getAllNotif.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({pseudo : pseudo})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+        if(data[0] == "Error"){
+          console.log(data[1]);
+        }
+        else {
+          //console.log(data);
+          _this.notifications = data;
+        }
+      });
+    },
+    deleteNotification : function(idNotif) {
+      var _this = this;
+      fetch(apiRoot() + 'Controllers/Notification/deleteNotif.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({ID : idNotif})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+        if(data[0] == "Error"){
+          console.log(data[1]);
+        }
+        else {
+          //console.log(data);
+          _this.notifications = data["notifications"];
+        }
+      });
+    },
+    addNotification : function(pseudo1, pseudo2) {
+      var _this = this;
+      var content = " would like to talk with you.";
+      fetch(apiRoot() + 'Controllers/Notification/addNotification.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({pseudo1 : pseudo1, pseudo2 : pseudo2, contenu : content})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+        if(data[0] == "Error"){
+          console.log(data[1]);
+        }
+        else {
+          //console.log(data);
+          _this.notifications = data["notifications"];
+        }
+      });
+    },
+    acceptConversation : function(pseudo, idNotif) {
+      this.createConversation(pseudo, idNotif);
+    },
+    refuseConversation : function(idNotif) {
+      this.deleteNotification(idNotif);
+    },
+    createConversation : function(pseudo, idNotif) {
+      var _this = this;
+      var pseudo_conv = [_this.connectedUser.pseudo, pseudo];
+      fetch(apiRoot() + 'Controllers/Conversation/createNewConversation.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({pseudo_conv : pseudo_conv})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+        if(data[0] == "Error"){
+          console.log(data[1]);
+        }
+        else {
+          _this.deleteNotification(idNotif);
+          _this.getNotifications(_this.connectedUser.pseudo);
+        }
       });
     }
   }

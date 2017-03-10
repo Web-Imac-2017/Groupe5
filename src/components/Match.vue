@@ -40,6 +40,7 @@
             <p>{{ user[0].infos.town }}, {{ user[0].infos.country }}</p>
             <p>{{ user[0].infos.age }} years old</p>
             <icon name="circle"></icon>
+            <p v-on:click="$parent.addNotification(userActif.pseudo, user[0].infos.pseudo)">
           </div>
         </div>
       </div>

@@ -118,17 +118,17 @@ export default {
           }
         });
 
-      }, 1000);
+      }, 2000);
     },
     deleteConv: function(id){
-      fetch(apiRoot() + 'Controllers/Conversation/getAllMessages.php', {
+      fetch(apiRoot() + 'Controllers/Conversation/deleteConversation.php', {
         method: 'POST',
         headers: {
           'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
           'Content-Type': 'application/json; charset=utf-8'
         },
         dataType: 'JSON',
-        body: JSON.stringify({conversation : id})
+        body: JSON.stringify({conv : id})
       }).then(function(response) {
         return response.json();
       }).then(function(data){
