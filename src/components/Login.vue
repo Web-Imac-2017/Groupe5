@@ -51,7 +51,7 @@ import Header from './Header.vue'
             _this.$parent.setCookie("PLUME_pseudo", _this.pseudo, 10)
             _this.$parent.setUserState(_this.pseudo, "true");
             _this.$parent.setConnectedUser(_this.$parent.getCookie("PLUME_pseudo"));
-            _this.$router.push('/home/');
+            _this.$router.push('/messages/');
           }
         });
       }

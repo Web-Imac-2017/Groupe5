@@ -5,15 +5,21 @@
         <a class="item" v-on:click.prevent="$parent.logout">Sign out</a>
         <router-link class="item" v-bind:to="'/home/'">Messages</router-link>
        
-        <router-link class="item" v-bind:to="'/profil/'">Profil</router-link>
+        <router-link class="item" v-bind:to="'/myProfile/'">Profile</router-link>
         <router-link class="item" v-if="$parent.connected === ''" v-bind:to="'/match/'">Match</router-link>
 
-        
+        <search-bar-component></search-bar-component>
+
     </div>
 </template>
 
 <script>
+import SearchBarComponent from './SearchBarCPN.vue';
+
   export default {
+    components : {
+        SearchBarComponent
+    }
   }
 </script>
 
