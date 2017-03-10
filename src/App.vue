@@ -154,7 +154,8 @@ export default {
           _this.selectedUser.description = data['description'];
           _this.selectedUser.color = data['color'];
           _this.selectedUser.hobbies = data['hobbies'];
-          _this.selectedUser.languages = data['languages'];  
+          _this.selectedUser.languages.learningLang = data['languages']['learningLang']['learningLang'];  
+          _this.selectedUser.languages.spokenLang = data['languages']['spokenLang']['spokenLang'];  
         }
         
       });

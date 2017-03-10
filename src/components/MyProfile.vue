@@ -23,11 +23,11 @@
                   <p v-if="editing == 'false'">{{ user.firstname }}</p>
                   <p v-if="editing == 'false'">{{ user.lastname }}</p>
                   <p v-if="editing == 'false'">{{ user.city }}</p>
-                  <p v-if="editing == 'false'">{{ user.country[0] }}</p>
+                  <p v-if="editing == 'false'">{{ user.country }}</p>
                   <input v-if="editing == 'true'" type="text" v-model="user.firstname">
                   <input v-if="editing == 'true'" type="text" v-model="user.lastname">
                   <input v-if="editing == 'true'" type="text" v-model="user.city">
-                  <select name="country" id="country" v-if="editing == 'true'" v-model="user.country[0]">
+                  <select name="country" id="country" v-if="editing == 'true'" v-model="user.country">
                     <option v-for="country in countries">{{ country.name }}</option>
                   </select>
                 </div>
@@ -48,29 +48,29 @@
             <div v-if="editing == 'true'" class="changeField" v-on:click="changeColor()">
               <div class="form-group">  
                 <div v-if="changeUserColor == 'true'" v-for="color in colors">
-                  <input class="form-check-input" type="radio" :id="color.name" :value="color.name" name="color" v-model="user.color">
+                  <input class="form-check-input" type="radio" :id="color.name" :value="color.normal" name="color" v-model="user.color">
                   <label class="form-check-label" :for="color.name" :class="color.name">{{color.name}}</label>
                 </div>
               </div>
             </div>
           <p>You speak</p>
             <div class="lang" v-for="spokenLang in user.languages.spokenLang">
-              <img v-bind:src="$parent.languagesToFlag(spokenLang)">
+              <img v-bind:src="$parent.languagesToFlag(spokenLang.name_langue)">
             </div>
             <div v-if="editing == 'true'" class="changeField" v-on:click="addNewSpokenLanguage()">
               <div v-if="addSpokenLanguage == 'true'" v-for="language in languages">
-                <input class="form-check-input" type="checkbox" :id="language.name" :value="language.name" v-model="user.languages.spokenLang">
-                <label class="form-check-label" :for="language.name" >{{language.name}}</label>
+                <input class="form-check-input" type="checkbox" :id="language.name_langue" :value="language.name_langue" v-model="user.languages.spokenLang">
+                <label class="form-check-label" :for="language.name_langue" >{{language.name}}</label>
               </div>
             </div>
           <p>You wanna learn</p>
             <div class="lang" v-for="learningLang in user.languages.learningLang">
-              <img v-bind:src="$parent.languagesToFlag(learningLang)">
+              <img v-bind:src="$parent.languagesToFlag(learningLang.name_langue)">
             </div>
             <div v-if="editing == 'true'" class="changeField" v-on:click="addNewLearningLanguage()">
               <div v-if="addLearningLanguage == 'true'" v-for="language in languages">
-                <input class="form-check-input" type="checkbox" :id="language.name" :value="language.name" v-model="user.languages.learningLang">
-                <label class="form-check-label" :for="language.name" >{{language.name}}</label>
+                <input class="form-check-input" type="checkbox" :id="language.name_langue" :value="language.name_langue" v-model="user.languages.learningLang">
+                <label class="form-check-label" :for="language.name_langue" >{{language.name}}</label>
               </div>
             </div>
 
@@ -123,6 +123,7 @@ export default {
     this.getColors();
 
   	this.user = this.$parent.connectedUser;
+    console.log(this.user);
   }, 
   methods: {
   	editProfile: function() {
