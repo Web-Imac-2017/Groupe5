@@ -1,14 +1,17 @@
 <template>
   <div class="conversation">
-    <ul ref="messages" class="messages" id="messages">
+    <ul id="messages">
       <li v-for="message in messages" :class=getUser(message.user)>
-        <div class="messageContent" :style="{background:$parent.connectedUser.color}">
+        <div class="messageContent" :style="{background:$parent.connectedUser.color}" v-bind:id="'Message' + message.ID">
           <span>{{ "["+message.date+"]" }}</span>
-          {{ message.content }}
+          <p>{{ message.content }}</p>
         </div>
       </li>
     </ul>
     <textarea v-on:keyup.enter="sendMessage();" v-model="newMessage" :style="{background:$parent.$parent.getLightColor($parent.connectedUser.color)}"></textarea>
+      <input type="file" name="messageImage" id="messageImage">
+      <p v-on:click="sendImage()">Send Image</p>
+    </form>
   </div>
 </template>
 
@@ -29,18 +32,25 @@ export default {
   watch: {
     '$route': function() {
       this.me = this.$parent.connectedUser;
-      this.getConversation();
+      this.init();
     }
   },
   created: function() {
     this.me = this.$parent.connectedUser;
-    this.getConversation();
+    this.init();
   },
   updated: function(){
     this.scrollBottomAuto();
   },
-
   methods: {
+    init: function() {
+      this.newMessage="";
+      this.getConversation();
+      var _this = this;
+      setTimeout(function() {
+        _this.getImages();
+      }, 1000);
+    },
     getUser: function(user) {
       var theClass = 'user_other';
       if(user == this.me.pseudo){
@@ -63,7 +73,7 @@ export default {
         return response.json();
       }).then(function(data){
         if(data[0] == "Error"){
-          console.log("ERREUR !!");
+          console.log(data[1]);
         }
         else {
           _this.messages = data['messages'];
@@ -71,7 +81,25 @@ export default {
         }
       });
     },
-    sendMessage() {
+    getImages : function() {
+      for(var i = 0; i < this.messages.length; i ++) {
+        if(this.messages[i].content.indexOf("PLUME_IMAGE_MESSAGE:") !== -1) {
+
+          this.messages[i].content = this.messages[i].content.substr(20,this.messages[i].content.length-1);
+         
+          var div = document.getElementById("Message" + this.messages[i].ID);
+          if(div.children.length == 2) {
+            var image = document.createElement('img');
+            image.src = this.messages[i].content;
+
+            div.append(image);
+          }
+
+          this.messages[i].content = "";     
+        }
+      }
+    },
+    sendMessage: function() {
       var _this = this;
       var _conversationID = this.$route.params.conversationID;
       fetch(apiRoot() + 'Controllers/Conversation/addMessage.php', {
@@ -86,12 +114,23 @@ export default {
         return response.json();
       }).then(function(data){
         if(data[0] == "Error"){
-          console.log("ERREUR !!");
+          console.log(data[1]);
         }
         else {
-          location.reload();
+          _this.init();
         }
       });
+    },
+    sendImage : function() {
+      var form = document.querySelector('#messageImage');
+      var file = form.files[0];
+      var oData = new FormData();
+      var im = oData.append("avatar", file);
+      var pseudo = oData.append("pseudo", this.me.pseudo);
+      var idConv = oData.append("id_conv", this.$route.params.conversationID);
+      this.$http.post(apiRoot() + 'Controllers/Image/uploadImageMessage.php', oData);
+      this.init();
+
     },
     scrollBottomAuto: function(){
       var container = this.$el.querySelector("#messages");

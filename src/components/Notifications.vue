@@ -2,14 +2,16 @@
   <div class="messages">
       <div class="container-fluid">
         <div class="row">
-          <div class="col-md-4 convMenu">
-            <conversations-menu-component></conversations-menu-component>
-          </div>
-          <div class="col-md-8">
-            <conversation-component></conversation-component>
-          </div>
+          <ul>
+            <li v-for="notif in $parent.notifications">
+              <p>{{ notif.user }} {{ notif.content }}</p>
+              <p v-on:click="$parent.acceptConversation(notif.user, notif.ID)">Accept</p>
+              <p v-on:click="$parent.refuseConversation(notif.ID)">Refuse</p>
+            </li>
+          </ul>
         </div>
       </div>
+
   </div>
 
 </template>
@@ -27,17 +29,21 @@ import ConversationComponent from './ConversationCPN.vue'
         connectedUser: {}
       }
     },
-    components: {
-      ConversationsMenuComponent,
-      ConversationComponent
-    },
     methods: {
     },
     created: function() {
+      var _this = this;
       this.connectedUser = this.$parent.connectedUser;
+      setTimeout(function() {
+        _this.$parent.getNotifications(_this.connectedUser.pseudo);
+      }, 500);
     },
     mounted: function() {
+      var _this = this;
       this.connectedUser = this.$parent.connectedUser;
+      setTimeout(function() {
+        _this.$parent.getNotifications(_this.connectedUser.pseudo);
+      }, 500);
     }
   }
 </script>

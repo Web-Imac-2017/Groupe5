@@ -17,17 +17,17 @@
           <p class="llabel">I speak</p>
           <ul class="spoken-lang">
             <li v-for="spokenLang in $parent.selectedUser.languages.spokenLang">
-              <img v-bind:src="$parent.languagesToFlag(spokenLang.name)">
+              <img v-bind:src="$parent.languagesToFlag(spokenLang.name_langue)">
             </li>
           </ul>
           <p class="llabel">I'm learning</p>
           <ul class="learning-lang">
             <li v-for="learningLang in $parent.selectedUser.languages.learningLang">
-              <img v-bind:src="$parent.languagesToFlag(learningLang.name)">
+              <img v-bind:src="$parent.languagesToFlag(learningLang.name_langue)">
             </li>
           </ul>
         </div>
-        <button name="talk" class="talkButton" :style="{border:1+'px '+'solid '+ $parent.selectedUser.color,color:$parent.selectedUser.avatar}">Talk !</button>
+        <button name="talk" class="talkButton" v-bind:style="{border:1+'px '+'solid '+ $parent.selectedUser.color,color:$parent.selectedUser.avatar}" v-on:click="$parent.addNotification($parent.connectedUser.pseudo, $parent.selectedUser.pseudo)">Talk !</button>
       </div>
     </div>
   </div>
