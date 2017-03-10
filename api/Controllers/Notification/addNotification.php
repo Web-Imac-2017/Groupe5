@@ -13,7 +13,7 @@
     $emetteur=$json['pseudo1'];
     $recepteur=$json['pseudo2'];
 
-
+    $data = [];
 
     if(!is_array($json)) $data = array("Error", "Error: POST.");
     else {
@@ -22,7 +22,7 @@
         }
 
         else{
-            $data=NotificationModel::addNotification($contenu,$emetteur,$recepteur);
+            NotificationModel::addNotification($contenu,$emetteur,$recepteur);
         }
     }
 
