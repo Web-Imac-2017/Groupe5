@@ -1,7 +1,11 @@
 <template>
   <div class="register">
+    <div class="quitButton">
+      <router-link v-bind:to="'/home/'" id="sign">
+        <icon name="times"></icon>
+      </router-link>
+    </div>
     <div class="wrapper">
-
       <div class="bg" v-bind:style="{backgroundImage: 'url(/static/img/bg.jpg)' }"></div>
       <h1 class="maintitle">{{ msgRegistration }}</h1>
 
