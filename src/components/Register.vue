@@ -10,7 +10,7 @@
         <!-- AVATAR -->
         <div id="chargeImg">
           <div v-if="!user.avatar">
-            <input type="file" name="file" id="file" class="inputfile" />
+            <input type="file" name="file" id="file" v-on:click="loadingFile" class="inputfile" />
             <label class="filebutton" for="file" v-bind:style="{backgroundImage: 'url(../../static/img/import.png'}"></label>
             <br/>
             <p class="filebuttontext">Import your avatar</p>
@@ -39,27 +39,27 @@
 
         <!-- FIRST NAME -->
         <input name="firstName" type="text" minlength="3" maxlength="20" required="required" placeholder="FIRST NAME" v-model="user.firstname"  />
-        <p id="error_FirstName" class="errorMsg">This field is not correct. It must have between 3 and 20 characters</p>
+        <p id="error_FirstName" class="errorMsg">This field must have between 3 and 20 characters</p>
 
         <!-- LAST NAME -->
         <input name="lastName" type="text" minlength="3" maxlength = "20" required="required" placeholder="LAST NAME" v-model="user.name"  />
-        <p id="error_LastName" class="errorMsg">This field is not correct. It must have between 3 and 20 characters</p>
+        <p id="error_LastName" class="errorMsg">This field must have between 3 and 20 characters</p>
 
         <!-- AGE -->
         <input name="age" id="age" type="number" min="16" max="120" required="required" placeholder="YOUR AGE" v-model="user.age"/>
-        <p id="error_Age" class="errorMsg">This age is not correct. Minimum 16 years</p>
+        <p id="error_Age" class="errorMsg">You have to be at least 16</p>
 
         <!-- PSEUDO -->
         <input id="pseudo" name="pseudo" type="text" minlength="3" maxlength="20" required="required" placeholder="USERNAME" v-model="user.pseudo" />
-        <p id="error_Pseudo" class="errorMsg">This field is not correct. It must have between 3 and 20 characters</p>
+        <p id="error_Pseudo" class="errorMsg">This fiels must have between 3 and 20 unaccentued character and digits</p>
 
         <!-- EMAIL -->
         <input name="email" id="email" type="email" required="required" placeholder="YOUR EMAIL" v-model="user.email" />
-        <p id="error_Mail" class="errorMsg">This mail is not correct</p>
+        <p id="error_Mail" class="errorMsg">This email is not valid</p>
 
         <!-- PWD -->
         <input name="pwd1" id="pwd1" required="required" type="password" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" placeholder="PASSWORD" v-model="user.password"  />
-        <p id="error_Psw" class="errorMsg">This password is not sure</p>
+        <p id="error_Psw" class="errorMsg">Your password must be a +8 characters containing at least a lowercase and an uppercase</p>
         <input name="pwd2" required="required" id="pwd2" type="password" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" placeholder="CONFIRM PASSWORD" v-model="user.password2" />
         <p id="error_Psw2" class="errorMsg">This fiels is not correct. It must be the same as password field</p>
 
@@ -100,6 +100,7 @@
 </template>
 
 <script>
+
 import {apiRoot} from '../../config/localhost/settings.js'
 
 export default {
@@ -139,9 +140,10 @@ export default {
     submitForm: function(user){
       var formCorrect = 1;
       // regex definitions
-      var regexName = new RegExp("^([a-zA-Z0-9_-]){3,30}$","i");
-      var regexEmail = new RegExp("^([a-zA-Z0-9_-])+([.]?[a-zA-Z0-9_-]{1,})*@([a-zA-Z0-9-_]{2,}[.])+[a-zA-Z]{2,3}\\s*$","i");
-      var regexPSW = new RegExp("^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$");
+      var regexName = new RegExp(/^([A-zÀ-ÿ]){3,30}$/);
+      var regexPseudo = new RegExp(/^([a-zA-Z0-9_-]){3,30}$/);
+      var regexEmail = new RegExp(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$/);
+      var regexPSW = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}$/);
       //simple security
       /* other possibilities
       regex password ++ : "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
@@ -178,7 +180,7 @@ export default {
         document.getElementById("error_Age").style.display = 'none';
       }
       //verification pseudo
-      if(!regexName.test(user.pseudo)){
+      if(!regexPseudo.test(user.pseudo)){
         formCorrect = 0;
         document.getElementById("error_Pseudo").style.display = 'block';
       } else {
@@ -216,6 +218,9 @@ export default {
         document.getElementById("error_Psw").style.display = 'none';
         document.getElementById("error_Psw2").style.display = 'none';
         document.getElementById("error_Country").style.display = 'none';
+
+        //tansform special caracters to html code
+        this.convertToHTML(user.description);
 
         var _this = this;
 
@@ -331,11 +336,55 @@ export default {
     {
       var el = document.getElementsByClassName("colors");
       var i;
+      console.log(el);
       for (i = 0; i < el.length; i++)
       {
         el[i].childNodes[2].style.border = "0px solid black";
       }
       event.target.style.border = "4px solid black";
+    },
+    loadingFile: function(event)
+    {
+      var f = event.target.files[0];
+      if (f)
+      {
+        var r = new FileReader();
+        r.onload = function(e)
+        {
+          var str = "Name : " + f.name + "\nType : " + f.type + "\nSize : " + f.size/1000 + "Ko\n";
+        }
+        r.readAsText(f);
+      }
+    },
+    convertToHTML: function(){
+      var text = this.user.description
+      String.prototype.convertionHTML = function(){
+        return this.replace(/[\']/g,"&apos;")
+        .replace(/[ ]/g,"&nbsp;")
+        .replace(/[\"]/g,"&quot;")
+        .replace(/[\«]/g,"&laquot;")
+        .replace(/[\»]/g,"&raquot;")
+        .replace(/[\']/g,"&apos;")
+        .replace(/[\‹]/g,"&lsaquot;")
+        .replace(/[\›]/g,"&rsaquot;")
+        .replace(/[\...]/g,"&hellip;")
+        .replace(/[\¡]/g,"&iexcl;")
+        .replace(/[\¿]/g,"&iquest;")
+        .replace(/[\ˆ]/g,"&circ;")
+        .replace(/[\&]/g,"&amp;")
+        .replace(/[\€]/g,"&euro;")
+        .replace(/[\¢]/g,"&cent;")
+        .replace(/[\£]/g,"&pound;")
+        .replace(/[\¥]/g,"&fnof;")
+        .replace(/[\<]/g,"&lt;")
+        .replace(/[\>]/g,"&gt;")
+        .replace(/[\−]/g,"&minus;")
+        .replace(/[\×]/g,"&times;")
+        .replace(/[\÷]/g,"&divide;")
+        .replace(/[\,]/g,"&sbquo;");
+      }
+      var newText = text.convertionHTML();
+      this.user.description = newText;
     }
   },
 
@@ -362,27 +411,6 @@ export default {
   }
 }
 
-// basic javascript
-
-function desactivateTooltips()
-{
-  var tooltips = document.querySelectorAll('.tooltip'),
-  tooltipsLength = tooltips.length;
-  for (var i = 0; i < tooltipsLength; i++)
-  {
-    tooltips[i].style.display = 'none';
-  }
-}
-
-function getTooltip(elements)
-{
-  while (elements = elements.nextSibling)
-  {
-    if (elements.className === 'tooltip') return elements;
-  }
-  return false;
-}
-
 </script>
 
 <style lang="scss">
@@ -401,7 +429,6 @@ function getTooltip(elements)
   margin: 0;
   text-align: center;
   position: absolute;
-  overflow-x: hidden;
   color: black;
   .wrapper
   {
