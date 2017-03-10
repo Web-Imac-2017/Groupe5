@@ -24,19 +24,39 @@ class ImageModel{
         return $data;
     }
     
-    //Récupère la balise image pour la réafficher dans la conversation
-    public static function getImageMessage () {
-        
-    }
     
     //Enregistre l'avatar d'un utilisateur
-    public static function uploadAvatar() {
+    public static function uploadAvatar($url, $pseudo) {
+        $bdd = Database::connexionBDD();
         
+        $req_active = $bdd->prepare("UPDATE `user` SET `avatar` = :avatar WHERE `pseudo` =:pseudo");
+        $result = $req_active->execute(array(':avatar' => $url, ':pseudo' => $pseudo));
+        
+        if($result){
+            $data = $result;
+        }
+        else {
+            $data = array("Error", "The request doesn't work");
+        }
+        
+        return $data;
     }
     
     //Va chercher l'avatar d'un utilisateur :
-    public static function getAvatar() {
+    public static function getAvatar($pseudo) {
+        $bdd = Database::connexionBDD();
         
+        $req_active = $bdd->prepare("SELECT `avatar` FROM `user` WHERE `pseudo`= :pseudo");
+        $req_active->execute(array(':pseudo' => $pseudo));
+        
+        if($result = $req_active->fetch(PDO::FETCH_ASSOC)){
+            $data = array($result['avatar'], $pseudo);
+        }
+           else{
+            $data = array(0);
+        }
+        
+           return $data;   
     }
 
 }

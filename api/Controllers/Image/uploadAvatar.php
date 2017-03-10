@@ -55,8 +55,8 @@
                 $newImage = imagecreatetruecolor($width, $height);
                 imagecopyresampled($newImage, $copy, 0, 0, 0, 0, $width, $height, $image_infos[0], $image_infos[1]);
                 //Déplace l'image dans le repertoire 
-                imagepng($newImage, "C:/wamp/www/PLUME/static/messages/".$pseudo."_".$id_conv."_".$date.".png");
-                $result = ImageModel::uploadImageMessage("C:/wamp/www/PLUME/static/messages/".$pseudo."_".$id_conv."_".$date.".png", $pseudo, $id_conv);
+                imagepng($newImage, "C:/wamp/www/PLUME/static/avatar/".$pseudo.".png");
+                $result = ImageModel::uploadAvatar("C:/wamp/www/PLUME/static/avatar/".$pseudo.".png", $pseudo);
             }
             else {
                 $result = array("Error", "Image can't be register.");
