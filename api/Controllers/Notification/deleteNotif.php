@@ -22,7 +22,7 @@
         }
 
         else{
-            $data=NotificationModel::deleteNotif($id_notif);
+            NotificationModel::deleteNotif($id_notif);
         }
     }
 

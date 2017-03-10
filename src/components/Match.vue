@@ -22,7 +22,7 @@
         <label  class="form-check-label" for="men">Men</label>
         
         <div id="rangeSlider">
-          <vue-slider ref="slider" v-model="value" :min="10" :max="90" ></vue-slider>
+          <vue-slider ref="slider" v-model="value"></vue-slider>
         </div>
       </div>
       <div id="btnSM">
@@ -34,13 +34,12 @@
 			<div class="matchUserList">
         <h2 id="matchTitle">Users matched with your profil</h2>
         <div class="profilMatch col-sm-3" v-for="user in users">
-          <img v-bind:src="'/static/avatar/' + user[0].infos.avatar" class="avatarProfil">
+          <img v-bind:src="'/static/avatar/' + user[0].infos.avatar" class="avatarProfil" v-on:click="$parent.changeSelectedUser(user[0].infos.pseudo)">
           <div class="info" :class=getUserState(user)>
             <h3 class="pseudo">{{ user[0].infos.pseudo }} </h3>
             <p>{{ user[0].infos.town }}, {{ user[0].infos.country }}</p>
             <p>{{ user[0].infos.age }} years old</p>
             <icon name="circle"></icon>
-            <p v-on:click="$parent.addNotification(userActif.pseudo, user[0].infos.pseudo)">
           </div>
         </div>
       </div>
@@ -78,7 +77,6 @@ export default{
 		},
 		getUserMatch: function(){
       this.users = [];
-   
       var _this = this;
       var sex = [];
       if(document.getElementById("men").checked) {
@@ -95,7 +93,7 @@ export default{
           'Content-Type': 'application/json; charset=utf-8'
         },
         dataType: 'JSON',
-        body: JSON.stringify({pseudo : _this.userActif.pseudo, role: _this.selectedFilter.role, sex: sex, minAge: _this.$refs.slider.min, maxAge: _this.$refs.slider.max})
+        body: JSON.stringify({pseudo : _this.userActif.pseudo, role: _this.selectedFilter.role, sex: sex, minAge: Math.min(_this.value[0]), maxAge: Math.max(_this.value[1])})
       }).then(function(response) {
         return response.json();
       }).then(function(data){

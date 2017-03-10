@@ -94,7 +94,10 @@ export default {
           }
           else {
             if(data[0] == 2) _this.connected = "true";
-            else _this.connected = "";
+            else {
+              _this.connected = "";
+              _this.logout();
+            }
           }
         }
       );
@@ -304,6 +307,7 @@ export default {
     },
     refuseConversation : function(idNotif) {
       this.deleteNotification(idNotif);
+      this.getNotifications(this.connectedUser.pseudo);
     },
     createConversation : function(pseudo, idNotif) {
       var _this = this;

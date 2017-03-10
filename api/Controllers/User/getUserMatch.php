@@ -26,7 +26,7 @@
       }
 
       if(isset($json['maxAge'])){
-      	$minAge = $json['maxAge'];
+      	$maxAge = $json['maxAge'];
       }
 
       $data = UserModel::getUserMatch($pseudo, $role, $sex, $minAge, $maxAge);

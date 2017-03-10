@@ -27,7 +27,7 @@
             </li>
           </ul>
         </div>
-        <button name="talk" class="talkButton" v-bind:style="{border:1+'px '+'solid '+ $parent.selectedUser.color,color:$parent.selectedUser.avatar}">Talk !</button>
+        <button name="talk" class="talkButton" v-bind:style="{border:1+'px '+'solid '+ $parent.selectedUser.color,color:$parent.selectedUser.avatar}" v-on:click="$parent.addNotification($parent.connectedUser.pseudo, $parent.selectedUser.pseudo)">Talk !</button>
       </div>
     </div>
   </div>
