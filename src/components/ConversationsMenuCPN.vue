@@ -270,9 +270,5 @@ $avatar_size: 80px;
       }
     }
   }
-<<<<<<< HEAD
-=======
-
 }
->>>>>>> refs/remotes/origin/front
 </style>
