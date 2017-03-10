@@ -56,7 +56,7 @@
                 imagecopyresampled($newImage, $copy, 0, 0, 0, 0, $width, $height, $image_infos[0], $image_infos[1]);
                 //Déplace l'image dans le repertoire 
                 imagepng($newImage, "C:/wamp/www/PLUME/static/avatar/".$pseudo.".png");
-                $result = ImageModel::uploadAvatar("C:/wamp/www/PLUME/static/avatar/".$pseudo.".png", $pseudo);
+                $result = ImageModel::uploadAvatar($pseudo.".png", $pseudo);
             }
             else {
                 $result = array("Error", "Image can't be register.");
