@@ -8,7 +8,7 @@
       <li v-for="conversation in conversations" class="row">
         <router-link v-bind:to="'/messages/' + conversation.id" :class=getActiveConversation(conversation.id) class="user">
           <span  v-for="user in conversation.users" class="avatar" v-on:click="$parent.$parent.changeSelectedUser(user.pseudo)">
-            <img src="../../static/avatar/maureeniz.jpg">
+            <img :src="user.avatar">
           </span>
           <span v-for="user in conversation.users" class="text-conv">
             <p class="titleConversation userPseudo" :class=getUserState(user)>{{ user.pseudo }} <icon name="circle"></icon></p> 
@@ -115,6 +115,18 @@ export default {
           }
           else {
             _this.conversations = data['conversations'];
+
+            for(var i = 0; i < _this.conversations.length; i ++) {
+              if(_this.conversations[i].lastMessage) {
+                if(_this.conversations[i].lastMessage.indexOf("PLUME_IMAGE_MESSAGE:") !== -1) {
+
+                  _this.conversations[i].lastMessage = _this.conversations[i].lastMessage.substr(20,_this.conversations[i].lastMessage.length-1);
+                  
+                  _this.conversations[i].lastMessage = "Image";     
+                }
+              }
+              
+            }
           }
         });
 
@@ -139,7 +151,6 @@ export default {
         }
       });
     }
-
   }
 }
 </script>

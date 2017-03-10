@@ -281,15 +281,14 @@ export default {
     },
     addNotification : function(pseudo1, pseudo2) {
       var _this = this;
-      var content = " would like to talk with you.";
-      fetch(apiRoot() + 'Controllers/Notification/addNotification.php', {
+      fetch(apiRoot() + 'Controllers/Notification/addNotif.php', {
         method: 'POST',
         headers: {
           'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
           'Content-Type': 'application/json; charset=utf-8'
         },
         dataType: 'JSON',
-        body: JSON.stringify({pseudo1 : pseudo1, pseudo2 : pseudo2, contenu : content})
+        body: JSON.stringify({pseudo1 : pseudo1, pseudo2 : pseudo2, id_notif : 1})
       }).then(function(response) {
         return response.json();
       }).then(function(data){

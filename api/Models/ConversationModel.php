@@ -127,7 +127,7 @@ class ConversationModel{
     public static function getOtherUsers($id_user, $id_conv){
         $bdd = Database::connexionBDD();
         
-        $req_active = $bdd->prepare("SELECT `pseudo`
+        $req_active = $bdd->prepare("SELECT `pseudo`, `avatar`
         FROM user
         INNER JOIN user_conversation
         WHERE user.`ID` = user_conversation.`id_user` && user_conversation.`id_user` != :user && user_conversation.`id_conversation` = :id_conv ;");
