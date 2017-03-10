@@ -64,11 +64,9 @@ class ConversationModel{
         $req_active = $bdd->prepare("SELECT `contenu` FROM `message` WHERE `id_conversation` = :conv ORDER BY `date` DESC LIMIT 1;");
         $req_active->execute(array(':conv' => $id_conv));
         
-        $result = $req_active->fetchAll();
+        $result = $req_active->fetch(PDO::FETCH_ASSOC);
         
-        /*var_dump($result);*/
-        
-        return $result[0]['contenu'];
+        return $result['contenu'];
     }
 
     /*la fonction prend en paramètre un tableau des pseudos sous forme de chaines de caractères*/

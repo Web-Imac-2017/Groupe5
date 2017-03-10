@@ -20,7 +20,7 @@
         </router-link>
       </li>
       <li class="row addPlume">
-        <router-link v-bind:to="'/home/'" class="user">
+        <router-link v-bind:to="'/match/'" class="user">
           <span class="avatar">
             <div class="plus">
               <icon name="plus"></icon>
@@ -118,7 +118,7 @@ export default {
           }
         });
 
-      }, 700);
+      }, 1000);
     },
     deleteConv: function(id){
       fetch(apiRoot() + 'Controllers/Conversation/getAllMessages.php', {

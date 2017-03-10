@@ -80,14 +80,13 @@ export default{
    
       var _this = this;
       var sex = [];
-      
+      if(document.getElementById("men").checked) {
+        sex.push(document.getElementById("men").value);
+      }      
       if(document.getElementById("women").checked) {
         sex.push(document.getElementById("women").value);
       }
-      if(document.getElementById("men").checked) {
-        sex.push(document.getElementById("men").value);
-      }
-      
+     
       fetch(apiRoot() + 'Controllers/User/getUserMatch.php', {
         method: 'POST',
         headers: {
@@ -95,7 +94,7 @@ export default{
           'Content-Type': 'application/json; charset=utf-8'
         },
         dataType: 'JSON',
-        body: JSON.stringify({pseudo : _this.userActif.pseudo, role: _this.selectedFilter.role, minAge: _this.$refs.slider.min, maxAge: _this.$refs.slider.max, sex: sex})
+        body: JSON.stringify({pseudo : _this.userActif.pseudo, role: _this.selectedFilter.role, sex: sex, minAge: _this.$refs.slider.min, maxAge: _this.$refs.slider.max})
       }).then(function(response) {
         return response.json();
       }).then(function(data){
