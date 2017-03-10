@@ -2,16 +2,16 @@
   <div class="Profil">
     <div class="overlay" v-on:click="$parent.changeSelectedUser('')"></div>
     <div class="profilCPN">
-      <div class="avatarProfil" v-bind:style="{borderBottom:4+'px '+'solid '+ $parent.selectedUser.color,backgroundImage:'url(/static/avatar/' + $parent.selectedUser.avatar+')'}">
+      <div class="avatarProfil" :style="{borderBottom:4+'px '+'solid '+ $parent.selectedUser.color,backgroundImage:'url(/static/avatar/' + $parent.selectedUser.avatar+')'}">
       </div>
       <div class="infos">
         <h1 class="pseudo">{{$parent.selectedUser.pseudo}}</h1>
-        <p class="name" v-bind:style="{color:$parent.selectedUser.color}">{{$parent.selectedUser.firstname}} {{$parent.selectedUser.lastname}} {{$parent.selectedUser.age}}</p>
-        <p class="city" v-bind:style="{color:$parent.selectedUser.color}" v-if="$parent.selectedUser.city">{{$parent.selectedUser.city}}</p>
-        <p class="country" v-bind:style="{color:$parent.selectedUser.color}">{{$parent.selectedUser.country}}</p>
+        <p class="name" :style="{color:$parent.selectedUser.color}">{{$parent.selectedUser.firstname}} {{$parent.selectedUser.lastname}} {{$parent.selectedUser.age}}</p>
+        <p class="city" :style="{color:$parent.selectedUser.color}" v-if="$parent.selectedUser.city">{{$parent.selectedUser.city}}</p>
+        <p class="country" :style="{color:$parent.selectedUser.color}">{{$parent.selectedUser.country}}</p>
         <p class="description">{{$parent.selectedUser.description}}</p>
         <ul class="hobbies">
-          <li v-for="hobbies in $parent.selectedUser.hobbies" v-bind:style="{background:$parent.selectedUser.color}">{{hobbies}}</li>
+          <li v-for="hobbies in $parent.selectedUser.hobbies" :style="{background:$parent.selectedUser.color}">{{hobbies}}</li>
         </ul>
         <div class="language">
           <p class="llabel">I speak</p>
@@ -27,7 +27,7 @@
             </li>
           </ul>
         </div>
-        <button name="talk" class="talkButton" v-bind:style="{border:1+'px '+'solid '+ $parent.selectedUser.color,color:$parent.selectedUser.avatar}">Talk !</button>
+        <button name="talk" class="talkButton" :style="{border:1+'px '+'solid '+ $parent.selectedUser.color,color:$parent.selectedUser.avatar}">Talk !</button>
       </div>
     </div>
   </div>

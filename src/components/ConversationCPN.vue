@@ -2,13 +2,13 @@
   <div class="conversation">
     <ul ref="messages" class="messages" id="messages">
       <li v-for="message in messages" :class=getUser(message.user)>
-        <div class="messageContent">
+        <div class="messageContent" :style="{background:$parent.connectedUser.color}">
           <span>{{ "["+message.date+"]" }}</span>
           {{ message.content }}
         </div>
       </li>
     </ul>
-    <textarea v-on:keyup.enter="sendMessage();" v-model="newMessage"></textarea>
+    <textarea v-on:keyup.enter="sendMessage();" v-model="newMessage" :style="{background:$parent.$parent.getLightColor($parent.connectedUser.color)}"></textarea>
   </div>
 </template>
 
@@ -104,9 +104,6 @@ export default {
 
 <style lang="scss">
 
-$profil_color: rgb(195,39,47);
-$profil_color_light: rgb(225,146,150);
-
 .conversation{
 
   ul {
@@ -164,7 +161,6 @@ $profil_color_light: rgb(225,146,150);
   .user_me {
     .messageContent {
       color: #ffffff;
-      background-color: $profil_color;
       float: right;
     }
     .messageDate{
