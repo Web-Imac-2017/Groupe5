@@ -7,12 +7,14 @@
 
 	include "../../Models/NotificationModel.php";
 
+    $id_notif = NULL;
+    $data = [];
 
     $json = json_decode(file_get_contents('php://input'), true);
-    $id_notif=$json['ID'];
-
-
-
+    if(isset($json['ID']) && $json['ID'] != "") {
+        $id_notif = $json['ID'];
+    }
+    
     if(!is_array($json)) $data = array("Error", "Error: POST.");
     else {
         if($id_notif==NULL){
@@ -20,7 +22,7 @@
         }
 
         else{
-            $data=NotificationModel::deleteNotif($id_notif);
+            NotificationModel::deleteNotif($id_notif);
         }
     }
 

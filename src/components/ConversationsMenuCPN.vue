@@ -7,10 +7,10 @@
     <ul>
       <li v-for="conversation in conversations" class="row">
         <router-link v-bind:to="'/messages/' + conversation.id" :class=getActiveConversation(conversation.id) class="user">
-          <span class="avatar">
-            <img src="../../static/avatar/maureeniz.jpg">
+          <span  v-for="user in conversation.users" class="avatar" v-on:click="$parent.$parent.changeSelectedUser(user.pseudo)">
+            <img :src="user.avatar">
           </span>
-          <span v-for="user in conversation.users" class="col-md-10">
+          <span v-for="user in conversation.users" class="text-conv">
             <p class="titleConversation userPseudo" :class=getUserState(user)>{{ user.pseudo }} <icon name="circle"></icon></p> 
             <p class="lastMessage">{{ conversation.lastMessage }}</p>
           </span>
@@ -20,7 +20,7 @@
         </router-link>
       </li>
       <li class="row addPlume">
-        <router-link v-bind:to="'/messages/' + 0" class="user">
+        <router-link v-bind:to="'/match/'" class="user">
           <span class="avatar">
             <div class="plus">
               <icon name="plus"></icon>
@@ -45,8 +45,9 @@ import Header from './Header.vue'
 export default {
   data : function () {
     return {
-      conversations : '',
-      me : {}
+      conversations : [],
+      me : {},
+      otherUser: {}
     }
   },
   watch: {
@@ -56,6 +57,10 @@ export default {
     }
   },
   created: function() {
+    this.me = this.$parent.connectedUser;
+    this.getConversations();
+  },
+  mounted: function() {
     this.me = this.$parent.connectedUser;
     this.getConversations();
   },
@@ -91,38 +96,59 @@ export default {
       return theClass;
     },
     getConversations: function() {
-
-      console.log(this.me);
       var _this = this;
-      fetch(apiRoot() + 'Controllers/Conversation/getUserConversations.php', {
+      // TO DO : Améliorer ça -- permet de corriger bug afficher conversations    
+      setTimeout(function() {
+        fetch(apiRoot() + 'Controllers/Conversation/getUserConversations.php', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+            'Content-Type': 'application/json; charset=utf-8'
+          },
+          dataType: 'JSON',
+          body: JSON.stringify({pseudo: _this.me.pseudo})
+        }).then(function(response) {
+          return response.json();
+        }).then(function(data){
+          if(data[0] == "Error"){
+            console.log(data[1]);
+          }
+          else {
+            _this.conversations = data['conversations'];
+
+            for(var i = 0; i < _this.conversations.length; i ++) {
+              if(_this.conversations[i].lastMessage) {
+                if(_this.conversations[i].lastMessage.indexOf("PLUME_IMAGE_MESSAGE:") !== -1) {
+
+                  _this.conversations[i].lastMessage = _this.conversations[i].lastMessage.substr(20,_this.conversations[i].lastMessage.length-1);
+                  
+                  _this.conversations[i].lastMessage = "Image";     
+                }
+              }
+              
+            }
+          }
+        });
+
+      }, 2000);
+    },
+    deleteConv: function(id){
+      fetch(apiRoot() + 'Controllers/Conversation/deleteConversation.php', {
         method: 'POST',
         headers: {
           'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
           'Content-Type': 'application/json; charset=utf-8'
         },
         dataType: 'JSON',
-        body: JSON.stringify({pseudo: _this.me.pseudo})
+        body: JSON.stringify({conv : id})
       }).then(function(response) {
         return response.json();
       }).then(function(data){
         if(data[0] == "Error"){
-          console.log("ERREUR !!");
+          console.log(data[1]);
         }
         else {
-          _this.conversations = data['conversations'];
         }
-      });
-    },
-    deleteConv: function(id){
-      var _conversationID = id;
-      fetch(apiRoot() + 'Controllers/Conversation/getAllMessages.php', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
-          'Content-Type': 'application/json; charset=utf-8'
-        },
-        dataType: 'JSON',
-        body: JSON.stringify({conversation : _conversationID})
       });
     }
   }
@@ -141,7 +167,7 @@ $avatar_size: 80px;
   overflow-x: hidden;
   overflow-y: auto;
   border-right: 1px solid #000;
-  height: 100%;
+  height: 100vh;
 
   [class*="col"]{
     padding: 0;
@@ -232,23 +258,22 @@ $avatar_size: 80px;
       right: 10px;
       top: -15px;
     }
-
-    .user.router-link-active.active {
+  }
+  .user.router-link-active.active {
+    background-color: $profil_color_light;
+  }
+  .addPlume{
+    margin-bottom: 50px;
+    .plus{
+      width: $avatar_size;
+      height: $avatar_size;
+      border: 1px solid #000;
       background-color: $profil_color_light;
-    }
-    .addPlume{
-      .plus{
-        width: $avatar_size;
-        height: $avatar_size;
-        border: 1px solid #000;
-        background-color: $profil_color_light;
-        text-align: center;
-        display: flex;
-        .fa-icon{
-          margin: auto;
-        }
+      text-align: center;
+      display: flex;
+      .fa-icon{
+        margin: auto;
       }
     }
-
   }
 </style>

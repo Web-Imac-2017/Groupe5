@@ -5,26 +5,18 @@
 	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 	header('Content-Type: application/json;charset=utf-8');
 
-	include "../../Models/NotificationModel.php";
-
+	include "../../Models/AdminModel.php";
 
     $json = json_decode(file_get_contents('php://input'), true);
-    $contenu=$json['contenu'];
-    $emetteur=$json['pseudo1'];
-    $recepteur=$json['pseudo2'];
+    $pseudo=$json['pseudo'];
 
-    $data = [];
 
     if(!is_array($json)) $data = array("Error", "Error: POST.");
     else {
-        if($contenu==NULL){
-            $data = array("Error", "Error: there is no content in the notification.");
-        }
-
-        else{
-            NotificationModel::addNotification($contenu,$emetteur,$recepteur);
-        }
+        AdminModel::approvePicture($pseudo);
+        $data = array("Error", "Il n'y a pas d'erreur");
     }
+    
 
   echo json_encode($data);
 
