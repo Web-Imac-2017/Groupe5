@@ -17,7 +17,7 @@
         $pseudo = $json['pseudo'];
 
         $data["pseudo"] = $pseudo;
-        $data["avatar"] = "";
+        $data["avatar"] = UserModel::getUserAvatar($pseudo);
         $data["lastname"] = UserModel::getUserLastName($pseudo);
         $data["age"] = UserModel::getUserAge($pseudo);
         $data["sex"] = UserModel::getUserSex($pseudo);

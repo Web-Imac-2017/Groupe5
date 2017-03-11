@@ -8,9 +8,9 @@
 
 	include "../../Models/ImageModel.php";
 
-    $json = json_decode(file_get_contents('php://input'), true);
-    $pseudo = "sapristi";//$json['pseudo'];
-    $id_conv = 3;//$json['id_conv'];
+    //$json = json_decode(file_get_contents('php://input'), true);
+    $pseudo = $_POST['pseudo'];
+    $id_conv = $_POST['id_conv'];
     $date = date("Y-m-d-h-i-s");
     $result = array();
 
@@ -52,8 +52,10 @@
                 $newImage = imagecreatetruecolor($width, $height);
                 imagecopyresampled($newImage, $copy, 0, 0, 0, 0, $width, $height, $image_infos[0], $image_infos[1]);
                 //Déplace l'image dans le repertoire 
-                imagepng($newImage, "C:/wamp/www/PLUME/static/messages/".$pseudo."_".$id_conv."_".$date.".png");
+
+                imagepng($newImage, $_SERVER['DOCUMENT_ROOT']."PLUME/static/messages/".$pseudo."_".$id_conv."_".$date.".png");
                 $result = ImageModel::uploadImageMessage($_SERVER['DOCUMENT_ROOT']."PLUME/static/messages/".$pseudo."_".$id_conv."_".$date.".png", $pseudo, $id_conv);
+
             }
             else {
                 $result = array("Error", "Image can't be register.");

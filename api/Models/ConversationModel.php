@@ -34,6 +34,9 @@ class ConversationModel{
         for($i=0; $i < count($result); $i++){
             $num_id = intval($result[$i]['id_user']);
             $result[$i]['user'] = UserModel::getPseudoById($num_id);
+            
+            /*Décryptage des messages*/
+            $result[$i]['content'] = ConversationModel::decryptMessage($result[$i]['user'], $result[$i]['content']);
         }
        
         return $result;
@@ -51,6 +54,9 @@ class ConversationModel{
         for($i=0; $i < count($result); $i++){
             $num_id = intval($result[$i]['id_user']);
             $result[$i]['user'] = UserModel::getPseudoById($num_id);
+            
+            /*Décryptage des messages*/
+            $result[$i]['content'] = ConversationModel::decryptMessage($result[$i]['user'], $result[$i]['content']);
         }
         
         return $result;
@@ -61,14 +67,16 @@ class ConversationModel{
         $bdd = Database::connexionBDD();
         $result = [];
 
-        $req_active = $bdd->prepare("SELECT `contenu` FROM `message` WHERE `id_conversation` = :conv ORDER BY `date` DESC LIMIT 1;");
+        $req_active = $bdd->prepare("SELECT `contenu`, `id_user` FROM `message` WHERE `id_conversation` = :conv ORDER BY `date` DESC LIMIT 1;");
         $req_active->execute(array(':conv' => $id_conv));
         
-        $result = $req_active->fetchAll();
+        $result = $req_active->fetch(PDO::FETCH_ASSOC);
         
-        /*var_dump($result);*/
+        /*Décryptage des messages*/
+        $pseudo = UserModel::getPseudoById($result['id_user']);
+        $result['contenu'] = ConversationModel::decryptMessage($pseudo, $result['contenu']);
         
-        return $result[0]['contenu'];
+        return $result['contenu'];
     }
 
     /*la fonction prend en paramètre un tableau des pseudos sous forme de chaines de caractères*/
@@ -129,13 +137,21 @@ class ConversationModel{
     public static function getOtherUsers($id_user, $id_conv){
         $bdd = Database::connexionBDD();
         
-        $req_active = $bdd->prepare("SELECT `pseudo`
+        $req_active = $bdd->prepare("SELECT `pseudo`, `avatar`
         FROM user
         INNER JOIN user_conversation
         WHERE user.`ID` = user_conversation.`id_user` && user_conversation.`id_user` != :user && user_conversation.`id_conversation` = :id_conv ;");
         $req_active->execute(array(':user' => $id_user, ':id_conv' => $id_conv));
         
         return $req_active->fetchAll();
+    }
+    
+    public static function decryptMessage($pseudo, $crypted){
+        
+        $key = file_get_contents('../../Security/key/'.$pseudo.'.txt');
+        openssl_private_decrypt($crypted, $decrypted, $key);
+        
+        return $decrypted;
     }
     
     public static function deleteConversation($id_conv){

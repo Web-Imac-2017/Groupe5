@@ -160,7 +160,6 @@ class UserModel {
         $req_get = $bdd->prepare('UPDATE user SET public_key = :key WHERE pseudo = :pseudo');
         $req_get->execute(array(":key"=>$key, ":pseudo"=>$pseudo));
         
-        return $req_get->fetchAll();
     }
 
     /*Ajouter un hobby à l'utilisateur*/
@@ -389,9 +388,13 @@ class UserModel {
             $arrayPrep[":minAge"] = $minAge;
         }
         if(isset($maxAge)&&($maxAge != "")){
+            //echo("test\n");
             $requete .= " AND user.age <= :maxAge ";
             $arrayPrep[":maxAge"] = $maxAge;
         }
+
+        //var_dump($requete);
+        //var_dump($arrayPrep);
 
         //Prise en compte du ou des sexes transmis lors de la demande de match
         if(isset($sex)){ //Si aucun sexe n'est transmis alors les utilisateurs de tous les sexes seront pris en compte
@@ -410,8 +413,8 @@ class UserModel {
             }
         }
 
-        var_dump($requete);
-        var_dump($arrayPrep);
+        //var_dump($requete);
+        //var_dump($arrayPrep);
 
         $idCentreInteret = UserModel::getUserCentreInteret($pseudo);
         $imaxCentreInteret = count($idCentreInteret['hobbies']);
@@ -705,11 +708,11 @@ class UserModel {
         return $result;
     }
     
-    public static function getUserPublicKey($id_user){
+    public static function getUserPublicKey($pseudo){
         $bdd = Database::connexionBDD();
         
-        $req_get = $bdd->prepare('SELECT public_key FROM users WHERE ID = :id');
-        $req_get->execute(array(":id"=>$id_user));
+        $req_get = $bdd->prepare('SELECT public_key FROM user WHERE `pseudo` = :pseudo');
+        $req_get->execute(array(":pseudo"=>$pseudo));
         
         return $req_get->fetchAll();
     }

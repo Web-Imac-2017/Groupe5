@@ -1,16 +1,17 @@
 <template>
   <div class="conversation">
-    <ul>
+    <ul id="messages">
       <li v-for="message in messages" :class=getUser(message.user)>
-        <div class="messageDate">
-          {{ "["+message.date+"]" }}
-        </div>
-        <div class="messageContent">
-          {{ message.content }}
+        <div class="messageContent" v-bind:id="'Message' + message.ID">
+          <span>{{ "["+message.date+"]" }}</span>
+          <p>{{ message.content }}</p>
         </div>
       </li>
     </ul>
     <textarea v-on:keyup.enter="sendMessage();" v-model="newMessage"></textarea>
+      <input type="file" name="messageImage" id="messageImage">
+      <p v-on:click="sendImage()">Send Image</p>
+    </form>
   </div>
 
 </template>
@@ -32,15 +33,25 @@ export default {
   watch: {
     '$route': function() {
       this.me = this.$parent.connectedUser;
-      this.getConversation();
+      this.init();
     }
   },
   created: function() {
     this.me = this.$parent.connectedUser;
-    this.getConversation();
+    this.init();
   },
-
+  updated: function(){
+    this.scrollBottomAuto();
+  },
   methods: {
+    init: function() {
+      this.newMessage="";
+      this.getConversation();
+      var _this = this;
+      setTimeout(function() {
+        _this.getImages();
+      }, 1000);
+    },
     getUser: function(user) {
       var theClass = 'user_other';
       if(user == this.me.pseudo){
@@ -49,30 +60,47 @@ export default {
       return theClass;
     },
     getConversation: function() {
-        var _this = this;
-
-        var _conversationID = this.$route.params.conversationID;
-        fetch(apiRoot() + 'Controllers/Conversation/getAllMessages.php', {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
-            'Content-Type': 'application/json; charset=utf-8'
-          },
-          dataType: 'JSON',
-          body: JSON.stringify({id : _conversationID, pseudo: _this.me.pseudo})
-        }).then(function(response) {
-          return response.json();
-        }).then(function(data){
-          if(data[0] == "Error"){
-            console.log("ERREUR !!");
-          }
-          else {
-            _this.messages = data['messages'];
-            _this.users = data['users'];
-          }
-        });
+      var _this = this;
+      var _conversationID = this.$route.params.conversationID;
+      fetch(apiRoot() + 'Controllers/Conversation/getAllMessages.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({id : _conversationID, pseudo: _this.me.pseudo})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+        if(data[0] == "Error"){
+          console.log(data[1]);
+        }
+        else {
+          _this.messages = data['messages'];
+          _this.users = data['users'];
+        }
+      });
     },
-    sendMessage() {
+    getImages : function() {
+      for(var i = 0; i < this.messages.length; i ++) {
+        if(this.messages[i].content.indexOf("PLUME_IMAGE_MESSAGE:") !== -1) {
+
+          this.messages[i].content = this.messages[i].content.substr(20,this.messages[i].content.length-1);
+         
+          var div = document.getElementById("Message" + this.messages[i].ID);
+          if(div.children.length == 2) {
+            var image = document.createElement('img');
+            image.src = this.messages[i].content;
+
+            div.append(image);
+          }
+
+          this.messages[i].content = "";     
+        }
+      }
+    },
+    sendMessage: function() {
       var _this = this;
       var _conversationID = this.$route.params.conversationID;
       fetch(apiRoot() + 'Controllers/Conversation/addMessage.php', {
@@ -87,16 +115,30 @@ export default {
         return response.json();
       }).then(function(data){
         if(data[0] == "Error"){
-          console.log("ERREUR !!");
+          console.log(data[1]);
         }
         else {
-          location.reload();
+          _this.init();
         }
       });
+    },
+    sendImage : function() {
+      var form = document.querySelector('#messageImage');
+      var file = form.files[0];
+      var oData = new FormData();
+      var im = oData.append("avatar", file);
+      var pseudo = oData.append("pseudo", this.me.pseudo);
+      var idConv = oData.append("id_conv", this.$route.params.conversationID);
+      this.$http.post(apiRoot() + 'Controllers/Image/uploadImageMessage.php', oData);
+      this.init();
+
+    },
+    scrollBottomAuto: function(){
+      var container = this.$el.querySelector("#messages");
+        container.scrollTop = container.scrollHeight;
     }
   }
 }
-
 </script>
 
 
@@ -106,20 +148,28 @@ $profil_color: rgb(195,39,47);
 $profil_color_light: rgb(225,146,150);
 
 .conversation{
+
   ul {
     padding: 0;
-    height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
+    background-color: #fff;
+    height: calc(100vh - 90px);
   }
   textarea {
     outline: none;
     resize: none;
-    overflow: auto;
-    background-color: $profil_color_light;
-    width: 100%;
+    background-color: #e19296;
     border: 2px solid #000;
     border-radius: 10px;
+    width: 100%;
+    position: relative;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    padding: 10px;
+    height: 60px;
+    color: #000;
   }
 
   .user_other, .user_me {
@@ -136,10 +186,10 @@ $profil_color_light: rgb(225,146,150);
       display: block;
       max-width: 60%;
     }
-    .messageDate{
+    span{
       font-size: 10px;
-      display: inline;
-      margin: 0 10px;
+      display: block;
+      margin-bottom: 10px;
     }
   }
 
@@ -157,10 +207,10 @@ $profil_color_light: rgb(225,146,150);
       background-color: $profil_color;
       float: right;
     }
+    .messageDate{
+
+    }
   }
 
 }
-
-
-
 </style>

@@ -2,31 +2,6 @@
 
 @import url('https://fonts.googleapis.com/css?family=Montserrat:100,400,600,900');
 
-$blue: #6A91C9;
-$blue-light: #D0DBF3;
-$red: #BA232A;
-$red-light: #E19296;
-
-.red
-{
-	background-color : $red;
-}
-
-.blue
-{
-	background-color : $blue;
-}
-
-.red-light
-{
-	background-color : $red-light;
-}
-
-.blue-light
-{
-	background-color : $blue-light;
-}
-
 body{
   font-family: 'Montserrat', sans-serif;
 
@@ -37,4 +12,15 @@ body{
       color: #000;
     }
   }
+}
+
+/***************SCROLLBAR****************/
+//Webkit
+::-webkit-scrollbar {
+    width: 3px;
+}
+::-webkit-scrollbar-track {
+}
+::-webkit-scrollbar-thumb {
+    background: #000;
 }
