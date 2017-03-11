@@ -9,13 +9,19 @@
 	$json = json_decode(file_get_contents('php://input'), true);
 	$searched=$json['searched'];
 
-	$pseudo = UserModel::userResearch($searched);
+	$pattern = "#^[a-z0-9]+$#i";
+	if (preg_match($pattern , $searched)){
+		$pseudo = UserModel::userResearch($searched);
 
-	$data = array();
-	$data['users'] = array();
+		$data = array();
+		$data['users'] = array();
 
-	foreach ($pseudo as $key => $user) {
-		array_push($data['users'], UserModel::getUser($user['pseudo']));
+		foreach ($pseudo as $key => $user) {
+			array_push($data['users'], UserModel::getUser($user['pseudo']));
+		}
+	}
+	else{
+		$data=array("Error", "Error : You're research is unauthorized");
 	}
 	
 
