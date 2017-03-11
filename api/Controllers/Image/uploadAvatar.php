@@ -32,12 +32,9 @@
             $image_infos = getimagesize($_FILES['avatar']['tmp_name']);
             $verif_format = preg_match($avatarExp, $image_infos['mime'], $tab);
 
-            echo $_FILES['avatar']['tmp_name'];
-
             if($image_infos[0] > 0 && $image_infos[1] > 0 && !empty($tab[1]) && $verif_format) {
 
                 // Traitement de l'image :
-                echo "Le type de l'image est ".$tab[1];
                 $createImage = 'imagecreatefrom'.$tab[1];
                 $copy = $createImage($_FILES['avatar']['tmp_name']);
 
@@ -55,7 +52,7 @@
                 $newImage = imagecreatetruecolor($width, $height);
                 imagecopyresampled($newImage, $copy, 0, 0, 0, 0, $width, $height, $image_infos[0], $image_infos[1]);
                 //Déplace l'image dans le repertoire 
-                imagepng($newImage, "C:/wamp/www/PLUME/static/avatar/".$pseudo.".png");
+                imagepng($newImage,$_SERVER['DOCUMENT_ROOT']."PLUME/static/avatar/".$pseudo.".png");
                 $result = ImageModel::uploadAvatar($pseudo.".png", $pseudo);
             }
             else {
