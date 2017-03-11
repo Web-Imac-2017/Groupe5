@@ -12,11 +12,17 @@
 	$pseudo = UserModel::userResearch($searched);
 
 	$data = array();
-	$data['users'] = array();
 
-	foreach ($pseudo as $key => $user) {
-		array_push($data['users'], UserModel::getUser($user['pseudo']));
+	if($pseudo[0] == "Error") {
+		$data = ["Error", "User not found"];
 	}
+	else {
+		$data['users'] = array();
+		foreach ($pseudo as $key => $user) {
+			array_push($data['users'], UserModel::getUser($user['pseudo']));
+		}
+	}
+
 	
 
   echo json_encode($data);
