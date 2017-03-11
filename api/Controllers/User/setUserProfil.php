@@ -5,6 +5,9 @@
 	header('Content-Type: application/json;charset=utf-8');
 
 	include "../../Models/UserModel.php";
+    set_include_path("../../Security/");
+
+    require_once "Crypt/RSA.php";
 
     $lastname = "";
     $firstname = "";
@@ -50,6 +53,13 @@
             $arr_languesLearning = $json['languages']['learningLang'];
             
             $data = UserModel::setUserProfil($lastname, $firstname, $pseudo, $email, $password, $avatar, $age, $sex, $city, $color, $date_inscription, $last_connection, $description, $country, $id_etat_activ, $arr_hobbies, $arr_languesSpoken, $arr_languesLearning);
+            
+            /*Key creation*/
+            $rsa = new Crypt_RSA();
+            extract($rsa->createKey());
+            /*key saving*/
+            UserModel::updateUserPublicKey($publickey, $pseudo);
+            file_put_contents('../../Security/key/'.$pseudo.'.txt', $privatekey);
         }
         
 	}

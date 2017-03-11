@@ -5,15 +5,9 @@ set_include_path("../../Security/");
 
 require_once "Crypt/RSA.php";
 
-//define("OPENSSL_CONF", 'C:\wamp\bin\php\php5.5.12\extras\ssl\openssl.cnf');
-
 $rsa = new Crypt_RSA();
 
 extract($rsa->createKey());
-
-/*echo $privatekey . '<br/>' . $publickey;*/
-
-//$rsa->loadKey('...'); // private
 
 $plaintext = 'Bonjour';
 
