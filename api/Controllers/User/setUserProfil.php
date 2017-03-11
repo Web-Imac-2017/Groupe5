@@ -5,6 +5,7 @@
 	header('Content-Type: application/json;charset=utf-8');
 
 	include "../../Models/UserModel.php";
+    $pattern = "#^[a-z0-9]+$#i";
 
     $lastname = "";
     $firstname = "";
@@ -49,7 +50,12 @@
             $arr_languesSpoken = $json['languages']['spokenLang'];
             $arr_languesLearning = $json['languages']['learningLang'];
             
-            $data = UserModel::setUserProfil($lastname, $firstname, $pseudo, $email, $password, $avatar, $age, $sex, $city, $color, $date_inscription, $last_connection, $description, $country, $id_etat_activ, $arr_hobbies, $arr_languesSpoken, $arr_languesLearning);
+            if(preg_match($pattern , $pseudo)){
+                $data = UserModel::setUserProfil($lastname, $firstname, $pseudo, $email, $password, $avatar, $age, $sex, $city, $color, $date_inscription, $last_connection, $description, $country, $id_etat_activ, $arr_hobbies, $arr_languesSpoken, $arr_languesLearning);
+            }
+            else{
+                $data = array("Error", "The pseudo contains special characters or some accent");
+            }
         }
         
 	}
