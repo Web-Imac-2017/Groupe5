@@ -7,22 +7,22 @@
 
 	include "../../Models/NotificationModel.php";
 
-    $id_notif = NULL;
-    $data = [];
 
     $json = json_decode(file_get_contents('php://input'), true);
-    if(isset($json['ID']) && $json['ID'] != "") {
-        $id_notif = $json['ID'];
-    }
-    
+    $contenu=$json['contenu'];
+    $emetteur=$json['pseudo1'];
+    $recepteur=$json['pseudo2'];
+
+    $data = [];
+
     if(!is_array($json)) $data = array("Error", "Error: POST.");
     else {
-        if($id_notif==NULL){
-            $data = array("Error", "Error: this notification doesn't exist.");
+        if($contenu==NULL){
+            $data = array("Error", "Error: there is no content in the notification.");
         }
 
         else{
-            NotificationModel::deleteNotif($id_notif);
+            NotificationModel::addNotification($contenu,$emetteur,$recepteur);
         }
     }
 

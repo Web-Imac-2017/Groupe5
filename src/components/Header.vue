@@ -3,11 +3,13 @@
         <img v-bind:src="'/static/img/logo.png'" class="headerlogo">
         <router-link class="item" v-bind:to="'/home/'">Home</router-link>
         <router-link class="item" v-if="$parent.connected === 'true'" v-bind:to="'/home/'">Messages</router-link>
-        <router-link class="item" v-if="$parent.connected === 'true'" v-bind:to="'/home/'">Matchs</router-link>
+       
         <router-link class="item" v-if="$parent.connected === 'true'" v-bind:to="'/profil/'">Profil</router-link>
         <router-link class="item" v-if="$parent.connected === ''" v-bind:to="'/login/'">Sign up / Sign in</router-link>
         <a class="item" v-if="$parent.connected === 'true'" v-on:click.prevent="$parent.logout">Sign out</a>
         <router-link class="item" v-if="$parent.connected === ''" v-bind:to="'/register/'">Register</router-link>
+        <router-link class="item" v-if="$parent.connected === ''" v-bind:to="'/match/'">Match</router-link>
+        
     </div>
 </template>
 

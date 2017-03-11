@@ -389,9 +389,13 @@ class UserModel {
             $arrayPrep[":minAge"] = $minAge;
         }
         if(isset($maxAge)&&($maxAge != "")){
+            //echo("test\n");
             $requete .= " AND user.age <= :maxAge ";
             $arrayPrep[":maxAge"] = $maxAge;
         }
+
+        //var_dump($requete);
+        //var_dump($arrayPrep);
 
         //Prise en compte du ou des sexes transmis lors de la demande de match
         if(isset($sex)){ //Si aucun sexe n'est transmis alors les utilisateurs de tous les sexes seront pris en compte
@@ -410,8 +414,8 @@ class UserModel {
             }
         }
 
-        var_dump($requete);
-        var_dump($arrayPrep);
+        //var_dump($requete);
+        //var_dump($arrayPrep);
 
         $idCentreInteret = UserModel::getUserCentreInteret($pseudo);
         $imaxCentreInteret = count($idCentreInteret['hobbies']);

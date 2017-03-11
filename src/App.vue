@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <notifications v-if="connected === 'true'"></notifications>
     <!-- <header-component></header-component> -->
     <router-view keep-alive></router-view>
     <profil-component v-if="profilShowed === 'true'"></profil-component>
@@ -12,12 +13,14 @@ import {apiRoot} from '../config/localhost/settings.js'
 import HeaderComponent from './components/Header.vue'
 import FooterComponent from './components/Footer.vue'
 import ProfilComponent from './components/ProfilCPN.vue'
+import Notifications from './components/Notifications.vue'
 
 export default {
   components: {
     HeaderComponent,
     FooterComponent,
-    ProfilComponent
+    ProfilComponent,
+    Notifications
   },
   data(){
     return {
@@ -55,6 +58,15 @@ export default {
           learningLang: ''
         }
       },
+      notifications : []
+    }
+  },
+  created: function(){
+    this.profilShowed = "false";
+    var pseudo = this.getCookie("PLUME_pseudo");
+    if(pseudo != "") {
+      this.getUserState(pseudo);
+      this.setConnectedUser(pseudo);
     }
   },
   methods: {
@@ -82,7 +94,10 @@ export default {
           }
           else {
             if(data[0] == 2) _this.connected = "true";
-            else _this.connected = "";
+            else {
+              _this.connected = "";
+              _this.logout();
+            }
           }
         }
       );
@@ -125,17 +140,24 @@ export default {
       }).then(function(response) {
         return response.json();
       }).then(function(data){
-        _this.selectedUser.pseudo = data['pseudo'];
-        _this.selectedUser.avatar = data['avatar'];
-        _this.selectedUser.firstname = data['firstname'];
-        _this.selectedUser.lastname = data['lastname'];
-        _this.selectedUser.age = data['age'];
-        _this.selectedUser.country = data['country'];
-        _this.selectedUser.city = data['city'];
-        _this.selectedUser.description = data['description'];
-        _this.selectedUser.color = data['color'];
-        _this.selectedUser.hobbies = data['hobbies'];
-        _this.selectedUser.languages = data['languages'];
+        if(data[0] == "Error") {
+
+        }
+        else {
+          _this.selectedUser.pseudo = data['pseudo'];
+          _this.selectedUser.avatar = data['avatar'];
+          _this.selectedUser.firstname = data['firstname'];
+          _this.selectedUser.lastname = data['lastname'];
+          _this.selectedUser.age = data['age'];
+          _this.selectedUser.country = data['country'];
+          _this.selectedUser.city = data['city'];
+          _this.selectedUser.description = data['description'];
+          _this.selectedUser.color = data['color'];
+          _this.selectedUser.hobbies = data['hobbies'];
+          _this.selectedUser.languages.learningLang = data['languages']['learningLang']['learningLang'];  
+          _this.selectedUser.languages.spokenLang = data['languages']['spokenLang']['spokenLang'];  
+        }
+        
       });
     },
     languagesToFlag: function(country) {
@@ -194,28 +216,122 @@ export default {
       }).then(function(response) {
         return response.json();
       }).then(function(data){
-        console.log(data);
-        _this.connectedUser.pseudo = data['pseudo'];
-        _this.connectedUser.avatar = data['avatar'];
-        _this.connectedUser.firstname = data['firstname'];
-        _this.connectedUser.lastname = data['lastname'];
-        _this.connectedUser.age = data['age'];
-        _this.connectedUser.country = data['country'];
-        _this.connectedUser.city = data['city'];
-        _this.connectedUser.description = data['description'];
-        _this.connectedUser.color = data['color'];
-        _this.connectedUser.hobbies = data['hobbies'];
-        _this.connectedUser.languages.spokenLang = data['languages']['spokenLang']['spokenLang'];
-        _this.connectedUser.languages.learningLang = data['languages']['learningLang']['learningLang'];
+        if(data[0] == "Error") {
+          console.log(data[1]);
+        } 
+        else {
+          _this.connectedUser.pseudo = data['pseudo'];
+          _this.connectedUser.avatar = data['avatar'];
+          _this.connectedUser.firstname = data['firstname'];
+          _this.connectedUser.lastname = data['lastname'];
+          _this.connectedUser.age = data['age'];
+          _this.connectedUser.country = data['country'];
+          _this.connectedUser.city = data['city'];
+          _this.connectedUser.description = data['description'];
+          _this.connectedUser.color = data['color'];
+          _this.connectedUser.hobbies = data['hobbies'];
+          _this.connectedUser.languages.spokenLang = data['languages']['spokenLang']['spokenLang'];
+          _this.connectedUser.languages.learningLang = data['languages']['learningLang']['learningLang'];  
+        }
+        
+      });
+    },
+    getNotifications : function(pseudo) {
+      var _this = this;
+      fetch(apiRoot() + 'Controllers/Notification/getAllNotif.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({pseudo : pseudo})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+        if(data[0] == "Error"){
+          console.log(data[1]);
+        }
+        else {
+          //console.log(data);
+          _this.notifications = data;
+        }
+      });
+    },
+    deleteNotification : function(idNotif) {
+      var _this = this;
+      fetch(apiRoot() + 'Controllers/Notification/deleteNotif.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({ID : idNotif})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+        if(data[0] == "Error"){
+          console.log(data[1]);
+        }
+        else {
+          //console.log(data);
+          _this.notifications = data["notifications"];
+        }
+      });
+    },
+    addNotification : function(pseudo1, pseudo2) {
+      var _this = this;
+      fetch(apiRoot() + 'Controllers/Notification/addNotif.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({pseudo1 : pseudo1, pseudo2 : pseudo2, id_notif : 1})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+        if(data[0] == "Error"){
+          console.log(data[1]);
+        }
+        else {
+          //console.log(data);
+          _this.notifications = data["notifications"];
+        }
+      });
+    },
+    acceptConversation : function(pseudo, idNotif) {
+      this.createConversation(pseudo, idNotif);
+    },
+    refuseConversation : function(idNotif) {
+      this.deleteNotification(idNotif);
+      this.getNotifications(this.connectedUser.pseudo);
+    },
+    createConversation : function(pseudo, idNotif) {
+      var _this = this;
+      var pseudo_conv = [_this.connectedUser.pseudo, pseudo];
+      fetch(apiRoot() + 'Controllers/Conversation/createNewConversation.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({pseudo_conv : pseudo_conv})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+        if(data[0] == "Error"){
+          console.log(data[1]);
+        }
+        else {
+          _this.deleteNotification(idNotif);
+          _this.getNotifications(_this.connectedUser.pseudo);
+        }
       });
     }
-  },
-  created: function(){
-    this.profilShowed = "false";
-    this.getUserState(this.getCookie("PLUME_pseudo"));
-    this.setConnectedUser(this.getCookie("PLUME_pseudo"));
-
-    console.log(this.connectedUser);
   }
 }
 </script>

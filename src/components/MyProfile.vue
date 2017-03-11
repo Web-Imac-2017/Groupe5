@@ -1,95 +1,95 @@
 <template>
 
 	<div class="myProfile">
+    <form id="changeProfile" name="changeProfile" method="post" v-on:submit="saveProfile" enctype="multipart/form-data">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="col-sm-4 imageProfile">
+              <img v-bind:src="user.avatar"><br/>
+              <input type="file" v-if="editing == 'true'" name="avatar" id="avatar">
+            </div>
+            <div class="col-sm-8">
+              <div class="row informationProfile">
+                <div class="col-sm-6 nameInformation">
+                  <p>USERNAME</p>
+                  <p>FIRSTNAME</p>
+                  <p>LASTNAME</p>
+                  <p>CITY</p>
+                  <p>COUNTRY</p>
+                </div>
+                <div class="col-sm-6 information">
+                  <p>{{ user.pseudo }}</p>
+                  <p v-if="editing == 'false'">{{ user.firstname }}</p>
+                  <p v-if="editing == 'false'">{{ user.lastname }}</p>
+                  <p v-if="editing == 'false'">{{ user.city }}</p>
+                  <p v-if="editing == 'false'">{{ user.country }}</p>
+                  <input v-if="editing == 'true'" type="text" v-model="user.firstname">
+                  <input v-if="editing == 'true'" type="text" v-model="user.lastname">
+                  <input v-if="editing == 'true'" type="text" v-model="user.city">
+                  <select name="country" id="country" v-if="editing == 'true'" v-model="user.country">
+                    <option v-for="country in countries">{{ country.name }}</option>
+                  </select>
+                </div>
 
-    <div class="row">
-      <div class="col-sm-12">
-        <div class="row">
-          <div class="col-sm-4 imageProfile">
-            <img v-bind:src="'/static/avatar/maureeniz.jpg'"><br/>
-            <p v-if="editing == 'true'">IMPORT / CHANGE</p>
-            <p v-if="editing == 'true'">DELETE</p>
-          </div>
-          <div class="col-sm-8">
-            <div class="row informationProfile">
-            	<div class="col-sm-6 nameInformation">
-            		<p>USERNAME</p>
-		            <p>FIRSTNAME</p>
-		            <p>LASTNAME</p>
-		            <p>CITY</p>
-		            <p>COUNTRY</p>
-            	</div>
-            	<div class="col-sm-6 information">
-            		<p>{{ user.pseudo }}</p>
-            		<p v-if="editing == 'false'">{{ user.firstname }}</p>
-            		<p v-if="editing == 'false'">{{ user.lastname }}</p>
-            		<p v-if="editing == 'false'">{{ user.city }}</p>
-            		<p v-if="editing == 'false'">{{ user.country[0] }}</p>
-            		<input v-if="editing == 'true'" type="text" v-model="user.firstname">
-            		<input v-if="editing == 'true'" type="text" v-model="user.lastname">
-            		<input v-if="editing == 'true'" type="text" v-model="user.city">
-            		<input v-if="editing == 'true'" type="text" v-model="user.country[0]">
-            	</div>
-
-            	<div class="col-sm-12" id="clickToEdit">
-            		<p v-if="editing == 'false'" v-on:click="editProfile()">click to edit</p>
-            	</div>   
+                <div class="col-sm-12" id="clickToEdit">
+                  <p v-if="editing == 'false'" v-on:click="editProfile()">click to edit</p>
+                </div>   
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="row">
-      <div class="col-sm-12 colorLanguages">
-        <p>Your color scheme</p>
-        	<div :class="user.color"></div>
-        	<div v-if="editing == 'true'" class="changeField" v-on:click="changeColor()">
-        		<div class="form-group">  
-	        		<div v-if="changeUserColor == 'true'" v-for="color in colors">
-			          <input class="form-check-input" type="radio" :id="color.name" :value="color.name" name="color" v-model="user.color">
-			          <label class="form-check-label" :for="color.name" :class="color.name">{{color.name}}</label>
-		          </div>
-		        </div>
-        	</div>
-        <p>You speak</p>
-        	<div class="lang" v-for="spokenLang in user.languages.spokenLang">
-        		<img v-bind:src="$parent.languagesToFlag(spokenLang)">
-        	</div>
-        	<div v-if="editing == 'true'" class="changeField" v-on:click="addNewSpokenLanguage()">
-        		<div v-if="addSpokenLanguage == 'true'" v-for="language in languages">
-		          <input class="form-check-input" type="checkbox" :id="language.name" :value="language.name" v-model="user.languages.spokenLang">
-		          <label class="form-check-label" :for="language.name" >{{language.name}}</label>
-	          </div>
-        	</div>
-        <p>You wanna learn</p>
-          <div class="lang" v-for="learningLang in user.languages.learningLang">
-        		<img v-bind:src="$parent.languagesToFlag(learningLang)">
-        	</div>
-        	<div v-if="editing == 'true'" class="changeField" v-on:click="addNewLearningLanguage()">
-						<div v-if="addLearningLanguage == 'true'" v-for="language in languages">
-		          <input class="form-check-input" type="checkbox" :id="language.name" :value="language.name" v-model="user.languages.learningLang">
-		          <label class="form-check-label" :for="language.name" >{{language.name}}</label>
-	          </div>
-        	</div>
+      <div class="row">
+        <div class="col-sm-12 colorLanguages">
+          <p>Your color scheme</p>
+            <div :class="user.color"></div>
+            <div v-if="editing == 'true'" class="changeField" v-on:click="changeColor()">
+              <div class="form-group">  
+                <div v-if="changeUserColor == 'true'" v-for="color in colors">
+                  <input class="form-check-input" type="radio" :id="color.name" :value="color.normal" name="color" v-model="user.color">
+                  <label class="form-check-label" :for="color.name" :class="color.name">{{color.name}}</label>
+                </div>
+              </div>
+            </div>
+          <p>You speak</p>
+            <div class="lang" v-for="spokenLang in user.languages.spokenLang">
+              <img v-bind:src="$parent.languagesToFlag(spokenLang.name_langue)">
+            </div>
+            <div v-if="editing == 'true'" class="changeField" v-on:click="addNewSpokenLanguage()">
+              <div v-if="addSpokenLanguage == 'true'" v-for="language in languages">
+                <input class="form-check-input" type="checkbox" :id="language.name_langue" :value="language.name_langue" v-model="user.languages.spokenLang">
+                <label class="form-check-label" :for="language.name_langue" >{{language.name}}</label>
+              </div>
+            </div>
+          <p>You wanna learn</p>
+            <div class="lang" v-for="learningLang in user.languages.learningLang">
+              <img v-bind:src="$parent.languagesToFlag(learningLang.name_langue)">
+            </div>
+            <div v-if="editing == 'true'" class="changeField" v-on:click="addNewLearningLanguage()">
+              <div v-if="addLearningLanguage == 'true'" v-for="language in languages">
+                <input class="form-check-input" type="checkbox" :id="language.name_langue" :value="language.name_langue" v-model="user.languages.learningLang">
+                <label class="form-check-label" :for="language.name_langue" >{{language.name}}</label>
+              </div>
+            </div>
 
-        	<p>You love</p>
-          <div class="lang" v-for="hobby in user.hobbies">
-        		{{ hobby }}
-        	</div>
-        	<div v-if="editing == 'true'" class="changeField" v-on:click="addNewHobby()">
-						<div v-if="addHobby == 'true'" v-for="hobby in hobbies">
-		          <input class="form-check-input" type="checkbox" :id="hobby.name" :value="hobby.name" v-model="user.hobbies">
-		          <label class="form-check-label" :for="hobby.name" >{{hobby.name}}</label>
-	          </div>
-        	</div>
+            <p>You love</p>
+            <div class="lang" v-for="hobby in user.hobbies">
+              {{ hobby }}
+            </div>
+            <div v-if="editing == 'true'" class="changeField" v-on:click="addNewHobby()">
+              <div v-if="addHobby == 'true'" v-for="hobby in hobbies">
+                <input class="form-check-input" type="checkbox" :id="hobby.name" :value="hobby.name" v-model="user.hobbies">
+                <label class="form-check-label" :for="hobby.name" >{{hobby.name}}</label>
+              </div>
+            </div>
+        </div>
       </div>
-    </div>
-		<div class="row" v-if="editing == 'true'" v-on:click="saveProfile()">
-			<div class="col-sm-12">SAVE CHANGES</div>
-		</div>
-
-
+      <div class="row" >
+        <input type="submit" value="SAVE CHANGES" class="col-sm-12" v-if="editing == 'true'" v-on:click="saveProfile()">
+      </div>
+    </form>
   </div>
 
 </template>
@@ -123,6 +123,7 @@ export default {
     this.getColors();
 
   	this.user = this.$parent.connectedUser;
+    console.log(this.user);
   }, 
   methods: {
   	editProfile: function() {
@@ -136,6 +137,8 @@ export default {
 			this.updateColor();
 			this.updateHobbies();
 			this.updateLanguages();
+      this.updateCountry();
+      this.updateAvatar();
   	},
   	getLanguages: function() {
     	var _this = this;
@@ -225,7 +228,7 @@ export default {
     	this.addSpokenLanguage = "true";
     },
     addNewLearningLanguage: function() {
-    	this.addSpokenLanguage = "true";
+    	this.addLearningLanguage = "true";
     },
     addNewHobby: function() {
     	this.addHobby = "true";
@@ -288,6 +291,28 @@ export default {
         },
         dataType: 'JSON',
         body: JSON.stringify({pseudo: _this.user.pseudo, city: _this.user.city})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
+        if(data[0] == "Error"){
+          console.log(data[1]);
+        }
+        else {
+
+        }
+      });
+    },
+    updateCountry: function() {
+      var _this = this;
+                
+      fetch(apiRoot() + 'Controllers/User/updateUserCountry.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({pseudo: _this.user.pseudo, country: _this.user.country[0]})
       }).then(function(response) {
         return response.json();
       }).then(function(data){
@@ -383,6 +408,14 @@ export default {
 
         }
       });
+    },
+    updateAvatar : function() {
+        var form = document.querySelector('#avatar');
+        var file = form.files[0];
+        var oData = new FormData();
+        var im = oData.append("avatar", file);
+        var pseudo = oData.append("pseudo", this.user.pseudo);
+        this.$http.post(apiRoot() + 'Controllers/Image/uploadAvatar.php', oData);
     }
   }
 }

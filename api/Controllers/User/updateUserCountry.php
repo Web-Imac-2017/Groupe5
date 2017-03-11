@@ -20,8 +20,8 @@
             $pseudo = $json['pseudo'];
         }
 
-	    if(isset($json['nomPays']) && $json['nomPays'] != '') { //A changer en fonction du front !
-	    $namePays = $json['nomPays'];
+	    if(isset($json['country']) && $json['country'] != '') { //A changer en fonction du front !
+	    $namePays = $json['country'];
 	  }
 	  else $data = array("Error", "Error");
 
