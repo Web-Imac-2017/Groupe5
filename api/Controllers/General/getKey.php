@@ -21,14 +21,22 @@ openssl_public_encrypt($plaintext, $crypttext, $publickey);
 
 echo "Crypt text:<br>$crypttext<BR><BR>";
 
-openssl_private_decrypt($crypttext, $decrypted, $privatekey);
+/*openssl_private_decrypt($crypttext, $decrypted, $privatekey);
 
-echo "Decrypted text:<BR>$decrypted<br><br>";
+echo "Decrypted text:<BR>$decrypted<br><br>";*/
 
 UserModel::updateUserPublicKey($publickey, 'Fabricetea');
 
-$result = openssl_pkey_export_to_file ( $privatekey , 'private.txt' );
+/*echo $string;*/
 
-var_dump($result);
+$result = file_put_contents('../../Security/key/Fabricetea.txt', $privatekey);
+
+$test = file_get_contents('../../Security/key/Fabricetea.txt');
+
+/*var_dump($test);*/
+
+openssl_private_decrypt($crypttext, $decrypted, $test);
+
+echo "Decrypted text:<BR>$decrypted<br><br>";
 
 ?>
