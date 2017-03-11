@@ -4,7 +4,6 @@
 
 body{
   font-family: 'Montserrat', sans-serif;
-  overflow-x: hidden;
 
   a{
     color: #000;
@@ -28,10 +27,8 @@ body{
 
 /***************SCROLLBAR****************/
 //Webkit
-
-
 ::-webkit-scrollbar {
-    width: 5px;
+    width: 3px;
 }
 ::-webkit-scrollbar-track {
 }

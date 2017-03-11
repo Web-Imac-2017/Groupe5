@@ -1,13 +1,12 @@
 <template>
 
 	<div class="myProfile">
-    <form id="changeProfile" name="changeProfile" method="post" v-on:submit="saveProfile" enctype="multipart/form-data">
       <div class="row">
         <div class="col-sm-12">
           <div class="row">
             <div class="col-sm-4 imageProfile">
               <img v-bind:src="user.avatar"><br/>
-              <input type="file" v-if="editing == 'true'" name="avatar" id="avatar">
+              <input type="file" v-if="editing == 'true'" name="avatar" id="avatar" v-on:change="addAvatar = 'true'">
             </div>
             <div class="col-sm-8">
               <div class="row informationProfile">
@@ -55,22 +54,22 @@
             </div>
           <p>You speak</p>
             <div class="lang" v-for="spokenLang in user.languages.spokenLang">
-              <img v-bind:src="$parent.languagesToFlag(spokenLang.name_langue)">
+              <img v-bind:src="$parent.languagesToFlag(spokenLang)">
             </div>
             <div v-if="editing == 'true'" class="changeField" v-on:click="addNewSpokenLanguage()">
               <div v-if="addSpokenLanguage == 'true'" v-for="language in languages">
-                <input class="form-check-input" type="checkbox" :id="language.name_langue" :value="language.name_langue" v-model="user.languages.spokenLang">
-                <label class="form-check-label" :for="language.name_langue" >{{language.name}}</label>
+                <input class="form-check-input" type="checkbox" :id="language.name" :value="language.name" v-model="user.languages.spokenLang">
+                <label class="form-check-label" :for="language.name" >{{language.name}}</label>
               </div>
             </div>
           <p>You wanna learn</p>
             <div class="lang" v-for="learningLang in user.languages.learningLang">
-              <img v-bind:src="$parent.languagesToFlag(learningLang.name_langue)">
+              <img v-bind:src="$parent.languagesToFlag(learningLang)">
             </div>
             <div v-if="editing == 'true'" class="changeField" v-on:click="addNewLearningLanguage()">
               <div v-if="addLearningLanguage == 'true'" v-for="language in languages">
-                <input class="form-check-input" type="checkbox" :id="language.name_langue" :value="language.name_langue" v-model="user.languages.learningLang">
-                <label class="form-check-label" :for="language.name_langue" >{{language.name}}</label>
+                <input class="form-check-input" type="checkbox" :id="language.name" :value="language.name" v-model="user.languages.learningLang">
+                <label class="form-check-label" :for="language.name" >{{language.name}}</label>
               </div>
             </div>
 
@@ -89,7 +88,6 @@
       <div class="row" >
         <input type="submit" value="SAVE CHANGES" class="col-sm-12" v-if="editing == 'true'" v-on:click="saveProfile()">
       </div>
-    </form>
   </div>
 
 </template>
@@ -101,6 +99,7 @@ export default {
     return {
     	editing: '',
     	user: '',
+      addAvatar : '',
     	addSpokenLanguage: '',
     	addLearningLanguage: '',
     	addHobby: '',
@@ -117,28 +116,46 @@ export default {
   	this.addLearningLanguage = "false";
   	this.changeUserColor = "false";
   	this.addHobby = "false";
+    this.addAvatar = "false";
   	this.getLanguages();
     this.getHobbies();
     this.getCountries();
     this.getColors();
 
   	this.user = this.$parent.connectedUser;
-    console.log(this.user);
   }, 
   methods: {
   	editProfile: function() {
   		this.editing = "true";
   	},
   	saveProfile: function() {
-  		this.editing = "false";
-  		this.updateFirstname();
-  		this.updateLastname();
-  		this.updateCity();
-			this.updateColor();
-			this.updateHobbies();
-			this.updateLanguages();
-      this.updateCountry();
-      this.updateAvatar();
+      var formCorrect = 1;
+      var regexName = new RegExp(/^([A-zÀ-ÿ]){3,30}$/);
+      var regexCity = new RegExp(/^([A-zÀ-ÿ]){3,30}$/);
+
+      if(!regexName.test(this.user.firstname)){
+        formCorrect = 0;
+      }
+
+      if(!regexName.test(this.user.city)){
+        formCorrect = 0;
+      }
+
+      if(!regexCity.test(this.user.lastname)){
+        formCorrect = 0;
+      }
+
+      if(formCorrect != 0){
+    		this.editing = "false";
+    		this.updateFirstname();
+    		this.updateLastname();
+    		this.updateCity();
+  			this.updateColor();
+  			this.updateHobbies();
+  			this.updateLanguages();
+        this.updateCountry();
+        if(this.addAvatar == 'true') this.updateAvatar();
+      }
   	},
   	getLanguages: function() {
     	var _this = this;

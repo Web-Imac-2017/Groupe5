@@ -125,16 +125,6 @@ import Header from './Header.vue'
         {
             animation: colorize 2s infinite;
         }
-
-        .quitButton
-        {
-          transition: .2s;
-
-          &:hover
-          {
-            transform: scale(1.1) rotate(15deg);
-          }
-        }
     }
 
 </style>

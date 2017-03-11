@@ -14,7 +14,7 @@
         <!-- AVATAR -->
         <div id="chargeImg">
           <div v-if="!user.avatar">
-            <input type="file" name="file" id="file" v-on:click="loadingFile(this)" class="inputfile" />
+            <input type="file" name="file" id="file" v-on:click="loadingFile" class="inputfile" />
             <label class="filebutton" for="file" v-bind:style="{backgroundImage: 'url(../../static/img/import.png'}"></label>
             <br/>
             <p class="filebuttontext">Import your avatar</p>
@@ -90,7 +90,7 @@
 
         <!-- BIO -->
         <label class="form-text" for="description">Introduce yourself in a few words</label>
-        <textarea id="description" v-model="user.description"></textarea>
+        <input id="description" v-model="user.description"></input>
         <span class="tooltip">Write something about your life</span>
 
         <!-- SUBMIT -->
@@ -340,27 +340,26 @@ export default {
     {
       var el = document.getElementsByClassName("colors");
       var i;
+      console.log(el);
       for (i = 0; i < el.length; i++)
       {
         el[i].childNodes[2].style.border = "0px solid black";
       }
       event.target.style.border = "4px solid black";
     },
-
-    loadingFile: function(input)
+    loadingFile: function(event)
     {
-    	if (input.files && input.files[0])
-    	{
-        	var reader = new FileReader();
-        	reader.onload = function(e)
-        	{
-        		document.getElementsByClassName("filebutton").setAttribute("backgroundImage", e.target.result);
-        		console.log("coucou");
-        	}
-        	reader.readAsDataURL(input.files[0]);
-    	}
+      var f = event.target.files[0];
+      if (f)
+      {
+        var r = new FileReader();
+        r.onload = function(e)
+        {
+          var str = "Name : " + f.name + "\nType : " + f.type + "\nSize : " + f.size/1000 + "Ko\n";
+        }
+        r.readAsText(f);
+      }
     },
-
     convertToHTML: function(){
       var text = this.user.description
       String.prototype.convertionHTML = function(){
@@ -435,17 +434,6 @@ export default {
   text-align: center;
   position: absolute;
   color: black;
-
-  .quitButton
-  {
-  	transition: .2s;
-
-  	&:hover
-  	{
-  		transform: scale(1.1) rotate(15deg);
-  	}
-  }
-
   .wrapper
   {
     .bg
@@ -486,17 +474,6 @@ export default {
       font-weight: 600;
       margin-bottom: 8px;
       border: 3px solid #333333;
-    }
-    textarea
-    {
-    	max-width: 100%;
-    	width: 100%;
-    	height: 200px;
-    	font-size: 1.5em;
-    	padding: 10px 10px;
-    	line-height: 1.2em;
-    	font-weight: 400;
-    	text-align: justify;
     }
 
     input#pseudo, label#countryLabel
