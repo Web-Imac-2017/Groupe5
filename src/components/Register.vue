@@ -90,7 +90,7 @@
 
         <!-- BIO -->
         <label class="form-text" for="description">Introduce yourself in a few words</label>
-        <input id="description" v-model="user.description"></input>
+        <textarea id="description" v-model="user.description"></textarea>
         <span class="tooltip">Write something about your life</span>
 
         <!-- SUBMIT -->
@@ -477,6 +477,15 @@ export default {
       font-weight: 600;
       margin-bottom: 8px;
       border: 3px solid #333333;
+    }
+
+    textarea
+    {
+    	width: 100%;
+    	max-width: 100%;
+    	height: auto;
+    	font-size: 1.3em;
+    	padding: 10px;
     }
 
     input#pseudo, label#countryLabel
