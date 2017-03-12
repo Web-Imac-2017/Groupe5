@@ -168,7 +168,9 @@ export default {
         French : '/static/flags/france.png',
         Japanese : '/static/flags/japan.png',
         German : '/static/flags/germany.png',
-        Spanish : '/static/flags/spain.png'
+        Spanish : '/static/flags/spain.png',
+        Italian : '/static/flags/italy.png',
+        Russian : '/static/flags/russia.png'
       }
       return flag[country];
     },

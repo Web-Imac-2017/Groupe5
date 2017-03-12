@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="searchBar">
       <div class="input-group bar">
-        <input type="text" class="form-control" placeholder="Search a Plummate" v-model="search">
+        <input type="text" class="form-control" placeholder="Search a Plummate" v-model="search" id="searchUser">
         <span class="input-group-btn">
           <button v-on:click="searchUsers" class="btn btn-default" type="button">Go</button>
         </span>
@@ -29,30 +29,42 @@ export default {
   data() {
     return {
       search: '',
-      users: ''
+      users: []
     }
   },
   methods: {
     searchUsers: function () {
-      var _this = this;
-      fetch(apiRoot() + 'Controllers/User/researchUser.php', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
-          'Content-Type': 'application/json; charset=utf-8'
-        },
-        dataType: 'JSON',
-        body: JSON.stringify({searched : _this.search})
-      }).then(function(response) {
-        return response.json();
-      }).then(function(data){
-        if(data[0] == "Error"){
-          //Display error messages
-        }
-        else {
-          _this.users = data["users"];
-        }
-      });
+      this.users = [];
+      var formCorrect = 1;
+      var regexPseudo = new RegExp(/^([a-zA-Z0-9_-]){1,30}$/);
+
+      if(!regexPseudo.test(this.search)){
+        formCorrect = 0;
+        console.log("ERROR");
+      } else {
+      }
+
+      if(formCorrect != 0){
+        var _this = this;
+        fetch(apiRoot() + 'Controllers/User/researchUser.php', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+            'Content-Type': 'application/json; charset=utf-8'
+          },
+          dataType: 'JSON',
+          body: JSON.stringify({searched : _this.search})
+        }).then(function(response) {
+          return response.json();
+        }).then(function(data){
+          if(data[0] == "Error"){
+            //Display error messages
+          }
+          else {
+            _this.users = data["users"];
+          }
+        });
+      }
     }
   }
 }
