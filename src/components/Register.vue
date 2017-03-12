@@ -17,7 +17,7 @@
             <input type="file" name="file" id="file" v-on:click="loadingFile" class="inputfile" />
             <label class="filebutton" for="file" v-bind:style="{backgroundImage: 'url(../../static/img/import.png'}"></label>
             <br/>
-            <p class="filebuttontext">Import your avatar</p>
+            <p id="loading" class="filebuttontext">Import your avatar</p>
           </div>
           <div v-else>
             <img :src="user.avatar" />
@@ -349,16 +349,17 @@ export default {
     },
     loadingFile: function(event)
     {
-      var f = event.target.files[0];
-      if (f)
-      {
-        var r = new FileReader();
-        r.onload = function(e)
-        {
-          var str = "Name : " + f.name + "\nType : " + f.type + "\nSize : " + f.size/1000 + "Ko\n";
-        }
-        r.readAsText(f);
-      }
+      	var f = event.target.files[0];
+      	if (f)
+      	{
+        	var r = new FileReader();
+        	r.onload = function(e)
+        	{
+          		var str = "Name : " + f.name + "\nType : " + f.type + "\nSize : " + f.size/1000 + "Ko\n";
+        	}
+        	r.readAsText(f);
+      	}
+      	document.getElementById("loading").innerHTML = "File loaded successfully";
     },
     convertToHTML: function(){
       var text = this.user.description;
@@ -434,6 +435,8 @@ export default {
   text-align: center;
   position: absolute;
   color: black;
+  overflow-x: hidden;
+
   .wrapper
   {
     .bg
