@@ -53,7 +53,7 @@ echo '{
             "user" : "CoralieBurton",
             "date" : "23/05/2017",
             "id" : "4",
-            "content" : "Je suis une petit bulle toute mignonne"
+            "content" : "Je suis une petit bulle toute mignonne :) "
         },
         {
             "user" : "Maureen",

@@ -9,9 +9,8 @@
       </li>
     </ul>
     <textarea v-on:keyup.enter="sendMessage();" v-model="newMessage" :style="{background:$parent.$parent.getLightColor($parent.connectedUser.color)}"></textarea>
-      <input type="file" name="messageImage" id="messageImage">
-      <p v-on:click="sendImage()">Send Image</p>
-    </form>
+    <input type="file" name="messageImage" id="messageImage" v-on:click="sendImage()">
+    <label for="messageImage"><icon name="picture-o"></icon></label>
   </div>
 </template>
 
@@ -86,7 +85,7 @@ export default {
         if(this.messages[i].content.indexOf("PLUME_IMAGE_MESSAGE:") !== -1) {
 
           this.messages[i].content = this.messages[i].content.substr(20,this.messages[i].content.length-1);
-         
+
           var div = document.getElementById("Message" + this.messages[i].ID);
           if(div.children.length == 2) {
             var image = document.createElement('img');
@@ -95,7 +94,7 @@ export default {
             div.append(image);
           }
 
-          this.messages[i].content = "";     
+          this.messages[i].content = "";
         }
       }
     },
@@ -134,7 +133,7 @@ export default {
     },
     scrollBottomAuto: function(){
       var container = this.$el.querySelector("#messages");
-        container.scrollTop = container.scrollHeight;
+      container.scrollTop = container.scrollHeight;
     }
   }
 }
@@ -149,7 +148,7 @@ export default {
     padding: 0;
     overflow-x: hidden;
     overflow-y: auto;
-    height: calc(100vh - 90px);
+    height: calc(100vh - 140px);
   }
   textarea {
     outline: none;
@@ -165,6 +164,20 @@ export default {
     height: 60px;
     color: #000;
   }
+  input{
+    display: none;
+  }
+  label{
+    cursor: pointer;
+    position: absolute;
+    bottom: 6px;
+    left: 35px;
+    .fa-icon{
+      width: 30px;
+      height: 30px;
+    }
+  }
+
 
   .user_other, .user_me {
     list-style: none;
