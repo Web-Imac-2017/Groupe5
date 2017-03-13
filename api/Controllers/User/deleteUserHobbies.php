@@ -20,7 +20,7 @@
             $pseudo = $json['pseudo'];
         }
 
-	    if(isset($json['NomInteret']) && $json['NomInteret'] != '') { //A modifier avec le front !
+	    if(isset($json['NomInteret']) && $json['NomInteret'] != '') { 
 	    $nameHobby = $json['NomInteret'];
 	  }
 	  else $data = array("Error", "Error");

@@ -20,7 +20,7 @@
             $pseudo = $json['pseudo'];
         }
 
-	    if(isset($json['age']) && $json['age'] != '') { /*A voir avec le front*/
+	    if(isset($json['age']) && $json['age'] != '') {
 	    	$userAge = $json['age'];
 	  	}
 	  	else $data = array("Error", "Error");
