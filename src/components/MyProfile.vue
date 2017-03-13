@@ -69,9 +69,8 @@
 				<div :class="user.color"></div>
 				<div v-if="editing == 'true'" class="changeField" v-on:click="changeColor()">
 					<icon name="pencil"></icon>
-
 					<div class="form-group">
-						<div v-if="changeUserColor == 'true'" v-for="color in colors">
+						<div id="colors" v-if="changeUserColor == 'true'" v-for="color in colors">
 							<input class="form-check-input" type="radio" :id="color.name" :value="color.normal" name="color" v-model="user.color">
 							<label class="form-check-label" :for="color.name" :class="color.name">{{color.name}}</label>
 						</div>
