@@ -48,6 +48,7 @@ export default {
       var _this = this;
       setTimeout(function() {
         _this.getImages();
+        _this.getSmiley();
       }, 1000);
     },
     getUser: function(user) {
@@ -130,6 +131,35 @@ export default {
       this.$http.post(apiRoot() + 'Controllers/Image/uploadImageMessage.php', oData);
       this.init();
 
+    },
+    getSmiley : function() {
+      for(var i = 0; i < this.messages.length; i ++) {
+        if(this.messages[i].content.indexOf(":)") !== -1) {
+          var pos = this.messages[i].content.indexOf(":)");
+
+          //create image smiley happy
+          var image = document.createElement('img');
+          image.src = "/static/smileys/happy.svg";
+console.log(image);
+          //Delete smiley characters
+          this.messages[i].content = this.messages[i].content.replace(":)", "");
+
+          //and replace with smiley image
+          var div = document.getElementById("Message" + this.messages[i].ID);
+          // div.append(image);
+
+          this.messages[i].content = this.messages[i].content.slice(0, pos) + image + this.messages[i].content.slice(pos);
+
+          // if(div.children.length == 2) {
+          //   var image = document.createElement('img');
+          //   image.src = this.messages[i].content;
+          //
+          //   div.append(image);
+          // }
+          //
+          // this.messages[i].content = "";
+        }
+      }
     },
     scrollBottomAuto: function(){
       var container = this.$el.querySelector("#messages");

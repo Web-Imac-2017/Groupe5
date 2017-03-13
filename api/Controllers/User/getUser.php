@@ -12,7 +12,7 @@ if($pseudo == "maureeniz") {
   echo '
   {
     "pseudo": "maureeniz",
-    "avatar": "maureeniz.jpg",
+    "avatar": "/static/avatar/maureeniz.jpg",
     "firstname": "Maureen",
     "lastname": "Roche",
     "age": "21",

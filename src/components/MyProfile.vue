@@ -33,7 +33,7 @@
 
                 <div class="col-sm-12" id="clickToEdit">
                   <p v-if="editing == 'false'" v-on:click="editProfile()">click to edit</p>
-                </div>   
+                </div>
               </div>
             </div>
           </div>
@@ -45,7 +45,7 @@
           <p>Your color scheme</p>
             <div :class="user.color"></div>
             <div v-if="editing == 'true'" class="changeField" v-on:click="changeColor()">
-              <div class="form-group">  
+              <div class="form-group">
                 <div v-if="changeUserColor == 'true'" v-for="color in colors">
                   <input class="form-check-input" type="radio" :id="color.name" :value="color.normal" name="color" v-model="user.color">
                   <label class="form-check-label" :for="color.name" :class="color.name">{{color.name}}</label>
@@ -123,7 +123,7 @@ export default {
     this.getColors();
 
   	this.user = this.$parent.connectedUser;
-  }, 
+  },
   methods: {
   	editProfile: function() {
   		this.editing = "true";
@@ -159,7 +159,7 @@ export default {
   	},
   	getLanguages: function() {
     	var _this = this;
-            
+
       fetch(apiRoot() + 'Controllers/General/getAllLanguages.php', {
         method: 'POST',
         headers: {
@@ -180,7 +180,7 @@ export default {
     },
     getHobbies: function() {
     	var _this = this;
-            
+
       fetch(apiRoot() + 'Controllers/General/getAllHobbies.php', {
         method: 'POST',
         headers: {
@@ -201,7 +201,7 @@ export default {
     },
     getCountries: function() {
     	var _this = this;
-            
+
       fetch(apiRoot() + 'Controllers/General/getAllCountries.php', {
         method: 'POST',
         headers: {
@@ -222,7 +222,7 @@ export default {
     },
     getColors: function() {
     	var _this = this;
-            
+
       fetch(apiRoot() + 'Controllers/General/getAllColors.php', {
         method: 'POST',
         headers: {
@@ -255,7 +255,7 @@ export default {
     },
     updateFirstname: function() {
     	var _this = this;
-                
+
       fetch(apiRoot() + 'Controllers/User/updateUserFirstname.php', {
         method: 'POST',
         headers: {
@@ -277,7 +277,7 @@ export default {
     },
     updateLastname: function() {
     	var _this = this;
-                
+
       fetch(apiRoot() + 'Controllers/User/updateUserLastname.php', {
         method: 'POST',
         headers: {
@@ -299,7 +299,7 @@ export default {
     },
     updateCity: function() {
     	var _this = this;
-                
+
       fetch(apiRoot() + 'Controllers/User/updateUserCity.php', {
         method: 'POST',
         headers: {
@@ -321,7 +321,7 @@ export default {
     },
     updateCountry: function() {
       var _this = this;
-                
+
       fetch(apiRoot() + 'Controllers/User/updateUserCountry.php', {
         method: 'POST',
         headers: {
@@ -343,7 +343,7 @@ export default {
     },
     updateColor: function() {
     	var _this = this;
-                
+
       fetch(apiRoot() + 'Controllers/User/updateUserColor.php', {
         method: 'POST',
         headers: {
@@ -365,7 +365,7 @@ export default {
     },
     updateHobbies: function() {
     	var _this = this;
-                
+
       fetch(apiRoot() + 'Controllers/User/setUserHobbies.php', {
         method: 'POST',
         headers: {
@@ -387,7 +387,7 @@ export default {
     },
     updateLanguages: function() {
     	var _this = this;
-                
+
       fetch(apiRoot() + 'Controllers/User/setUserLang.php', {
         method: 'POST',
         headers: {

@@ -65,9 +65,10 @@ export default {
   },
   created: function(){
     this.profilShowed = "false";
-    var pseudo = this.getCookie("PLUME_pseudo");
+    // var pseudo = this.getCookie("PLUME_pseudo");
+    var pseudo = "maureeniz";
     if(pseudo != "") {
-      this.getUserState(pseudo);
+      // this.getUserState(pseudo);
       this.setConnectedUser(pseudo);
     }
   },
@@ -347,34 +348,7 @@ export default {
       else {
         return "fff";
       }
-      // var colors = [
-      //   {
-      //     normal : "#6A91C9",
-      //     light : "#D0DBF3"
-      //   },
-      //   {
-      //     normal : "#BA232A",
-      //     light : "#E19296"
-      //   },
-      //   {
-      //     normal : "#3AAB3C",
-      //     light : "#ABFF97"
-      //   }
-      // ];
-      // //Boucle pas bien : a changer
-      // for (var coloree in colors) {
-      //   if (color == colors[coloree].normal) {
-      //     return colors[coloree].light;
-      //   }else {
-      //     return "erreurboya";
-      //   }
-      // }
     },
-    created: function(){
-      this.profilShowed = "false";
-      this.getUserState(this.getCookie("PLUME_pseudo"));
-      this.setConnectedUser(this.getCookie("PLUME_pseudo"));
-    }
   }
 }
 </script>
