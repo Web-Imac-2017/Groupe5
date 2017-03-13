@@ -1,6 +1,6 @@
 <?php
 	define("HOST", "localhost");
 	define("USER", "root");
-	define("PSWD", "");
+	define("PSWD", "root");
 	define("BDD", "plume");
 ?>
