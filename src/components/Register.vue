@@ -222,7 +222,6 @@ export default {
         document.getElementById("error_Mail").style.display = 'none';
         document.getElementById("error_Psw").style.display = 'none';
         document.getElementById("error_Psw2").style.display = 'none';
-        document.getElementById("error_Country").style.display = 'none';
 
         //tansform special caracters to html code
         this.convertToHTML();
@@ -244,14 +243,22 @@ export default {
             console.log(data[1]);
           }
           else {
+            _this.sendAvatar();
             _this.$parent.setCookie("PLUME_pseudo", _this.user.pseudo, 10);
             _this.$parent.setUserState(_this.user.pseudo, "true");
             _this.$parent.setConnectedUser(_this.$parent.getCookie("PLUME_pseudo"));
-            console.log(_this.$parent.connectedUser);
-            _this.$router.push('/home/');
+            _this.$router.push('/messages/');
           }
         });
       }
+    },
+    sendAvatar : function() {
+      var form = document.querySelector('#file');
+      var file = form.files[0];
+      var oData = new FormData();
+      var im = oData.append("avatar", file);
+      var pseudo = oData.append("pseudo", this.user.pseudo);
+      this.$http.post(apiRoot() + 'Controllers/Image/uploadAvatar.php', oData);
     },
     getLanguages: function() {
       var _this = this;

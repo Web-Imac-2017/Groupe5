@@ -67,7 +67,6 @@
             else{
                 $data = array("Error", "The pseudo contains special characters or some accent");
             }
->>>>>>> a75e8bcdaa05a40c0787f6e575040a4ca841759a
         }
         
 	}
