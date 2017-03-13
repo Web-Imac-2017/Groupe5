@@ -40,11 +40,6 @@ class UserModel {
 
                 $result = array($idUser['ID'], $pseudo);
 
-                /*ob_start();
-                setcookie("PLUME_pseudo", $pseudo);
-                ob_end_flush();
-
-                print_r($_COOKIE['PLUME_pseudo']);*/
             }
             else {
                 $result = array("Error", "Error: the password isn't correct.");
@@ -72,8 +67,6 @@ class UserModel {
     }
 
     public static function deleteUserSession() {
-        //session_unset();
-        //session_destroy();
         unset($_COOKIE['PLUME_pseudo']);
     }
 
@@ -267,8 +260,7 @@ class UserModel {
 
     /* Recherche/filtre pour match */
     public static function filterResearch($filterData){ /* tableau json contenant les filtres choisis par le user */
-    	/* Tableau de la forme [ageMin,ageMax,sexe]
-        La fonction filtrant les hobbies et langues est faite par Adrian */
+    	/* Tableau de la forme [ageMin,ageMax,sexe] */
     	$bdd = Database::connexionBDD();
     	$filterResults = $bdd->prepare('SELECT pseudo FROM user WHERE age >= "'.$filterData['ageMin'].'" AND age <= "'.$filterData['ageMax'].'" AND sexe ="'.$filterData['sexe'].'"');
     	$filterResults->execute();
@@ -416,8 +408,6 @@ class UserModel {
             $arrayPrep[":maxAge"] = $maxAge;
         }
 
-        //var_dump($requete);
-        //var_dump($arrayPrep);
 
         //Prise en compte du ou des sexes transmis lors de la demande de match
         if(isset($sex)){ //Si aucun sexe n'est transmis alors les utilisateurs de tous les sexes seront pris en compte
@@ -435,9 +425,6 @@ class UserModel {
                 $requete .= ") ";
             }
         }
-
-        //var_dump($requete);
-        //var_dump($arrayPrep);
 
         $idCentreInteret = UserModel::getUserCentreInteret($pseudo);
         $imaxCentreInteret = count($idCentreInteret['hobbies']);
@@ -752,9 +739,6 @@ class UserModel {
         /* Recuperer les id des hobbies du user */
         $req_active = $bdd->prepare('SELECT id_interet FROM user_centre_interet WHERE id_user = '.$user_id);
         $req_active->execute();
-        
-        /*$result = $req_active->fetch(PDO::FETCH_ASSOC);*/
-        /*$id_hobbies = array($result['id_interet']);*/
         
         /* Renvoyer les noms des hobbies du user */
         while($result = $req_active->fetch(PDO::FETCH_ASSOC)){
