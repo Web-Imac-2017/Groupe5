@@ -2,7 +2,7 @@
   <div class="conversation">
     <ul id="messages">
       <li v-for="message in messages" :class=getUser(message.user)>
-        <div class="messageContent" :style="{background:$parent.connectedUser.color}" v-bind:id="'Message' + message.ID">
+        <div class="messageContent" :style="{background:getBackground(message.user)}" v-bind:id="'Message' + message.ID">
           <span>{{ "["+message.date+"]" }}</span>
           <p>{{ message.content }}</p>
         </div>
@@ -53,10 +53,20 @@ export default {
     },
     getUser: function(user) {
       var theClass = 'user_other';
+      console.log(this.me.pseudo);
+
       if(user == this.me.pseudo){
         theClass = 'user_me';
       }
       return theClass;
+    },
+    getBackground(user){
+      if(user == this.me.pseudo){
+        return this.$parent.connectedUser.color;
+      }
+      else{
+        return '#cdcccc';
+      }
     },
     getConversation: function() {
       var _this = this;

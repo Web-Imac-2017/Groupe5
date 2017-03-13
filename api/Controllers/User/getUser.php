@@ -19,7 +19,7 @@ if($pseudo == "maureeniz") {
     "country": "France",
     "city": "bordeaux",
     "description": "Hi :D. If you\'re looking for a funny french girl to talk to, here I stand !",
-    "hobbies" : ["travel", "music", "cinema", "science","arts"],
+    "hobbies" : ["Travel", "Music", "Cinema", "Sciences","Arts"],
     "languages" : {
       "spokenLang" : ["french", "english"],
       "learningLang" : ["spanish", "chinese", "german"]

@@ -20,7 +20,7 @@ echo '{
             "content" : "Jai une grand nouvelle à tannoncer : Nullam ultrices, eros vitae vulputate congue, arcu ex posuere lacus, ac viverra odio lectus scelerisque urna. Proin pellentesque mi ante, a cursus est eleifend vel. Sed bibendum, felis et blandit bibendum, urna nisl tempus enim, at maximus neque justo quis dolor. Fusce vel quam eu leo gravida tristique. Maecenas eget dapibus leo"
         },
         {
-            "user" : "Maureen",
+            "user" : "maureeniz",
             "date" : "23/05/2017",
             "id" : "3",
             "content" : " Quisque iaculis diam vel risus euismod tincidunt. Sed rutrum lectus eleifend nibh malesuada venenatis. Vestibulum vitae augue tincidunt, consequat metus in, sagittis ex. Aliquam erat volutpat. Nam tempus leo id iaculis sagittis."
@@ -38,7 +38,7 @@ echo '{
             "content" : "Je suis une petit bulle toute mignonne"
         },
         {
-            "user" : "Maureen",
+            "user" : "maureeniz",
             "date" : "23/05/2017",
             "id" : "5",
             "content" : "Fusce iaculis iaculis massa sed iaculis. Nullam lobortis maximus nisi vel auctor. Nunc vestibulum pretium urna id commodo. Donec aliquam consequat nisl, ut lobortis mi sodales vitae. Nam urna metus, pulvinar sit amet felis vel."
@@ -56,7 +56,7 @@ echo '{
             "content" : "Je suis une petit bulle toute mignonne :) tadddaa"
         },
         {
-            "user" : "Maureen",
+            "user" : "maureeniz",
             "date" : "23/05/2017",
             "id" : "5",
             "content" : "Fusce iaculis iaculis massa sed iaculis. Nullam lobortis maximus nisi vel auctor. Nunc vestibulum pretium urna id commodo. Donec aliquam consequat nisl, ut lobortis mi sodales vitae. Nam urna metus, pulvinar sit amet felis vel."
@@ -64,7 +64,7 @@ echo '{
     ],
     "users" : [
         {
-            "pseudo" : "Maureen"
+            "pseudo" : "maureeniz"
         }
     ],
     "id" : "3"
