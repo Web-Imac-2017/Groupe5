@@ -34,7 +34,6 @@ class ConversationModel{
         for($i=0; $i < count($result); $i++){
             $num_id = intval($result[$i]['id_user']);
             $result[$i]['user'] = UserModel::getPseudoById($num_id);
-            print_r($result);
             
             /*Décryptage des messages*/
             //$result[$i]['content'] = ConversationModel::decryptMessage($result[$i]['user'], $result[$i]['content']);

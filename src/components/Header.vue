@@ -1,14 +1,11 @@
 <template>
     <div class="header">
-        
+
         <router-link v-bind:to="'/home/'"><img v-bind:src="'/static/img/logo.png'" class="headerlogo"></router-link>
         <a class="item" v-on:click.prevent="$parent.logout">Sign out</a>
         <router-link class="item" v-bind:to="'/messages/'">Messages</router-link>
-       
         <router-link class="item" v-bind:to="'/myProfile/'">Profile</router-link>
         <router-link class="item" v-if="$parent.connected === ''" v-bind:to="'/match/'">Match</router-link>
-
-        <search-bar-component></search-bar-component>
 
     </div>
 </template>
@@ -29,8 +26,9 @@ import SearchBarComponent from './SearchBarCPN.vue';
     {
         height: 50px;
         width: 100%;
-        position: relative;
-        top: 0;
+        // position: absolute;
+        // z-index: 1;
+        // top: 0;
         background: #fff;
         box-shadow: 0px 3px 15px rgba(0, 0, 0, .4);
 

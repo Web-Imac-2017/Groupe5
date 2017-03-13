@@ -37,7 +37,7 @@
             if($image_infos[0] > 0 && $image_infos[1] > 0 && !empty($tab[1]) && $verif_format) {
 
                 // Traitement de l'image :
-                echo "Le type de l'image est ".$tab[1];
+                //echo "Le type de l'image est ".$tab[1];
                 $createImage = 'imagecreatefrom'.$tab[1];
                 $copy = $createImage($_FILES['avatar']['tmp_name']);
 

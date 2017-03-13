@@ -1,14 +1,12 @@
 <template lang="html">
   <div class="searchBar">
-    <div class="col-md-4">
-      <div class="input-group">
+      <div class="input-group bar">
         <input type="text" class="form-control" placeholder="Search a Plummate" v-model="search" id="searchUser">
         <span class="input-group-btn">
           <button v-on:click="searchUsers" class="btn btn-default" type="button">Go</button>
         </span>
       </div>
-    </div>
-    <div class="col-md-12">
+    <div class="col-md-12 result" :style="{display: none}">
       <div v-for="user in users" class="col-md-4">
         <h1>{{user.pseudo}}</h1>
         <h2>Spoken languages</h2>
@@ -104,4 +102,9 @@ export default {
 </script>
 
 <style lang="scss">
+  .searchBar{
+    .bar{
+      width: 300px;
+    }
+  }
 </style>

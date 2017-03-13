@@ -28,18 +28,18 @@
 	      if($level == 1) {
 	      	$oldLanguages = UserModel::getUserLangueAApprendre($pseudo);
 	      	foreach ($oldLanguages['learningLang'] as $key => $language) {
-					  UserModel::deleteUserLang($pseudo, $language);
+					  UserModel::deleteUserLang($pseudo, $language['name_langue']);
 					}
 	      }
 	      else {
 	      	$oldLanguages = UserModel::getUserLangueMaitrisee($pseudo);
 	      	foreach ($oldLanguages['spokenLang'] as $key => $language) {
-					  UserModel::deleteUserLang($pseudo, $language);
+					  UserModel::deleteUserLang($pseudo, $language['name_langue']);
 					}
 	      }
 	     	
 
-				if(isset($json['languages']) && $json['languages'] != '') { //A modifier avec le front !
+				if(isset($json['languages']) && $json['languages'] != '') {
 			    $newLanguages = $json['languages'];
 			    foreach ($newLanguages as $key => $language) {
 			    	UserModel::setUserLang($pseudo, $language, $level);

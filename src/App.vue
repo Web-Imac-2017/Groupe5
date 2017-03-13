@@ -2,7 +2,7 @@
   <div id="app">
     <notifications v-if="connected === 'true'"></notifications>
     <header-component v-if="connected === 'true'"></header-component>
-    <router-view keep-alive></router-view>
+      <router-view keep-alive></router-view>
     <profil-component v-if="profilShowed === 'true'"></profil-component>
     <footer-component></footer-component>
   </div>
@@ -38,8 +38,8 @@ export default {
         city: '',
         hobbies: '',
         languages: {
-          spokenLang: '',
-          learningLang: ''
+          spokenLang: [],
+          learningLang: []
         }
       },
       profilShowed: '',
@@ -52,12 +52,12 @@ export default {
         age: '',
         country: '',
         description: '',
-        color: '#3AAB3C',
+        color: '',
         city: '',
         hobbies: '',
         languages: {
-          spokenLang: '',
-          learningLang: ''
+          spokenLang: [],
+          learningLang: []
         }
       },
       notifications : []
@@ -154,10 +154,14 @@ export default {
           _this.selectedUser.description = data['description'];
           _this.selectedUser.color = data['color'];
           _this.selectedUser.hobbies = data['hobbies'];
-          _this.selectedUser.languages.learningLang = data['languages']['learningLang']['learningLang'];  
-          _this.selectedUser.languages.spokenLang = data['languages']['spokenLang']['spokenLang'];  
+          for(var i = 0; i < data['languages']['learningLang']['learningLang'].length; i ++) {
+            _this.selectedUser.languages.learningLang.push(data['languages']['learningLang']['learningLang'][i]['name_langue']);
+          }
+          for(var i = 0; i < data['languages']['spokenLang']['spokenLang'].length; i ++) {
+            _this.selectedUser.languages.spokenLang.push(data['languages']['spokenLang']['spokenLang'][i]['name_langue']);
+          }
         }
-        
+
       });
     },
     languagesToFlag: function(country) {
@@ -220,7 +224,7 @@ export default {
       }).then(function(data){
         if(data[0] == "Error") {
           console.log(data[1]);
-        } 
+        }
         else {
           _this.connectedUser.pseudo = data['pseudo'];
           _this.connectedUser.avatar = data['avatar'];
@@ -232,10 +236,14 @@ export default {
           _this.connectedUser.description = data['description'];
           _this.connectedUser.color = data['color'];
           _this.connectedUser.hobbies = data['hobbies'];
-          _this.connectedUser.languages.spokenLang = data['languages']['spokenLang']['spokenLang'];
-          _this.connectedUser.languages.learningLang = data['languages']['learningLang']['learningLang'];  
+          for(var i = 0; i < data['languages']['learningLang']['learningLang'].length; i ++) {
+            _this.connectedUser.languages.learningLang.push(data['languages']['learningLang']['learningLang'][i]['name_langue']);
+          }
+          for(var i = 0; i < data['languages']['spokenLang']['spokenLang'].length; i ++) {
+            _this.connectedUser.languages.spokenLang.push(data['languages']['spokenLang']['spokenLang'][i]['name_langue']);
+          }
         }
-        
+
       });
     },
     getNotifications : function(pseudo) {
@@ -255,7 +263,6 @@ export default {
           console.log(data[1]);
         }
         else {
-          //console.log(data);
           _this.notifications = data;
         }
       });
@@ -347,34 +354,7 @@ export default {
       else {
         return "fff";
       }
-      // var colors = [
-      //   {
-      //     normal : "#6A91C9",
-      //     light : "#D0DBF3"
-      //   },
-      //   {
-      //     normal : "#BA232A",
-      //     light : "#E19296"
-      //   },
-      //   {
-      //     normal : "#3AAB3C",
-      //     light : "#ABFF97"
-      //   }
-      // ];
-      // //Boucle pas bien : a changer
-      // for (var coloree in colors) {
-      //   if (color == colors[coloree].normal) {
-      //     return colors[coloree].light;
-      //   }else {
-      //     return "erreurboya";
-      //   }
-      // }
     },
-    created: function(){
-      this.profilShowed = "false";
-      this.getUserState(this.getCookie("PLUME_pseudo"));
-      this.setConnectedUser(this.getCookie("PLUME_pseudo"));
-    }
   }
 }
 </script>
@@ -382,5 +362,4 @@ export default {
   <style lang="scss">
   @import 'assets/scss/reset.css';
   @import 'assets/scss/design.scss';
-
   </style>
