@@ -825,6 +825,37 @@ class UserModel {
 
         return $data;
     }
+
+    public static function getIdLangueNavigator(){
+        $lang = 'en';
+        $id_lang = 1;
+        $temp_lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'],0,2);
+     
+      if(isset($_COOKIE['lang'])&&($_COOKIE['lang'] == $temp_lang)) {
+        $lang = $_COOKIE['lang'];
+      }
+      else {
+        // si aucune langue n'est déclarée on tente de reconnaitre la langue par défaut du navigateur
+        
+        $bdd = Database::connexionBDD();
+        $req_active = $bdd->prepare('SELECT ID FROM langue WHERE abrev_langue =:lang');
+        $req_active->bindParam(':lang', $temp_lang, PDO::PARAM_STR);
+        $req_active->execute();
+        $result = $req_active->fetchAll(PDO::FETCH_ASSOC);
+
+        if (isset($result[0])){
+          $id_lang = $result[0]['ID'];
+        }
+        else {
+          $lang = "en";
+          $id_lang = 1;
+        }
+        setcookie('lang', $lang, time() + 360);  
+      }
+
+      return $id_lang;
+    }
+
 }
 
 ?>
