@@ -34,9 +34,10 @@ class ConversationModel{
         for($i=0; $i < count($result); $i++){
             $num_id = intval($result[$i]['id_user']);
             $result[$i]['user'] = UserModel::getPseudoById($num_id);
+            print_r($result);
             
             /*Décryptage des messages*/
-            $result[$i]['content'] = ConversationModel::decryptMessage($result[$i]['user'], $result[$i]['content']);
+            //$result[$i]['content'] = ConversationModel::decryptMessage($result[$i]['user'], $result[$i]['content']);
         }
        
         return $result;
@@ -74,7 +75,7 @@ class ConversationModel{
         
         /*Décryptage des messages*/
         $pseudo = UserModel::getPseudoById($result['id_user']);
-        $result['contenu'] = ConversationModel::decryptMessage($pseudo, $result['contenu']);
+        //$result['contenu'] = ConversationModel::decryptMessage($pseudo, $result['contenu']);
         
         return $result['contenu'];
     }
@@ -147,7 +148,6 @@ class ConversationModel{
     }
     
     public static function decryptMessage($pseudo, $crypted){
-        
         $key = file_get_contents('../../Security/key/'.$pseudo.'.txt');
         openssl_private_decrypt($crypted, $decrypted, $key);
         

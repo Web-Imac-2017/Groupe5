@@ -3,7 +3,7 @@
         
         <router-link v-bind:to="'/home/'"><img v-bind:src="'/static/img/logo.png'" class="headerlogo"></router-link>
         <a class="item" v-on:click.prevent="$parent.logout">Sign out</a>
-        <router-link class="item" v-bind:to="'/home/'">Messages</router-link>
+        <router-link class="item" v-bind:to="'/messages/'">Messages</router-link>
        
         <router-link class="item" v-bind:to="'/myProfile/'">Profile</router-link>
         <router-link class="item" v-if="$parent.connected === ''" v-bind:to="'/match/'">Match</router-link>

@@ -224,7 +224,7 @@ export default {
         document.getElementById("error_Country").style.display = 'none';
 
         //tansform special caracters to html code
-        this.convertToHTML(user.description);
+        this.convertToHTML();
 
         var _this = this;
 
@@ -361,7 +361,7 @@ export default {
       }
     },
     convertToHTML: function(){
-      var text = this.user.description
+      var text = this.user.description;
       String.prototype.convertionHTML = function(){
         return this.replace(/[\']/g,"&apos;")
         .replace(/[ ]/g,"&nbsp;")

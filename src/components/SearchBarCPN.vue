@@ -43,10 +43,11 @@ export default {
       if(!regexPseudo.test(this.search)){
         formCorrect = 0;
         console.log("ERROR");
-      } else {
-      }
+      }       
 
       if(formCorrect != 0){
+        this.convertSearchToHTML();
+
         var _this = this;
         fetch(apiRoot() + 'Controllers/User/researchUser.php', {
           method: 'POST',
@@ -67,6 +68,36 @@ export default {
           }
         });
       }
+    },
+    convertSearchToHTML: function(){
+      var text = this.search;
+      String.prototype.convertionHTML = function(){
+        return this.replace(/[\']/g,"&apos;")
+        .replace(/[ ]/g,"&nbsp;")
+        .replace(/[\"]/g,"&quot;")
+        .replace(/[\«]/g,"&laquot;")
+        .replace(/[\»]/g,"&raquot;")
+        .replace(/[\']/g,"&apos;")
+        .replace(/[\‹]/g,"&lsaquot;")
+        .replace(/[\›]/g,"&rsaquot;")
+        .replace(/[\...]/g,"&hellip;")
+        .replace(/[\¡]/g,"&iexcl;")
+        .replace(/[\¿]/g,"&iquest;")
+        .replace(/[\ˆ]/g,"&circ;")
+        .replace(/[\&]/g,"&amp;")
+        .replace(/[\€]/g,"&euro;")
+        .replace(/[\¢]/g,"&cent;")
+        .replace(/[\£]/g,"&pound;")
+        .replace(/[\¥]/g,"&fnof;")
+        .replace(/[\<]/g,"&lt;")
+        .replace(/[\>]/g,"&gt;")
+        .replace(/[\−]/g,"&minus;")
+        .replace(/[\×]/g,"&times;")
+        .replace(/[\÷]/g,"&divide;")
+        .replace(/[\,]/g,"&sbquo;");
+      }
+      var newSearch = text.convertionHTML();
+      this.search = newSearch;
     }
   }
 }
