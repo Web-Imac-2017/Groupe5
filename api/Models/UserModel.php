@@ -855,6 +855,7 @@ class UserModel {
         return $data;
     }
 
+    //Récupère les langues du navigateur de l'utilisateur et, si le cookie n'est pas déjà fixé, fais les tests pour fixer une langue prise en charge ou alors fixe à l'anglais
     public static function getIdLangueUserAgent(){
         $lang = 'en';
         $id_lang = 1;
@@ -864,7 +865,7 @@ class UserModel {
         $lang = $_COOKIE['lang'];
       }
       else {
-        // si aucune langue n'est déclarée on tente de reconnaitre la langue par défaut du navigateur
+        // si aucune langue n'est pas déclarée en coockie on tente de reconnaitre la langue par défaut du navigateur
         
         $bdd = Database::connexionBDD();
         $req_active = $bdd->prepare('SELECT ID FROM langue WHERE abrev_langue =:lang');
@@ -872,10 +873,10 @@ class UserModel {
         $req_active->execute();
         $result = $req_active->fetchAll(PDO::FETCH_ASSOC);
 
-        if (isset($result[0])){
+        if (isset($result[0])){ //si elle est reconnue en BDD alors on récupère l'ID de la langue
           $id_lang = $result[0]['ID'];
         }
-        else {
+        else { //sinon on fixe la langue par défaut à l'anglais
           $lang = "en";
           $id_lang = 1;
         }
