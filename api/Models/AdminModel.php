@@ -19,16 +19,19 @@ class AdminModel{
     public static function approvePicture($pseudo){
         $bdd = Database::connexionBDD();
         
-        $req_get = $bdd->prepare('UPDATE user SET avatar_state = 1 WHERE pseudo ="'.$pseudo.'"');
+        $req_get = $bdd->prepare('UPDATE user SET avatar_state = 1 WHERE pseudo = :pseudo');
+        $req_get->bindParam(':pseudo', $pseudo, PDO::PARAM_STR, 60);
         $req_get->execute();  
     }
 
     public static function refusePicture($pseudo){
         $bdd = Database::connexionBDD();
         
-        $req_get = $bdd->prepare('UPDATE user SET avatar = "" WHERE pseudo = "'.$pseudo.'"');
+        $req_get = $bdd->prepare('UPDATE user SET avatar = "" WHERE pseudo = :pseudo.');
+        $req_get->bindParam(':pseudo', $pseudo, PDO::PARAM_STR, 60);
         $req_get->execute();
-        $req_get = $bdd->prepare('UPDATE user SET avatar_state = "2" WHERE pseudo = "'.$pseudo.'"');
+        $req_get = $bdd->prepare('UPDATE user SET avatar_state = "2" WHERE pseudo = :pseudo.');
+        $req_get->bindParam(':pseudo', $pseudo, PDO::PARAM_STR, 60);
         $req_get->execute();
     }
 }

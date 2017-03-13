@@ -34,7 +34,6 @@
     else $data = array("Error", "Error: pseudo or role not defined");
 	 }
 	 else $data = array("Error", "Error: POST.");
+
   echo json_encode($data);
-
-
 ?>

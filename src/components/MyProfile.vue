@@ -142,20 +142,23 @@ export default {
 		}
 	},
 	created: function() {
-		this.editing = "false";
-		this.addSpokenLanguage = "false";
-		this.addLearningLanguage = "false";
-		this.changeUserColor = "false";
-		this.addHobby = "false";
-		this.addAvatar = "false";
-		this.getLanguages();
-		this.getHobbies();
-		this.getCountries();
-		this.getColors();
-
-		this.user = this.$parent.connectedUser;
+		this.init();
 	},
 	methods: {
+		init: function() {
+			this.editing = "false";
+			this.addSpokenLanguage = "false";
+			this.addLearningLanguage = "false";
+			this.changeUserColor = "false";
+			this.addHobby = "false";
+			this.addAvatar = "false";
+			this.getLanguages();
+			this.getHobbies();
+			this.getCountries();
+			this.getColors();
+
+			this.user = this.$parent.connectedUser;
+		},
 		editProfile: function() {
 			this.editing = "true";
 		},
@@ -186,6 +189,10 @@ export default {
 				this.updateLanguages();
 				this.updateCountry();
 				if(this.addAvatar == 'true') this.updateAvatar();
+
+				this.init();
+
+				location.reload();
 			}
 		},
 		getLanguages: function() {

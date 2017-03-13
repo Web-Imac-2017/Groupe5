@@ -8,7 +8,6 @@
 
 	include "../../Models/ImageModel.php";
 
-    //$json = json_decode(file_get_contents('php://input'), true);
     $pseudo = $_POST['pseudo'];
     $date = date("Y-m-d-h-i-s");
     $result = array();
@@ -31,12 +30,9 @@
             $image_infos = getimagesize($_FILES['avatar']['tmp_name']);
             $verif_format = preg_match($avatarExp, $image_infos['mime'], $tab);
 
-            echo $_FILES['avatar']['tmp_name'];
-
             if($image_infos[0] > 0 && $image_infos[1] > 0 && !empty($tab[1]) && $verif_format) {
 
                 // Traitement de l'image :
-                //echo "Le type de l'image est ".$tab[1];
                 $createImage = 'imagecreatefrom'.$tab[1];
                 $copy = $createImage($_FILES['avatar']['tmp_name']);
 
@@ -54,7 +50,7 @@
                 $newImage = imagecreatetruecolor($width, $height);
                 imagecopyresampled($newImage, $copy, 0, 0, 0, 0, $width, $height, $image_infos[0], $image_infos[1]);
                 //Déplace l'image dans le repertoire 
-                imagepng($newImage, "C:/wamp/www/WebS4/PLUME/static/avatar/".$pseudo.".png");
+                imagepng($newImage,ROOT."static/avatar/".$pseudo.".png");
                 $result = ImageModel::uploadAvatar("/static/avatar/".$pseudo.".png", $pseudo);
             }
             else {

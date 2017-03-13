@@ -9,6 +9,16 @@
 
     require_once "Crypt/RSA.php";
 
+    //Caractères non-ASCII autorisés dans un nom de domaine .eu :
+    $nonASCII='ďđēĕėęěĝğġģĥħĩīĭįıĵķĺļľŀłńņňŉŋōŏőoeŕŗřśŝsťŧ';
+    $nonASCII.='ďđēĕėęěĝğġģĥħĩīĭįıĵķĺļľŀłńņňŉŋōŏőoeŕŗřśŝsťŧ';
+    $nonASCII.='ũūŭůűųŵŷźżztșțΐάέήίΰαβγδεζηθικλμνξοπρςστυφ';
+    $nonASCII.='χψωϊϋόύώабвгдежзийклмнопрстуфхцчшщъыьэюяt';
+    $nonASCII.='ἀἁἂἃἄἅἆἇἐἑἒἓἔἕἠἡἢἣἤἥἦἧἰἱἲἳἴἵἶἷὀὁὂὃὄὅὐὑὒὓὔ';
+    $nonASCII.='ὕὖὗὠὡὢὣὤὥὦὧὰάὲέὴήὶίὸόὺύὼώᾀᾁᾂᾃᾄᾅᾆᾇᾐᾑᾒᾓᾔᾕᾖᾗ';
+    $nonASCII.='ᾠᾡᾢᾣᾤᾥᾦᾧᾰᾱᾲᾳᾴᾶᾷῂῃῄῆῇῐῑῒΐῖῗῠῡῢΰῤῥῦῧῲῳῴῶῷ';
+    
+    $syntaxe="#^[[:alnum:][:punct:]]{1,64}@[[:alnum:]-.$nonASCII]{2,253}\.[[:alpha:].]{2,6}$#";
     $pattern = "#^[a-z0-9]+$#i";
 
     $lastname = "";
@@ -41,7 +51,7 @@
             $email = $json['email'];
             $password = $json['password'];
             $avatar = $json['avatar'];
-            $age = $json['age'];
+            $age = intval($json['age']);
             $sex = $json['sex'];
             $city = $json['city'];
             $color = $json['color'];
@@ -55,14 +65,24 @@
             $arr_languesLearning = $json['languages']['learningLang'];
             
             if(preg_match($pattern , $pseudo)){
-                $data = UserModel::setUserProfil($lastname, $firstname, $pseudo, $email, $password, $avatar, $age, $sex, $city, $color, $date_inscription, $last_connection, $description, $country, $id_etat_activ, $arr_hobbies, $arr_languesSpoken, $arr_languesLearning);
+                if (is_numeric($age)){
+                    if(preg_match($syntaxe,$userMail)){
+                        $data = UserModel::setUserProfil($lastname, $firstname, $pseudo, $email, $password, $avatar, $age, $sex, $city, $color, $date_inscription, $last_connection, $description, $country, $id_etat_activ, $arr_hobbies, $arr_languesSpoken, $arr_languesLearning);
                 
-                /*Key creation*/
-                $rsa = new Crypt_RSA();
-                extract($rsa->createKey());
-                /*key saving*/
-                UserModel::updateUserPublicKey($publickey, $pseudo);
-                file_put_contents('../../Security/key/'.$pseudo.'.txt', $privatekey);
+                        /*Key creation*/
+                        $rsa = new Crypt_RSA();
+                        extract($rsa->createKey());
+                        /*key saving*/
+                        UserModel::updateUserPublicKey($publickey, $pseudo);
+                        file_put_contents('../../Security/key/'.$pseudo.'.txt', $privatekey);
+                    }
+                    else{
+                        $data = array("Error", "Error, there is a problem with your e-mail !");
+                    }
+                }
+                else {
+                    $data = array("Error", "Error : You're age is unauthorized");
+                }
             }
             else{
                 $data = array("Error", "The pseudo contains special characters or some accent");
