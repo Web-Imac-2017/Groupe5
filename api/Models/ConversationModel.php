@@ -35,8 +35,12 @@ class ConversationModel{
             $num_id = intval($result[$i]['id_user']);
             $result[$i]['user'] = UserModel::getPseudoById($num_id);
             
+            /*pseudo correspondant à la private key*/
+            $pseudo = ConversationModel::getOtherUsers($result[$i]['id_user'], $id_conv);
+            
             /*Décryptage des messages*/
-            $result[$i]['content'] = ConversationModel::decryptMessage($result[$i]['user'], $result[$i]['content']);
+            $result[$i]['content'] = ConversationModel::decryptMessage($pseudo[0]['pseudo'], $result[$i]['content']);
+            $result[$i][3] = $result[$i]['content'];
         }
        
         return $result;
@@ -45,7 +49,8 @@ class ConversationModel{
     public static function getNewMessagesOfConv($id_last_message, $id_conv){
         $bdd = Database::connexionBDD();
         $result = [];
-        $req_active = $bdd->prepare("SELECT `id_user`, `date`, `ID`, `contenu` as `content` FROM `message` WHERE `id_conversation` = :conv && `ID` > :last_message ORDER BY `date` DESC;");
+        $req_active = $bdd->prepare("SELECT `id_user`, `date`, `ID`, `contenu` as `content` FROM `message` WHERE `id_conversation` = :conv && `ID` > :last_message ORDER BY `date` ASC;");
+        $req_active->execute(array(':conv' => $id_conv, ':last_message' => $id_last_message));
         
         $result = $req_active->fetchAll();
         
@@ -55,10 +60,16 @@ class ConversationModel{
             $num_id = intval($result[$i]['id_user']);
             $result[$i]['user'] = UserModel::getPseudoById($num_id);
             
+            /*pseudo correspondant à la private key*/
+            $pseudo = ConversationModel::getOtherUsers($result[$i]['id_user'], $id_conv);
+            /*var_dump($pseudo[0]['pseudo']);*/
+            
             /*Décryptage des messages*/
-            $result[$i]['content'] = ConversationModel::decryptMessage($result[$i]['user'], $result[$i]['content']);
+            $result[$i]['content'] = ConversationModel::decryptMessage($pseudo[0]['pseudo'], $result[$i]['content']);
+            $result[$i][3] = $result[$i]['content'];
         }
         
+        var_dump($result);
         return $result;
     }
     
@@ -73,8 +84,9 @@ class ConversationModel{
         $result = $req_active->fetch(PDO::FETCH_ASSOC);
         
         /*Décryptage des messages*/
-        $pseudo = UserModel::getPseudoById($result['id_user']);
-        $result['contenu'] = ConversationModel::decryptMessage($pseudo, $result['contenu']);
+        $pseudo = ConversationModel::getOtherUsers($result['id_user'], $id_conv);
+        //var_dump($result['contenu']);
+        $result['contenu'] = ConversationModel::decryptMessage($pseudo[0]['pseudo'], $result['contenu']);
         
         return $result['contenu'];
     }
@@ -149,6 +161,7 @@ class ConversationModel{
     public static function decryptMessage($pseudo, $crypted){
         
         $key = file_get_contents('../../Security/key/'.$pseudo.'.txt');
+        
         openssl_private_decrypt($crypted, $decrypted, $key);
         
         return $decrypted;

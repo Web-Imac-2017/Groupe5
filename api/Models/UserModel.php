@@ -714,7 +714,9 @@ class UserModel {
         $req_get = $bdd->prepare('SELECT public_key FROM user WHERE `pseudo` = :pseudo');
         $req_get->execute(array(":pseudo"=>$pseudo));
         
-        return $req_get->fetchAll();
+        $result = $req_get->fetchAll();
+        
+        return $result[0]['public_key'];
     }
     
     public static function getUserHobbies($pseudo) {
