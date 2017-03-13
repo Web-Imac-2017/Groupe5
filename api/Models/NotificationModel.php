@@ -38,7 +38,8 @@ class NotificationModel{
         $bdd = Database::connexionBDD();
 
         $req_active = $bdd->prepare('DELETE FROM user_notification WHERE ID = :id_notif');
-        $req_active->execute(array(":id_notif" => $idNotif));
+        $req_active->bindParam(':id_notif', $idNotif, PDO::PARAM_INT);
+        $req_active->execute();
     }
 }  
  

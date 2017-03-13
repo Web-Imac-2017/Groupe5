@@ -12,6 +12,7 @@ class ImageModel{
         $contenu = "PLUME_IMAGE_MESSAGE:".$url;
         
         $req_active = $bdd->prepare("INSERT INTO `message`(`ID`, `contenu`, `date`, `id_user`, `id_conversation`) VALUES (NULL,:contenu, now(), :id_user, :id_conv)");
+
         $result = $req_active->execute(array(':contenu' => $contenu, ':id_user' => $id_user, ':id_conv' => $id_conv));
         
         if($result){
@@ -47,7 +48,8 @@ class ImageModel{
         $bdd = Database::connexionBDD();
         
         $req_active = $bdd->prepare("SELECT `avatar` FROM `user` WHERE `pseudo`= :pseudo");
-        $req_active->execute(array(':pseudo' => $pseudo));
+        $req_active->bindParam(':pseudo', $pseudo, PDO::PARAM_STR, 60);
+        $req_active->execute();
         
         if($result = $req_active->fetch(PDO::FETCH_ASSOC)){
             $data = array($result['avatar'], $pseudo);
