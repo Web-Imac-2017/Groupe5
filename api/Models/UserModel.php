@@ -108,8 +108,8 @@ class UserModel {
     /*Mettre à jour le mail de l'utilisateur*/
     public static function updateUserMail($pseudo, $userMail){
         $bdd = Database::connexionBDD();
-        
-        $req_active = $bdd->prepare('UPDATE user SET email = '.$userMail.' WHERE pseudo = "'.$pseudo.'"');
+
+        $req_active = $bdd->prepare('UPDATE user SET email = "'.$userMail.'" WHERE pseudo = "'.$pseudo.'"');
         $req_active->execute();
     }
 

@@ -21,13 +21,17 @@
         }
 
 	    if(isset($json['age']) && $json['age'] != '') { /*A voir avec le front*/
-	    $userAge = $json['age'];
-	  }
-	  else $data = array("Error", "Error");
+	    	$userAge = $json['age'];
+	  	}
+	  	else $data = array("Error", "Error");
 
 
-	  UserModel::updateUserAge($pseudo, $userAge);
-
+	  	if (is_numeric($userAge)){
+	  		UserModel::updateUserAge($pseudo, $userAge);
+		}
+		else {
+			$data = array("Error", "Error : You're age is unauthorized");
+		}
 	}
 	else $data = array("Error", "Error");
 
