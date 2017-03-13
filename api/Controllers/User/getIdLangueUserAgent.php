@@ -9,6 +9,6 @@ header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 
 include "../../Models/UserModel.php";
 
-echo UserModel::getIdLangueNavigator();
+echo UserModel::getIdLangueUserAgent();
 
 ?>

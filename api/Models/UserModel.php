@@ -855,7 +855,7 @@ class UserModel {
         return $data;
     }
 
-    public static function getIdLangueNavigator(){
+    public static function getIdLangueUserAgent(){
         $lang = 'en';
         $id_lang = 1;
         $temp_lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'],0,2);
