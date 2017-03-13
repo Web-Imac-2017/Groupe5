@@ -3,7 +3,7 @@
 	header('Access-Control-Allow-Origin:*');
 	header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
 	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
-	//header('Content-Type: application/json;charset=utf-8');
+	header('Content-Type: application/json;charset=utf-8');
 
 	include "../../Models/NotificationModel.php";
 
@@ -17,7 +17,7 @@
 
     if(!is_array($json)) $data = array("Error", "Error: POST.");
     else {
-        if($contenu==NULL){
+        if($id_notif==NULL){
             $data = array("Error", "Error: there is no content in the notification.");
         }
 
