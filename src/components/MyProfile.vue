@@ -473,7 +473,26 @@ export default {
 			this.$http.post(apiRoot() + 'Controllers/Image/uploadAvatar.php', oData);
 		},
 		deleteAvatar :function(){
-
+			var _this = this;
+			fetch(apiRoot() + 'Controllers/User/updateUserAvatar.php', {
+				method: 'POST',
+				headers: {
+					'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+					'Content-Type': 'application/json; charset=utf-8'
+				},
+				dataType: 'JSON',
+				body: JSON.stringify({pseudo: _this.user.pseudo, avatar: "/static/avatar/default.png"})
+			}).then(function(response) {
+				return response.json();
+			}).then(function(data){
+				if(data[0] == "Error"){
+					console.log(data[1]);
+				}
+				else {
+					_this.init();
+					location.reload();
+				}
+			});
 		}
 	}
 }

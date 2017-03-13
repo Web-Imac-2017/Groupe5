@@ -20,7 +20,7 @@
             $pseudo = $json['pseudo'];
         }
 
-	    if(isset($json['avatar']) && $json['avatar'] != '') {
+	    if(isset($json['avatar'])) {
 	    $userAvatar = $json['avatar'];
 	  }
 	  else $data = array("Error", "Error");

@@ -123,7 +123,7 @@ class UserModel {
     public static function updateUserAvatar($pseudo, $userAvatar){
         $bdd = Database::connexionBDD();
         
-        $req_active = $bdd->prepare('UPDATE user SET avatar = '.$userAvatar.' WHERE pseudo = :pseudo');
+        $req_active = $bdd->prepare('UPDATE user SET avatar = "'.$userAvatar.'" WHERE pseudo = :pseudo');
         $req_active->bindParam(':pseudo', $pseudo, PDO::PARAM_STR,60);
         $req_active->execute();
     }
