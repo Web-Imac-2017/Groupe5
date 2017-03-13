@@ -17,7 +17,7 @@
             <input type="file" name="file" id="file" v-on:click="loadingFile" class="inputfile" />
             <label class="filebutton" for="file" v-bind:style="{backgroundImage: 'url(../../static/img/import.png'}"></label>
             <br/>
-            <p class="filebuttontext">Import your avatar</p>
+            <p id="loading" class="filebuttontext">Import your avatar</p>
           </div>
           <div v-else>
             <img :src="user.avatar" />
@@ -90,7 +90,7 @@
 
         <!-- BIO -->
         <label class="form-text" for="description">Introduce yourself in a few words</label>
-        <input id="description" v-model="user.description"></input>
+        <textarea id="description" v-model="user.description"></textarea>
         <span class="tooltip">Write something about your life</span>
 
         <!-- SUBMIT -->
@@ -224,7 +224,7 @@ export default {
         document.getElementById("error_Country").style.display = 'none';
 
         //tansform special caracters to html code
-        this.convertToHTML(user.description);
+        this.convertToHTML();
 
         var _this = this;
 
@@ -349,19 +349,20 @@ export default {
     },
     loadingFile: function(event)
     {
-      var f = event.target.files[0];
-      if (f)
-      {
-        var r = new FileReader();
-        r.onload = function(e)
-        {
-          var str = "Name : " + f.name + "\nType : " + f.type + "\nSize : " + f.size/1000 + "Ko\n";
-        }
-        r.readAsText(f);
-      }
+      	var f = event.target.files[0];
+      	if (f)
+      	{
+        	var r = new FileReader();
+        	r.onload = function(e)
+        	{
+          		var str = "Name : " + f.name + "\nType : " + f.type + "\nSize : " + f.size/1000 + "Ko\n";
+        	}
+        	r.readAsText(f);
+      	}
+      	document.getElementById("loading").innerHTML = "File loaded successfully";
     },
     convertToHTML: function(){
-      var text = this.user.description
+      var text = this.user.description;
       String.prototype.convertionHTML = function(){
         return this.replace(/[\']/g,"&apos;")
         .replace(/[ ]/g,"&nbsp;")
@@ -434,6 +435,8 @@ export default {
   text-align: center;
   position: absolute;
   color: black;
+  overflow-x: hidden;
+
   .wrapper
   {
     .bg
@@ -474,6 +477,15 @@ export default {
       font-weight: 600;
       margin-bottom: 8px;
       border: 3px solid #333333;
+    }
+
+    textarea
+    {
+    	width: 100%;
+    	max-width: 100%;
+    	height: auto;
+    	font-size: 1.3em;
+    	padding: 10px;
     }
 
     input#pseudo, label#countryLabel
