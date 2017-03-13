@@ -11,11 +11,11 @@ class NotificationModel{
         $id_user1 = UserModel::getUserId($pseudo1);
         $id_user2 = UserModel::getUserId($pseudo2);
 
-        $req_active = $bdd->prepare("INSERT INTO `user_notification` (`ID`, `ID_user1`, `ID_user2`, `date`, `id_notification`) VALUES (NULL, :user1, :user2, NOW(), :id_notif)");
+        $req_active = $bdd->prepare("INSERT INTO `user_notification` (`ID`, `ID_user1`, `ID_user2`, `date`, `id_notification`) VALUES (NULL, :user1, :user2, NOW(), :id_notif )");
         $req_active->bindParam(':user1', $id_user1, PDO::PARAM_INT);
         $req_active->bindParam(':user2', $id_user2, PDO::PARAM_INT);
         $req_active->bindParam(':id_notif', $id_notif, PDO::PARAM_INT);
-        $req_active->execute(array(':id_notif' => $id_notif);
+        $req_active->execute();
     }
 
     /*cette fonction renvoie un tableau contenant les notifications classés du + récent au + ancient */
