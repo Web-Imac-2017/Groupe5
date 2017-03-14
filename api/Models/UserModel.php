@@ -7,7 +7,8 @@ class UserModel {
     public static function getPseudoById($id) {
         $bdd = Database::connexionBDD();
         
-        $req_ident = $bdd->prepare('SELECT pseudo FROM user WHERE `ID` = "'.$id.'"');
+        $req_ident = $bdd->prepare('SELECT pseudo FROM user WHERE `ID` = :id');
+        $req_ident->bindParam(':id', $id, PDO::PARAM_INT);
         $req_ident->execute();
 
         $result = $req_ident->fetch(PDO::FETCH_ASSOC);
@@ -18,11 +19,13 @@ class UserModel {
    public static function login($pseudo, $password) {
         $bdd = Database::connexionBDD();
         
-        $req_ident = $bdd->prepare('SELECT pseudo FROM user WHERE pseudo = "'.$pseudo.'"');
+        $req_ident = $bdd->prepare('SELECT pseudo FROM user WHERE pseudo = :pseudo');
+        $req_ident->bindParam(':pseudo', $pseudo, PDO::PARAM_STR,60);
         $req_ident->execute();
 
         if($req_ident->fetch()){
-            $req_password = $bdd->prepare('SELECT password FROM user WHERE pseudo = "'.$pseudo.'"');
+            $req_password = $bdd->prepare('SELECT password FROM user WHERE pseudo = :pseudo');
+            $req_password->bindParam(':pseudo', $pseudo, PDO::PARAM_STR,60);
             $req_password->execute();
             $recup_password = $req_password->fetch();
             $password_hach = md5($password);
@@ -30,17 +33,13 @@ class UserModel {
             if($password_hach == $recup_password["password"]){
                 UserModel::setUserState($pseudo, 1);
 
-                $req_id = $bdd->prepare('SELECT ID FROM user WHERE pseudo = "'.$pseudo.'"');
+                $req_id = $bdd->prepare('SELECT ID FROM user WHERE pseudo = :pseudo');
+                $req_id->bindParam(':pseudo', $pseudo, PDO::PARAM_STR,60);
                 $req_id->execute();
                 $idUser = $req_id->fetch(PDO::FETCH_ASSOC);
 
                 $result = array($idUser['ID'], $pseudo);
 
-                /*ob_start();
-                setcookie("PLUME_pseudo", $pseudo);
-                ob_end_flush();
-
-                print_r($_COOKIE['PLUME_pseudo']);*/
             }
             else {
                 $result = array("Error", "Error: the password isn't correct.");
@@ -56,7 +55,9 @@ class UserModel {
     public static function setUserState($pseudo, $userState) {
         $bdd = Database::connexionBDD();
        
-        $req_active = $bdd->prepare('UPDATE user SET id_etat_activite = '.$userState.' WHERE pseudo = "'.$pseudo.'"');
+        $req_active = $bdd->prepare('UPDATE user SET id_etat_activite = :userState WHERE pseudo = :pseudo');
+        $req_active->bindParam(':userState', $userState, PDO::PARAM_INT);
+        $req_active->bindParam(':pseudo', $pseudo, PDO::PARAM_STR,60);
         $req_active->execute();
     }
 
@@ -66,14 +67,13 @@ class UserModel {
     }
 
     public static function deleteUserSession() {
-        //session_unset();
-        //session_destroy();
         unset($_COOKIE['PLUME_pseudo']);
     }
 
     public static function getUserState($pseudo) {
         $bdd = Database::connexionBDD();
-        $req_id = $bdd->prepare('SELECT id_etat_activite FROM user WHERE pseudo = "'.$pseudo.'"');
+        $req_id = $bdd->prepare('SELECT id_etat_activite FROM user WHERE pseudo = :pseudo');
+        $req_id->bindParam(':pseudo', $pseudo, PDO::PARAM_STR, 60);
         $req_id->execute();
         $idUser = $req_id->fetch(PDO::FETCH_ASSOC);
 
@@ -85,7 +85,9 @@ class UserModel {
     public static function updateUserLastname($pseudo, $userLastname){
         $bdd = Database::connexionBDD();
         
-        $req_active = $bdd->prepare('UPDATE user SET nom = "'.$userLastname.'" WHERE pseudo = "'.$pseudo.'"');
+        $req_active = $bdd->prepare('UPDATE user SET nom = :lastname WHERE pseudo = :pseudo');
+        $req_active->bindParam(':lastname', $userLastname, PDO::PARAM_STR,60);
+        $req_active->bindParam(':pseudo', $pseudo, PDO::PARAM_STR,60);
         $req_active->execute();
     }
 
@@ -93,7 +95,9 @@ class UserModel {
     public static function updateUserFirstName($pseudo, $userFirstname){
         $bdd = Database::connexionBDD();
         
-        $req_active = $bdd->prepare('UPDATE user SET prenom = "'.$userFirstname.'" WHERE pseudo = "'.$pseudo.'"');
+        $req_active = $bdd->prepare('UPDATE user SET prenom = :firstname WHERE pseudo = :pseudo');
+        $req_active->bindParam(':firstname', $userFirstname, PDO::PARAM_STR,60);
+        $req_active->bindParam(':pseudo', $pseudo, PDO::PARAM_STR,60);
         $req_active->execute();
     }
 
@@ -101,7 +105,8 @@ class UserModel {
     public static function updateUserPassword($pseudo, $userPassword){
         $bdd = Database::connexionBDD();
         
-        $req_active = $bdd->prepare('UPDATE user SET password = '.MD5($userPassword).' WHERE pseudo = "'.$pseudo.'"');
+        $req_active = $bdd->prepare('UPDATE user SET password = '.MD5($userPassword).' WHERE pseudo = :pseudo');
+        $req_active->bindParam(':pseudo', $pseudo, PDO::PARAM_STR,60);
         $req_active->execute();
     }
 
@@ -109,7 +114,8 @@ class UserModel {
     public static function updateUserMail($pseudo, $userMail){
         $bdd = Database::connexionBDD();
 
-        $req_active = $bdd->prepare('UPDATE user SET email = "'.$userMail.'" WHERE pseudo = "'.$pseudo.'"');
+        $req_active = $bdd->prepare('UPDATE user SET email = "'.$userMail.'" WHERE pseudo = :pseudo');
+        $req_active->bindParam(':pseudo', $pseudo, PDO::PARAM_STR,60);
         $req_active->execute();
     }
 
@@ -117,7 +123,8 @@ class UserModel {
     public static function updateUserAvatar($pseudo, $userAvatar){
         $bdd = Database::connexionBDD();
         
-        $req_active = $bdd->prepare('UPDATE user SET avatar = '.$userAvatar.' WHERE pseudo = "'.$pseudo.'"');
+        $req_active = $bdd->prepare('UPDATE user SET avatar = '.$userAvatar.' WHERE pseudo = :pseudo');
+        $req_active->bindParam(':pseudo', $pseudo, PDO::PARAM_STR,60);
         $req_active->execute();
     }
 
@@ -125,7 +132,9 @@ class UserModel {
     public static function updateUserCity($pseudo, $userCity){
         $bdd = Database::connexionBDD();
         
-        $req_active = $bdd->prepare('UPDATE user SET ville = "'.$userCity.'" WHERE pseudo = "'.$pseudo.'"');
+        $req_active = $bdd->prepare('UPDATE user SET ville = :city WHERE pseudo = :pseudo');
+        $req_active->bindParam(':city', $userCity, PDO::PARAM_STR,60);
+        $req_active->bindParam(':pseudo', $pseudo, PDO::PARAM_STR,60);
         $req_active->execute();
     }
 
@@ -133,7 +142,8 @@ class UserModel {
     public static function updateUserColor($pseudo, $userColor){
         $bdd = Database::connexionBDD();
         
-        $req_active = $bdd->prepare('UPDATE user SET couleur = "'.$userColor.'" WHERE pseudo = "'.$pseudo.'"');
+        $req_active = $bdd->prepare('UPDATE user SET couleur = "'.$userColor.'" WHERE pseudo = :pseudo');
+        $req_active->bindParam(':pseudo', $pseudo, PDO::PARAM_STR,60);
         $req_active->execute();
     }
 
@@ -141,7 +151,8 @@ class UserModel {
     public static function updateUserAge($pseudo, $userAge){
         $bdd = Database::connexionBDD();
         
-        $req_active = $bdd->prepare('UPDATE user SET age = '.$userAge.' WHERE pseudo = "'.$pseudo.'"');
+        $req_active = $bdd->prepare('UPDATE user SET age = '.$userAge.' WHERE pseudo = :pseudo');
+        $req_active->bindParam(':pseudo', $pseudo, PDO::PARAM_STR,60);
         $req_active->execute();
     }
 
@@ -149,7 +160,8 @@ class UserModel {
     public static function updateUserDescription($pseudo, $userDescription){
         $bdd = Database::connexionBDD();
         
-        $req_active = $bdd->prepare('UPDATE user SET description = '.$userDescription.' WHERE pseudo = "'.$pseudo.'"');
+        $req_active = $bdd->prepare('UPDATE user SET description = '.$userDescription.' WHERE pseudo = :pseudo');
+        $req_active->bindParam(':pseudo', $pseudo, PDO::PARAM_STR,60);
         $req_active->execute();
     }
     
@@ -158,6 +170,7 @@ class UserModel {
         $bdd = Database::connexionBDD();
         
         $req_get = $bdd->prepare('UPDATE user SET public_key = :key WHERE pseudo = :pseudo');
+        $req_get->bindParam(':pseudo', $pseudo, PDO::PARAM_STR,60);
         $req_get->execute(array(":key"=>$key, ":pseudo"=>$pseudo));
         
     }
@@ -184,7 +197,8 @@ class UserModel {
         $req_idHobby->execute();
         $id_Hobby = $req_idHobby->fetch(PDO::FETCH_ASSOC);
 
-        $req_active = $bdd->prepare('DELETE FROM user_centre_interet WHERE id_interet = '.$id_Hobby['ID'].' AND id_user = '.$idUser);
+        $req_active = $bdd->prepare('DELETE FROM user_centre_interet WHERE id_interet = "'.$id_Hobby['ID'].'" AND id_user = :id');
+        $req_active->bindParam(':id', $idUser, PDO::PARAM_INT);
         $req_active->execute();
     }
 
@@ -210,7 +224,8 @@ class UserModel {
         $req_idLang->execute();
         $id_lang = $req_idLang->fetch(PDO::FETCH_ASSOC);
 
-        $req_active = $bdd->prepare('DELETE FROM user_langue WHERE id_langue = '.$id_lang['ID'].' AND id_user = '.$idUser);
+        $req_active = $bdd->prepare('DELETE FROM user_langue WHERE id_langue = "'.$id_lang['ID'].'" AND id_user = :id');
+        $req_active->bindParam(':id', $idUser, PDO::PARAM_INT);
         $req_active->execute();
     }
 
@@ -223,7 +238,8 @@ class UserModel {
         $req_idPays->execute();
         $id_pays = $req_idPays->fetch(PDO::FETCH_ASSOC);
 
-        $req_active = $bdd->prepare('UPDATE user SET id_pays = '.$id_pays['id_pays'].' WHERE pseudo = "'.$pseudo.'"');
+        $req_active = $bdd->prepare('UPDATE user SET id_pays = '.$id_pays['id_pays'].' WHERE pseudo = :pseudo');
+        $req_active->bindParam(':pseudo', $pseudo, PDO::PARAM_STR,60);
         $req_active->execute();
     }
 
@@ -244,8 +260,7 @@ class UserModel {
 
     /* Recherche/filtre pour match */
     public static function filterResearch($filterData){ /* tableau json contenant les filtres choisis par le user */
-    	/* Tableau de la forme [ageMin,ageMax,sexe]
-        La fonction filtrant les hobbies et langues est faite par Adrian */
+    	/* Tableau de la forme [ageMin,ageMax,sexe] */
     	$bdd = Database::connexionBDD();
     	$filterResults = $bdd->prepare('SELECT pseudo FROM user WHERE age >= "'.$filterData['ageMin'].'" AND age <= "'.$filterData['ageMax'].'" AND sexe ="'.$filterData['sexe'].'"');
     	$filterResults->execute();
@@ -393,8 +408,6 @@ class UserModel {
             $arrayPrep[":maxAge"] = $maxAge;
         }
 
-        //var_dump($requete);
-        //var_dump($arrayPrep);
 
         //Prise en compte du ou des sexes transmis lors de la demande de match
         if(isset($sex)){ //Si aucun sexe n'est transmis alors les utilisateurs de tous les sexes seront pris en compte
@@ -412,9 +425,6 @@ class UserModel {
                 $requete .= ") ";
             }
         }
-
-        //var_dump($requete);
-        //var_dump($arrayPrep);
 
         $idCentreInteret = UserModel::getUserCentreInteret($pseudo);
         $imaxCentreInteret = count($idCentreInteret['hobbies']);
@@ -495,7 +505,8 @@ class UserModel {
         $bdd = Database::connexionBDD();
 
         /* Recherche si le pseudo existe :*/
-        $req_pseudo = $bdd->prepare('SELECT ID FROM user WHERE pseudo = "'.$pseudo.'"');
+        $req_pseudo = $bdd->prepare('SELECT ID FROM user WHERE pseudo = :pseudo');
+        $req_pseudo->bindParam(':pseudo', $pseudo, PDO::PARAM_STR,60);
         $req_pseudo->execute();
         
         if($donnees = $req_pseudo->fetch(PDO::FETCH_ASSOC)){
@@ -503,7 +514,8 @@ class UserModel {
         }
         else {
             /* Recherche si le mail deja used :*/
-            $req_mail = $bdd->prepare('SELECT email FROM user WHERE pseudo = "'.$pseudo.'"');
+            $req_mail = $bdd->prepare('SELECT email FROM user WHERE pseudo = :pseudo');
+            $req_mail->bindParam(':pseudo', $pseudo, PDO::PARAM_STR,60);
             $req_mail->execute();
             if($donnees = $req_mail->fetch(PDO::FETCH_ASSOC)){
                 $result = array("Error", "Error: mail already taken.");
@@ -565,7 +577,8 @@ class UserModel {
     public static function getUserId($pseudo) {
         $bdd = Database::connexionBDD();
 
-        $req_active = $bdd->prepare('SELECT ID FROM user WHERE `pseudo` = "'.$pseudo.'"');
+        $req_active = $bdd->prepare('SELECT ID FROM user WHERE `pseudo` = :pseudo');
+        $req_active->bindParam(':pseudo', $pseudo, PDO::PARAM_STR,60);
         $req_active->execute();
 
         if($id_user = $req_active->fetch(PDO::FETCH_ASSOC)){  
@@ -729,9 +742,6 @@ class UserModel {
         $req_active = $bdd->prepare('SELECT id_interet FROM user_centre_interet WHERE id_user = '.$user_id);
         $req_active->execute();
         
-        /*$result = $req_active->fetch(PDO::FETCH_ASSOC);*/
-        /*$id_hobbies = array($result['id_interet']);*/
-        
         /* Renvoyer les noms des hobbies du user */
         while($result = $req_active->fetch(PDO::FETCH_ASSOC)){
             $hobbies = UserModel::getHobbies($result['id_interet']);
@@ -830,6 +840,38 @@ class UserModel {
 
         return $data;
     }
+
+    //Récupère les langues du navigateur de l'utilisateur et, si le cookie n'est pas déjà fixé, fais les tests pour fixer une langue prise en charge ou alors fixe à l'anglais
+    public static function getIdLangueUserAgent(){
+        $lang = 'en';
+        $id_lang = 1;
+        $temp_lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'],0,2);
+     
+      if(isset($_COOKIE['lang'])&&($_COOKIE['lang'] == $temp_lang)) {
+        $lang = $_COOKIE['lang'];
+      }
+      else {
+        // si aucune langue n'est pas déclarée en coockie on tente de reconnaitre la langue par défaut du navigateur
+        
+        $bdd = Database::connexionBDD();
+        $req_active = $bdd->prepare('SELECT ID FROM langue WHERE abrev_langue =:lang');
+        $req_active->bindParam(':lang', $temp_lang, PDO::PARAM_STR);
+        $req_active->execute();
+        $result = $req_active->fetchAll(PDO::FETCH_ASSOC);
+
+        if (isset($result[0])){ //si elle est reconnue en BDD alors on récupère l'ID de la langue
+          $id_lang = $result[0]['ID'];
+        }
+        else { //sinon on fixe la langue par défaut à l'anglais
+          $lang = "en";
+          $id_lang = 1;
+        }
+        setcookie('lang', $lang, time() + 360);  
+      }
+
+      return $id_lang;
+    }
+
 }
 
 ?>

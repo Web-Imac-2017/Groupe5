@@ -39,7 +39,7 @@
 	      }
 	     	
 
-				if(isset($json['languages']) && $json['languages'] != '') { //A modifier avec le front !
+				if(isset($json['languages']) && $json['languages'] != '') {
 			    $newLanguages = $json['languages'];
 			    foreach ($newLanguages as $key => $language) {
 			    	UserModel::setUserLang($pseudo, $language, $level);

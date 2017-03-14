@@ -12,7 +12,10 @@ class ConversationModel{
         
         $req_active = $bdd->prepare("INSERT INTO message (`contenu`, `date`, `id_user`, `id_conversation`) VALUES (:contenu, now(), :user, :conv); ");
         $bdd->beginTransaction();
-        $req_active->execute(array(':contenu' => $contenu, ':user' => $id_user, ':conv' => $id_conv));
+        $req_active->bindParam(':contenu', $contenu, PDO::PARAM_STR);
+        $req_active->bindParam(':user', $id_user, PDO::PARAM_INT);
+        $req_active->bindParam(':conv', $id_conv, PDO::PARAM_INT);
+        $req_active->execute();
         $result = $bdd->lastInsertId();
         $bdd->commit();
         
@@ -25,11 +28,10 @@ class ConversationModel{
         $result = [];
 
         $req_active = $bdd->prepare("SELECT `id_user`, `date`, `ID`, `contenu` as `content` FROM `message` WHERE `id_conversation` = :conv ORDER BY `date` ASC;");
-        $req_active->execute(array(':conv' => $id_conv));
+        $req_active->bindParam(':conv', $id_conv, PDO::PARAM_INT);
+        $req_active->execute();
         
         $result = $req_active->fetchAll();
-        
-        /*var_dump($result);*/
 
         for($i=0; $i < count($result); $i++){
             $num_id = intval($result[$i]['id_user']);
@@ -49,12 +51,13 @@ class ConversationModel{
     public static function getNewMessagesOfConv($id_last_message, $id_conv){
         $bdd = Database::connexionBDD();
         $result = [];
+
         $req_active = $bdd->prepare("SELECT `id_user`, `date`, `ID`, `contenu` as `content` FROM `message` WHERE `id_conversation` = :conv && `ID` > :last_message ORDER BY `date` ASC;");
-        $req_active->execute(array(':conv' => $id_conv, ':last_message' => $id_last_message));
+        $req_active->bindParam(':conv', $id_conv, PDO::PARAM_INT);
+        $req_active->bindParam(':last_message', $id_last_message, PDO::PARAM_INT);        
+        $req_active->execute();
         
         $result = $req_active->fetchAll();
-        
-        /*var_dump($result);*/
         
         for($i=0; $i < count($result); $i++){
             $num_id = intval($result[$i]['id_user']);
@@ -79,7 +82,8 @@ class ConversationModel{
         $result = [];
 
         $req_active = $bdd->prepare("SELECT `contenu`, `id_user` FROM `message` WHERE `id_conversation` = :conv ORDER BY `date` DESC LIMIT 1;");
-        $req_active->execute(array(':conv' => $id_conv));
+        $req_active->bindParam(':conv', $id_conv, PDO::PARAM_INT);
+        $req_active->execute();
         
         $result = $req_active->fetch(PDO::FETCH_ASSOC);
         
@@ -112,7 +116,9 @@ class ConversationModel{
             /*rempli user_conv*/
             for($i = 0; $i < count($pseudo_array); $i++){
                 $req_active = $bdd->prepare("INSERT INTO `user_conversation`(`id_user_conversation`, `id_conversation`, `id_user`) VALUES (NULL, :conv, :user)");
-                $req_active->execute(array(':conv' => $id_conv, ':user' => $user[$i][0]));
+                $req_active->bindParam(':conv', $id_conv, PDO::PARAM_INT);
+                $req_active->bindParam(':user', $user[$i][0], PDO::PARAM_INT);
+                $req_active->execute();
             }
 
         }else{
@@ -130,7 +136,8 @@ class ConversationModel{
         FROM conversation
         INNER JOIN user_conversation
         WHERE conversation.`id` = user_conversation.`id_conversation` && user_conversation.`id_user` = :user ;");
-        $req_active->execute(array(':user' => $id_user[0]));
+        $req_active->bindParam(':user', $id_user[0], PDO::PARAM_INT);
+        $req_active->execute();
         
         $result = $req_active->fetchAll();
         
@@ -139,8 +146,6 @@ class ConversationModel{
             $result[$i]['lastMessage'] = ConversationModel::getLastMessageOfConv($result[$i]['id']);
             
             $result[$i]['users'] = ConversationModel::getOtherUsers($id_user[0], $result[$i]['id']);
-            
-            /*var_dump($result[$i]);*/
         }
         
         return $result;
@@ -153,7 +158,9 @@ class ConversationModel{
         FROM user
         INNER JOIN user_conversation
         WHERE user.`ID` = user_conversation.`id_user` && user_conversation.`id_user` != :user && user_conversation.`id_conversation` = :id_conv ;");
-        $req_active->execute(array(':user' => $id_user, ':id_conv' => $id_conv));
+        $req_active->bindParam(':user', $id_user, PDO::PARAM_INT);
+        $req_active->bindParam(':id_conv', $id_conv, PDO::PARAM_INT);
+        $req_active->execute();
         
         return $req_active->fetchAll();
     }
@@ -172,15 +179,18 @@ class ConversationModel{
         
         /* DATA IN USER_CONVERSATION */
         $req_active = $bdd->prepare("DELETE FROM `user_conversation` WHERE `id_conversation` = :id");
-        $req_active->execute(array(':id' => $id_conv));
+        $req_active->bindParam(':id', $id_conv, PDO::PARAM_INT);
+        $req_active->execute();
         
         /* DATA IN MESSAGE */
         $req_active = $bdd->prepare("DELETE FROM `message` WHERE `id_conversation` = :id");
-        $req_active->execute(array(':id' => $id_conv));
+        $req_active->bindParam(':id', $id_conv, PDO::PARAM_INT);
+        $req_active->execute();
         
         /* DATA IN CONVERSATION */
         $req_active = $bdd->prepare("DELETE FROM `conversation` WHERE `ID` = :id");
-        $req_active->execute(array(':id' => $id_conv));
+        $req_active->bindParam(':id', $id_conv, PDO::PARAM_INT);
+        $req_active->execute();
     }
 }
 

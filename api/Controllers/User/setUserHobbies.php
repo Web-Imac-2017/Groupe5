@@ -27,7 +27,7 @@
 		    UserModel::deleteUserHobbies($pseudo, $hobby);
 		  }
 
-	    if(isset($json['hobbies']) && $json['hobbies'] != '') { //A modifier avec le front !
+	    if(isset($json['hobbies']) && $json['hobbies'] != '') { 
 		    $newHobbies = $json['hobbies'];
 		    foreach ($newHobbies as $key => $hobby) {
 		    	UserModel::setUserHobbies($pseudo, $hobby);

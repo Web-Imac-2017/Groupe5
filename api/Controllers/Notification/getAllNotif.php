@@ -10,7 +10,7 @@
 
     $json = json_decode(file_get_contents('php://input'), true);
     $pseudo=$json['pseudo'];
-
+    $pattern = "#^[a-z0-9]+$#i";
 
     if(!is_array($json)) $data = array("Error", "Error: POST.");
     else {
@@ -19,7 +19,12 @@
         }
 
         else{
-            $data=NotificationModel::getAllNotif($pseudo);
+            if(preg_match($pattern , $pseudo)){
+                $data=NotificationModel::getAllNotif($pseudo);
+            }
+            else{
+                $data = array("Error", "Error : Unathorized pseudo");
+            }
         }
     }
 

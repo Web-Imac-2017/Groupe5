@@ -9,20 +9,25 @@
 
 
     $json = json_decode(file_get_contents('php://input'), true);
-    $contenu=$json['contenu'];
+    $id_notif=$json['id_notif'];
     $emetteur=$json['pseudo1'];
     $recepteur=$json['pseudo2'];
+    $pattern = "#^[a-z0-9]+$#i";
 
-    $data = [];
 
     if(!is_array($json)) $data = array("Error", "Error: POST.");
     else {
-        if($contenu==NULL){
+        if($id_notif==NULL){
             $data = array("Error", "Error: there is no content in the notification.");
         }
 
         else{
-            NotificationModel::addNotification($contenu,$emetteur,$recepteur);
+            if(preg_match($pattern , $emetteur) && preg_match($pattern, $recepteur)){
+                $data=NotificationModel::addNotif($id_notif,$emetteur,$recepteur);
+            }
+            else{
+                $data = array("Error", "Error : Unathorized pseudo");
+            }
         }
     }
 
