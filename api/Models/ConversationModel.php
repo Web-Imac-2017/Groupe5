@@ -146,7 +146,7 @@ class ConversationModel{
             /*last message*/
             $result[$i]['lastMessage'] = ConversationModel::getLastMessageOfConv($result[$i]['id']);
             
-            $result[$i]['users'] = ConversationModel::getOtherUsers($id_user[0], $result[$i]['id']);
+            $result[$i]['users'] = ConversationModel::getOtherUsers($id_user, $result[$i]['id']);
         }
         
         return $result;
@@ -176,14 +176,14 @@ class ConversationModel{
         FROM conversation
         INNER JOIN user_conversation
         WHERE conversation.`id` = user_conversation.`id_conversation` && user_conversation.`id_user` = :user ;");
-        $req_active->bindParam(':user', $id_user[0], PDO::PARAM_INT);
+        $req_active->bindParam(':user', $id_user, PDO::PARAM_INT);
         $req_active->execute();
         
         $result = $req_active->fetchAll();
         
         if(!empty($result)){
             for($i=0; $i<count($result); $i++){
-                $other_user = ConversationModel::getOtherUsers($id_user[0], $result[$i]['id']);
+                $other_user = ConversationModel::getOtherUsers($id_user, $result[$i]['id']);
                 if(!empty($other_user) && $other_user[0]['pseudo'] == $user_array[1]){
                     return 1;
                 }

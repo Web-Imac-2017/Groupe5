@@ -6,6 +6,7 @@
 	header('Content-Type: application/json;charset=utf-8');
 
 	include "../../Models/NotificationModel.php";
+    include "../../Models/ConversationModel.php";
 
 
     $json = json_decode(file_get_contents('php://input'), true);
@@ -13,6 +14,7 @@
     $emetteur=$json['pseudo1'];
     $recepteur=$json['pseudo2'];
     $pattern = "#^[a-z0-9]+$#i";
+    $verif_array = array();
 
 
     if(!is_array($json)) $data = array("Error", "Error: POST.");
@@ -23,7 +25,22 @@
 
         else{
             if(preg_match($pattern , $emetteur) && preg_match($pattern, $recepteur)){
-                $data=NotificationModel::addNotif($id_notif,$emetteur,$recepteur);
+                /*verif si conv existe pas déjà*/
+                $verif_array[0] = $emetteur;
+                $verif_array[1] = $recepteur;
+                
+                if($id_notif == "2"){
+                    $verif = ConversationModel::ifConvExist($verif_array);
+                }else{
+                    $verif = 0;
+                }
+                
+                if($verif){
+                    $data = array("Error", "Error : A conversation with this user already exists !");
+                }else{
+                    $data=NotificationModel::addNotif($id_notif,$emetteur,$recepteur);
+                }
+                
             }
             else{
                 $data = array("Error", "Error : Unathorized pseudo");
