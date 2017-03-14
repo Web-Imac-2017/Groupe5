@@ -1,11 +1,16 @@
 <template>
   <div class="connexion" v-bind:style="{backgroundImage: 'url(../../static/img/bg.jpg)'}">
+    <div class="quitButton">
+      <router-link v-bind:to="'/home/'" id="sign">
+        <icon name="times"></icon>
+      </router-link>
+    </div>
     <div class="wrapper">
       <!-- <h1>Connexion</h1> -->
       <img v-bind:src="'/static/img/logo.png'" class="loginlogo">
       <div class="error-message" v-text="loginError"></div>
-      <input type="text"  name="pseudo" id="pseudo" placeholder="ID" v-model="pseudo">  
-      <input type="password" name="password" id="password" placeholder="PASSWORD" v-model="password">  
+      <input type="text"  name="pseudo" id="pseudo" placeholder="ID" v-model="pseudo">
+      <input type="password" name="password" id="password" placeholder="PASSWORD" v-model="password">
       <input type="submit" v-on:click="login" v-model="submit" id="submit">
     </div>
   </div>
@@ -60,9 +65,8 @@ import Header from './Header.vue'
     @keyframes colorize
     {
         0% {background-color: #FAD6A6;}
-        25% {background-color: #FF717E;}
-        50% {background-color: #F9B69C;}
-        75% {background-color: #6ABE83;}
+        33% {background-color: #F9B69C;}
+        66% {background-color: #6ABE83;}
         100% {background-color: #FAD6A6;}
     }
 
@@ -75,6 +79,17 @@ import Header from './Header.vue'
         font-family: Montserrat;
         font-weight: 700;
         text-align: center;
+
+        .quitButton
+        {
+          transition: .2s;
+
+          &:hover
+          {
+            transform: scale(1.05) rotate(20deg);
+          }
+        }
+
 
         .wrapper
         {

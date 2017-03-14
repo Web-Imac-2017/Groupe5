@@ -15,8 +15,8 @@
 		if(isset($json['pseudo']) && $json['pseudo'] != '') {
 			$pseudo = $json['pseudo'];
 			$data["conversations"] = ConversationModel::getConvOfUser($pseudo);
-            echo "data";
-            var_dump($data);
+            //echo "data";
+            //var_dump($data);
 		}
 		else {
 			$data = array("Error", "Error: Pseudo");

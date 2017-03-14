@@ -8,7 +8,6 @@
 
 	include "../../Models/ImageModel.php";
 
-    //$json = json_decode(file_get_contents('php://input'), true);
     $pseudo = $_POST['pseudo'];
     $date = date("Y-m-d-h-i-s");
     $result = array();
@@ -51,10 +50,8 @@
                 $newImage = imagecreatetruecolor($width, $height);
                 imagecopyresampled($newImage, $copy, 0, 0, 0, 0, $width, $height, $image_infos[0], $image_infos[1]);
                 //Déplace l'image dans le repertoire 
-
-                imagepng($newImage,$_SERVER['DOCUMENT_ROOT']."PLUME/static/avatar/".$pseudo.".png");
-                $result = ImageModel::uploadAvatar($pseudo.".png", $pseudo);
-
+                imagepng($newImage,ROOT."static/avatar/".$pseudo.".png");
+                $result = ImageModel::uploadAvatar("/static/avatar/".$pseudo.".png", $pseudo);
             }
             else {
                 $result = array("Error", "Image can't be register.");
