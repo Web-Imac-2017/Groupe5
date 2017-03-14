@@ -4,3 +4,9 @@ dist/
 npm-debug.log
 plume.sql
 api/secure/
+logs/
+access.log
+config/localhost/settings.js
+php/
+settings.js
+config/localhost/settings.js

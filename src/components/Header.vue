@@ -1,51 +1,68 @@
 <template>
-	<div class="header">
-		  <router-link v-bind:to="'/home/'">Home</router-link>
-      <router-link v-if="connected === 'true'" v-bind:to="'/home/'">Messages</router-link>
-      <router-link v-if="connected === 'true'" v-bind:to="'/home/'">Matchs</router-link>
-      <router-link v-if="connected === 'true'" v-bind:to="'/profil/'">Profil</router-link>
-      <router-link v-if="connected === ''" v-bind:to="'/login/'">Sign up / Sign in</router-link>
-      <a v-if="connected === 'true'" v-on:click.prevent="logout">Sign out</a>
-	</div>
+    <div class="header">
+
+        <router-link v-bind:to="'/home/'"><img v-bind:src="'/static/img/logo.png'" class="headerlogo"></router-link>
+        <a class="item" v-on:click.prevent="$parent.logout">Sign out</a>
+        <router-link class="item" v-bind:to="'/messages/'">Messages</router-link>
+        <router-link class="item" v-bind:to="'/myProfile/'">Profile</router-link>
+        <router-link class="item" v-if="$parent.connected === ''" v-bind:to="'/match/'">Match</router-link>
+
+    </div>
 </template>
 
 <script>
-	export default {
-    data(){
-      return {
-      	connected: ''
-      }
-  	},
-  	methods: {
-    	logout(){
-    		console.log("Deconnect");
-    		document.cookie = "idUser=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-      	document.cookie = "pseudo=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-    		this.connected = '';
-    		location.reload();
-    	}
-    },
-    created: function(){
-    	function getCookie(cname) {
-        var name = cname + "=";
-        var ca = document.cookie.split(';');
-        for(var i = 0; i <ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0)==' ') {
-                c = c.substring(1);
-            }
-            if (c.indexOf(name) == 0) {
-                return c.substring(name.length,c.length);
-            }
-        }
-        return "";
-      }
-      if(getCookie('idUser')) this.connected = "true";
-      else this.connected = '';
+import SearchBarComponent from './SearchBarCPN.vue';
+
+  export default {
+    components : {
+        SearchBarComponent
     }
   }
 </script>
 
-<style type="scss">
+<style lang="scss">
+
+    .header
+    {
+        height: 50px;
+        width: 100%;
+        // position: absolute;
+        // z-index: 1;
+        // top: 0;
+        background: #fff;
+        box-shadow: 0px 3px 15px rgba(0, 0, 0, .4);
+
+        .headerlogo
+        {
+            height: 60%;
+            position: relative;
+            top: 50%;
+            left: 30px;
+            transform: translateY(-50%);
+        }
+
+        .item
+        {
+            margin: 0;
+            float: right;
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 50px;
+            font-size: 1.2em;
+            margin-left: 25px;
+            font-family: Montserrat;
+            color: black;
+            text-decoration: none;
+            transition: .2s;
+            border-bottom: 3px solid rgba(0, 0, 0, 0);
+            padding: 5px;
+        }
+
+        .item:hover
+        {
+            border-bottom: 3px solid rgba(0, 0, 0, 1);
+        }
+    }
 
 </style>
