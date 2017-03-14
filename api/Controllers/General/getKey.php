@@ -20,17 +20,17 @@ var_dump($privatekey);
 
 //echo "Crypt text:<br>".$crypttext."<BR><BR>";
 
-file_put_contents('../../Security/key/test.txt', $crypttext);
+//file_put_contents('../../Security/key/test.txt', $crypttext);
 
 /*openssl_private_decrypt($crypttext, $decrypted, $privatekey);
 
 echo "Decrypted text:<BR>$decrypted<br><br>";*/
 
-//UserModel::updateUserPublicKey($publickey, 'Fabricetea');
+UserModel::updateUserPublicKey($publickey, 'Butcher');
 
 /*echo $string;*/
 
-//$result = file_put_contents('../../Security/key/Fabricetea.txt', $privatekey);
+$result = file_put_contents('../../Security/key/Butcher.txt', $privatekey);
 
 /*$test = file_get_contents('../../Security/key/Fabricetea.txt');
 

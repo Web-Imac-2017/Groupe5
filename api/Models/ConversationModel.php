@@ -72,7 +72,7 @@ class ConversationModel{
             $result[$i][3] = $result[$i]['content'];
         }
         
-        var_dump($result);
+        //var_dump($result);
         return $result;
     }
     
@@ -89,8 +89,8 @@ class ConversationModel{
         
         /*Décryptage des messages*/
         $pseudo = ConversationModel::getOtherUsers($result['id_user'], $id_conv);
-        print_r($pseudo[0]['pseudo']);
-        $result['contenu'] = ConversationModel::decryptMessage($pseudo[0]['pseudo'], $result['contenu']);
+        //print_r($pseudo);
+        if(!empty($pseudo)) $result['contenu'] = ConversationModel::decryptMessage($pseudo[0]['pseudo'], $result['contenu']);
         
         return $result['contenu'];
     }
@@ -117,12 +117,12 @@ class ConversationModel{
             for($i = 0; $i < count($pseudo_array); $i++){
                 $req_active = $bdd->prepare("INSERT INTO `user_conversation`(`id_user_conversation`, `id_conversation`, `id_user`) VALUES (NULL, :conv, :user)");
                 $req_active->bindParam(':conv', $id_conv, PDO::PARAM_INT);
-                $req_active->bindParam(':user', $user[$i][0], PDO::PARAM_INT);
+                $req_active->bindParam(':user', $user[$i], PDO::PARAM_INT);
                 $req_active->execute();
             }
 
         }else{
-            echo "problème d'insertion de ligne dans la table ocnv";
+            //echo "problème d'insertion de ligne dans la table ocnv";
         }
     }
     
