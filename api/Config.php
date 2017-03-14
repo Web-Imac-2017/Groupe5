@@ -4,5 +4,5 @@
 	define("PSWD", "");
 	define("BDD", "plume");
 
-	define("ROOT", "C:/wamp/www/WebS4/Plume/");
+	define("ROOT", "C:/wamp/www/PLUME/");
 ?>
