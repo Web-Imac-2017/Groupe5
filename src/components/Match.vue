@@ -1,28 +1,38 @@
 <template>
 	<div class="matchs">
-		<div class="col-sm-3">
+		<div class="col-lg-3 col-sm-5 col-sm-offset-0 col-xs-10 col-xs-offset-1">
       <div id="infoProfil">
         <img v-bind:src="'/static/avatar/' + userActif.avatar" class="avatar">
         <p>connected as<br/><span> {{ userActif.pseudo }} </span></p>
       </div>
       <div id="filterMatch">
         <h2>Filters </h2>
-        <p style="display:inline-block">You search : </p>
-
-        <input v-model="selectedFilter.role"  class="form-check-input" type="radio" value="1" >
-        <label  class="form-check-label" for="master">Master</label>
+        <div>
+            <input v-model="selectedFilter.role"  class="form-check-input" type="radio" value="1" >
+            <label  class="form-check-label" for="master">Master</label>
+        </div>
+        <div>
+            <input v-model="selectedFilter.role" class="form-check-input" type="radio" value="2" >
+            <label  class="form-check-label" for="apprentices">Apprentices</label><br/>
+        </div>
         
-        <input v-model="selectedFilter.role" class="form-check-input" type="radio" value="2" >
-        <label  class="form-check-label" for="apprentices">Apprentices</label>
+        <div>
+          <input v-model="selectedFilter.sexMen"  class="form-check-input" type="checkbox" id="women" value="2" >
+          <label  class="form-check-label" for="women">Women</label>
+        </div>
         
-        <input v-model="selectedFilter.sexMen"  class="form-check-input" type="checkbox" id="women" value="2" >
-        <label  class="form-check-label" for="women">Women</label>
+        <div>
+          <input v-model="selectedFilter.sexWomen" class="form-check-input" type="checkbox" id="men" value="1" >
+          <label  class="form-check-label" for="men">Men</label>
+        </div>
         
-        <input v-model="selectedFilter.sexWomen" class="form-check-input" type="checkbox" id="men" value="1" >
-        <label  class="form-check-label" for="men">Men</label>
         
         <div id="rangeSlider">
-          <vue-slider ref="slider" v-model="value"></vue-slider>
+          <section class="range-slider">
+            <input v-model="value[0]" id="doubleRange1" min="15" max="90" step="1" type="range">
+            <input v-model="value[1]" id="doubleRange2"  min="15" max="90" step="1" type="range">
+          </section>
+          <p><span>Years selected : </span> {{ value[0] }} to {{ value[1] }}</p>
         </div>
       </div>
       <div id="btnSM">
@@ -30,16 +40,18 @@
         <button v-on:click="getSearch()" class="btn btn-default" type="button">Search</button>
       </div>
 		</div>
-		<div class="col-sm-9">
+		<div class="col-lg-9 col-lg-offset-0 col-sm-9 col-xs-10 col-xs-offset-1">
 			<div class="matchUserList">
         <h2 id="matchTitle">Users matched with your profil</h2>
-        <div class="profilMatch col-sm-3" v-for="user in users">
+        <div class="profilMatch col-xs-12 col-lg-6" v-for="user in users" v-on:click="$parent.changeSelectedUser(user[0].infos.pseudo)">
           <img v-bind:src="'/static/avatar/' + user[0].infos.avatar" class="avatarProfil" v-on:click="$parent.changeSelectedUser(user[0].infos.pseudo)">
+
           <div class="info" :class=getUserState(user)>
-            <h3 class="pseudo">{{ user[0].infos.pseudo }} </h3>
+            <h3 class="pseudo">{{ user[0].infos.pseudo }} <icon name="circle"></icon></h3>
+
             <p>{{ user[0].infos.town }}, {{ user[0].infos.country }}</p>
             <p>{{ user[0].infos.age }} years old</p>
-            <icon name="circle"></icon>
+            
           </div>
         </div>
       </div>
@@ -85,7 +97,13 @@ export default{
       if(document.getElementById("women").checked) {
         sex.push(document.getElementById("women").value);
       }
-     
+
+      if(this.value[0] > this.value[1]){
+          var tpm = this.value[0];
+          this.value[0] = this.value[1];
+          this.value[1] = tpm;
+      }
+
       fetch(apiRoot() + 'Controllers/User/getUserMatch.php', {
         method: 'POST',
         headers: {
@@ -131,18 +149,46 @@ export default{
         }
       );
       return theClass;
+    },
+    initSlider : function(){
+      // Initialize Sliders
+      var sliderSections = document.getElementsByClassName("range-slider");
+          for( var x = 0; x < sliderSections.length; x++ ){
+            var sliders = sliderSections[x].getElementsByTagName("input");
+            for( var y = 0; y < sliders.length; y++ ){
+              if( sliders[y].type ==="range" ){
+                sliders[y].oninput = getVals;
+                // Manually trigger event first time to display values
+                sliders[y].oninput();
+              }
+            }
+          }
     }
 	},
 	created: function() {
 		this.userActif = this.$parent.connectedUser;
+    this.initSlider();
+  },
+  watch: {
+    'value' : function(){
+        if(this.value[0] > this.value[1]){
+          var tpm = this.value[0];
+          this.value[0] = this.value[1];
+          this.value[1] = tpm;
+        }
+    }
   }
 }
+
+
 
 
 </script>
 
 
 <style lang="scss">
+
+.matchs{margin-top:20px;}
 
 info {
   &.userConnected svg {
@@ -158,7 +204,7 @@ info {
 }
 
 .matchUserList {
-  width: 65%;
+  width: 100%;
   display: inline-block;
   vertical-align: top;
 }
@@ -177,9 +223,9 @@ info {
 }
 
 .profilMatch {
-  width: 100%;
   margin-bottom: 10px;
   cursor: pointer;
+  margin-top: 15px;
   &:hover {
     background: whitesmoke;
   }
@@ -214,8 +260,8 @@ info {
 
 .info {
   vertical-align: top;
-  margin-top: 15px;
   margin-right: 10px;
+  margin-left:10px;
 }
 
 .profilMatch, .info {
@@ -227,6 +273,7 @@ info {
   text-transform: uppercase;
   font-family: arial;
   font-weight: bold;
+  margin-top:0;
 }
 
 .detailOfUser {
@@ -265,17 +312,20 @@ info {
   font-family: arial;
   margin-top: 15px;
   margin-bottom: 15px;
+  text-align:center;
 }
 
 #infoProfil {
   width: 100%;
   border: 1px solid black;
   p {
+    width:43%;
     display: inline-block;
     vertical-align: top;
     margin-top: 20px;
     margin-left: 10%;
     font-family: arial;
+    text-align:center;
     span {
       font-size: 20px;
       text-transform: uppercase;
@@ -286,10 +336,10 @@ info {
     width: 60px;
     height: 60px;
     border-radius: 100%;
-    background: blue;
+    border:1px solid black;
     display: inline-block;
     vertical-align: top;
-    margin: 5px 0 5px 6%;
+    margin: 10px 0 5px 6%;
   }
 }
 
@@ -307,6 +357,13 @@ info {
     font-family: arial;
     margin-bottom: 15px;
   }
+  div{
+    display:inline-block;
+    width:40%;
+  }
+  div:nth-child(2), div:nth-child(4){
+    margin-left:12%;
+  }
 }
 
 #btnSM {
@@ -322,8 +379,135 @@ info {
   }
 }
 
-#rangeSlider {
-  margin-top: 30px;
+/* slider part */
+
+#filterMatch div:nth-child(6){
+  width:80%;
+  margin-left:10%;
 }
+
+#rangeSlider {
+  width:100%;
+}
+
+#rangeSlider p span{
+  font-weight:bold;
+}
+
+ section.range-slider {
+    position: relative;
+    width: 100%;
+    height: 35px;
+    text-align: center;
+}
+
+ section.range-slider input{
+   position:absolute;
+   pointer-events:none;
+   overflow:hidden;
+   outline:none;
+   left:0;
+   height:18px;
+ }
+
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  display:block;
+
+
+}
+input[type=range]:focus {
+  outline: none;
+}
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 1px;
+  cursor: pointer;
+  box-shadow: px px 0px rgba(0, 0, 0, 0), 0px 0px px rgba(13, 13, 13, 0);
+  background: #000000;
+  border-radius: 0px;
+  border: 0px solid #010101;
+}
+input[type=range]::-webkit-slider-thumb {
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0), 0px 0px 0px rgba(13, 13, 13, 0);
+  border: 0px solid rgba(0, 0, 0, 0);
+  height: 18px;
+  width: 3px;
+  border-radius: 0px;
+  background: #000000;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -8.5px;
+  pointer-events: all;
+  position:relative;
+  z-index:1;
+}
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #0d0d0d;
+}
+input[type=range]::-moz-range-track {
+   width: 100%;
+  height: 1px;
+  cursor: pointer;
+  box-shadow: px px 0px rgba(0, 0, 0, 0), 0px 0px px rgba(13, 13, 13, 0);
+  background: #000000;
+  border-radius: 0px;
+  border: 0px solid #010101;
+}
+input[type=range]::-moz-range-thumb {
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0), 0px 0px 0px rgba(13, 13, 13, 0);
+  border: 0px solid rgba(0, 0, 0, 0);
+  height: 18px;
+  width: 3px;
+  border-radius: 0px;
+  background: #000000;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -8.5px;
+  pointer-events: all;
+  position:relative;
+  z-index:10;
+
+}
+input[type=range]::-ms-track {
+  width: 100%;
+  height: 1px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+input[type=range]::-ms-fill-lower {
+  background: #000000;
+  border: 0px solid #010101;
+  border-radius: 0px;
+  box-shadow: px px 0px rgba(0, 0, 0, 0), 0px 0px px rgba(13, 13, 13, 0);
+}
+input[type=range]::-ms-fill-upper {
+  background: #000000;
+  border: 0px solid #010101;
+  border-radius: 0px;
+  box-shadow: px px 0px rgba(0, 0, 0, 0), 0px 0px px rgba(13, 13, 13, 0);
+}
+input[type=range]::-ms-thumb {
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0), 0px 0px 0px rgba(13, 13, 13, 0);
+  border: 0px solid rgba(0, 0, 0, 0);
+  height: 18px;
+  width: 3px;
+  border-radius: 0px;
+  background: #000000;
+  cursor: pointer;
+  height: 1px;
+}
+input[type=range]:focus::-ms-fill-lower {
+  background: #000000;
+}
+input[type=range]:focus::-ms-fill-upper {
+  background: #0d0d0d;
+}
+
+
+
 
 </style>
