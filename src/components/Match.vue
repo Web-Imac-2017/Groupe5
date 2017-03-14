@@ -2,7 +2,7 @@
 	<div class="matchs">
 		<div class="col-sm-3">
       <div id="infoProfil">
-        <img v-bind:src="'/static/avatar/' + userActif.avatar" class="avatar">
+        <img v-bind:src="userActif.avatar" class="avatar">
         <p>connected as<br/><span> {{ userActif.pseudo }} </span></p>
       </div>
       <div id="filterMatch">
@@ -34,7 +34,7 @@
 			<div class="matchUserList">
         <h2 id="matchTitle">Users matched with your profil</h2>
         <div class="profilMatch col-sm-3" v-for="user in users">
-          <img v-bind:src="'/static/avatar/' + user[0].infos.avatar" class="avatarProfil" v-on:click="$parent.changeSelectedUser(user[0].infos.pseudo)">
+          <img v-bind:src="user[0].infos.avatar" class="avatarProfil" v-on:click="$parent.changeSelectedUser(user[0].infos.pseudo)">
           <div class="info" :class=getUserState(user)>
             <h3 class="pseudo">{{ user[0].infos.pseudo }} </h3>
             <p>{{ user[0].infos.town }}, {{ user[0].infos.country }}</p>

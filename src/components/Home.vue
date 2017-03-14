@@ -1,17 +1,21 @@
 <template>
 	<div id="home">
-  		<div class="bg" v-bind:style="{backgroundImage: 'url(/static/img/bg.jpg)' }">
-  			<div id="centerwrapper">
-  				<img v-bind:src="'/static/img/logo.png'" class="homeLogo"><br/>
-	    		<router-link v-if="$parent.connected === ''" v-bind:to="'/login/'" id="sign">
-	    			<span>SIGN UP</span>
-	    			<p>or</p>
-	    			<span>SIGN IN</span>
-	    		</router-link>
-	    		<a v-if="$parent.connected === 'true'" v-on:click.prevent="$parent.logout">Sign out</a>
-  			</div>
-  		</div>
-  	</div>
+		<div class="bg" v-bind:style="{backgroundImage: 'url(/static/img/bg.jpg)' }">
+			<div id="centerwrapper">
+				<img v-bind:src="'/static/img/logo.png'" class="homeLogo"><br/>
+				<router-link v-if="$parent.connected === ''" v-bind:to="'/register/'" id="sign">
+					<span>SIGN UP</span>
+					<p>or</p>
+				</router-link>
+				<router-link v-if="$parent.connected === ''" v-bind:to="'/login/'" id="sign">
+					<span>SIGN IN</span>
+				</router-link>
+				<router-link v-bind:to="'/home/'" id="sign">
+					<a v-if="$parent.connected === 'true'" v-on:click.prevent="$parent.logout">Sign out</a>
+				</router-link>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -52,21 +56,12 @@
 			font-size: 2em;
 			font-family: Montserrat;
 			transition: .1s;
+			margin: 0 50px;
 		}
 
 		span:hover
 		{
 			transform: scale(1.1);
-		}
-
-		span:nth-child(1)
-		{
-			margin-right: 50px;
-		}
-
-		span:nth-child(3)
-		{
-			margin-left: 50px;
 		}
 	}
 }

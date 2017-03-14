@@ -2,18 +2,16 @@
   <div class="conversation">
     <ul id="messages">
       <li v-for="message in messages" :class=getUser(message.user)>
-        <div class="messageContent" v-bind:id="'Message' + message.ID">
+        <div class="messageContent" :style="{background:getBackground(message.user)}" v-bind:id="'Message' + message.ID">
           <span>{{ "["+message.date+"]" }}</span>
           <p>{{ message.content }}</p>
         </div>
       </li>
     </ul>
-    <textarea v-on:keyup.enter="sendMessage();" v-model="newMessage"></textarea>
-      <input type="file" name="messageImage" id="messageImage">
-      <p v-on:click="sendImage()">Send Image</p>
-    </form>
+    <textarea v-on:keyup.enter="sendMessage();" v-model="newMessage" :style="{background:$parent.$parent.getLightColor($parent.connectedUser.color)}"></textarea>
+    <input type="file" name="messageImage" id="messageImage" v-on:change="sendImage()">
+    <label for="messageImage"><icon name="picture-o"></icon></label>
   </div>
-
 </template>
 
 
@@ -50,14 +48,25 @@ export default {
       var _this = this;
       setTimeout(function() {
         _this.getImages();
+        _this.getSmiley();
       }, 1000);
     },
     getUser: function(user) {
       var theClass = 'user_other';
+      console.log(this.me.pseudo);
+
       if(user == this.me.pseudo){
         theClass = 'user_me';
       }
       return theClass;
+    },
+    getBackground(user){
+      if(user == this.me.pseudo){
+        return this.$parent.connectedUser.color;
+      }
+      else{
+        return '#cdcccc';
+      }
     },
     getConversation: function() {
       var _this = this;
@@ -87,7 +96,7 @@ export default {
         if(this.messages[i].content.indexOf("PLUME_IMAGE_MESSAGE:") !== -1) {
 
           this.messages[i].content = this.messages[i].content.substr(20,this.messages[i].content.length-1);
-         
+
           var div = document.getElementById("Message" + this.messages[i].ID);
           if(div.children.length == 2) {
             var image = document.createElement('img');
@@ -96,7 +105,7 @@ export default {
             div.append(image);
           }
 
-          this.messages[i].content = "";     
+          this.messages[i].content = "";
         }
       }
     },
@@ -133,9 +142,38 @@ export default {
       this.init();
 
     },
+    getSmiley : function() {
+      for(var i = 0; i < this.messages.length; i ++) {
+        if(this.messages[i].content.indexOf(":)") !== -1) {
+          var pos = this.messages[i].content.indexOf(":)");
+
+          //create image smiley happy
+          var image = document.createElement('img');
+          image.src = "/static/smileys/happy.svg";
+console.log(image);
+          //Delete smiley characters
+          this.messages[i].content = this.messages[i].content.replace(":)", "");
+
+          //and replace with smiley image
+          var div = document.getElementById("Message" + this.messages[i].ID);
+          // div.append(image);
+
+          this.messages[i].content = this.messages[i].content.slice(0, pos) + image + this.messages[i].content.slice(pos);
+
+          // if(div.children.length == 2) {
+          //   var image = document.createElement('img');
+          //   image.src = this.messages[i].content;
+          //
+          //   div.append(image);
+          // }
+          //
+          // this.messages[i].content = "";
+        }
+      }
+    },
     scrollBottomAuto: function(){
       var container = this.$el.querySelector("#messages");
-        container.scrollTop = container.scrollHeight;
+      container.scrollTop = container.scrollHeight;
     }
   }
 }
@@ -144,22 +182,17 @@ export default {
 
 <style lang="scss">
 
-$profil_color: rgb(195,39,47);
-$profil_color_light: rgb(225,146,150);
-
 .conversation{
 
   ul {
     padding: 0;
     overflow-x: hidden;
     overflow-y: auto;
-    background-color: #fff;
-    height: calc(100vh - 90px);
+    height: calc(100vh - 140px);
   }
   textarea {
     outline: none;
     resize: none;
-    background-color: #e19296;
     border: 2px solid #000;
     border-radius: 10px;
     width: 100%;
@@ -171,6 +204,20 @@ $profil_color_light: rgb(225,146,150);
     height: 60px;
     color: #000;
   }
+  input{
+    display: none;
+  }
+  label{
+    cursor: pointer;
+    position: absolute;
+    bottom: 6px;
+    left: 35px;
+    .fa-icon{
+      width: 30px;
+      height: 30px;
+    }
+  }
+
 
   .user_other, .user_me {
     list-style: none;
@@ -204,7 +251,6 @@ $profil_color_light: rgb(225,146,150);
   .user_me {
     .messageContent {
       color: #ffffff;
-      background-color: $profil_color;
       float: right;
     }
     .messageDate{

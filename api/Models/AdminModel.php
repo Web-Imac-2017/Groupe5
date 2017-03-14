@@ -11,8 +11,7 @@ class AdminModel{
         
         $req_get = $bdd->prepare('SELECT `ID`, `pseudo`, `avatar` FROM `user` WHERE avatar_state = 0');
         $req_get->execute();
-        $result = $req_get->fetchAll();
-        var_dump($result);
+        $result = Array('users' => $req_get->fetchAll());
         return $result;  
     }
     

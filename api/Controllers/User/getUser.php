@@ -8,14 +8,13 @@
 
 	include "../../Models/UserModel.php";
 
-    $data = array();
 
+    $data = array();
     if ($_SERVER['REQUEST_METHOD'] == 'POST')
     {   
         $json = json_decode(file_get_contents('php://input'), true);
         if(!is_array($json)) $data = array("Error", "Error: POST.");
         $pseudo = $json['pseudo'];
-
         $data["pseudo"] = $pseudo;
         $data["avatar"] = UserModel::getUserAvatar($pseudo);
         $data["lastname"] = UserModel::getUserLastName($pseudo);

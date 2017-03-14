@@ -1,9 +1,9 @@
 <template>
   <div class="conversationsMenu">
-    <div class="CMHeader">
+    <!-- <div class="CMHeader">
       <router-link v-bind:to="'/home/'"><icon name="long-arrow-left"></icon>back</router-link>
       <img v-bind:src="'/static/img/logo.png'" class="CMLogo">
-    </div>
+    </div> -->
     <ul>
       <li v-for="conversation in conversations" class="row">
         <router-link v-bind:to="'/messages/' + conversation.id" :class=getActiveConversation(conversation.id) class="user">
@@ -11,7 +11,7 @@
             <img :src="user.avatar">
           </span>
           <span v-for="user in conversation.users" class="text-conv">
-            <p class="titleConversation userPseudo" :class=getUserState(user)>{{ user.pseudo }} <icon name="circle"></icon></p> 
+            <p class="titleConversation userPseudo" :class=getUserState(user)>{{ user.pseudo }} <icon name="circle"></icon></p>
             <p class="lastMessage">{{ conversation.lastMessage }}</p>
           </span>
           <span v-on:click="deleteConv(conversation.id)" class="quit">
@@ -22,7 +22,7 @@
       <li class="row addPlume">
         <router-link v-bind:to="'/match/'" class="user">
           <span class="avatar">
-            <div class="plus">
+            <div class="plus" :style="{background:$parent.$parent.getLightColor($parent.connectedUser.color)}">
               <icon name="plus"></icon>
             </div>
           </span>
@@ -66,11 +66,11 @@ export default {
   },
   methods: {
     getActiveConversation: function(id) {
-      var theClass = '';
+      var colorLight = '#fff';
       if(id == this.$route.params.conversationID){
-        theClass = 'active';
+        colorLight = this.$parent.$parent.getLightColor(this.$parent.connectedUser.color);
       }
-      return theClass;
+      return colorLight;
     },
     getUserState: function(user) {
       var theClass = 'userNonConnected';
@@ -97,7 +97,7 @@ export default {
     },
     getConversations: function() {
       var _this = this;
-      // TO DO : Améliorer ça -- permet de corriger bug afficher conversations    
+      // TO DO : Améliorer ça -- permet de corriger bug afficher conversations
       setTimeout(function() {
         fetch(apiRoot() + 'Controllers/Conversation/getUserConversations.php', {
           method: 'POST',
@@ -121,11 +121,11 @@ export default {
                 if(_this.conversations[i].lastMessage.indexOf("PLUME_IMAGE_MESSAGE:") !== -1) {
 
                   _this.conversations[i].lastMessage = _this.conversations[i].lastMessage.substr(20,_this.conversations[i].lastMessage.length-1);
-                  
-                  _this.conversations[i].lastMessage = "Image";     
+
+                  _this.conversations[i].lastMessage = "Image";
                 }
               }
-              
+
             }
           }
         });
@@ -158,8 +158,6 @@ export default {
 
 <style lang="scss">
 
-$profil_color: rgb(195,39,47);
-$profil_color_light: rgb(225,146,150);
 $avatar_size: 80px;
 
 
@@ -167,7 +165,8 @@ $avatar_size: 80px;
   overflow-x: hidden;
   overflow-y: auto;
   border-right: 1px solid #000;
-  height: 100vh;
+  // height: 100vh;
+  height: calc(100vh - 50px);
 
   [class*="col"]{
     padding: 0;
@@ -259,16 +258,12 @@ $avatar_size: 80px;
       top: -15px;
     }
   }
-  .user.router-link-active.active {
-    background-color: $profil_color_light;
-  }
   .addPlume{
     margin-bottom: 50px;
     .plus{
       width: $avatar_size;
       height: $avatar_size;
       border: 1px solid #000;
-      background-color: $profil_color_light;
       text-align: center;
       display: flex;
       .fa-icon{

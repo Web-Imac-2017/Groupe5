@@ -9,12 +9,11 @@
 
     $json = json_decode(file_get_contents('php://input'), true);
     $pseudo=$json['pseudo'];
-
+    $data = "";
 
     if(!is_array($json)) $data = array("Error", "Error: POST.");
     else {
         AdminModel::approvePicture($pseudo);
-        $data = array("Error", "Il n'y a pas d'erreur");
     }
     
 

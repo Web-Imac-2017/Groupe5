@@ -28,13 +28,13 @@
 	      if($level == 1) {
 	      	$oldLanguages = UserModel::getUserLangueAApprendre($pseudo);
 	      	foreach ($oldLanguages['learningLang'] as $key => $language) {
-					  UserModel::deleteUserLang($pseudo, $language);
+					  UserModel::deleteUserLang($pseudo, $language['name_langue']);
 					}
 	      }
 	      else {
 	      	$oldLanguages = UserModel::getUserLangueMaitrisee($pseudo);
 	      	foreach ($oldLanguages['spokenLang'] as $key => $language) {
-					  UserModel::deleteUserLang($pseudo, $language);
+					  UserModel::deleteUserLang($pseudo, $language['name_langue']);
 					}
 	      }
 	     	

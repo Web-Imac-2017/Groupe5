@@ -22,8 +22,7 @@
 	}
 	else{
 		$data=array("Error", "Error : You're research is unauthorized");
-	}
-	
+	}	
 
   echo json_encode($data);
 
