@@ -65,9 +65,8 @@ import Header from './Header.vue'
     @keyframes colorize
     {
         0% {background-color: #FAD6A6;}
-        25% {background-color: #FF717E;}
-        50% {background-color: #F9B69C;}
-        75% {background-color: #6ABE83;}
+        33% {background-color: #F9B69C;}
+        66% {background-color: #6ABE83;}
         100% {background-color: #FAD6A6;}
     }
 
@@ -80,6 +79,17 @@ import Header from './Header.vue'
         font-family: Montserrat;
         font-weight: 700;
         text-align: center;
+
+        .quitButton
+        {
+          transition: .2s;
+
+          &:hover
+          {
+            transform: scale(1.05) rotate(20deg);
+          }
+        }
+
 
         .wrapper
         {

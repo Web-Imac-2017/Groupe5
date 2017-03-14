@@ -14,8 +14,8 @@
         <!-- AVATAR -->
         <div id="chargeImg">
           <div v-if="!user.avatar">
-            <input type="file" name="file" id="file" v-on:click="loadingFile" class="inputfile" />
-            <label class="filebutton" for="file" v-bind:style="{backgroundImage: 'url(../../static/img/import.png'}"></label>
+            <input type="file" name="file" id="file" v-on:change="avatarChecked" class="inputfile" />
+            <label class="filebutton" id="filebtn" for="file" v-bind:style="{backgroundImage: 'url(../../static/img/import.png'}"></label>
             <br/>
             <p id="loading" class="filebuttontext">Import your avatar</p>
           </div>
@@ -136,7 +136,8 @@ export default {
       },
       hobbiesList: [],
       languagesList: [],
-      colorsList: []
+      colorsList: [],
+      addAvatar : ''
     }
   },
 
@@ -347,19 +348,12 @@ export default {
       }
       event.target.style.border = "4px solid black";
     },
-    loadingFile: function(event)
+    avatarChecked: function(event)
     {
       	var f = event.target.files[0];
-      	if (f)
-      	{
-        	var r = new FileReader();
-        	r.onload = function(e)
-        	{
-          		var str = "Name : " + f.name + "\nType : " + f.type + "\nSize : " + f.size/1000 + "Ko\n";
-        	}
-        	r.readAsText(f);
-      	}
-      	document.getElementById("loading").innerHTML = "File loaded successfully";
+        document.getElementById("loading").innerHTML = f.name + " loaded succesfully.";
+        document.getElementById("filebtn").style.backgroundImage = "url(../../static/img/checked.png)";
+        document.getElementById("filebtn").style.border = "3px solid black"; 
     },
     convertToHTML: function(){
       var text = this.user.description;
@@ -419,6 +413,15 @@ export default {
 </script>
 
 <style lang="scss">
+
+@keyframes colorize
+{
+    0% {background-color: #FAD6A6;}
+    33% {background-color: #F9B69C;}
+    66% {background-color: #6ABE83;}
+    100% {background-color: #FAD6A6;}
+}
+
 #error_Genre, #error_FirstName, #error_LastName, #error_Age, #error_Pseudo, #error_Mail, #error_Psw, #error_Psw2, #error_Country{
   display:none;
 }
@@ -436,6 +439,16 @@ export default {
   position: absolute;
   color: black;
   overflow-x: hidden;
+
+  .quitButton
+  {
+    transition: .2s;
+
+    &:hover
+    {
+      transform: scale(1.05) rotate(20deg);
+    }
+  }
 
   .wrapper
   {
@@ -486,6 +499,7 @@ export default {
     	height: auto;
     	font-size: 1.3em;
     	padding: 10px;
+      border: 3px solid #333333;
     }
 
     input#pseudo, label#countryLabel
@@ -516,7 +530,7 @@ export default {
     .filebuttontext
     {
       margin-bottom: 35px;
-      font-size: 0.8em;
+      font-size: 1.2em;
       font-style: italic;
     }
     select#country
@@ -572,7 +586,8 @@ export default {
     }
     #submitbuttonlabel
     {
-      margin-top: 50px;
+      width: 100%;
+      margin-top: 10px;
       margin-bottom: 120px;
       font-size: 3em;
       padding: 0 15px;
@@ -581,9 +596,10 @@ export default {
       cursor: pointer;
       font-weight: 900;
       transition: .1s;
+      color: #111111;
       &:hover
       {
-        transform: scale(1.2) rotate(5deg);
+        animation: colorize 2s infinite;
       }
     }
   }
