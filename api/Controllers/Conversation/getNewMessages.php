@@ -22,7 +22,8 @@
 
             $data["messages"] = ConversationModel::getNewMessagesOfConv($last_message, $id_conv);
             if(!empty($data["messages"])){
-                $data["last_message"] = $data["messages"][0]["ID"]; 
+                $last = count($data["messages"])-1;
+                $data["last_message"] = $data[$last]['ID']; 
             }
 
          }

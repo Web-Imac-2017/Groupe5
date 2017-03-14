@@ -128,10 +128,11 @@ class ConversationModel{
     
     /*retourne un tableau*/
     public static function getConvOfUser($pseudo){
+        $bdd = Database::connexionBDD();
+        
         $id_user = UserModel::getUserId($pseudo);
         $result = [];
         
-        $bdd = Database::connexionBDD();
         $req_active = $bdd->prepare("SELECT `ID` as `id`
         FROM conversation
         INNER JOIN user_conversation
@@ -163,6 +164,33 @@ class ConversationModel{
         $req_active->execute();
         
         return $req_active->fetchAll();
+    }
+    
+    /*prend un tableau de pseudo d'utilisateurs en entrée et retourne 1 si existe déjà / 0 sinon*/
+    public static function ifConvExist($user_array){
+        $bdd = Database::connexionBDD();
+        
+        $id_user = UserModel::getUserId($user_array[0]);
+        
+        $req_active = $bdd->prepare("SELECT `ID` as `id`
+        FROM conversation
+        INNER JOIN user_conversation
+        WHERE conversation.`id` = user_conversation.`id_conversation` && user_conversation.`id_user` = :user ;");
+        $req_active->bindParam(':user', $id_user[0], PDO::PARAM_INT);
+        $req_active->execute();
+        
+        $result = $req_active->fetchAll();
+        
+        if(!empty($result)){
+            for($i=0; $i<count($result); $i++){
+                $other_user = ConversationModel::getOtherUsers($id_user[0], $result[$i]['id']);
+                if(!empty($other_user) && $other_user[0]['pseudo'] == $user_array[1]){
+                    return 1;
+                }
+            }
+        }
+        
+        return 0;
     }
     
     public static function decryptMessage($pseudo, $crypted){
