@@ -368,7 +368,13 @@ export default {
 }
 </script>
 
-  <style lang="scss">
+<style lang="scss">
   @import 'assets/scss/reset.css';
   @import 'assets/scss/design.scss';
-  </style>
+
+  #app
+  {
+    overflow-x: hidden;
+  }
+
+</style>

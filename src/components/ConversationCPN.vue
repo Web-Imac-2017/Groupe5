@@ -143,30 +143,29 @@ export default {
     },
     getSmiley : function() {
       for(var i = 0; i < this.messages.length; i ++) {
-        if(this.messages[i].content.indexOf(":)") !== -1) {
-          var pos = this.messages[i].content.indexOf(":)");
-
-          //create image smiley happy
-          var image = document.createElement('img');
-          image.src = "/static/smileys/happy.svg";
-          //Delete smiley characters
-          this.messages[i].content = this.messages[i].content.replace(":)", "");
-
-          //and replace with smiley image
-          var div = document.getElementById("Message" + this.messages[i].ID);
-          // div.append(image);
-
-          this.messages[i].content = this.messages[i].content.slice(0, pos) + image + this.messages[i].content.slice(pos);
-
-          // if(div.children.length == 2) {
-          //   var image = document.createElement('img');
-          //   image.src = this.messages[i].content;
-          //
-          //   div.append(image);
-          // }
-          //
-          // this.messages[i].content = "";
-        }
+        var regex = this.messages[i].content.match(/:\)/);
+        //console.log("regex: " + regex);
+        // for (var j = 0; j < regex.length; i++) {
+        //   array[i]
+        // }
+        //
+        //
+        // if(this.messages[i].content.indexOf(":)") !== -1) {
+        //   console.log(this.messages[i].content.match(/:\)/));
+        //   var pos = this.messages[i].content.indexOf(":)");
+        //   var image = document.createElement('img');
+        //   image.src = "/static/smileys/happy.svg";
+        //   image.className = "smiley";
+        //   this.messages[i].content = this.messages[i].content.replace(":)", "");
+        //   var part1 = this.messages[i].content.slice(0, pos);
+        //   var part2 = this.messages[i].content.slice(pos);
+        //   var div = document.getElementById("Message" + this.messages[i].ID);
+        //   div.append(image);
+        //   this.messages[i].content = "";
+        //   div.append(part1);
+        //   div.append(image);
+        //   div.append(part2);
+        // }
       }
     },
     scrollBottomAuto: function(){
@@ -255,6 +254,8 @@ export default {
 
     }
   }
-
+  .smiley{
+    width: 40px;
+  }
 }
 </style>

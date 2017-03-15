@@ -2,7 +2,7 @@
 	<div id="home">
 		<div class="bg" v-bind:style="{backgroundImage: 'url(/static/img/bg.jpg)' }">
 			<div id="centerwrapper">
-				<img v-bind:src="'/static/img/logo.png'" class="homeLogo"><br/>
+				<img src="/static/img/logo.png" class="homeLogo"><br/>
 				<router-link v-if="$parent.connected === ''" v-bind:to="'/register/'" id="sign">
 					<span>SIGN UP</span>
 					<p>or</p>
