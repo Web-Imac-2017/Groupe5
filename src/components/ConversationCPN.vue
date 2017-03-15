@@ -44,16 +44,15 @@ export default {
   methods: {
     init: function() {
       this.newMessage="";
-      this.getConversation();
       var _this = this;
       setTimeout(function() {
+        _this.getConversation();
         _this.getImages();
         _this.getSmiley();
       }, 1000);
     },
     getUser: function(user) {
       var theClass = 'user_other';
-      console.log(this.me.pseudo);
 
       if(user == this.me.pseudo){
         theClass = 'user_me';
@@ -93,19 +92,17 @@ export default {
     },
     getImages : function() {
       for(var i = 0; i < this.messages.length; i ++) {
-        if(this.messages[i].content.indexOf("PLUME_IMAGE_MESSAGE:") !== -1) {
-
-          this.messages[i].content = this.messages[i].content.substr(20,this.messages[i].content.length-1);
-
-          var div = document.getElementById("Message" + this.messages[i].ID);
-          if(div.children.length == 2) {
-            var image = document.createElement('img');
-            image.src = this.messages[i].content;
-
-            div.append(image);
+        if(this.messages[i].content != "" && this.messages[i].content != null) {
+          if(this.messages[i].content.indexOf("PLUME_IMAGE_MESSAGE:") !== -1) {
+            this.messages[i].content = this.messages[i].content.substr(20,this.messages[i].content.length-1);
+            var div = document.getElementById("Message" + this.messages[i].ID);
+            if(div.children.length == 2) {
+              var image = document.createElement('img');
+              image.src = this.messages[i].content;
+              div.append(image);
+            }
+            this.messages[i].content = "";
           }
-
-          this.messages[i].content = "";
         }
       }
     },
@@ -138,36 +135,52 @@ export default {
       var im = oData.append("avatar", file);
       var pseudo = oData.append("pseudo", this.me.pseudo);
       var idConv = oData.append("id_conv", this.$route.params.conversationID);
-      this.$http.post(apiRoot() + 'Controllers/Image/uploadImageMessage.php', oData);
-      this.init();
+      var _this = this;
+      this.$http.post(apiRoot() + 'Controllers/Image/uploadImageMessage.php', oData).then(function() {
+        _this.init();
+      });
 
+    },
+    replaceTxtBySmiley : function(message, match, name){
+      var div = document.getElementById("Message" + message.ID);
+      div.text = "";
+      var pos = match.index;
+      var image = document.createElement('img');
+      image.src = "/static/smileys/"+name+".svg";
+      image.className = "smiley";
+      message.content = message.content.replace(match[0], " ");
+      var part1 = message.content.slice(0, pos);
+      var part2 = message.content.slice(pos);
+      div.append(image);
+      message.content = "";
+      div.append(part1);
+      div.append(image);
+      div.append(part2);
     },
     getSmiley : function() {
       for(var i = 0; i < this.messages.length; i ++) {
-        if(this.messages[i].content.indexOf(":)") !== -1) {
-          var pos = this.messages[i].content.indexOf(":)");
-
-          //create image smiley happy
-          var image = document.createElement('img');
-          image.src = "/static/smileys/happy.svg";
-console.log(image);
-          //Delete smiley characters
-          this.messages[i].content = this.messages[i].content.replace(":)", "");
-
-          //and replace with smiley image
-          var div = document.getElementById("Message" + this.messages[i].ID);
-          // div.append(image);
-
-          this.messages[i].content = this.messages[i].content.slice(0, pos) + image + this.messages[i].content.slice(pos);
-
-          // if(div.children.length == 2) {
-          //   var image = document.createElement('img');
-          //   image.src = this.messages[i].content;
-          //
-          //   div.append(image);
-          // }
-          //
-          // this.messages[i].content = "";
+        var re = /:\)|:D|:\(|:O|:P/g,
+        str = this.messages[i].content;
+        var match;
+        while ((match = re.exec(str)) != null) {
+          switch (match[0]) {
+            case ":)":
+              this.replaceTxtBySmiley(this.messages[i], match, "smile");
+              break;
+            case ":(":
+              this.replaceTxtBySmiley(this.messages[i], match, "sad");
+              break;
+            case ":O":
+              this.replaceTxtBySmiley(this.messages[i], match, "shock");
+              break;
+            case ":D":
+              this.replaceTxtBySmiley(this.messages[i], match, "happy");
+              break;
+            case ":P":
+              this.replaceTxtBySmiley(this.messages[i], match, "tongue");
+              break;
+            default:
+          }
         }
       }
     },
@@ -257,6 +270,8 @@ console.log(image);
 
     }
   }
-
+  .smiley{
+    width: 40px;
+  }
 }
 </style>

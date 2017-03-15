@@ -50,7 +50,7 @@
                 $newImage = imagecreatetruecolor($width, $height);
                 imagecopyresampled($newImage, $copy, 0, 0, 0, 0, $width, $height, $image_infos[0], $image_infos[1]);
                 //Déplace l'image dans le repertoire 
-                imagepng($newImage,ROOT."static/avatar/".$pseudo.".png");
+                imagepng($newImage, ROOT."static/avatar/".$pseudo.".png");
                 $result = ImageModel::uploadAvatar("/static/avatar/".$pseudo.".png", $pseudo);
             }
             else {

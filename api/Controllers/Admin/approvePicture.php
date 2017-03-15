@@ -9,7 +9,7 @@
 
     $json = json_decode(file_get_contents('php://input'), true);
     $pseudo=$json['pseudo'];
-    $data = "";
+    $data = "false";
 
     if(!is_array($json)) $data = array("Error", "Error: POST.");
     else {

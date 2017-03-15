@@ -34,9 +34,15 @@ import ConversationComponent from './ConversationCPN.vue'
     methods: {
     },
     created: function() {
+      if(this.$parent.connected != "true") {
+        this.$parent.logout();
+      }
       this.connectedUser = this.$parent.connectedUser;
     },
     mounted: function() {
+      if(this.$parent.connected != "true") {
+        this.$parent.logout();
+      }
       this.connectedUser = this.$parent.connectedUser;
     }
   }

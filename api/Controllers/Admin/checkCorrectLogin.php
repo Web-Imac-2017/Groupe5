@@ -8,16 +8,15 @@
 	include "../../Models/AdminModel.php";
 
     $json = json_decode(file_get_contents('php://input'), true);
-    $pseudo=$json['pseudo'];
-    $data = "";
-
+    $username=$json['username'];
+    $password=$json['password'];
+    $data = "false";
 
     if(!is_array($json)) $data = array("Error", "Error: POST.");
     else {
-        $data = AdminModel::refusePicture($pseudo);
+        $data = AdminModel::checkUsernamePassword($username, $password);
     }
     
-
-  echo json_encode($data);
+    echo json_encode($data);
 
 ?>

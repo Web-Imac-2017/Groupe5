@@ -97,6 +97,11 @@ export default {
       var newSearch = text.convertionHTML();
       this.search = newSearch;
     }
+  },
+  created: function() {
+    if(this.$parent.$parent.connected != "true") {
+      this.$parent.$parent.logout();
+    }
   }
 }
 </script>
