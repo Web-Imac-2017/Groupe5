@@ -12,13 +12,23 @@ class ImageModel{
         //$id_user = UserModel::getUserId($pseudo);
         $contenu = "PLUME_IMAGE_MESSAGE:".$url;
         
-        //$req_active = $bdd->prepare("INSERT INTO `message`(`ID`, `contenu`, `date`, `id_user`, `id_conversation`) VALUES (NULL,:contenu, now(), :id_user, :id_conv)");
+        $data = array();
 
-       // $result = $req_active->execute(array(':contenu' => $contenu, ':id_user' => $id_user, ':id_conv' => $id_conv));
+        /*cryptage message*/
+        $id_sender = UserModel::getUserId($pseudo);
 
-        $result = ConversationModel::addMessage($contenu, $pseudo, $id_conv);
+        $receiver = ConversationModel::getOtherUsers($id_sender, $id_conv);
+
+        $public_key = UserModel::getUserPublicKey($receiver[0]['pseudo']);
+
+        openssl_public_encrypt($contenu, $crypted_message, $public_key);
         
-        return "";
+        /*message en BDD*/
+        $data = ConversationModel::addMessage($crypted_message, $pseudo, $id_conv);
+        $data = array(0);
+
+
+        return $data;
     }
     
     

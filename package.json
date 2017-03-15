@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A Vue.js project",
   "author": "CoucouCNous",
+  "main": "main.js",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
@@ -10,9 +11,15 @@
   },
   "dependencies": {
     "bootstrap-sass": "^3.3.7",
+    "es6-promise": "^4.0.5",
+    "isomorphic-fetch": "^2.2.1",
     "jquery": "^2.2.4",
+    "sync-request": "^4.0.1",
     "vue": "^2.1.10",
-    "vue-router": "^2.2.0"
+    "vue-awesome": "^2.1.0",
+    "vue-resource": "^1.2.1",
+    "vue-router": "^2.2.0",
+    "vue-slider-component": "^2.1.9"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",

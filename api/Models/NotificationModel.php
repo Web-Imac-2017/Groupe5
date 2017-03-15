@@ -33,6 +33,7 @@ class NotificationModel{
         for($i=0; $i < count($result); $i++){
             $num_id = intval($result[$i]['ID_user1']);
             $result[$i]['user'] = UserModel::getPseudoById($num_id);
+            $result[$i]['user_avatar'] = UserModel::getUserAvatar($result[$i]['user']);
         }
        
         return $result;
