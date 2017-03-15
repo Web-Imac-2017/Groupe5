@@ -143,7 +143,7 @@ export default {
     },
     replaceTxtBySmiley : function(message, match, name){
       var div = document.getElementById("Message" + message.ID);
-      div.text = "";
+      div.innerHTML="";
       var pos = match.index;
       var image = document.createElement('img');
       image.src = "/static/smileys/"+name+".svg";
@@ -216,6 +216,7 @@ export default {
     padding: 10px;
     height: 60px;
     color: #000;
+    padding-left: 65px;
   }
   input{
     display: none;
