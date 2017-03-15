@@ -156,6 +156,17 @@ export default {
 			this.getCountries();
 			this.getColors();
 
+			setTimeout(function()
+    	{
+      		var el = document.getElementsByClassName("colors");
+      		var i;
+      		for (i = 0; i < el.length; i++)
+      		{
+        		var bg = el[i].childNodes[0].getAttribute("value");
+        		el[i].childNodes[2].style.backgroundColor = bg;
+      		}
+    	}, 500);
+
 			this.user = this.$parent.connectedUser;
 		},
 		editProfile: function() {
@@ -388,7 +399,6 @@ export default {
 		},
 		updateColor: function() {
 			var _this = this;
-			console.log(_this.user);
 			fetch(apiRoot() + 'Controllers/User/updateUserColor.php', {
 				method: 'POST',
 				headers: {
@@ -502,20 +512,9 @@ export default {
 			});
 		}
 	},
-
 	mounted: function()
 	{
-		setTimeout(function()
-    	{
-      		var el = document.getElementsByClassName("colors");
-      		console.log(el);
-      		var i;
-      		for (i = 0; i < el.length; i++)
-      		{
-        		var bg = el[i].childNodes[0].getAttribute("value");
-        		el[i].childNodes[2].style.backgroundColor = bg;
-      		}
-    	}, 300);
+		this.init();
 	}
 }
 </script>
@@ -668,5 +667,12 @@ export default {
         	height: 50px;
       	}
     }
+
+  .lang img {
+    padding: 8px 10px;
+    border-radius: 5px;
+    width: auto;
+    height: 75px;
+  }
 }
 </style>

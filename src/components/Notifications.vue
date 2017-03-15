@@ -1,5 +1,5 @@
 <template>
-    <div class="notification">
+    <div class="notification" v-if="$parent.notifications != ''">
         <div class="container-fluid">
             <div class="row">
                 <ul>
@@ -49,15 +49,14 @@ import ConversationComponent from './ConversationCPN.vue'
       this.connectedUser = this.$parent.connectedUser;
       setTimeout(function() {
         _this.$parent.getNotifications(_this.connectedUser.pseudo);
-        console.log(_this.$parent.notifications);
       }, 1000);
     },
     mounted: function() {
-      var _this = this;
-      this.connectedUser = this.$parent.connectedUser;
-      setTimeout(function() {
-        _this.$parent.getNotifications(_this.connectedUser.pseudo);
-      }, 500);
+        this.connectedUser = this.$parent.connectedUser;
+        var _this = this;
+        setTimeout(function() {
+            _this.$parent.getNotifications(_this.connectedUser.pseudo);
+        }, 1000);
     }
   }
 </script>

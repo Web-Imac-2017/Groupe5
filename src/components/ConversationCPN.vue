@@ -141,31 +141,47 @@ export default {
       });
 
     },
+    replaceTxtBySmiley : function(message, match, name){
+      var div = document.getElementById("Message" + message.ID);
+      div.text = "";
+      var pos = match.index;
+      var image = document.createElement('img');
+      image.src = "/static/smileys/"+name+".svg";
+      image.className = "smiley";
+      message.content = message.content.replace(match[0], " ");
+      var part1 = message.content.slice(0, pos);
+      var part2 = message.content.slice(pos);
+      div.append(image);
+      message.content = "";
+      div.append(part1);
+      div.append(image);
+      div.append(part2);
+    },
     getSmiley : function() {
       for(var i = 0; i < this.messages.length; i ++) {
-        var regex = this.messages[i].content.match(/:\)/);
-        //console.log("regex: " + regex);
-        // for (var j = 0; j < regex.length; i++) {
-        //   array[i]
-        // }
-        //
-        //
-        // if(this.messages[i].content.indexOf(":)") !== -1) {
-        //   console.log(this.messages[i].content.match(/:\)/));
-        //   var pos = this.messages[i].content.indexOf(":)");
-        //   var image = document.createElement('img');
-        //   image.src = "/static/smileys/happy.svg";
-        //   image.className = "smiley";
-        //   this.messages[i].content = this.messages[i].content.replace(":)", "");
-        //   var part1 = this.messages[i].content.slice(0, pos);
-        //   var part2 = this.messages[i].content.slice(pos);
-        //   var div = document.getElementById("Message" + this.messages[i].ID);
-        //   div.append(image);
-        //   this.messages[i].content = "";
-        //   div.append(part1);
-        //   div.append(image);
-        //   div.append(part2);
-        // }
+        var re = /:\)|:D|:\(|:O|:P/g,
+        str = this.messages[i].content;
+        var match;
+        while ((match = re.exec(str)) != null) {
+          switch (match[0]) {
+            case ":)":
+              this.replaceTxtBySmiley(this.messages[i], match, "smile");
+              break;
+            case ":(":
+              this.replaceTxtBySmiley(this.messages[i], match, "sad");
+              break;
+            case ":O":
+              this.replaceTxtBySmiley(this.messages[i], match, "shock");
+              break;
+            case ":D":
+              this.replaceTxtBySmiley(this.messages[i], match, "happy");
+              break;
+            case ":P":
+              this.replaceTxtBySmiley(this.messages[i], match, "tongue");
+              break;
+            default:
+          }
+        }
       }
     },
     scrollBottomAuto: function(){

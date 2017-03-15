@@ -60,7 +60,7 @@ export default {
           learningLang: []
         }
       },
-      notifications : []
+      notifications : ''
     }
   },
   created: function(){
