@@ -53,13 +53,13 @@ echo '{
             "user" : "CoralieBurton",
             "date" : "23/05/2017",
             "ID" : "8",
-            "content" : ":) Je suis une petit bulle toute mignonne :) tadddaa"
+            "content" : "Je suis une petit bulle toute mignonne :P tadddaa"
         },
         {
             "user" : "maureeniz",
             "date" : "23/05/2017",
             "ID" : "9",
-            "content" : "Trop cool ! :) Fusce iaculis iaculis massa sed iaculis. Nullam lobortis maximus nisi vel auctor. Nunc vestibulum pretium urna ID commodo. Donec aliquam consequat nisl, ut lobortis mi sodales vitae. Nam urna metus, pulvinar sit amet felis vel."
+            "content" : "Trop cool ! Fusce iaculis iaculis massa sed iaculis. Nullam lobortis maximus nisi vel auctor. Nunc vestibulum pretium urna ID commodo. Donec aliquam consequat nisl, ut lobortis mi sodales vitae. Nam urna metus, pulvinar sit amet felis vel."
         }
     ],
     "users" : [
