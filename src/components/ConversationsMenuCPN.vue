@@ -6,7 +6,7 @@
     </div> -->
     <ul>
       <li v-for="conversation in conversations" class="row">
-        <router-link v-bind:to="'/messages/' + conversation.id" :class=getActiveConversation(conversation.id) class="user">
+        <router-link v-bind:to="'/messages/' + conversation.id" :style="{background:getActiveConversation(conversation.id)}" class="user">
           <span  v-for="user in conversation.users" class="avatar" v-on:click="$parent.$parent.changeSelectedUser(user.pseudo)">
             <img :src="user.avatar">
           </span>
