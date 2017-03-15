@@ -821,7 +821,7 @@ class UserModel {
         $data = array();
         
         $data["pseudo"] = $pseudo;
-        $data["avatar"] = "";
+        $data["avatar"] = UserModel::getUserAvatar($pseudo);
         $data["name"] = UserModel::getUserLastName($pseudo);        
         $data["firstname"] = UserModel::getUserName($pseudo);
         $data["age"] = UserModel::getUserAge($pseudo);

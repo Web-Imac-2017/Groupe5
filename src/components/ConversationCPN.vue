@@ -50,9 +50,9 @@ export default {
       _this.scrollBottomAuto();
     }, 500);
 
-    /*setInterval(function() {
+    setInterval(function() {
       _this.getConversation();
-    }, 1000);*/
+    }, 1000);
 
   },
   methods: {

@@ -118,7 +118,6 @@ export default{
             if(data[i]["users"].length > 0) {
               _this.users.push(data[i]["users"]);
             }
-            console.log(_this.users);
           }
         }
       });
