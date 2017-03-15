@@ -1,28 +1,34 @@
 <template lang="html">
-  <div class="searchBar">
-      <div class="input-group bar">
-        <input type="text" class="form-control" placeholder="Search a Plummate" v-model="search" id="searchUser">
-        <span class="input-group-btn">
-          <button v-on:click="searchUsers" class="btn btn-default" type="button">Go</button>
-        </span>
-      </div>
-    <div class="col-md-12 result" :style="{display: none}">
-      <div v-for="user in users" class="col-md-4">
-        <h1>{{user.pseudo}}</h1>
-        <h2>Spoken languages</h2>
-        <ul>
-          <li v-for="spokenLang in user.languages.spokenLang">{{spokenLang}}</li>
-        </ul>
-        <h2>Learning languages</h2>
-        <ul>
-          <li v-for="learningLang in user.languages.learningLang">{{learningLang}}</li>
-        </ul>
-      </div>
+    <div class="searchBar">
+        <div class="input-group bar">
+            <input type="text" class="form-control" placeholder="If u're looking for someone..." v-model="search" id="searchUser">
+            <span class="input-group-btn">
+                <button v-on:click="searchUsers" class="btn btn-default" type="button">Go</button>
+            </span>
+        </div>
+        <div id="resultdiv" class="col-md-12 result">
+            <div v-for="user in users" class="col-md-4 resultitem">
+                <div class="resultavatar">
+                    <img class="resultimg" src="/static/avatar/default.jpg"/>
+                </div>
+                <div class="resulttext">
+                    <p class="resultuser">{{ user.pseudo }}</p>
+                    <p class="">Spoken languages</h2>
+                    <ul>
+                        <li v-for="spokenLang in user.languages.spokenLang">{{spokenLang}}</li>
+                    </ul>
+                    <h2>Learning languages</h2>
+                    <ul>
+                        <li v-for="learningLang in user.languages.learningLang">{{learningLang}}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
+
 import {apiRoot} from '../../config/localhost/settings.js'
 
 export default {
@@ -33,40 +39,46 @@ export default {
     }
   },
   methods: {
-    searchUsers: function () {
-      this.users = [];
-      var formCorrect = 1;
-      var regexPseudo = new RegExp(/^([a-zA-Z0-9_-]){1,30}$/);
+    searchUsers: function ()
+    {
+        this.users = [];
+        var formCorrect = 1;
+        var regexPseudo = new RegExp(/^([a-zA-Z0-9_-]){1,30}$/);
 
-      if(!regexPseudo.test(this.search)){
-        formCorrect = 0;
-        console.log("ERROR");
-      }
+        if (!regexPseudo.test(this.search))
+        {
+            formCorrect = 0;
+            console.log("ERROR");
+        }
 
+        if (formCorrect != 0)
+        {
+            this.convertSearchToHTML();
 
-      if(formCorrect != 0){
-        this.convertSearchToHTML();
-
-        var _this = this;
-        fetch(apiRoot() + 'Controllers/User/researchUser.php', {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
-            'Content-Type': 'application/json; charset=utf-8'
-          },
-          dataType: 'JSON',
-          body: JSON.stringify({searched : _this.search})
-        }).then(function(response) {
-          return response.json();
-        }).then(function(data){
-          if(data[0] == "Error"){
-            //Display error messages
-          }
-          else {
-            _this.users = data["users"];
-          }
-        });
-      }
+            var _this = this;
+            fetch(apiRoot() + 'Controllers/User/researchUser.php', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+                    'Content-Type': 'application/json; charset=utf-8'
+                },
+                dataType: 'JSON',
+                body: JSON.stringify({pseudoToSearch : _this.search})
+            }).then(function(response) {
+                return response.json();
+            }).then(function(data){
+                if(data[0] == "Error")
+                {
+                    // Display error messages
+                }
+                else
+                {
+                    _this.users = data["users"];
+                }
+            });
+        }
+        document.getElementById("resultdiv").style.display = "inline";
+        console.log(document.getElementById("resultdiv"));
     },
     convertSearchToHTML: function(){
       var text = this.search;
@@ -103,9 +115,92 @@ export default {
 </script>
 
 <style lang="scss">
-  .searchBar{
-    .bar{
-      width: 300px;
+    .searchBar
+    { 
+        position: relative;
+        display: inline-block;
+        float: right;
+        right: 60px;
+        top: 50%;
+        transform: translateY(-50%);
+
+        .bar
+        {
+            width: 500px;
+        }
+
+        .result
+        {
+            z-index: 9999;
+            border-radius: 3px;
+            width: 100%;
+            background-color: rgba(100, 100, 100, .5);
+            position: absolute;
+            margin: 0;
+            padding: 5px;
+            display: none;
+
+            .resultitem
+            {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height: 100px;
+                background-color: green;
+                margin-bottom: 5px;
+
+                &:hover .resulttext
+                {
+                    background-color: pink;
+                }
+
+                &:last-child
+                {
+                    margin-bottom: 0px;
+                }
+
+                .resultavatar
+                {
+                    height: 100%;
+                    width: 100px;
+                    display: inline-block;
+
+                    .resultimg
+                    {
+                        height: 100%;
+                    }
+                }
+
+                .resulttext
+                {
+                    display: inline-block;
+                    height: 100%;
+                    width: calc(100% - 100px);
+                    background-color: lightblue;
+                    float: right;
+                    transition: .2s;
+
+                    .resultuser
+                    {
+                        text-transform: uppercase;
+                        letter-spacing: 2px;
+                        font-weight: 700;
+                        font-size: 1.8em;
+                    }
+
+                    & > p
+                    {
+                        margin: 0;
+                        margin-left: 10px;
+                        margin-top: 3px; 
+                    }
+
+                    .resultcontent
+                    {
+                        margin-top: 0;
+                    }
+                }
+            }
+        }
     }
-  }
 </style>

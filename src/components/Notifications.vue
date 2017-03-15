@@ -46,7 +46,7 @@ import ConversationComponent from './ConversationCPN.vue'
       this.connectedUser = this.$parent.connectedUser;
       setTimeout(function() {
         _this.$parent.getNotifications(_this.connectedUser.pseudo);
-        console.log(_this.$parent.notifications);
+        // console.log(_this.$parent.notifications);
       }, 1000);
     },
     mounted: function() {

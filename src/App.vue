@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <notifications></notifications>
-    <header-component v-if="connected === 'true'"></header-component>
+    <header-component id="header"></header-component>
       <router-view keep-alive></router-view>
     <profil-component v-if="profilShowed === 'true'"></profil-component>
     <footer-component></footer-component>
@@ -256,7 +256,7 @@ export default {
           console.log(data[1]);
         }
         else {
-          console.log(data);
+          // console.log(data);
           _this.notifications = data;
         }
       });
