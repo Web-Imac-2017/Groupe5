@@ -161,6 +161,7 @@ export default {
 		width:65%;
 		display:inline-block;
 		vertical-align:top;
+		background:red;
 	}
 
 	.matchUser h2{

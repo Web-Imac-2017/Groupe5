@@ -7,71 +7,78 @@
 	echo ' 
   
 
-{
-  "users" : {
-      "user1" : {
-        "pseudo": "Maureeeeeen",
-        "avatar": "maureeniz.jpg",
-        "lastname": "roche",
-        "firstname": "maureen",
-        "age": "21",
-        "country": "France",
-        "city": "bordeaux",
-        "description": "Hi :D. If you&#39re looking for a funny french girl to talk to, here I stand !",
-        "color": "#4E55F3",
-        "hobbies" : ["travel", "music", "cinema", "science","arts"],
-        "spokenLang" : ["french", "english"],
-          "learningLang" : ["spanish", "chinese", "german"]
-        
-      },
-      "user2" : {
-        "pseudo": "Dail",
-        "avatar": "maureeniz.jpg",
-        "lastname": "Danno",
-        "firstname": "Hart",
-        "age": "42",
-        "country": "Espagne",
-        "city": "Madrid",
-        "description": "Hi :D. If you&#39re looking for a funny french girl to talk to, here I stand !",
-        "color": "#4E55F3",
-        "hobbies" : ["travel", "music", "cinema", "science","arts"],
-        "spokenLang" : ["spanish", "english"],
-        "learningLang" : ["french", "chinese", "german"]
-
-      },
-      "user3" : {
-        "pseudo": "MyPseudo",
-        "avatar": "maureeniz.jpg",
-        "lastname": "roche",
-        "firstname": "maureen",
-        "age": "26",
-        "country": "France",
-        "city": "bordeaux",
-        "description": "Hi :D. If you&#39re looking for a funny french girl to talk to, here I stand !",
-        "color": "#4E55F3",
-        "hobbies" : ["travel", "music", "cinema", "science","arts"],
-        "spokenLang" : ["french", "english"],
-          "learningLang" : ["spanish", "chinese", "german"]
-        
-      },
-      "user4" : {
-        "pseudo": "Peanuts",
-        "avatar": "maureeniz.jpg",
-        "lastname": "Camel",
-        "firstname": "Cairo",
-        "age": "34",
-        "country": "Congo",
-        "city": "Berlin",
-        "description": "Hi :D. If you&#39re looking for a funny french girl to talk to, here I stand !",
-        "color": "#4E55F3",
-        "hobbies" : ["travel", "music", "cinema", "science","arts"],
-        "spokenLang" : ["french", "english"],
-        "learningLang" : ["spanish", "chinese", "german"]
-
-      }
-  }
-}
-
+[{
+    "id_langue": "1",
+    "name_langue": "English",
+    "users": [{
+        "id_user": "5",
+        "nbCommuns": 1,
+        "id_interet": ["2"],
+        "infos": {
+            "pseudo": "kingofimac",
+            "avatar": "/static/avatar/maureeniz.jpg",
+            "name": "Kalista",
+            "firstname": "venceslas",
+            "age": "29",
+            "sex": "0",
+            "description": "kingofimac description",
+            "town": "Ville test kingofimac",
+            "country": "France",
+            "ville": "Ville test kingofimac",
+            "pays": "France",
+            "state": "2",
+            "hobbies": ["Cooking", "Movies"],
+            "languages": [{
+                "spokenLang": [{
+                    "id_langue": "3",
+                    "name_langue": "Spanish"
+                }]
+            }, {
+                "learningLang": [{
+                    "id_langue": "1",
+                    "name_langue": "English"
+                }]
+            }]
+        }
+    }]
+}, {
+    "id_langue": "5",
+    "name_langue": "Japanese",
+    "users": [{
+        "id_user": "3",
+        "nbCommuns": 2,
+        "id_interet": ["10", "9"],
+        "infos": {
+            "pseudo": "sapristi",
+            "avatar": "static/avatar/maureeniz.jpg",
+            "name": "Robtano",
+            "firstname": "Benjamin",
+            "age": "68",
+            "sex": "3",
+            "description": "sapristi descrption",
+            "town": "ville test sapristi",
+            "country": "Spain",
+            "ville": "ville test sapristi",
+            "pays": "Spain",
+            "state": "0",
+            "hobbies": ["Arts", "Music", "Fashion", "Sciences", "Video games"],
+            "languages": [{
+                "spokenLang": []
+            }, {
+                "learningLang": [{
+                    "id_langue": "5",
+                    "name_langue": "Japanese"
+                }, {
+                    "id_langue": "3",
+                    "name_langue": "Spanish"
+                }, {
+                    "id_langue": "4",
+                    "name_langue": "Italian"
+                }]
+            }]
+        }
+    }]
+}]
 
 ';
 

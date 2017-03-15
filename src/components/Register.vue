@@ -14,10 +14,10 @@
         <!-- AVATAR -->
         <div id="chargeImg">
           <div v-if="!user.avatar">
-            <input type="file" name="file" id="file" v-on:click="loadingFile" class="inputfile" />
-            <label class="filebutton" for="file" v-bind:style="{backgroundImage: 'url(../../static/img/import.png'}"></label>
+            <input type="file" name="file" id="file" v-on:change="avatarChecked" class="inputfile" />
+            <label class="filebutton" id="filebtn" for="file" v-bind:style="{backgroundImage: 'url(../../static/img/import.png'}"></label>
             <br/>
-            <p class="filebuttontext">Import your avatar</p>
+            <p id="loading" class="filebuttontext">Import your avatar</p>
           </div>
           <div v-else>
             <img :src="user.avatar" />
@@ -55,6 +55,7 @@
 
         <!-- PSEUDO -->
         <input id="pseudo" name="pseudo" type="text" minlength="3" maxlength="20" required="required" placeholder="USERNAME" v-model="user.pseudo" />
+        <span class="rule">3-20 unaccentued characters and digits</span>
         <p id="error_Pseudo" class="errorMsg">This fiels must have between 3 and 20 unaccentued character and digits</p>
 
         <!-- EMAIL -->
@@ -63,6 +64,7 @@
 
         <!-- PWD -->
         <input name="pwd1" id="pwd1" required="required" type="password" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" placeholder="PASSWORD" v-model="user.password"  />
+        <span class="rule">one uppercase, one lowercase, one digit minimum</span>
         <p id="error_Psw" class="errorMsg">Your password must be a +8 characters containing at least a lowercase and an uppercase</p>
         <input name="pwd2" required="required" id="pwd2" type="password" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" placeholder="CONFIRM PASSWORD" v-model="user.password2" />
         <p id="error_Psw2" class="errorMsg">This fiels is not correct. It must be the same as password field</p>
@@ -90,7 +92,7 @@
 
         <!-- BIO -->
         <label class="form-text" for="description">Introduce yourself in a few words</label>
-        <input id="description" v-model="user.description"></input>
+        <textarea id="description" v-model="user.description"></textarea>
         <span class="tooltip">Write something about your life</span>
 
         <!-- SUBMIT -->
@@ -136,7 +138,8 @@ export default {
       },
       hobbiesList: [],
       languagesList: [],
-      colorsList: []
+      colorsList: [],
+      addAvatar : ''
     }
   },
 
@@ -224,7 +227,7 @@ export default {
         document.getElementById("error_Country").style.display = 'none';
 
         //tansform special caracters to html code
-        this.convertToHTML(user.description);
+        this.convertToHTML();
 
         var _this = this;
 
@@ -347,21 +350,15 @@ export default {
       }
       event.target.style.border = "4px solid black";
     },
-    loadingFile: function(event)
+    avatarChecked: function(event)
     {
-      var f = event.target.files[0];
-      if (f)
-      {
-        var r = new FileReader();
-        r.onload = function(e)
-        {
-          var str = "Name : " + f.name + "\nType : " + f.type + "\nSize : " + f.size/1000 + "Ko\n";
-        }
-        r.readAsText(f);
-      }
+      	var f = event.target.files[0];
+        document.getElementById("loading").innerHTML = f.name + " loaded succesfully.";
+        document.getElementById("filebtn").style.backgroundImage = "url(../../static/img/checked.png)";
+        document.getElementById("filebtn").style.border = "3px solid black"; 
     },
     convertToHTML: function(){
-      var text = this.user.description
+      var text = this.user.description;
       String.prototype.convertionHTML = function(){
         return this.replace(/[\']/g,"&apos;")
         .replace(/[ ]/g,"&nbsp;")
@@ -411,18 +408,33 @@ export default {
         var bg = el[i].childNodes[0].getAttribute("value");
         el[i].childNodes[2].style.backgroundColor = bg;
       }
-    }, 300);
+    }, 1000);
   }
 }
 
 </script>
 
 <style lang="scss">
+
+@keyframes colorize
+{
+    0% {background-color: #FAD6A6;}
+    33% {background-color: #F9B69C;}
+    66% {background-color: #6ABE83;}
+    100% {background-color: #FAD6A6;}
+}
+
 #error_Genre, #error_FirstName, #error_LastName, #error_Age, #error_Pseudo, #error_Mail, #error_Psw, #error_Psw2, #error_Country{
   display:none;
 }
 .errorMsg{
   color:red;
+}
+
+.rule
+{
+  display: block;
+  margin-bottom: 5px;
 }
 
 .register
@@ -434,6 +446,18 @@ export default {
   text-align: center;
   position: absolute;
   color: black;
+  overflow-x: hidden;
+
+  .quitButton
+  {
+    transition: .2s;
+
+    &:hover
+    {
+      transform: scale(1.05) rotate(20deg);
+    }
+  }
+
   .wrapper
   {
     .bg
@@ -472,7 +496,17 @@ export default {
       font-size: 1.5em;
       padding: 0 5px;
       font-weight: 600;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
+      border: 3px solid #333333;
+    }
+
+    textarea
+    {
+    	width: 100%;
+    	max-width: 100%;
+    	height: auto;
+    	font-size: 1.3em;
+    	padding: 10px;
       border: 3px solid #333333;
     }
 
@@ -504,7 +538,7 @@ export default {
     .filebuttontext
     {
       margin-bottom: 35px;
-      font-size: 0.8em;
+      font-size: 1.2em;
       font-style: italic;
     }
     select#country
@@ -552,7 +586,7 @@ export default {
     }
     #city, #colorwrapper, #description
     {
-      margin-bottom: 20px;
+      margin-bottom: 30px;
     }
     #submitbutton
     {
@@ -560,7 +594,8 @@ export default {
     }
     #submitbuttonlabel
     {
-      margin-top: 50px;
+      width: 100%;
+      margin-top: 10px;
       margin-bottom: 120px;
       font-size: 3em;
       padding: 0 15px;
@@ -569,9 +604,10 @@ export default {
       cursor: pointer;
       font-weight: 900;
       transition: .1s;
+      color: #111111;
       &:hover
       {
-        transform: scale(1.2) rotate(5deg);
+        animation: colorize 2s infinite;
       }
     }
   }

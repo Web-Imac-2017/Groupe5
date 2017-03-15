@@ -1,18 +1,17 @@
 <template>
   <div class="conversationsMenu">
-    <div class="CMHeader">
+    <!-- <div class="CMHeader">
       <router-link v-bind:to="'/home/'"><icon name="long-arrow-left"></icon>back</router-link>
       <img v-bind:src="'/static/img/logo.png'" class="CMLogo">
-    </div>
+    </div> -->
     <ul>
       <li v-for="conversation in conversations" class="row">
         <router-link v-bind:to="'/messages/' + conversation.id" :style="{background:getActiveConversation(conversation.id)}" class="user">
-          <span class="avatar" v-on:click="$parent.$parent.changeSelectedUser('maureeniz')">
-            <img src="../../static/avatar/maureeniz.jpg">
+          <span  v-for="user in conversation.users" class="avatar" v-on:click="$parent.$parent.changeSelectedUser(user.pseudo)">
+            <img :src="user.avatar">
           </span>
           <span v-for="user in conversation.users" class="text-conv">
-            <p class="titleConversation userPseudo" :class="getUserState(user)">{{ user.pseudo }}
-              <icon name="circle"></icon></p>
+            <p class="titleConversation userPseudo" :class=getUserState(user)>{{ user.pseudo }} <icon name="circle"></icon></p>
             <p class="lastMessage">{{ conversation.lastMessage }}</p>
           </span>
           <span v-on:click="deleteConv(conversation.id)" class="quit">
@@ -21,7 +20,7 @@
         </router-link>
       </li>
       <li class="row addPlume">
-        <router-link v-bind:to="'/home/'" class="user">
+        <router-link v-bind:to="'/match/'" class="user">
           <span class="avatar">
             <div class="plus" :style="{background:$parent.$parent.getLightColor($parent.connectedUser.color)}">
               <icon name="plus"></icon>
@@ -46,8 +45,9 @@ import Header from './Header.vue'
 export default {
   data : function () {
     return {
-      conversations : '',
-      me : {}
+      conversations : [],
+      me : {},
+      otherUser: {}
     }
   },
   watch: {
@@ -57,6 +57,10 @@ export default {
     }
   },
   created: function() {
+    this.me = this.$parent.connectedUser;
+    this.getConversations();
+  },
+  mounted: function() {
     this.me = this.$parent.connectedUser;
     this.getConversations();
   },
@@ -82,57 +86,72 @@ export default {
       }).then(function(response) {
         return response.json();
       }).then(function(data){
+          if(data[0] == "Error"){
+          }
+          else {
+            if(data[0] == 2) theClass = "userConnected";
+          }
+        }
+      );
+      return theClass;
+    },
+    getConversations: function() {
+      var _this = this;
+      // TO DO : Améliorer ça -- permet de corriger bug afficher conversations
+      setTimeout(function() {
+        fetch(apiRoot() + 'Controllers/Conversation/getUserConversations.php', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+            'Content-Type': 'application/json; charset=utf-8'
+          },
+          dataType: 'JSON',
+          body: JSON.stringify({pseudo: _this.me.pseudo})
+        }).then(function(response) {
+          return response.json();
+        }).then(function(data){
+          if(data[0] == "Error"){
+            console.log(data[1]);
+          }
+          else {
+            _this.conversations = data['conversations'];
+
+            for(var i = 0; i < _this.conversations.length; i ++) {
+              if(_this.conversations[i].lastMessage) {
+                if(_this.conversations[i].lastMessage.indexOf("PLUME_IMAGE_MESSAGE:") !== -1) {
+
+                  _this.conversations[i].lastMessage = _this.conversations[i].lastMessage.substr(20,_this.conversations[i].lastMessage.length-1);
+
+                  _this.conversations[i].lastMessage = "Image";
+                }
+              }
+
+            }
+          }
+        });
+
+      }, 2000);
+    },
+    deleteConv: function(id){
+      fetch(apiRoot() + 'Controllers/Conversation/deleteConversation.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        dataType: 'JSON',
+        body: JSON.stringify({conv : id})
+      }).then(function(response) {
+        return response.json();
+      }).then(function(data){
         if(data[0] == "Error"){
+          console.log(data[1]);
         }
         else {
-          if(data[0] == 2) theClass = "userConnected";
         }
-      }
-    );
-    return theClass;
-  },
-  getConversations: function() {
-
-    var _this = this;
-    console.log(this.me);
-    fetch(apiRoot() + 'Controllers/Conversation/getUserConversations.php', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
-        'Content-Type': 'application/json; charset=utf-8'
-      },
-      dataType: 'JSON',
-      body: JSON.stringify({pseudo: _this.me.pseudo})
-    }).then(function(response) {
-      return response.json();
-    }).then(function(data){
-      if(data[0] == "Error"){
-        console.log("ERREUR !!");
-      }
-      else {
-        _this.conversations = data['conversations'];
-      }
-    });
-  },
-  deleteConv: function(id){
-    var _conversationID = id;
-    fetch(apiRoot() + 'Controllers/Conversation/deleteConversation.php', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
-        'Content-Type': 'application/json; charset=utf-8'
-      },
-      dataType: 'JSON',
-      body: JSON.stringify({id : id})
-    }).then(function(response) {
-      return response.json();
-    }).then(function(data){
-      if(data[0] == "Error"){
-        console.log("ERREUR !!");
-      }
-    });
+      });
+    }
   }
-}
 }
 </script>
 
@@ -146,7 +165,8 @@ $avatar_size: 80px;
   overflow-x: hidden;
   overflow-y: auto;
   border-right: 1px solid #000;
-  height: 100vh;
+  // height: 100vh;
+  height: calc(100vh - 50px);
 
   [class*="col"]{
     padding: 0;
@@ -192,6 +212,25 @@ $avatar_size: 80px;
         border: 1px solid #000;
       }
     }
+  }
+
+  .userPseudo {
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 20px;
+
+    &.userConnected svg {
+      color: #38B647;
+    }
+    &.userNonConnected svg {
+      color: #C02029;
+    }
+  }
+  .lastMessage {
+    display: block;
+    font-style: italic;
+    font-size: 12px;
+  }
 
     .text-conv{
       margin-left: 15px;
@@ -232,6 +271,4 @@ $avatar_size: 80px;
       }
     }
   }
-
-}
 </style>
