@@ -25,9 +25,13 @@
 	  }
 	  else $data = array("Error", "Error");
 
+
 	  UserModel::updateUserFirstname($pseudo, $firstname);
+
 	}
 	else $data = array("Error", "Error");
+
+  
 
   echo json_encode($data);
 
