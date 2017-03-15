@@ -13,7 +13,7 @@
                 </div>
                 <div class="resulttext">
                     <p class="resultuser">{{ user.pseudo }}</p>
-                    <p class="">Spoken languages</h2>
+                    <p class="">Speaks</h2>
                     <ul>
                         <li v-for="spokenLang in user.languages.spokenLang">{{spokenLang}}</li>
                     </ul>
@@ -78,7 +78,6 @@ export default {
             });
         }
         document.getElementById("resultdiv").style.display = "inline";
-        console.log(document.getElementById("resultdiv"));
     },
     convertSearchToHTML: function(){
       var text = this.search;
