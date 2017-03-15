@@ -2,7 +2,7 @@
   <div class="Profil">
     <div class="overlay" v-on:click="$parent.changeSelectedUser('')"></div>
     <div class="profilCPN">
-      <div class="avatarProfil" :style="{borderBottom:4+'px '+'solid '+ $parent.selectedUser.color,backgroundImage:'url(/static/avatar/' + $parent.selectedUser.avatar+')'}">
+      <div class="avatarProfil" :style="{borderBottom:4+'px '+'solid '+ $parent.selectedUser.color,backgroundImage:'url(' + $parent.selectedUser.avatar + ')'}">
       </div>
       <div class="infos">
         <h1 class="pseudo">{{$parent.selectedUser.pseudo}}</h1>

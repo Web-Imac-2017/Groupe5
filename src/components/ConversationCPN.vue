@@ -8,7 +8,7 @@
         </div>
       </li>
     </ul>
-    <textarea v-on:keyup.enter="sendMessage();" v-model="newMessage" :style="{background:$parent.$parent.getLightColor($parent.connectedUser.color)}"></textarea>
+    <textarea maxlength="200" v-on:keyup.enter="sendMessage();" v-model="newMessage" :style="{background:$parent.$parent.getLightColor($parent.connectedUser.color)}"></textarea>
     <input type="file" name="messageImage" id="messageImage" v-on:change="sendImage()">
     <label for="messageImage"><icon name="picture-o"></icon></label>
   </div>
@@ -158,7 +158,7 @@ export default {
     },
     replaceTxtBySmiley : function(message, match, name){
       var div = document.getElementById("Message" + message.ID);
-      div.text = "";
+      div.innerHTML="";
       var pos = match.index;
       var image = document.createElement('img');
       image.src = "/static/smileys/"+name+".svg";
@@ -231,6 +231,7 @@ export default {
     padding: 10px;
     height: 60px;
     color: #000;
+    padding-left: 65px;
   }
   input{
     display: none;

@@ -1,28 +1,29 @@
 <template lang="html">
-  <div class="searchBar">
-      <div class="input-group bar">
-        <input type="text" class="form-control" placeholder="Search a Plummate" v-model="search" id="searchUser">
-        <span class="input-group-btn">
-          <button v-on:click="searchUsers" class="btn btn-default" type="button">Go</button>
-        </span>
-      </div>
-    <div class="col-md-12 result" :style="{display: none}">
-      <div v-for="user in users" class="col-md-4">
-        <h1>{{user.pseudo}}</h1>
-        <h2>Spoken languages</h2>
-        <ul>
-          <li v-for="spokenLang in user.languages.spokenLang">{{spokenLang}}</li>
-        </ul>
-        <h2>Learning languages</h2>
-        <ul>
-          <li v-for="learningLang in user.languages.learningLang">{{learningLang}}</li>
-        </ul>
-      </div>
+    <div class="searchBar">
+        <div class="input-group bar">
+            <input type="text" class="form-control" placeholder="If u're looking for someone..." v-model="search" id="searchUser">
+            <span class="input-group-btn">
+                <button v-on:click="searchUsers" class="btn btn-default" type="button">Go</button>
+            </span>
+        </div>
+        <div class="col-md-12 result">
+            <div v-for="user in users" class="col-md-4 resultitem">
+                <h1>{{user.pseudo}}</h1>
+                <h2>Spoken languages</h2>
+                <ul>
+                    <li v-for="spokenLang in user.languages.spokenLang">{{spokenLang}}</li>
+                </ul>
+                <h2>Learning languages</h2>
+                <ul>
+                    <li v-for="learningLang in user.languages.learningLang">{{learningLang}}</li>
+                </ul>
+            </div>
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
+
 import {apiRoot} from '../../config/localhost/settings.js'
 
 export default {
@@ -54,7 +55,7 @@ export default {
             'Content-Type': 'application/json; charset=utf-8'
           },
           dataType: 'JSON',
-          body: JSON.stringify({searched : _this.search})
+          body: JSON.stringify({pseudoToSearch : _this.search})
         }).then(function(response) {
           return response.json();
         }).then(function(data){
@@ -63,6 +64,7 @@ export default {
           }
           else {
             _this.users = data["users"];
+            console.log(_this.users);
           }
         });
       }
@@ -107,9 +109,35 @@ export default {
 </script>
 
 <style lang="scss">
-  .searchBar{
-    .bar{
-      width: 300px;
+    .searchBar
+    { 
+        position: relative;
+        display: inline-block;
+        float: right;
+        right: 60px;
+        top: 50%;
+        transform: translateY(-50%);
+
+        .bar
+        {
+            width: 300px;
+        }
+
+        .result
+        {
+            z-index: 20;
+            border-radius: 3px;
+            width: 100%;
+            height: auto;
+            background-color: red;
+            position: absolute;
+
+            .resultitem
+            {
+                width: 100%;
+                height: 50px;
+                background-color: green;
+            }
+        }
     }
-  }
 </style>

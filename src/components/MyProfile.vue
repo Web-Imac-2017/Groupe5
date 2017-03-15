@@ -498,7 +498,7 @@ export default {
 					'Content-Type': 'application/json; charset=utf-8'
 				},
 				dataType: 'JSON',
-				body: JSON.stringify({pseudo: _this.user.pseudo, avatar: "/static/avatar/default.png"})
+				body: JSON.stringify({pseudo: _this.user.pseudo, avatar: "/static/avatar/default.jpg"})
 			}).then(function(response) {
 				return response.json();
 			}).then(function(data){

@@ -114,8 +114,9 @@ export default {
           }
           else {
             _this.conversations = data['conversations'];
-
             for(var i = 0; i < _this.conversations.length; i ++) {
+              _this.$parent.$parent.checkAvatar(_this.conversations[i].users);
+              
               if(_this.conversations[i].lastMessage) {
                 if(_this.conversations[i] != "" && _this.conversations[i] != null) {
                   if(_this.conversations[i].lastMessage.indexOf("PLUME_IMAGE_MESSAGE:") !== -1) {
