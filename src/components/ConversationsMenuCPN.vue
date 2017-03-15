@@ -97,7 +97,6 @@ export default {
     },
     getConversations: function() {
       var _this = this;
-      // TO DO : Améliorer ça -- permet de corriger bug afficher conversations
       setTimeout(function() {
         fetch(apiRoot() + 'Controllers/Conversation/getUserConversations.php', {
           method: 'POST',
@@ -118,14 +117,13 @@ export default {
 
             for(var i = 0; i < _this.conversations.length; i ++) {
               if(_this.conversations[i].lastMessage) {
-                if(_this.conversations[i].lastMessage.indexOf("PLUME_IMAGE_MESSAGE:") !== -1) {
-
-                  _this.conversations[i].lastMessage = _this.conversations[i].lastMessage.substr(20,_this.conversations[i].lastMessage.length-1);
-
-                  _this.conversations[i].lastMessage = "Image";
+                if(_this.conversations[i] != "" && _this.conversations[i] != null) {
+                  if(_this.conversations[i].lastMessage.indexOf("PLUME_IMAGE_MESSAGE:") !== -1) {
+                    _this.conversations[i].lastMessage = _this.conversations[i].lastMessage.substr(20,_this.conversations[i].lastMessage.length-1);
+                    _this.conversations[i].lastMessage = "Image";
+                  }
                 }
               }
-
             }
           }
         });

@@ -6,7 +6,6 @@
 	header('Content-Type: application/json;charset=utf-8');
 
 	include "../../Models/UserModel.php";
-
 	if ($_SERVER['REQUEST_METHOD'] == 'POST'){	
 		$json = json_decode(file_get_contents('php://input'), true);
 		if((isset($json['pseudo']))&&(isset($json['role']))){

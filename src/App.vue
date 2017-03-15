@@ -24,7 +24,7 @@ export default {
   },
   data(){
     return {
-      connected: '',
+      connected: 'true',
       selectedUser: {
         id : '',
         pseudo: '',
@@ -72,6 +72,13 @@ export default {
     }
   },
   methods: {
+    checkAvatar: function(users) {
+      for(var i = 0; i < users.length; i ++) {
+        if(users[i].avatar == "") {
+          users[i].avatar = "/static/avatar/default.png";
+        }
+      }
+    },
     logout: function(){
       document.cookie = "PLUME_pseudo=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
       this.setUserState(this.connectedUser.pseudo, '');
@@ -154,9 +161,11 @@ export default {
           _this.selectedUser.description = data['description'];
           _this.selectedUser.color = data['color'];
           _this.selectedUser.hobbies = data['hobbies'];
+          _this.selectedUser.languages.learningLang = [];
           for(var i = 0; i < data['languages']['learningLang']['learningLang'].length; i ++) {
             _this.selectedUser.languages.learningLang.push(data['languages']['learningLang']['learningLang'][i]['name_langue']);
           }
+          _this.selectedUser.languages.spokenLang = [];
           for(var i = 0; i < data['languages']['spokenLang']['spokenLang'].length; i ++) {
             _this.selectedUser.languages.spokenLang.push(data['languages']['spokenLang']['spokenLang'][i]['name_langue']);
           }
@@ -236,9 +245,11 @@ export default {
           _this.connectedUser.description = data['description'];
           _this.connectedUser.color = data['color'];
           _this.connectedUser.hobbies = data['hobbies'];
+          _this.connectedUser.languages.learningLang = [];
           for(var i = 0; i < data['languages']['learningLang']['learningLang'].length; i ++) {
             _this.connectedUser.languages.learningLang.push(data['languages']['learningLang']['learningLang'][i]['name_langue']);
           }
+          _this.connectedUser.languages.spokenLang = [];
           for(var i = 0; i < data['languages']['spokenLang']['spokenLang'].length; i ++) {
             _this.connectedUser.languages.spokenLang.push(data['languages']['spokenLang']['spokenLang'][i]['name_langue']);
           }
@@ -284,7 +295,6 @@ export default {
           console.log(data[1]);
         }
         else {
-          //console.log(data);
           _this.notifications = data["notifications"];
         }
       });
@@ -306,7 +316,6 @@ export default {
           console.log(data[1]);
         }
         else {
-          //console.log(data);
           _this.notifications = data["notifications"];
         }
       });

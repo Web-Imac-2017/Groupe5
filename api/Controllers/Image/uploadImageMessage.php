@@ -52,15 +52,14 @@
                 $newImage = imagecreatetruecolor($width, $height);
                 imagecopyresampled($newImage, $copy, 0, 0, 0, 0, $width, $height, $image_infos[0], $image_infos[1]);
                 //Déplace l'image dans le repertoire 
-
-                imagepng($newImage, ."/static/messages/".$pseudo."_".$id_conv."_".$date.".png");
-                $result = ImageModel::uploadImageMessage(ROOT."static/messages/".$pseudo."_".$id_conv."_".$date.".png", $pseudo, $id_conv);
+                imagepng($newImage, ROOT."static/messages/".$pseudo."_".$id_conv."_".$date.".png");
+                $result = ImageModel::uploadImageMessage("/static/messages/".$pseudo."_".$id_conv."_".$date.".png", $pseudo, $id_conv);
 
             }
             else {
                 $result = array("Error", "Image can't be register.");
-                echo $result;
             }
+            echo $result;
         }
     }
 

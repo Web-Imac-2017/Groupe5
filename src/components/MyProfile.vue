@@ -67,16 +67,11 @@
 			<div class="col-sm-12 colorLanguages">
 				<p>Your color scheme</p>
 				<div :class="user.color"></div>
-				<div v-if="editing == 'true'" class="changeField" v-on:click="changeColor()">
-					<icon name="pencil"></icon>
-
-					<div class="form-group">
-						<div v-if="changeUserColor == 'true'" v-for="color in colors">
-							<input class="form-check-input" type="radio" :id="color.name" :value="color.normal" name="color" v-model="user.color">
-							<label class="form-check-label" :for="color.name" :class="color.name">{{color.name}}</label>
-						</div>
-					</div>
+				<div class="colors" v-for="color in colors">
+					<input class="form-check-input" type="radio" :id="color.name" :value="color.normal" name="color" v-model="user.color">
+					<label class="form-check-label" v-on:click="colorChecked" :for="color.name" :class="color.name">{{color.name}}</label>
 				</div>
+				<br/><br/>
 				<p>You speak</p>
 				<div class="lang" v-for="spokenLang in user.languages.spokenLang">
 					<img v-bind:src="$parent.languagesToFlag(spokenLang)">
@@ -146,6 +141,10 @@ export default {
 	},
 	methods: {
 		init: function() {
+			if(this.$parent.connected != "true") {
+        this.$parent.logout();
+      }
+
 			this.editing = "false";
 			this.addSpokenLanguage = "false";
 			this.addLearningLanguage = "false";
@@ -191,8 +190,6 @@ export default {
 				if(this.addAvatar == 'true') this.updateAvatar();
 
 				this.init();
-
-				location.reload();
 			}
 		},
 		getLanguages: function() {
@@ -279,6 +276,16 @@ export default {
 				}
 			});
 		},
+		colorChecked: function(event)
+    	{
+      		var el = document.getElementsByClassName("colors");
+      		var i;
+      		for (i = 0; i < el.length; i++)
+      		{
+        		el[i].childNodes[2].style.border = "3px solid rgba(0, 0, 0, 0)";
+      		}
+      		event.target.style.border = "3px solid rgba(0, 0, 0, 1)";
+    	},
 		addNewSpokenLanguage: function() {
 			this.addSpokenLanguage = "true";
 		},
@@ -381,7 +388,7 @@ export default {
 		},
 		updateColor: function() {
 			var _this = this;
-
+			console.log(_this.user);
 			fetch(apiRoot() + 'Controllers/User/updateUserColor.php', {
 				method: 'POST',
 				headers: {
@@ -494,6 +501,21 @@ export default {
 				}
 			});
 		}
+	},
+
+	mounted: function()
+	{
+		setTimeout(function()
+    	{
+      		var el = document.getElementsByClassName("colors");
+      		console.log(el);
+      		var i;
+      		for (i = 0; i < el.length; i++)
+      		{
+        		var bg = el[i].childNodes[0].getAttribute("value");
+        		el[i].childNodes[2].style.backgroundColor = bg;
+      		}
+    	}, 300);
 	}
 }
 </script>
@@ -573,8 +595,7 @@ export default {
 
 	.colorLanguages
 	{
-		text-align : left;
-		padding : 15px;
+		width: 100%;
 
 		p
 		{
@@ -584,9 +605,6 @@ export default {
 
 		div
 		{
-			margin-top: 10px;
-			margin-right: 20px;
-			margin-bottom: 10px;
 			display: inline-block;
 		}
 
@@ -601,15 +619,17 @@ export default {
 
 		.hobbies
 		{
-			padding: 2px 6px;
+			padding: 2px 10px;
 			margin: 6px 6px;
 			display: inline-block;
 			color: #fff;
 			text-transform: uppercase;
 			-webkit-border-radius: 2px;
 			border-radius: 2px;
+			font-size: 1.5em;
 		}
 	}
+
 	input[type=submit]{
 		border: 1px solid #000;
 		font-size: 22px;
@@ -624,5 +644,29 @@ export default {
 		left: 50%;
 		transform: translateX(-50%);
 	}
+
+	.colors
+    {
+    	width: 9%;
+    	margin-right: 0.9%;
+
+      	& > input
+      	{
+        	display: none;
+      	}
+      	& > label
+      	{
+        	cursor: pointer;
+        	margin: 0;
+        	color: black;
+        	font-weight: 400;
+        	padding: 8px 10px;
+        	border-radius: 5px;
+        	border: 3px solid rgba(0, 0, 0, 0);
+        	font-size: 0;
+        	width: 100%;
+        	height: 50px;
+      	}
+    }
 }
 </style>

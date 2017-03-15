@@ -53,7 +53,6 @@ export default {
     },
     getUser: function(user) {
       var theClass = 'user_other';
-      console.log(this.me.pseudo);
 
       if(user == this.me.pseudo){
         theClass = 'user_me';
@@ -93,19 +92,17 @@ export default {
     },
     getImages : function() {
       for(var i = 0; i < this.messages.length; i ++) {
-        if(this.messages[i].content.indexOf("PLUME_IMAGE_MESSAGE:") !== -1) {
-
-          this.messages[i].content = this.messages[i].content.substr(20,this.messages[i].content.length-1);
-
-          var div = document.getElementById("Message" + this.messages[i].ID);
-          if(div.children.length == 2) {
-            var image = document.createElement('img');
-            image.src = this.messages[i].content;
-
-            div.append(image);
+        if(this.messages[i].content != "" && this.messages[i].content != null) {
+          if(this.messages[i].content.indexOf("PLUME_IMAGE_MESSAGE:") !== -1) {
+            this.messages[i].content = this.messages[i].content.substr(20,this.messages[i].content.length-1);
+            var div = document.getElementById("Message" + this.messages[i].ID);
+            if(div.children.length == 2) {
+              var image = document.createElement('img');
+              image.src = this.messages[i].content;
+              div.append(image);
+            }
+            this.messages[i].content = "";
           }
-
-          this.messages[i].content = "";
         }
       }
     },
@@ -150,7 +147,6 @@ export default {
           //create image smiley happy
           var image = document.createElement('img');
           image.src = "/static/smileys/happy.svg";
-console.log(image);
           //Delete smiley characters
           this.messages[i].content = this.messages[i].content.replace(":)", "");
 

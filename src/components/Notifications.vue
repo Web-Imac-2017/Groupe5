@@ -32,6 +32,9 @@ import ConversationComponent from './ConversationCPN.vue'
     methods: {
     },
     created: function() {
+      if(this.$parent.connected != "true") {
+        this.$parent.logout();
+      }
       var _this = this;
       this.connectedUser = this.$parent.connectedUser;
       setTimeout(function() {

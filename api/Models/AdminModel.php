@@ -34,6 +34,21 @@ class AdminModel{
         $req_get->bindParam(':pseudo', $pseudo, PDO::PARAM_STR, 60);
         $req_get->execute();
     }
+
+
+    public static function checkUsernamePassword($username, $password){
+        $bdd = Database::connexionBDD();
+        
+        $req_id = $bdd->prepare('SELECT password, username FROM admin');
+        $req_id->execute();
+        $result = $req_id->fetch(PDO::FETCH_ASSOC);
+
+        if($result['password'] == md5($password) && $result['username'] == $username) {
+            return 'true';
+        }
+        else return 'false';
+
+    }
 }
 
 ?>

@@ -2,45 +2,56 @@
 
 	<div class="admin">
 
-    <div class="row" id="title">
-      <div class="col-sm-12">
-        ADMINISTRATION
+    <div class="adminPage" v-if="connected == 'true'">
+      <div class="row" id="title">
+        <div class="col-sm-12">
+          ADMINISTRATION
+        </div>
       </div>
-    </div>
 
-    <ul>
-      <li v-for="user in users">
-        <div class="row acceptation">
-          <div class="col-sm-12">
-            <div class="row">
-                <div class="col-lg-4">
-                  <img v-bind:src="user.avatar"> 
-                </div>
+      <ul>
+        <li v-for="user in users">
+          <div class="row acceptation">
+            <div class="col-sm-12">
+              <div class="row">
+                  <div class="col-lg-4">
+                    <img v-bind:src="user.avatar"> 
+                  </div>
 
-                <div class="col-lg-8">
+                  <div class="col-lg-8">
 
-                  <div class="name"> {{user.pseudo}} </div>
+                    <div class="name"> {{user.pseudo}} </div>
 
-                  <div class="row">
+                    <div class="row">
 
-                    <div class="col-lg-6">
-                      <div class="valid" v-on:click="validAvatar(user)">
-                        <icon name="check"></icon>
+                      <div class="col-lg-6">
+                        <div class="valid" v-on:click="validAvatar(user)">
+                          <icon name="check"></icon>
+                        </div>
                       </div>
-                    </div>
 
-                    <div class="col-lg-6">
-                      <div class="refuse" v-on:click="refuseAvatar(user)">
-                        <icon name="times"></icon>
+                      <div class="col-lg-6">
+                        <div class="refuse" v-on:click="refuseAvatar(user)">
+                          <icon name="times"></icon>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </li>
-    </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="adminPage" v-if="connected != 'true'">
+      <label for="login">User</label>
+      <input type="text" id="login" v-model="username">
+      <label for="password">Password</label>
+      <input type="password" id="password" v-model="password">
+      <button v-on:click="login">Login</button>
+    </div>
+
 
   </div>
 
@@ -51,7 +62,10 @@
   export default {
     data() {
       return {
-        users : {}
+        users : {},
+        connected: '',
+        username: '',
+        password: ''
       }
     },
     methods: {
@@ -115,6 +129,27 @@
 
         this.getAvatarsNotChecked();
       },
+      login: function() {
+        var _this = this;
+        fetch(apiRoot() + 'Controllers/Admin/checkCorrectLogin.php', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+            'Content-Type': 'application/json; charset=utf-8'
+          },
+          dataType: 'JSON',
+          body: JSON.stringify({username: _this.username, password: _this.password})
+        }).then(function(response) {
+          return response.json();
+        }).then(function(data){
+          if(data[0] == "Error"){
+            console.log(data[0]);
+          }
+          else {
+            _this.connected = data;
+          }
+        });
+      }
     },
     created : function(){
       this.getAvatarsNotChecked();
