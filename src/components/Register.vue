@@ -55,6 +55,7 @@
 
         <!-- PSEUDO -->
         <input id="pseudo" name="pseudo" type="text" minlength="3" maxlength="20" required="required" placeholder="USERNAME" v-model="user.pseudo" />
+        <span class="rule">3-20 unaccentued characters and digits</span>
         <p id="error_Pseudo" class="errorMsg">This fiels must have between 3 and 20 unaccentued character and digits</p>
 
         <!-- EMAIL -->
@@ -63,6 +64,7 @@
 
         <!-- PWD -->
         <input name="pwd1" id="pwd1" required="required" type="password" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" placeholder="PASSWORD" v-model="user.password"  />
+        <span class="rule">one uppercase, one lowercase, one digit minimum</span>
         <p id="error_Psw" class="errorMsg">Your password must be a +8 characters containing at least a lowercase and an uppercase</p>
         <input name="pwd2" required="required" id="pwd2" type="password" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" placeholder="CONFIRM PASSWORD" v-model="user.password2" />
         <p id="error_Psw2" class="errorMsg">This fiels is not correct. It must be the same as password field</p>
@@ -406,7 +408,7 @@ export default {
         var bg = el[i].childNodes[0].getAttribute("value");
         el[i].childNodes[2].style.backgroundColor = bg;
       }
-    }, 300);
+    }, 1000);
   }
 }
 
@@ -427,6 +429,12 @@ export default {
 }
 .errorMsg{
   color:red;
+}
+
+.rule
+{
+  display: block;
+  margin-bottom: 5px;
 }
 
 .register
@@ -488,7 +496,7 @@ export default {
       font-size: 1.5em;
       padding: 0 5px;
       font-weight: 600;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
       border: 3px solid #333333;
     }
 
@@ -578,7 +586,7 @@ export default {
     }
     #city, #colorwrapper, #description
     {
-      margin-bottom: 20px;
+      margin-bottom: 30px;
     }
     #submitbutton
     {

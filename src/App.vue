@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <notifications v-if="connected === 'true'"></notifications>
+    <notifications></notifications>
     <header-component v-if="connected === 'true'"></header-component>
       <router-view keep-alive></router-view>
     <profil-component v-if="profilShowed === 'true'"></profil-component>
@@ -256,7 +256,7 @@ export default {
           console.log(data[1]);
         }
         else {
-          //console.log(data);
+          console.log(data);
           _this.notifications = data;
         }
       });
@@ -353,7 +353,13 @@ export default {
 }
 </script>
 
-  <style lang="scss">
+<style lang="scss">
   @import 'assets/scss/reset.css';
   @import 'assets/scss/design.scss';
-  </style>
+
+  #app
+  {
+    overflow-x: hidden;
+  }
+
+</style>
