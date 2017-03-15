@@ -44,9 +44,9 @@ export default {
   methods: {
     init: function() {
       this.newMessage="";
-      this.getConversation();
       var _this = this;
       setTimeout(function() {
+        _this.getConversation();
         _this.getImages();
         _this.getSmiley();
       }, 1000);
@@ -135,8 +135,10 @@ export default {
       var im = oData.append("avatar", file);
       var pseudo = oData.append("pseudo", this.me.pseudo);
       var idConv = oData.append("id_conv", this.$route.params.conversationID);
-      this.$http.post(apiRoot() + 'Controllers/Image/uploadImageMessage.php', oData);
-      this.init();
+      var _this = this;
+      this.$http.post(apiRoot() + 'Controllers/Image/uploadImageMessage.php', oData).then(function() {
+        _this.init();
+      });
 
     },
     getSmiley : function() {
