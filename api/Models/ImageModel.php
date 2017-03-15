@@ -16,9 +16,24 @@ class ImageModel{
 
        // $result = $req_active->execute(array(':contenu' => $contenu, ':id_user' => $id_user, ':id_conv' => $id_conv));
 
-        $result = ConversationModel::addMessage($contenu, $pseudo, $id_conv);
-        
-        return "";
+       // $result = ConversationModel::addMessage($contenu, $pseudo, $id_conv);
+        $data = array();
+
+            /*cryptage message*/
+            $id_sender = UserModel::getUserId($pseudo);
+
+            $receiver = ConversationModel::getOtherUsers($id_sender, $id_conv);
+
+            $public_key = UserModel::getUserPublicKey($receiver[0]['pseudo']);
+
+            openssl_public_encrypt($contenu, $crypted_message, $public_key);
+            
+            /*message en BDD*/
+            $data = ConversationModel::addMessage($crypted_message, $pseudo, $id_conv);
+            $data = array(0);
+
+
+        return $data;
     }
     
     

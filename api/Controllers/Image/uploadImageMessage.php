@@ -59,7 +59,7 @@
             else {
                 $result = array("Error", "Image can't be register.");
             }
-            echo $result;
+            echo json_encode($result);
         }
     }
 

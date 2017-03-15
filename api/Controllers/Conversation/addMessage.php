@@ -23,15 +23,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
       
     /*cryptage message*/
     $id_sender = UserModel::getUserId($pseudo);
-      //$data['id_sender'] = $id_sender;
+
     $receiver = ConversationModel::getOtherUsers($id_sender, $id_conv);
-      //$data['receiver'] = $receiver;
+
     $public_key = UserModel::getUserPublicKey($receiver[0]['pseudo']);
-      //var_dump($public_key);
-    
+
     openssl_public_encrypt($message, $crypted_message, $public_key);
-      //var_dump($crypted_message);
-    
+
     /*message en BDD*/
     $data = ConversationModel::addMessage($crypted_message, $pseudo, $id_conv);
   	$data = array(0);
