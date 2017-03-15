@@ -83,7 +83,8 @@ import ConversationComponent from './ConversationCPN.vue'
 
 .notification
 {
-    position: absolute;
+    position: fixed;
+    z-index: 10;
     background-color: white;
     right: 20px;
     bottom: 20px;
