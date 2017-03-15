@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <notifications v-if="connected === 'true'"></notifications>
+    <notifications></notifications>
     <header-component v-if="connected === 'true'"></header-component>
       <router-view keep-alive></router-view>
     <profil-component v-if="profilShowed === 'true'"></profil-component>

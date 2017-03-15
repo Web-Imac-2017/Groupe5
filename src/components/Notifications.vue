@@ -1,19 +1,17 @@
 <template>
-  <div class="messages">
-      <div class="container-fluid">
-        <div class="row">
-          <ul>
-            <li v-for="notif in $parent.notifications">
-              <p>{{ notif.user }} {{ notif.content }}</p>
-              <p v-on:click="$parent.acceptConversation(notif.user, notif.ID)">Accept</p>
-              <p v-on:click="$parent.refuseConversation(notif.ID)">Refuse</p>
-            </li>
-          </ul>
+    <div class="messages">
+        <div class="container-fluid">
+            <div class="row">
+                <ul>
+                    <li v-for="notif in $parent.notifications">
+                        <p>{{ notif.user }} {{ notif.content }}</p>
+                        <p v-on:click="$parent.acceptConversation(notif.user, notif.ID)">Accept</p>
+                        <p v-on:click="$parent.refuseConversation(notif.ID)">Refuse</p>
+                    </li>
+                </ul>
+            </div>
         </div>
-      </div>
-
-  </div>
-
+    </div>
 </template>
 
 
@@ -50,8 +48,11 @@ import ConversationComponent from './ConversationCPN.vue'
 
 
 <style lang="scss">
-.convMenu{
-  padding-right: 0;
+
+.messages
+{
+    position: absolute;
+    background-color: pink;
 }
 
 </style>
