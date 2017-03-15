@@ -72,11 +72,9 @@ export default {
     }
   },
   methods: {
-    checkAvatar: function(users) {
-      for(var i = 0; i < users.length; i ++) {
-        if(users[i].avatar == "") {
-          users[i].avatar = "/static/avatar/default.png";
-        }
+    checkAvatar: function(avatar) {
+      if(avatar == "") {
+        avatar = "/static/avatar/default.jpg";
       }
     },
     logout: function(){

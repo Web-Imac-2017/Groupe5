@@ -4,7 +4,7 @@
             <div class="row">
                 <ul>
                     <li v-for="notif in $parent.notifications">
-                        <img src="/static/avatar/aleqsandr.jpg" id="avatarnotif"/>
+                        <img :src="notif.user_avatar" id="avatarnotif"/>
                         <div id="textnotif">
                             <p id="textuser">{{ notif.user }}</p>
                             <p id="textcontent">{{ notif.content }}</p>
@@ -100,6 +100,7 @@ import ConversationComponent from './ConversationCPN.vue'
         position: relative;
         display: inline-block;
         height: 120px;
+        width: 120px;
         background-color: red;
     }
 

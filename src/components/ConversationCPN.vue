@@ -8,7 +8,7 @@
         </div>
       </li>
     </ul>
-    <textarea v-on:keyup.enter="sendMessage();" v-model="newMessage" :style="{background:$parent.$parent.getLightColor($parent.connectedUser.color)}"></textarea>
+    <textarea maxlength="200" v-on:keyup.enter="sendMessage();" v-model="newMessage" :style="{background:$parent.$parent.getLightColor($parent.connectedUser.color)}"></textarea>
     <input type="file" name="messageImage" id="messageImage" v-on:change="sendImage()">
     <label for="messageImage"><icon name="picture-o"></icon></label>
   </div>
@@ -37,14 +37,29 @@ export default {
   created: function() {
     this.me = this.$parent.connectedUser;
     this.init();
+
+    //this.updateBottomScroll();
   },
-  updated: function(){
-    this.scrollBottomAuto();
+  mounted: function() {
+    this.me = this.$parent.connectedUser;
+    this.init();
+
+    var _this = this;
+
+    setTimeout(function() {
+      _this.scrollBottomAuto();
+    }, 500);
+
+    setInterval(function() {
+      _this.getConversation();
+    }, 1000);
+
   },
   methods: {
     init: function() {
       this.newMessage="";
       var _this = this;
+
       setTimeout(function() {
         _this.getConversation();
         _this.getImages();
@@ -59,7 +74,7 @@ export default {
       }
       return theClass;
     },
-    getBackground(user){
+    getBackground: function(user){
       if(user == this.me.pseudo){
         return this.$parent.connectedUser.color;
       }
@@ -143,7 +158,7 @@ export default {
     },
     replaceTxtBySmiley : function(message, match, name){
       var div = document.getElementById("Message" + message.ID);
-      div.text = "";
+      div.innerHTML="";
       var pos = match.index;
       var image = document.createElement('img');
       image.src = "/static/smileys/"+name+".svg";
@@ -216,6 +231,7 @@ export default {
     padding: 10px;
     height: 60px;
     color: #000;
+    padding-left: 65px;
   }
   input{
     display: none;
