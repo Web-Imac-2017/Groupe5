@@ -4,17 +4,17 @@
             <div class="row">
                 <ul>
                     <li v-for="notif in $parent.notifications">
-                        <img :src="'http://localhost/PLUME/public_html' + notif.user_avatar" id="avatarnotif"/>
+                        <img :src="'http://www.plume.ink/public_html' + notif.user_avatar" id="avatarnotif"/>
                         <div id="textnotif">
                             <p id="textuser">{{ notif.user }}</p>
                             <p id="textcontent">{{ notif.content }}</p>
                             <div id="buttons">
                                 <div id="accept" v-on:click="$parent.acceptConversation(notif.user, notif.ID)">
-                                    <img src="http://localhost/PLUME/public_html/static/img/accept.png" class="iconbutton"/>
+                                    <img src="http://www.plume.ink/public_html/static/img/accept.png" class="iconbutton"/>
                                     <p>Accept </p>
                                 </div>
                                 <div id="refuse" v-on:click="$parent.refuseConversation(notif.ID)">
-                                    <img src="http://localhost/PLUME/public_html/static/img/refuse.png" class="iconbutton"/>
+                                    <img src="http://www.plume.ink/public_html/static/img/refuse.png" class="iconbutton"/>
                                     <p>Refuse </p>
                                 </div>
                             </div>

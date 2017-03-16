@@ -2,7 +2,7 @@
 	<div class="myProfile">
 		<div class="row">
 			<div class="col-sm-4 imageUpdate">
-				<img v-bind:src="'http://localhost/PLUME/public_html' + user.avatar">
+				<img v-bind:src="'http://www.plume.ink/public_html' + user.avatar">
 				<input type="file" v-if="editing == 'true'" name="avatar" id="avatar" v-on:change="addAvatar = 'true'">
 				<label v-if="editing == 'true'" for="avatar">IMPORT / CHANGE</label>
 				<label v-if="editing == 'true'" v-on:click="deleteAvatar()">DELETE</label>
@@ -74,7 +74,7 @@
 				<br/><br/>
 				<p>You speak</p>
 				<div class="lang" v-for="spokenLang in user.languages.spokenLang">
-					<img v-bind:src="'http://localhost/PLUME/public_html' + $parent.languagesToFlag(spokenLang)">
+					<img v-bind:src="'http://www.plume.ink/public_html' + $parent.languagesToFlag(spokenLang)">
 				</div>
 				<div v-if="editing == 'true'" class="changeField" v-on:click="addNewSpokenLanguage()">
 					<icon name="pencil"></icon>
@@ -86,7 +86,7 @@
 				</div>
 				<p>You wanna learn</p>
 				<div class="lang" v-for="learningLang in user.languages.learningLang">
-					<img v-bind:src="'http://localhost/PLUME/public_html' + $parent.languagesToFlag(learningLang)">
+					<img v-bind:src="'http://www.plume.ink/public_html' + $parent.languagesToFlag(learningLang)">
 				</div>
 				<div v-if="editing == 'true'" class="changeField" v-on:click="addNewLearningLanguage()">
 					<icon name="pencil"></icon>

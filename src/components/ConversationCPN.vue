@@ -119,7 +119,7 @@ export default {
             var div = document.getElementById("Message" + this.messages[i].ID);
             if(div.children.length == 2) {
               var image = document.createElement('img');
-              image.src = 'http://localhost/PLUME/public_html' + this.messages[i].content;
+              image.src = 'http://www.plume.ink/public_html' + this.messages[i].content;
               div.append(image);
             }
             this.messages[i].content = "";
@@ -170,7 +170,7 @@ export default {
       div.innerHTML="";
       var pos = match.index;
       var image = document.createElement('img');
-      image.src = "http://localhost/PLUME/public_html/static/smileys/"+name+".svg";
+      image.src = "http://www.plume.ink/public_html/static/smileys/"+name+".svg";
       image.className = "smiley";
       message.content = message.content.replace(match[0], " ");
       var part1 = message.content.slice(0, pos);

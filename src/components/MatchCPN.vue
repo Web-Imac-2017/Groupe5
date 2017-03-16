@@ -40,7 +40,7 @@
 			<div class="matchUserList">
         <h2 id="matchTitle">Users matched with your profil</h2>
         <div class="profilMatch col-xs-12 col-lg-6" v-for="user in users" v-on:click="$parent.changeSelectedUser(user[0].infos.pseudo)">
-          <img :src="'http://localhost/PLUME/public_html' + user[0].infos.avatar" class="avatarProfil" v-on:click="$parent.changeSelectedUser(user[0].infos.pseudo)">
+          <img :src="'http://www.plume.ink/public_html' + user[0].infos.avatar" class="avatarProfil" v-on:click="$parent.changeSelectedUser(user[0].infos.pseudo)">
           <div class="info" :class=getUserState(user)>
             <h3 class="pseudo">{{ user[0].infos.pseudo }}</h3>
 

@@ -9,7 +9,7 @@
         <div id="resultdiv" class="col-md-12 result">
             <div v-for="user in users" class="col-md-4 resultitem" id="resultitem">
                 <div class="resultavatar" id="resultavatar">
-                    <img class="resultimg" id="resultimg" :src="'http://localhost/PLUME/public_html' + user.avatar" v-on:click="$parent.$parent.changeSelectedUser(user.pseudo)"/>
+                    <img class="resultimg" id="resultimg" :src="'http://www.plume.ink/public_html' + user.avatar" v-on:click="$parent.$parent.changeSelectedUser(user.pseudo)"/>
                 </div>
                 <div class="resulttext" id="resulttext">
                     <p class="resultuser" id="resultuser">{{ user.pseudo }}</p>
