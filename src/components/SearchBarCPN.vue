@@ -9,17 +9,17 @@
         <div id="resultdiv" class="col-md-12 result">
             <div v-for="user in users" class="col-md-4 resultitem">
                 <div class="resultavatar">
-                    <img class="resultimg" src="/static/avatar/default.jpg"/>
+                    <img class="resultimg" :src="user.avatar"/>
                 </div>
                 <div class="resulttext">
                     <p class="resultuser">{{ user.pseudo }}</p>
                     <p class="resultcontent">Speaks</h2>
                     <ul>
-                        <li class="resultcontent" v-for="spokenLang in user.languages.spokenLang">{{ spokenLang }}</li>
+                        <li class="resultcontent" v-for="spokenLang in user.languages[0].spokenLang">{{ spokenLang.name_langue }}</li>
                     </ul>
                     <p class="resultcontent">Is learning</p>
                     <ul>
-                        <li class="resultcontent" v-for="learningLang in user.languages.learningLang">{{learningLang}}</li>
+                        <li class="resultcontent" v-for="learningLang in user.languages[1].learningLang">{{ learningLang.name_langue }}</li>
                     </ul>
                 </div>
             </div>
@@ -62,7 +62,7 @@ export default {
                     'Content-Type': 'application/json; charset=utf-8'
                 },
                 dataType: 'JSON',
-                body: JSON.stringify({pseudoToSearch : _this.search})
+                body: JSON.stringify({searched : _this.search})
             }).then(function(response) {
                 return response.json();
             }).then(function(data){
@@ -73,6 +73,7 @@ export default {
                 else
                 {
                     _this.users = data["users"];
+                    console.log(_this.users);
                 }
             });
         }
@@ -171,6 +172,7 @@ export default {
                     .resultimg
                     {
                         height: 100%;
+                        width: 100%;
                     }
                 }
 
