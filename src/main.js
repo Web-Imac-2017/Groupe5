@@ -27,7 +27,7 @@ Vue.component('icon', Icon)
 Vue.use(Router)
 
 Vue.use(Resource)
-Vue.http.options.root = "http://localhost"
+Vue.http.options.root = "http://www.plume.ink"
 
 // routing
 var router = new Router({
