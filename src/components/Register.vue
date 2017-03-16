@@ -225,9 +225,6 @@ export default {
         document.getElementById("error_Psw").style.display = 'none';
         document.getElementById("error_Psw2").style.display = 'none';
 
-        //tansform special caracters to html code
-        this.convertToHTML();
-
         var _this = this;
 
         fetch(apiRoot() + 'Controllers/User/setUserProfil.php', {
@@ -363,36 +360,6 @@ export default {
         document.getElementById("loading").innerHTML = f.name + " loaded succesfully.";
         document.getElementById("filebtn").style.backgroundImage = "url(../../static/img/checked.png)";
         document.getElementById("filebtn").style.border = "3px solid black"; 
-    },
-    convertToHTML: function(){
-      var text = this.user.description;
-      String.prototype.convertionHTML = function(){
-        return this.replace(/[\']/g,"&apos;")
-        .replace(/[ ]/g,"&nbsp;")
-        .replace(/[\"]/g,"&quot;")
-        .replace(/[\«]/g,"&laquot;")
-        .replace(/[\»]/g,"&raquot;")
-        .replace(/[\']/g,"&apos;")
-        .replace(/[\‹]/g,"&lsaquot;")
-        .replace(/[\›]/g,"&rsaquot;")
-        .replace(/[\...]/g,"&hellip;")
-        .replace(/[\¡]/g,"&iexcl;")
-        .replace(/[\¿]/g,"&iquest;")
-        .replace(/[\ˆ]/g,"&circ;")
-        .replace(/[\&]/g,"&amp;")
-        .replace(/[\€]/g,"&euro;")
-        .replace(/[\¢]/g,"&cent;")
-        .replace(/[\£]/g,"&pound;")
-        .replace(/[\¥]/g,"&fnof;")
-        .replace(/[\<]/g,"&lt;")
-        .replace(/[\>]/g,"&gt;")
-        .replace(/[\−]/g,"&minus;")
-        .replace(/[\×]/g,"&times;")
-        .replace(/[\÷]/g,"&divide;")
-        .replace(/[\,]/g,"&sbquo;");
-      }
-      var newText = text.convertionHTML();
-      this.user.description = newText;
     }
   },
 
