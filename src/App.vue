@@ -1,9 +1,9 @@
 <template>
-  <div id="app">
+  <div id="app" v-on:click="closeResults">
     <notifications></notifications>
     <header-component id="header"></header-component>
       <router-view keep-alive></router-view>
-    <profil-component v-if="profilShowed === 'true'"></profil-component>
+    <profil-component></profil-component>
     <footer-component></footer-component>
   </div>
 </template>
@@ -73,6 +73,17 @@ export default {
     }
   },
   methods: {
+    closeResults: function(e)
+    {
+      if (document.getElementById("resultdiv").style.display == "inline")
+      {
+        if (e.target != document.getElementById("searchbutton"))
+        {
+          document.getElementById("resultdiv").style.display = "none";
+        }
+      }
+      console.log(e.target);
+    },
     logout: function(){
       document.cookie = "PLUME_pseudo=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
       this.setUserState(this.connectedUser.pseudo, '');
@@ -180,10 +191,14 @@ export default {
         this.selectedUser.pseudo = pseudo;
         this.getSelectedUser();
         this.profilShowed = "true";
+        document.getElementById("overlay").style.display = "block";
+        document.getElementById("profile").style.right = "0px";
       }
       else {
         this.selectedUser.pseudo = '';
         this.profilShowed = "false";
+        document.getElementById("overlay").style.display = "none";
+        document.getElementById("profile").style.right = "-350px";
       }
     },
     getCookie: function(cname) {
