@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <router-link v-bind:to="'/home/'"><img v-bind:src="'/static/img/logo.png'" class="headerlogo"></router-link>
+    <router-link v-bind:to="'/home/'"><img v-bind:src="'http://localhost/PLUME/public_html/static/img/logo.png'" class="headerlogo"></router-link>
     <a class="item" v-on:click.prevent="$parent.logout">SIGN OUT</a>
     <router-link class="item" v-bind:to="'/myProfile/'">MY PROFILE</router-link>
     <router-link class="item" v-bind:to="'/messages/'">MESSAGES</router-link>

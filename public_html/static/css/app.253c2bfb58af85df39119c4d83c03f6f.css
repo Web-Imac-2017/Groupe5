@@ -6479,6 +6479,7 @@ body a:hover, body a:active, body a:focus {
 }
 #app {
   overflow-x: hidden;
+  min-height: 100vh;
 }
 
 .header {
@@ -6515,6 +6516,9 @@ body a:hover, body a:active, body a:focus {
 }
 .header .search {
     position: relative;
+}
+.header a {
+    cursor: pointer;
     z-index: 15;
 }
 
@@ -6646,11 +6650,11 @@ body a:hover, body a:active, body a:focus {
 }
 .profilCPN .infos .pseudo {
       text-transform: uppercase;
-      font-size: 35px;
+      font-size: 32px;
       text-align: center;
       font-weight: 900;
-      margin-top: 30px;
-      margin-bottom: 25px;
+      margin-top: 10px;
+      margin-bottom: 10px;
 }
 .profilCPN .infos .name, .profilCPN .infos .country, .profilCPN .infos .city {
       margin: 0;
@@ -6670,7 +6674,7 @@ body a:hover, body a:active, body a:focus {
 }
 .profilCPN .infos ul.hobbies li {
         padding: 2px 6px;
-        margin: 6px 6px;
+        margin: 4px 4px;
         display: inline-block;
         color: #fff;
         text-transform: uppercase;
@@ -6679,7 +6683,7 @@ body a:hover, body a:active, body a:focus {
 .profilCPN .infos .language {
       position: relative;
       bottom: 0;
-      margin: 50px auto 0;
+      margin: 20px auto 0;
 }
 .profilCPN .infos .language .llabel {
         font-style: italic;
@@ -6700,7 +6704,7 @@ body a:hover, body a:active, body a:focus {
     text-align: center;
     display: block;
     transition: .2s;
-    margin-top: 40px;
+    margin-top: 20px;
 }
 .profilCPN .talkButton:hover {
       background-color: #888888;
@@ -6996,6 +7000,12 @@ body a:hover, body a:active, body a:focus {
 #sign span {
   margin-right: 10px;
   margin-left: 10px;
+}
+.legal-notice {
+  position: fixed;
+  bottom: 20px;
+  left: 30px;
+  font-size: 25px;
 }
 
 @keyframes colorize {
@@ -7678,6 +7688,11 @@ input[type=range]:focus::-ms-fill-upper {
   background: #0d0d0d;
 }
 
+.LegalNotice {
+  width: 70%;
+  margin: 50px auto 0;
+}
+
 .fa-icon {
   display: inline-block;
   fill: currentColor;
@@ -7706,4 +7721,4 @@ input[type=range]:focus::-ms-fill-upper {
 }
 }
 
-/*# sourceMappingURL=app.712ca41260b394c0131da62773b1739a.css.map*/
+/*# sourceMappingURL=app.253c2bfb58af85df39119c4d83c03f6f.css.map*/

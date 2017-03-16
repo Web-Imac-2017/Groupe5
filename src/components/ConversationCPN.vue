@@ -96,7 +96,8 @@ export default {
           _this.users = data['users'];
           _this.messages = data['messages'];
           _this.getImages();
-          _this.getSmiley();
+          // Ne marche pas si plusieurs smileys :
+          //_this.getSmiley();
         }
       });
     },

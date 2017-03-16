@@ -17,14 +17,14 @@
                     <p class="resultcontent" id="resulcontent">Speaks&nbsp;</p>
                     <ul>
                         <li class="resultcontent" v-for="spoken in user.languages[0].spokenLang">
-                            {{ spoken.languageName.name_langue }},&nbsp;
+                            {{ spoken.name_langue }},&nbsp;
                         </li>
                     </ul>
                     <br/>
                     <p class="resultcontent resultcontent2">Is learning&nbsp;</p>
                     <ul>
                         <li class="resultcontent resultcontent2" v-for="learned in user.languages[1].learningLang">
-                            {{ learned.languageName.name_langue }},&nbsp;
+                            {{ learned.name_langue }},&nbsp;
                         </li>
                     </ul>
                 </div>
