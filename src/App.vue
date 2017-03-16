@@ -1,7 +1,7 @@
 <template>
-  <div id="app">
+  <div id="app" v-on:click="closeResults">
     <notifications v-if="connected === 'true'"></notifications>
-    <header-component v-if="connected === 'true'"></header-component>
+    <header-component id="header" v-if="connected === 'true'"></header-component>
       <router-view keep-alive></router-view>
     <profil-component v-if="profilShowed === 'true'"></profil-component>
     <footer-component></footer-component>
@@ -72,9 +72,20 @@ export default {
     }
   },
   methods: {
+<<<<<<< HEAD
     checkAvatar: function(avatar) {
       if(avatar == "") {
         avatar = "/static/avatar/default.jpg";
+=======
+    closeResults: function(e)
+    {
+      if (document.getElementById("resultdiv").style.display == "inline")
+      {
+        if (e.target != document.getElementById("searchbutton"))
+        {
+          document.getElementById("resultdiv").style.display = "none";
+        }
+>>>>>>> refs/remotes/origin/front
       }
     },
     logout: function(){
