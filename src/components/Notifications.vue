@@ -9,13 +9,13 @@
                             <p id="textuser">{{ notif.user }}</p>
                             <p id="textcontent">{{ notif.content }}</p>
                             <div id="buttons">
-                                <div id="accept">
+                                <div id="accept" v-on:click="$parent.acceptConversation(notif.user, notif.ID)">
                                     <img src="/static/img/accept.png" class="iconbutton"/>
-                                    <p v-on:click="$parent.acceptConversation(notif.user, notif.ID)">Accept </p>
+                                    <p>Accept </p>
                                 </div>
-                                <div id="refuse">
+                                <div id="refuse" v-on:click="$parent.refuseConversation(notif.ID)">
                                     <img src="/static/img/refuse.png" class="iconbutton"/>
-                                    <p v-on:click="$parent.refuseConversation(notif.ID)">Refuse </p>
+                                    <p>Refuse </p>
                                 </div>
                             </div>
                         </div>

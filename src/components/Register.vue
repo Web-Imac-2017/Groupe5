@@ -147,7 +147,7 @@ export default {
     submitForm: function(user){
       var formCorrect = 1;
       // regex definitions
-      var regexName = new RegExp(/^([A-zÀ-ÿ]){3,30}$/);
+      var regexName = new RegExp(/^([A-zÀ-ÿ_-]){3,30}$/);
       var regexPseudo = new RegExp(/^([a-zA-Z0-9_-]){3,30}$/);
       var regexEmail = new RegExp(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$/);
       var regexPSW = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}$/);
@@ -224,9 +224,6 @@ export default {
         document.getElementById("error_Mail").style.display = 'none';
         document.getElementById("error_Psw").style.display = 'none';
         document.getElementById("error_Psw2").style.display = 'none';
-
-        //tansform special caracters to html code
-        this.convertToHTML();
 
         var _this = this;
 
@@ -363,36 +360,6 @@ export default {
         document.getElementById("loading").innerHTML = f.name + " loaded succesfully.";
         document.getElementById("filebtn").style.backgroundImage = "url(../../static/img/checked.png)";
         document.getElementById("filebtn").style.border = "3px solid black"; 
-    },
-    convertToHTML: function(){
-      var text = this.user.description;
-      String.prototype.convertionHTML = function(){
-        return this.replace(/[\']/g,"&apos;")
-        .replace(/[ ]/g,"&nbsp;")
-        .replace(/[\"]/g,"&quot;")
-        .replace(/[\«]/g,"&laquot;")
-        .replace(/[\»]/g,"&raquot;")
-        .replace(/[\']/g,"&apos;")
-        .replace(/[\‹]/g,"&lsaquot;")
-        .replace(/[\›]/g,"&rsaquot;")
-        .replace(/[\...]/g,"&hellip;")
-        .replace(/[\¡]/g,"&iexcl;")
-        .replace(/[\¿]/g,"&iquest;")
-        .replace(/[\ˆ]/g,"&circ;")
-        .replace(/[\&]/g,"&amp;")
-        .replace(/[\€]/g,"&euro;")
-        .replace(/[\¢]/g,"&cent;")
-        .replace(/[\£]/g,"&pound;")
-        .replace(/[\¥]/g,"&fnof;")
-        .replace(/[\<]/g,"&lt;")
-        .replace(/[\>]/g,"&gt;")
-        .replace(/[\−]/g,"&minus;")
-        .replace(/[\×]/g,"&times;")
-        .replace(/[\÷]/g,"&divide;")
-        .replace(/[\,]/g,"&sbquo;");
-      }
-      var newText = text.convertionHTML();
-      this.user.description = newText;
     }
   },
 

@@ -3,23 +3,29 @@
         <div class="input-group bar">
             <input type="text" class="form-control" placeholder="If u're looking for someone..." v-model="search" id="searchUser">
             <span class="input-group-btn">
-                <button v-on:click="searchUsers" class="btn btn-default" type="button">Go</button>
+                <button v-on:click="searchUsers" id="searchbutton" class="btn btn-default" type="button">Go</button>
             </span>
         </div>
         <div id="resultdiv" class="col-md-12 result">
-            <div v-for="user in users" class="col-md-4 resultitem">
-                <div class="resultavatar">
-                    <img class="resultimg" src="/static/avatar/default.jpg"/>
+            <div v-for="user in users" class="col-md-4 resultitem" id="resultitem">
+                <div class="resultavatar" id="resultavatar">
+                    <img class="resultimg" id="resultimg" :src="user.avatar" v-on:click="$parent.$parent.changeSelectedUser(user.pseudo)"/>
                 </div>
-                <div class="resulttext">
-                    <p class="resultuser">{{ user.pseudo }}</p>
-                    <p class="">Spoken languages</h2>
+                <div class="resulttext" id="resulttext">
+                    <p class="resultuser" id="resultuser">{{ user.pseudo }}</p>
+                    <br/>
+                    <p class="resultcontent" id="resulcontent">Speaks&nbsp;</p>
                     <ul>
-                        <li v-for="spokenLang in user.languages.spokenLang">{{spokenLang}}</li>
+                        <li class="resultcontent" v-for="spoken in user.languages[0].spokenLang">
+                            {{ spoken.languageName.name_langue }},&nbsp;
+                        </li>
                     </ul>
-                    <h2>Learning languages</h2>
+                    <br/>
+                    <p class="resultcontent resultcontent2">Is learning&nbsp;</p>
                     <ul>
-                        <li v-for="learningLang in user.languages.learningLang">{{learningLang}}</li>
+                        <li class="resultcontent resultcontent2" v-for="learned in user.languages[1].learningLang">
+                            {{ learned.languageName.name_langue }},&nbsp;
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -62,7 +68,7 @@ export default {
                     'Content-Type': 'application/json; charset=utf-8'
                 },
                 dataType: 'JSON',
-                body: JSON.stringify({pseudoToSearch : _this.search})
+                body: JSON.stringify({searched : _this.search})
             }).then(function(response) {
                 return response.json();
             }).then(function(data){
@@ -73,11 +79,11 @@ export default {
                 else
                 {
                     _this.users = data["users"];
+                    console.log(_this.users);
                 }
             });
         }
         document.getElementById("resultdiv").style.display = "inline";
-        console.log(document.getElementById("resultdiv"));
     },
     convertSearchToHTML: function(){
       var text = this.search;
@@ -135,7 +141,7 @@ export default {
 
         .result
         {
-            z-index: 9999;
+            z-index: 12;
             border-radius: 3px;
             width: 100%;
             background-color: rgba(100, 100, 100, .5);
@@ -152,10 +158,11 @@ export default {
                 height: 100px;
                 background-color: green;
                 margin-bottom: 5px;
+                cursor: pointer;
 
                 &:hover .resulttext
                 {
-                    background-color: pink;
+                    background-color: #A1D4E2;
                 }
 
                 &:last-child
@@ -172,6 +179,7 @@ export default {
                     .resultimg
                     {
                         height: 100%;
+                        width: 100%;
                     }
                 }
 
@@ -180,7 +188,7 @@ export default {
                     display: inline-block;
                     height: 100%;
                     width: calc(100% - 100px);
-                    background-color: lightblue;
+                    background-color: #CFDEE7;
                     float: right;
                     transition: .2s;
 
@@ -197,14 +205,39 @@ export default {
                         margin: 0;
                         margin-left: 10px;
                         margin-top: 3px; 
+                        display: inline-block;
                     }
 
                     .resultcontent
                     {
                         margin-top: 0;
+                        font-size: 1.2em;
+                        display: inline-block;
+                        float: left;
+                    }
+
+                    .resultcontent2
+                    {
+                        margin-top: -8px;
+                    }
+
+                    .resultspoken
+                    {
+                        font-size: 1.5em;
+                        display: inline-block
                     }
                 }
             }
         }
+    }
+
+    .visible
+    {
+        display: inline;
+    }
+
+    .invisible
+    {
+        display: none;
     }
 </style>

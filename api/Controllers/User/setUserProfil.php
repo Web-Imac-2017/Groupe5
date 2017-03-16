@@ -66,7 +66,7 @@
             
             if(preg_match($pattern , $pseudo)){
                 if (is_numeric($age)){
-                    if(preg_match($syntaxe,$userMail)){
+                    if(preg_match($syntaxe,$email)){
                         $data = UserModel::setUserProfil($lastname, $firstname, $pseudo, $email, $password, $avatar, $age, $sex, $city, $color, $date_inscription, $last_connection, $description, $country, $id_etat_activ, $arr_hobbies, $arr_languesSpoken, $arr_languesLearning);
                 
                         /*Key creation*/

@@ -11,7 +11,7 @@
             <img :src="user.avatar">
           </span>
           <span v-for="user in conversation.users" class="text-conv">
-            <p class="titleConversation userPseudo" :class=getUserState(user)>{{ user.pseudo }} <icon name="circle"></icon></p>
+            <p class="titleConversation userPseudo" :class=getUserState(user)>{{ user.pseudo }}</p>
             <p class="lastMessage">{{ conversation.lastMessage }}</p>
           </span>
           <span v-on:click="deleteConv(conversation.id)" class="quit">
@@ -63,6 +63,11 @@ export default {
   mounted: function() {
     this.me = this.$parent.connectedUser;
     this.getConversations();
+
+    var _this = this;
+    setInterval(function() {
+      _this.getConversations();
+    }, 3000);
   },
   methods: {
     getActiveConversation: function(id) {
@@ -89,7 +94,8 @@ export default {
           if(data[0] == "Error"){
           }
           else {
-            if(data[0] == 2) theClass = "userConnected";
+            if(data == "2") theClass = "userConnected";
+            else theClass = "userNonConnected";
           }
         }
       );
