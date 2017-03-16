@@ -147,7 +147,7 @@ export default {
     submitForm: function(user){
       var formCorrect = 1;
       // regex definitions
-      var regexName = new RegExp(/^([A-zÀ-ÿ]){3,30}$/);
+      var regexName = new RegExp(/^([A-zÀ-ÿ_-]){3,30}$/);
       var regexPseudo = new RegExp(/^([a-zA-Z0-9_-]){3,30}$/);
       var regexEmail = new RegExp(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$/);
       var regexPSW = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])\w{6,}$/);
