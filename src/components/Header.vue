@@ -66,7 +66,7 @@ import SearchBarComponent from './SearchBarCPN.vue';
         .search
         {
             position: relative;
-            z-index: 1000;
+            z-index: 15;
         }
     }
 

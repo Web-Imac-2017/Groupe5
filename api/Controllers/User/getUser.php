@@ -8,7 +8,6 @@
 
 	include "../../Models/UserModel.php";
 
-
     $data = array();
     if ($_SERVER['REQUEST_METHOD'] == 'POST')
     {   
