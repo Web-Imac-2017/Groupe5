@@ -72,11 +72,11 @@ export default {
     }
   },
   methods: {
-<<<<<<< HEAD
     checkAvatar: function(avatar) {
       if(avatar == "") {
         avatar = "/static/avatar/default.jpg";
-=======
+      }
+    },
     closeResults: function(e)
     {
       if (document.getElementById("resultdiv").style.display == "inline")
@@ -85,9 +85,7 @@ export default {
         {
           document.getElementById("resultdiv").style.display = "none";
         }
->>>>>>> refs/remotes/origin/front
       }
-      console.log(e.target);
     },
     logout: function(){
       document.cookie = "PLUME_pseudo=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
