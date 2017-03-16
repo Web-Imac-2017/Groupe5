@@ -94,38 +94,29 @@ export default {
         }
         else {
           _this.users = data['users'];
-          var canCommunicate = "false";
-
-          for(var i = 0; i < _this.users.length; i ++) {
-            if(_this.users[i][0] == _this.me.pseudo) {
-              canCommunicate = "true";
-            }
-          }
-          if(canCommunicate != "true") {
-            _this.$router.push('/messages/');
-          }
-          else {
-            _this.messages = data['messages'];
-            _this.getImages();
-          }
+          _this.messages = data['messages'];
+          _this.getImages();
+          _this.getSmiley();
         }
       });
     },
     getImages : function() {
       for(var i = 0; i < this.messages.length; i ++) {
         if(this.messages[i].content != "" && this.messages[i].content != null) {
-          if(this.messages[i].content.indexOf("PLUME_IMAGE_MESSAGE:") !== -1) {
-            this.messages[i].content = this.messages[i].content.substr(20,this.messages[i].content.length-1);
+          if(this.messages[i].content.indexOf("PLUME_IMAGE_MESSAGE") !== -1) {
+            this.messages[i].content = this.messages[i].content.substr(19);
             var div = document.getElementById("Message" + this.messages[i].ID);
-            if(div.children.length == 2) {
-              var image = document.createElement('img');
-              image.src = 'http://localhost/PLUME/public_html' + this.messages[i].content;
-              div.append(image);
+            if(div != null) {
+              if(div.children.length == 2) {
+                var image = document.createElement('img');
+                image.src = 'http://localhost/PLUME/public_html' + this.messages[i].content;
+                div.append(image);
+              }
             }
             this.messages[i].content = "";
           }
           else {
-            this.getSmiley();
+
           }
         }
       }
@@ -165,45 +156,69 @@ export default {
       });
 
     },
-    replaceTxtBySmiley : function(message, match, name){
-      var div = document.getElementById("Message" + message.ID);
-      div.innerHTML="";
-      var pos = match.index;
-      var image = document.createElement('img');
-      image.src = "http://localhost/PLUME/public_html/static/smileys/"+name+".svg";
-      image.className = "smiley";
-      message.content = message.content.replace(match[0], " ");
-      var part1 = message.content.slice(0, pos);
-      var part2 = message.content.slice(pos);
-      div.append(image);
-      message.content = "";
-      div.append(part1);
-      div.append(image);
-      div.append(part2);
+    replaceTxtBySmiley : function(smiley,name,messages){
+
+        //on récupère la balise html de la bulle concerné
+        var domElm = document.getElementById("Message" + messages.ID);
+        domElm.innerHTML="";
+
+        var rest = messages.content;
+        do
+        {
+          //je récupère la position du smiley
+          var pos = rest.indexOf(smiley);
+          //Je selectionne le debut jusqu'a après le premier smiley
+          var str = rest.slice(0,pos+2);
+          //Je met le reste dans rest
+          var rest = rest.slice(pos+2);
+
+          //je créer une image
+          var image = document.createElement('img');
+          image.src = "http://localhost/PLUME/public_html/static/smileys/"+name+".svg";
+          image.className = "smiley";
+
+          //Je supprime le smiley text de str
+          str = str.replace(smiley, "");
+
+          //On met dans la balise html le texte puis l'image
+          domElm.append(str);
+          domElm.append(image);
+
+        } while (rest != "" && rest.indexOf(":)") !== -1);
     },
     getSmiley : function() {
       for(var i = 0; i < this.messages.length; i ++) {
-        var re = /:\)|:D|:\(|:O|:P/g,
-        str = this.messages[i].content;
-        var match;
-        while ((match = re.exec(str)) != null) {
-          switch (match[0]) {
+
+        var regex = new RegExp(/:\)|:D|:\(|:O|:P|:\/|<3|:@/g);
+
+        if (this.messages[i].content.match(regex)) {
+          var match = this.messages[i].content.match(regex);
+          var smiley = match[0];
+          switch (smiley) {
             case ":)":
-              this.replaceTxtBySmiley(this.messages[i], match, "smile");
-              break;
-            case ":(":
-              this.replaceTxtBySmiley(this.messages[i], match, "sad");
-              break;
-            case ":O":
-              this.replaceTxtBySmiley(this.messages[i], match, "shock");
-              break;
+              this.replaceTxtBySmiley(smiley,"smile" ,this.messages[i]);
+            break;
             case ":D":
-              this.replaceTxtBySmiley(this.messages[i], match, "happy");
-              break;
+              this.replaceTxtBySmiley(smiley,"happy" ,this.messages[i]);
+            break;
+            case ":(":
+              this.replaceTxtBySmiley(smiley,"sad" ,this.messages[i]);
+            break;
+            case ":O":
+              this.replaceTxtBySmiley(smiley,"shock" ,this.messages[i]);
+            break;
             case ":P":
-              this.replaceTxtBySmiley(this.messages[i], match, "tongue");
-              break;
-            default:
+              this.replaceTxtBySmiley(smiley,"tongue" ,this.messages[i]);
+            break;
+            case ":/":
+              this.replaceTxtBySmiley(smiley,"jaded" ,this.messages[i]);
+            break;
+            case "<3":
+              this.replaceTxtBySmiley(smiley,"inlove" ,this.messages[i]);
+            break;
+            case ":@":
+              this.replaceTxtBySmiley(smiley,"angry" ,this.messages[i]);
+            break;
           }
         }
       }

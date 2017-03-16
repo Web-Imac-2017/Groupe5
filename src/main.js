@@ -15,6 +15,7 @@ import MyProfile from './components/MyProfile.vue'
 import Admin from './components/Admin.vue'
 import Messages from './components/Messages.vue'
 import Match from './components/MatchCPN.vue'
+import LegalNotice from './components/LegalNotice.vue'
 
 //Font Awesome
 import 'vue-awesome/icons/flag'
@@ -86,6 +87,11 @@ var router = new Router({
 			name: 'admin',
 			path: '/admin/',
 			component: Admin
+		},
+		{
+			name:'legalNotice',
+			path: '/legalNotice/',
+			component: LegalNotice
 		},
 		{
 			path: '*',
