@@ -31,14 +31,14 @@ if($pseudo == "maureeniz") {
 else {
   echo '
   {
-    "pseudo": "CoralieBurton",
+    "pseudo": "KORALAI",
     "avatar": "maureeniz.jpg",
     "firstname": "Coralie",
     "lastname": "Goldbaum",
     "age": "21",
     "country": "France",
     "city": "Paris",
-    "description": "I loooove dogs and Tim Burton!",
+    "description": "Hello, how are you ? I am getting better since I ate ice cream. I love dogs and I live on the Moon with several purple flying guys. I like to excange with people, don\'t wait to come talking with me :D",
     "hobbies" : ["Music", "Cinema"],
     "languages" : {
       "spokenLang" : ["French", "English"],

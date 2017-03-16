@@ -136,7 +136,7 @@ export default {
 
         .result
         {
-            z-index: 9999;
+            z-index: 12;
             border-radius: 3px;
             width: 100%;
             background-color: rgba(100, 100, 100, .5);
