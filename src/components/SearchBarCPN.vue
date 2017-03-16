@@ -13,13 +13,13 @@
                 </div>
                 <div class="resulttext">
                     <p class="resultuser">{{ user.pseudo }}</p>
-                    <p class="">Spoken languages</h2>
+                    <p class="resultcontent">Speaks</h2>
                     <ul>
-                        <li v-for="spokenLang in user.languages.spokenLang">{{spokenLang}}</li>
+                        <li class="resultcontent" v-for="spokenLang in user.languages.spokenLang">{{ spokenLang }}</li>
                     </ul>
-                    <h2>Learning languages</h2>
+                    <p class="resultcontent">Is learning</p>
                     <ul>
-                        <li v-for="learningLang in user.languages.learningLang">{{learningLang}}</li>
+                        <li class="resultcontent" v-for="learningLang in user.languages.learningLang">{{learningLang}}</li>
                     </ul>
                 </div>
             </div>
@@ -78,7 +78,6 @@ export default {
             });
         }
         document.getElementById("resultdiv").style.display = "inline";
-        console.log(document.getElementById("resultdiv"));
     },
     convertSearchToHTML: function(){
       var text = this.search;
@@ -198,6 +197,11 @@ export default {
                     .resultcontent
                     {
                         margin-top: 0;
+                    }
+
+                    .resultspoken
+                    {
+                        font-size: 1em;
                     }
                 }
             }
