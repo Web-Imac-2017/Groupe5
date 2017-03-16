@@ -11,18 +11,18 @@
             <input v-model="selectedFilter.role" class="form-check-input" type="radio" value="2" >
             <label  class="form-check-label" for="apprentices">Apprentices</label><br/>
         </div>
-        
+
         <div>
-          <input v-model="selectedFilter.sexMen"  class="form-check-input" type="checkbox" id="women" value="2" >
+          <input v-model="selectedFilter.sexMen"  class="form-check-input" type="checkbox" id="women" value="1" >
           <label  class="form-check-label" for="women">Women</label>
         </div>
-        
+
         <div>
-          <input v-model="selectedFilter.sexWomen" class="form-check-input" type="checkbox" id="men" value="1" >
+          <input v-model="selectedFilter.sexWomen" class="form-check-input" type="checkbox" id="men" value="2" >
           <label  class="form-check-label" for="men">Men</label>
         </div>
-        
-        
+
+
         <div id="rangeSlider">
           <section class="range-slider">
             <input v-model="value[0]" id="doubleRange1" min="15" max="90" step="1" type="range">
@@ -46,15 +46,15 @@
 
             <p>{{ user[0].infos.town }}, {{ user[0].infos.country }}</p>
             <p>{{ user[0].infos.age }} years old</p>
-            
+
           </div>
         </div>
       </div>
 		</div>
 	</div>
-	
+
 </template>
-	
+
 
 <script>
 
@@ -88,7 +88,7 @@ export default{
       var sex = [];
       if(document.getElementById("men").checked) {
         sex.push(document.getElementById("men").value);
-      }      
+      }
       if(document.getElementById("women").checked) {
         sex.push(document.getElementById("women").value);
       }

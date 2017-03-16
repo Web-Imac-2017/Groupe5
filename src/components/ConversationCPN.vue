@@ -110,7 +110,7 @@ export default {
             if(div != null) {
               if(div.children.length == 2) {
                 var image = document.createElement('img');
-                image.src = 'http://www.plume.ink/public_html' + this.messages[i].content;
+                image.src = 'http://www.plume.ink/public_html/' + this.messages[i].content;
                 div.append(image);
               }
             }
