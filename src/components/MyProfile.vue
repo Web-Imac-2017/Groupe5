@@ -201,7 +201,11 @@ export default {
 				if(this.addAvatar == 'true') this.updateAvatar();
 
 				this.init();
+
+				this.editing = "false";
 			}
+
+
 		},
 		getLanguages: function() {
 			var _this = this;

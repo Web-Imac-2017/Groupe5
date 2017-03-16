@@ -9,7 +9,7 @@
         <div id="resultdiv" class="col-md-12 result">
             <div v-for="user in users" class="col-md-4 resultitem">
                 <div class="resultavatar">
-                    <img class="resultimg" :src="user.avatar"/>
+                    <img class="resultimg" :src="user.avatar" v-on:click="$parent.$parent.changeSelectedUser(user.pseudo)"/>
                 </div>
                 <div class="resulttext">
                     <p class="resultuser">{{ user.pseudo }}</p>
