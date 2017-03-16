@@ -88,7 +88,7 @@ export default {
 
     .pseudo{
       text-transform: uppercase;
-      font-size: 35px;
+      font-size: 32px;
       text-align: center;
       font-weight: 900;
       margin-top: 30px;

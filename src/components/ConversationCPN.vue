@@ -156,47 +156,120 @@ export default {
       });
 
     },
-    replaceTxtBySmiley : function(message, match, name){
-      var div = document.getElementById("Message" + message.ID);
-      div.innerHTML="";
-      var pos = match.index;
-      var image = document.createElement('img');
-      image.src = "/static/smileys/"+name+".svg";
-      image.className = "smiley";
-      message.content = message.content.replace(match[0], " ");
-      var part1 = message.content.slice(0, pos);
-      var part2 = message.content.slice(pos);
-      div.append(image);
-      message.content = "";
-      div.append(part1);
-      div.append(image);
-      div.append(part2);
+    replaceTxtBySmiley : function(smiley, messages){
+
+        //on récupère la balise html de la bulle concerné
+        var domElm = document.getElementById("Message" + messages.ID);
+        domElm.innerHTML="";
+
+        var rest = messages.content;
+        do
+        {
+          //je récupère la position du smiley
+          var pos = rest.indexOf(smiley);
+          //Je selectionne le debut jusqu'a après le premier smiley
+          var str = rest.slice(0,pos+2);
+          //Je met le reste dans rest
+          var rest = rest.slice(pos+2);
+
+          //je créer une image
+          var image = document.createElement('img');
+          image.src = "/static/smileys/happy.svg";
+          image.className = "smiley";
+
+          //Je supprime le smiley text de str
+          str = str.replace(smiley, "");
+
+          //On met dans la balise html le texte puis l'image
+          domElm.append(str);
+          domElm.append(image);
+
+        } while (rest != "" && rest.indexOf(":)") !== -1);
+
     },
     getSmiley : function() {
       for(var i = 0; i < this.messages.length; i ++) {
-        var re = /:\)|:D|:\(|:O|:P/g,
-        str = this.messages[i].content;
-        var match;
-        while ((match = re.exec(str)) != null) {
-          switch (match[0]) {
+
+        var regex = new RegExp(/:\)|:D|:\(|:O|:P|:\/|<3|:@/g);
+
+        if (this.messages[i].content.match(regex)) {
+          var match = this.messages[i].content.match(regex);
+          var smiley = match[0];
+
+          switch (smiley) {
             case ":)":
-              this.replaceTxtBySmiley(this.messages[i], match, "smile");
-              break;
-            case ":(":
-              this.replaceTxtBySmiley(this.messages[i], match, "sad");
-              break;
-            case ":O":
-              this.replaceTxtBySmiley(this.messages[i], match, "shock");
-              break;
+              this.replaceTxtBySmiley(smiley, this.messages[i]);
+            break;
             case ":D":
-              this.replaceTxtBySmiley(this.messages[i], match, "happy");
-              break;
+              this.replaceTxtBySmiley(smiley, this.messages[i]);
+            break;
+            case ":(":
+              this.replaceTxtBySmiley(smiley, this.messages[i]);
+            break;
+            case ":O":
+              this.replaceTxtBySmiley(smiley, this.messages[i]);
+            break;
             case ":P":
-              this.replaceTxtBySmiley(this.messages[i], match, "tongue");
-              break;
-            default:
+              this.replaceTxtBySmiley(smiley, this.messages[i]);
+            break;
+            case ":/":
+              this.replaceTxtBySmiley(smiley, this.messages[i]);
+            break;
+            case "<3":
+              this.replaceTxtBySmiley(smiley, this.messages[i]);
+            break;
+            case ":@":
+              this.replaceTxtBySmiley(smiley, this.messages[i]);
+            break;
           }
         }
+
+
+
+        // var regex = new RegExp(/:\)|:D|:\(|:O|:P|:\/|<3|:@/g);
+        // var match;
+        // var domElm = document.getElementById("Message" + this.messages[i].ID);
+        // console.log(domElm);
+        // var str = this.messages[i].content;
+        // console.log(str);
+        //
+        // if((match = regex.exec(str)) != null) domElm.innerHTML="";
+        //
+        // while (str != "") {
+        //
+        //   if((match = regex.exec(str)) != null) {
+        //     console.log(match[0]);
+        //     switch (match[0]) {
+        //       case ":)":
+        //       this.replaceTxtBySmiley(str.slice(0, match.index+2), match, "smile", domElm);
+        //       break;
+        //       case ":D":
+        //       this.replaceTxtBySmiley(str.slice(0, match.index+2), match, "happy", domElm);
+        //       break;
+        //       case ":(":
+        //       this.replaceTxtBySmiley(str.slice(0, match.index+2), match, "sad", domElm);
+        //       break;
+        //       case ":O":
+        //       this.replaceTxtBySmiley(str.slice(0, match.index+2), match, "shock", domElm);
+        //       break;
+        //       case ":P":
+        //       this.replaceTxtBySmiley(str.slice(0, match.index+2), match, "tongue", domElm);
+        //       break;
+        //       case ":/":
+        //       this.replaceTxtBySmiley(str.slice(0, match.index+2), match, "jaded", domElm);
+        //       break;
+        //       case "<3":
+        //       this.replaceTxtBySmiley(str.slice(0, match.index+2), match, "inlove", domElm);
+        //       break;
+        //       case ":@":
+        //       this.replaceTxtBySmiley(str.slice(0, match.index+2), match, "angry", domElm);
+        //       break;
+        //     }
+        //     str = this.messages[i].content.slice(match.index+2);
+        //   }
+        //   else str = "";
+        //
+        // }
       }
     },
     scrollBottomAuto: function(){

@@ -395,6 +395,7 @@ export default {
   #app
   {
     overflow-x: hidden;
+    min-height: 100vh;
   }
 
 </style>
