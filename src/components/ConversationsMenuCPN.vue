@@ -125,8 +125,8 @@ export default {
               
               if(_this.conversations[i].lastMessage) {
                 if(_this.conversations[i] != "" && _this.conversations[i] != null) {
-                  if(_this.conversations[i].lastMessage.indexOf("PLUME_IMAGE_MESSAGE:") !== -1) {
-                    _this.conversations[i].lastMessage = _this.conversations[i].lastMessage.substr(20,_this.conversations[i].lastMessage.length-1);
+                  if(_this.conversations[i].lastMessage.indexOf("PLUME_IMAGE_MESSAGE") !== -1) {
+                    _this.conversations[i].lastMessage = _this.conversations[i].lastMessage.substr(19);
                     _this.conversations[i].lastMessage = "Image";
                   }
                 }
