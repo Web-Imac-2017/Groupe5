@@ -4,7 +4,7 @@ dist/
 npm-debug.log
 plume.sql
 api/secure/
-logs/
+logs/*
 access.log
 config/localhost/settings.js
 settings.js
