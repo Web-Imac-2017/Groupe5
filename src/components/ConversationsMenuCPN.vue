@@ -2,16 +2,16 @@
   <div class="conversationsMenu">
     <!-- <div class="CMHeader">
       <router-link v-bind:to="'/home/'"><icon name="long-arrow-left"></icon>back</router-link>
-      <img v-bind:src="'/static/img/logo.png'" class="CMLogo">
+      <img v-bind:src="'http://www.plume.ink/public_html/static/img/logo.png'" class="CMLogo">
     </div> -->
     <ul>
       <li v-for="conversation in conversations" class="row">
         <router-link v-bind:to="'/messages/' + conversation.id" :style="{background:getActiveConversation(conversation.id)}" class="user">
           <span  v-for="user in conversation.users" class="avatar" v-on:click="$parent.$parent.changeSelectedUser(user.pseudo)">
-            <img :src="user.avatar">
+            <img :src="'http://www.plume.ink/public_html' + user.avatar">
           </span>
           <span v-for="user in conversation.users" class="text-conv">
-            <p class="titleConversation userPseudo" :class=getUserState(user)>{{ user.pseudo }} <icon name="circle"></icon></p>
+            <p class="titleConversation userPseudo" :class=getUserState(user)>{{ user.pseudo }}</p>
             <p class="lastMessage">{{ conversation.lastMessage }}</p>
           </span>
           <span v-on:click="deleteConv(conversation.id)" class="quit">
@@ -63,6 +63,11 @@ export default {
   mounted: function() {
     this.me = this.$parent.connectedUser;
     this.getConversations();
+
+    var _this = this;
+    setInterval(function() {
+      _this.getConversations();
+    }, 3000);
   },
   methods: {
     getActiveConversation: function(id) {
@@ -89,7 +94,8 @@ export default {
           if(data[0] == "Error"){
           }
           else {
-            if(data[0] == 2) theClass = "userConnected";
+            if(data == "2") theClass = "userConnected";
+            else theClass = "userNonConnected";
           }
         }
       );
@@ -97,7 +103,6 @@ export default {
     },
     getConversations: function() {
       var _this = this;
-      // TO DO : Améliorer ça -- permet de corriger bug afficher conversations
       setTimeout(function() {
         fetch(apiRoot() + 'Controllers/Conversation/getUserConversations.php', {
           method: 'POST',
@@ -115,17 +120,16 @@ export default {
           }
           else {
             _this.conversations = data['conversations'];
-
             for(var i = 0; i < _this.conversations.length; i ++) {
+              _this.$parent.$parent.checkAvatar(_this.conversations[i].users);
               if(_this.conversations[i].lastMessage) {
-                if(_this.conversations[i].lastMessage.indexOf("PLUME_IMAGE_MESSAGE:") !== -1) {
-
-                  _this.conversations[i].lastMessage = _this.conversations[i].lastMessage.substr(20,_this.conversations[i].lastMessage.length-1);
-
-                  _this.conversations[i].lastMessage = "Image";
+                if(_this.conversations[i] != "" && _this.conversations[i] != null) {
+                  if(_this.conversations[i].lastMessage.indexOf("PLUME_IMAGE_MESSAGE:") !== -1) {
+                    _this.conversations[i].lastMessage = _this.conversations[i].lastMessage.substr(20,_this.conversations[i].lastMessage.length-1);
+                    _this.conversations[i].lastMessage = "Image";
+                  }
                 }
               }
-
             }
           }
         });

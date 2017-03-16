@@ -1,7 +1,7 @@
 <template>
   <div id="app" v-on:click="closeResults">
-    <notifications></notifications>
-    <header-component id="header"></header-component>
+    <notifications v-if="connected === 'true'"></notifications>
+    <header-component id="header" v-if="connected === 'true'"></header-component>
       <router-view keep-alive></router-view>
     <profil-component></profil-component>
     <footer-component></footer-component>
@@ -24,7 +24,7 @@ export default {
   },
   data(){
     return {
-      connected: '',
+      connected: 'true',
       selectedUser: {
         id : '',
         pseudo: '',
@@ -38,8 +38,8 @@ export default {
         city: '',
         hobbies: '',
         languages: {
-          spokenLang: '',
-          learningLang: ''
+          spokenLang: [],
+          learningLang: []
         }
       },
       profilShowed: '',
@@ -56,23 +56,32 @@ export default {
         city: '',
         hobbies: '',
         languages: {
-          spokenLang: '',
-          learningLang: ''
+          spokenLang: [],
+          learningLang: []
         }
       },
-      notifications : []
+      notifications : ''
     }
   },
   created: function(){
     this.profilShowed = "false";
-    // var pseudo = this.getCookie("PLUME_pseudo");
-    var pseudo = "maureeniz";
+    var pseudo = this.getCookie("PLUME_pseudo");
     if(pseudo != "") {
-      // this.getUserState(pseudo);
+      this.getUserState(pseudo);
       this.setConnectedUser(pseudo);
+      
+      var _this = this;
+      setInterval(function() {
+        _this.getNotifications(_this.connectedUser.pseudo);
+      }, 2000);
     }
   },
   methods: {
+    checkAvatar: function(avatar) {
+      if(avatar == "") {
+        avatar = "/static/avatar/default.jpg";
+      }
+    },
     closeResults: function(e)
     {
       if (document.getElementById("resultdiv").style.display == "inline")
@@ -82,7 +91,6 @@ export default {
           document.getElementById("resultdiv").style.display = "none";
         }
       }
-      console.log(e.target);
     },
     logout: function(){
       document.cookie = "PLUME_pseudo=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
@@ -166,8 +174,14 @@ export default {
           _this.selectedUser.description = data['description'];
           _this.selectedUser.color = data['color'];
           _this.selectedUser.hobbies = data['hobbies'];
-          _this.selectedUser.languages.learningLang = data['languages']['learningLang']['learningLang'];
-          _this.selectedUser.languages.spokenLang = data['languages']['spokenLang']['spokenLang'];
+          _this.selectedUser.languages.learningLang = [];
+          for(var i = 0; i < data['languages']['learningLang']['learningLang'].length; i ++) {
+            _this.selectedUser.languages.learningLang.push(data['languages']['learningLang']['learningLang'][i]['name_langue']);
+          }
+          _this.selectedUser.languages.spokenLang = [];
+          for(var i = 0; i < data['languages']['spokenLang']['spokenLang'].length; i ++) {
+            _this.selectedUser.languages.spokenLang.push(data['languages']['spokenLang']['spokenLang'][i]['name_langue']);
+          }
         }
 
       });
@@ -248,8 +262,14 @@ export default {
           _this.connectedUser.description = data['description'];
           _this.connectedUser.color = data['color'];
           _this.connectedUser.hobbies = data['hobbies'];
-          _this.connectedUser.languages.spokenLang = data['languages']['spokenLang']['spokenLang'];
-          _this.connectedUser.languages.learningLang = data['languages']['learningLang']['learningLang'];
+          _this.connectedUser.languages.learningLang = [];
+          for(var i = 0; i < data['languages']['learningLang']['learningLang'].length; i ++) {
+            _this.connectedUser.languages.learningLang.push(data['languages']['learningLang']['learningLang'][i]['name_langue']);
+          }
+          _this.connectedUser.languages.spokenLang = [];
+          for(var i = 0; i < data['languages']['spokenLang']['spokenLang'].length; i ++) {
+            _this.connectedUser.languages.spokenLang.push(data['languages']['spokenLang']['spokenLang'][i]['name_langue']);
+          }
         }
 
       });
@@ -271,7 +291,6 @@ export default {
           console.log(data[1]);
         }
         else {
-          // console.log(data);
           _this.notifications = data;
         }
       });
@@ -293,7 +312,6 @@ export default {
           console.log(data[1]);
         }
         else {
-          //console.log(data);
           _this.notifications = data["notifications"];
         }
       });
@@ -315,13 +333,13 @@ export default {
           console.log(data[1]);
         }
         else {
-          //console.log(data);
           _this.notifications = data["notifications"];
         }
       });
     },
     acceptConversation : function(pseudo, idNotif) {
       this.createConversation(pseudo, idNotif);
+      this.getNotifications(this.connectedUser.pseudo);
     },
     refuseConversation : function(idNotif) {
       this.deleteNotification(idNotif);

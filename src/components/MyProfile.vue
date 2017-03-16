@@ -2,7 +2,7 @@
 	<div class="myProfile">
 		<div class="row">
 			<div class="col-sm-4 imageUpdate">
-				<img v-bind:src="user.avatar">
+				<img v-bind:src="'http://www.plume.ink/public_html' + user.avatar">
 				<input type="file" v-if="editing == 'true'" name="avatar" id="avatar" v-on:change="addAvatar = 'true'">
 				<label v-if="editing == 'true'" for="avatar">IMPORT / CHANGE</label>
 				<label v-if="editing == 'true'" v-on:click="deleteAvatar()">DELETE</label>
@@ -74,7 +74,7 @@
 				<br/><br/>
 				<p>You speak</p>
 				<div class="lang" v-for="spokenLang in user.languages.spokenLang">
-					<img v-bind:src="$parent.languagesToFlag(spokenLang)">
+					<img v-bind:src="'http://www.plume.ink/public_html' + $parent.languagesToFlag(spokenLang)">
 				</div>
 				<div v-if="editing == 'true'" class="changeField" v-on:click="addNewSpokenLanguage()">
 					<icon name="pencil"></icon>
@@ -86,7 +86,7 @@
 				</div>
 				<p>You wanna learn</p>
 				<div class="lang" v-for="learningLang in user.languages.learningLang">
-					<img v-bind:src="$parent.languagesToFlag(learningLang)">
+					<img v-bind:src="'http://www.plume.ink/public_html' + $parent.languagesToFlag(learningLang)">
 				</div>
 				<div v-if="editing == 'true'" class="changeField" v-on:click="addNewLearningLanguage()">
 					<icon name="pencil"></icon>
@@ -137,20 +137,38 @@ export default {
 		}
 	},
 	created: function() {
-		this.editing = "false";
-		this.addSpokenLanguage = "false";
-		this.addLearningLanguage = "false";
-		this.changeUserColor = "false";
-		this.addHobby = "false";
-		this.addAvatar = "false";
-		this.getLanguages();
-		this.getHobbies();
-		this.getCountries();
-		this.getColors();
-
-		this.user = this.$parent.connectedUser;
+		this.init();
 	},
 	methods: {
+		init: function() {
+			if(this.$parent.connected != "true") {
+        this.$parent.logout();
+      }
+
+			this.editing = "false";
+			this.addSpokenLanguage = "false";
+			this.addLearningLanguage = "false";
+			this.changeUserColor = "false";
+			this.addHobby = "false";
+			this.addAvatar = "false";
+			this.getLanguages();
+			this.getHobbies();
+			this.getCountries();
+			this.getColors();
+
+			setTimeout(function()
+    	{
+      		var el = document.getElementsByClassName("colors");
+      		var i;
+      		for (i = 0; i < el.length; i++)
+      		{
+        		var bg = el[i].childNodes[0].getAttribute("value");
+        		el[i].childNodes[2].style.backgroundColor = bg;
+      		}
+    	}, 500);
+
+			this.user = this.$parent.connectedUser;
+		},
 		editProfile: function() {
 			this.editing = "true";
 		},
@@ -181,7 +199,13 @@ export default {
 				this.updateLanguages();
 				this.updateCountry();
 				if(this.addAvatar == 'true') this.updateAvatar();
+
+				this.init();
+
+				this.editing = "false";
 			}
+
+
 		},
 		getLanguages: function() {
 			var _this = this;
@@ -379,7 +403,6 @@ export default {
 		},
 		updateColor: function() {
 			var _this = this;
-
 			fetch(apiRoot() + 'Controllers/User/updateUserColor.php', {
 				method: 'POST',
 				headers: {
@@ -471,23 +494,31 @@ export default {
 			this.$http.post(apiRoot() + 'Controllers/Image/uploadAvatar.php', oData);
 		},
 		deleteAvatar :function(){
-
+			var _this = this;
+			fetch(apiRoot() + 'Controllers/User/updateUserAvatar.php', {
+				method: 'POST',
+				headers: {
+					'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+					'Content-Type': 'application/json; charset=utf-8'
+				},
+				dataType: 'JSON',
+				body: JSON.stringify({pseudo: _this.user.pseudo, avatar: "/static/avatar/default.jpg"})
+			}).then(function(response) {
+				return response.json();
+			}).then(function(data){
+				if(data[0] == "Error"){
+					console.log(data[1]);
+				}
+				else {
+					_this.init();
+					location.reload();
+				}
+			});
 		}
 	},
-
 	mounted: function()
 	{
-		setTimeout(function()
-    	{
-      		var el = document.getElementsByClassName("colors");
-      		console.log(el);
-      		var i;
-      		for (i = 0; i < el.length; i++)
-      		{
-        		var bg = el[i].childNodes[0].getAttribute("value");
-        		el[i].childNodes[2].style.backgroundColor = bg;
-      		}
-    	}, 300);
+		this.init();
 	}
 }
 </script>
@@ -640,5 +671,12 @@ export default {
         	height: 50px;
       	}
     }
+
+  .lang img {
+    padding: 8px 10px;
+    border-radius: 5px;
+    width: auto;
+    height: 75px;
+  }
 }
 </style>

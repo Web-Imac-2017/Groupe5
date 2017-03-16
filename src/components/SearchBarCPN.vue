@@ -9,22 +9,22 @@
         <div id="resultdiv" class="col-md-12 result">
             <div v-for="user in users" class="col-md-4 resultitem" id="resultitem">
                 <div class="resultavatar" id="resultavatar">
-                    <img class="resultimg" id="resultimg" src="/static/avatar/default.jpg"/>
+                    <img class="resultimg" id="resultimg" :src="'http://www.plume.ink/public_html' + user.avatar" v-on:click="$parent.$parent.changeSelectedUser(user.pseudo)"/>
                 </div>
                 <div class="resulttext" id="resulttext">
                     <p class="resultuser" id="resultuser">{{ user.pseudo }}</p>
                     <br/>
                     <p class="resultcontent" id="resulcontent">Speaks&nbsp;</p>
                     <ul>
-                        <li class="resultcontent" v-for="spoken in user.spokenLang">
-                            {{ spoken.languageName }},&nbsp;
+                        <li class="resultcontent" v-for="spoken in user.languages[0].spokenLang">
+                            {{ spoken.languageName.name_langue }},&nbsp;
                         </li>
                     </ul>
                     <br/>
                     <p class="resultcontent resultcontent2">Is learning&nbsp;</p>
                     <ul>
-                        <li class="resultcontent resultcontent2" v-for="learned in user.learnedLang">
-                            {{ learned.languageName }},&nbsp;
+                        <li class="resultcontent resultcontent2" v-for="learned in user.languages[1].learningLang">
+                            {{ learned.languageName.name_langue }},&nbsp;
                         </li>
                     </ul>
                 </div>
@@ -34,7 +34,6 @@
 </template>
 
 <script>
-
 import {apiRoot} from '../../config/localhost/settings.js'
 
 export default {
@@ -56,7 +55,6 @@ export default {
             formCorrect = 0;
             console.log("ERROR");
         }
-
         if (formCorrect != 0)
         {
             this.convertSearchToHTML();
@@ -69,7 +67,7 @@ export default {
                     'Content-Type': 'application/json; charset=utf-8'
                 },
                 dataType: 'JSON',
-                body: JSON.stringify({pseudoToSearch : _this.search})
+                body: JSON.stringify({searched : _this.search})
             }).then(function(response) {
                 return response.json();
             }).then(function(data){
@@ -80,6 +78,7 @@ export default {
                 else
                 {
                     _this.users = data["users"];
+                    console.log(_this.users);
                 }
             });
         }
@@ -114,6 +113,11 @@ export default {
       }
       var newSearch = text.convertionHTML();
       this.search = newSearch;
+    }
+  },
+  created: function() {
+    if(this.$parent.$parent.connected != "true") {
+      this.$parent.$parent.logout();
     }
   }
 }
@@ -174,6 +178,7 @@ export default {
                     .resultimg
                     {
                         height: 100%;
+                        width: 100%;
                     }
                 }
 

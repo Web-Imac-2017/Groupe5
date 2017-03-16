@@ -6,7 +6,7 @@
       </router-link>
     </div>
     <div class="wrapper">
-      <div class="bg" v-bind:style="{backgroundImage: 'url(/static/img/bg.jpg)' }"></div>
+      <div class="bg" v-bind:style="{backgroundImage: 'url(http://www.plume.ink/public_html/static/img/bg.jpg)' }"></div>
       <h1 class="maintitle">{{ msgRegistration }}</h1>
 
       <form id="formRegistration" method="post" action="" v-on:submit.prevent>
@@ -15,12 +15,12 @@
         <div id="chargeImg">
           <div v-if="!user.avatar">
             <input type="file" name="file" id="file" v-on:change="avatarChecked" class="inputfile" />
-            <label class="filebutton" id="filebtn" for="file" v-bind:style="{backgroundImage: 'url(../../static/img/import.png'}"></label>
+            <label class="filebutton" id="filebtn" for="file" v-bind:style="{backgroundImage: 'url(http://www.plume.ink/public_html/static/img/import.png'}"></label>
             <br/>
             <p id="loading" class="filebuttontext">Import your avatar</p>
           </div>
           <div v-else>
-            <img :src="user.avatar" />
+            <img :src="'../..' + user.avatar" />
             <button @click="">Remove image</button>
           </div>
         </div>
@@ -224,10 +224,6 @@ export default {
         document.getElementById("error_Mail").style.display = 'none';
         document.getElementById("error_Psw").style.display = 'none';
         document.getElementById("error_Psw2").style.display = 'none';
-        document.getElementById("error_Country").style.display = 'none';
-
-        //tansform special caracters to html code
-        this.convertToHTML();
 
         var _this = this;
 
@@ -246,14 +242,22 @@ export default {
             console.log(data[1]);
           }
           else {
+            _this.sendAvatar();
             _this.$parent.setCookie("PLUME_pseudo", _this.user.pseudo, 10);
             _this.$parent.setUserState(_this.user.pseudo, "true");
             _this.$parent.setConnectedUser(_this.$parent.getCookie("PLUME_pseudo"));
-            console.log(_this.$parent.connectedUser);
-            _this.$router.push('/home/');
+            _this.$router.push('/messages/');
           }
         });
       }
+    },
+    sendAvatar : function() {
+      var form = document.querySelector('#file');
+      var file = form.files[0];
+      var oData = new FormData();
+      var im = oData.append("avatar", file);
+      var pseudo = oData.append("pseudo", this.user.pseudo);
+      this.$http.post(apiRoot() + 'Controllers/Image/uploadAvatar.php', oData);
     },
     getLanguages: function() {
       var _this = this;
@@ -354,38 +358,8 @@ export default {
     {
       	var f = event.target.files[0];
         document.getElementById("loading").innerHTML = f.name + " loaded succesfully.";
-        document.getElementById("filebtn").style.backgroundImage = "url(../../static/img/checked.png)";
+        document.getElementById("filebtn").style.backgroundImage = "url(http://www.plume.ink/public_html/static/img/checked.png)";
         document.getElementById("filebtn").style.border = "3px solid black"; 
-    },
-    convertToHTML: function(){
-      var text = this.user.description;
-      String.prototype.convertionHTML = function(){
-        return this.replace(/[\']/g,"&apos;")
-        .replace(/[ ]/g,"&nbsp;")
-        .replace(/[\"]/g,"&quot;")
-        .replace(/[\«]/g,"&laquot;")
-        .replace(/[\»]/g,"&raquot;")
-        .replace(/[\']/g,"&apos;")
-        .replace(/[\‹]/g,"&lsaquot;")
-        .replace(/[\›]/g,"&rsaquot;")
-        .replace(/[\...]/g,"&hellip;")
-        .replace(/[\¡]/g,"&iexcl;")
-        .replace(/[\¿]/g,"&iquest;")
-        .replace(/[\ˆ]/g,"&circ;")
-        .replace(/[\&]/g,"&amp;")
-        .replace(/[\€]/g,"&euro;")
-        .replace(/[\¢]/g,"&cent;")
-        .replace(/[\£]/g,"&pound;")
-        .replace(/[\¥]/g,"&fnof;")
-        .replace(/[\<]/g,"&lt;")
-        .replace(/[\>]/g,"&gt;")
-        .replace(/[\−]/g,"&minus;")
-        .replace(/[\×]/g,"&times;")
-        .replace(/[\÷]/g,"&divide;")
-        .replace(/[\,]/g,"&sbquo;");
-      }
-      var newText = text.convertionHTML();
-      this.user.description = newText;
     }
   },
 

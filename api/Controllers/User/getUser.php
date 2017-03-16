@@ -1,53 +1,35 @@
-<?php
+<?php 
+    session_start();
 
-header('Access-Control-Allow-Origin:*');
-header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
-header('Content-Type: application/json;charset=utf-8');
+	header('Access-Control-Allow-Origin:*');
+	header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
+	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
+	header('Content-Type: application/json;charset=utf-8');
 
-$json = json_decode(file_get_contents('php://input'), true);
-$pseudo = $json['pseudo'];
+	include "../../Models/UserModel.php";
 
-if($pseudo == "maureeniz") {
-  echo '
-  {
-    "pseudo": "maureeniz",
-    "avatar": "/static/avatar/maureeniz.jpg",
-    "firstname": "Maureen",
-    "lastname": "Roche",
-    "age": "21",
-    "country": "France",
-    "city": "bordeaux",
-    "description": "Hi :D. If you\'re looking for a funny french girl to talk to, here I stand !",
-    "hobbies" : ["Travel", "Music", "Cinema", "Sciences","Arts"],
-    "languages" : {
-      "spokenLang" : ["french", "english"],
-      "learningLang" : ["spanish", "chinese", "german"]
-    },
-    "color": "#6A91C9"
-  }
-  ';
-}
-else {
-  echo '
-  {
-    "pseudo": "KORALAI",
-    "avatar": "maureeniz.jpg",
-    "firstname": "Coralie",
-    "lastname": "Goldbaum",
-    "age": "21",
-    "country": "France",
-    "city": "Paris",
-    "description": "Hello, how are you ? I am getting better since I ate ice cream. I love dogs and I live on the Moon with several purple flying guys. I like to excange with people, don\'t wait to come talking with me :D",
-    "hobbies" : ["Music", "Cinema"],
-    "languages" : {
-      "spokenLang" : ["French", "English"],
-      "learningLang" : ["Spanish", "German"]
-    },
-    "color": "blue"
-  }
-  ';
-}
+    $data = array();
+    if ($_SERVER['REQUEST_METHOD'] == 'POST')
+    {   
+        $json = json_decode(file_get_contents('php://input'), true);
+        if(!is_array($json)) $data = array("Error", "Error: POST.");
+        $pseudo = $json['pseudo'];
+        $data["pseudo"] = $pseudo;
+        $data["avatar"] = UserModel::getUserAvatar($pseudo);
+        $data["lastname"] = UserModel::getUserLastName($pseudo);
+        $data["age"] = UserModel::getUserAge($pseudo);
+        $data["sex"] = UserModel::getUserSex($pseudo);
+        $data["firstname"] = UserModel::getUserName($pseudo);
+        $data["description"] = UserModel::getUserDescription($pseudo);
+        $data["city"] = UserModel::getUserCity($pseudo);
+        $data["color"] = UserModel::getUserColor($pseudo);
+        $data["country"] = UserModel::getUserPays($pseudo);
+        $data["hobbies"] = UserModel::getUserHobbies($pseudo);
+        $data["languages"]["spokenLang"] = UserModel::getUserLangueMaitrisee($pseudo);
+        $data["languages"]["learningLang"] = UserModel::getUserLangueAApprendre($pseudo);
+    }
+    else $data = array("Error", "Error: POST.");
 
+    echo json_encode($data);
 
 ?>

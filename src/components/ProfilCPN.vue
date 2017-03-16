@@ -2,7 +2,7 @@
   <div class="Profil">
     <div class="overlay" id="overlay" v-on:click="$parent.changeSelectedUser('')"></div>
     <div class="profilCPN" id="profile">
-      <div class="avatarProfil" :style="{borderBottom:4+'px '+'solid '+ $parent.selectedUser.color,backgroundImage:'url(/static/avatar/' + $parent.selectedUser.avatar+')'}">
+      <div class="avatarProfil" :style="{borderBottom:4+'px '+'solid '+ $parent.selectedUser.color,backgroundImage:'url(http://www.plume.ink/public_html' + $parent.selectedUser.avatar + ')'}">
       </div>
       <div class="infos">
         <h1 class="pseudo">{{$parent.selectedUser.pseudo}}</h1>
@@ -17,13 +17,13 @@
           <p class="llabel">I speak</p>
           <ul class="spoken-lang">
             <li v-for="spokenLang in $parent.selectedUser.languages.spokenLang">
-              <img v-bind:src="$parent.languagesToFlag(spokenLang)">
+              <img v-bind:src="'http://www.plume.ink/public_html' + $parent.languagesToFlag(spokenLang)">
             </li>
           </ul>
           <p class="llabel">I'm learning</p>
           <ul class="learning-lang">
             <li v-for="learningLang in $parent.selectedUser.languages.learningLang">
-              <img v-bind:src="$parent.languagesToFlag(learningLang)">
+              <img v-bind:src="'http://www.plume.ink/public_html' + $parent.languagesToFlag(learningLang)">
             </li>
           </ul>
         </div>
@@ -43,6 +43,8 @@ export default {
   },
   methods: {
 
+  },
+  created: function() {
   }
 }
 

@@ -1,82 +1,39 @@
 <?php
+	header('Access-Control-Allow-Origin:*');
+	header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
+	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
+	header('Content-Type: application/json;charset=utf-8');
 
-header('Access-Control-Allow-Origin:*');
-header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
-header('Content-Type: application/json;charset=utf-8');
+	include "../../Models/ConversationModel.php";
 
-$json = json_decode(file_get_contents('php://input'), true);
-$id = $json['id'];
-if($id == 1) {
-  echo '
-  {
-    "messages" : [
-      {
-        "user" : "CoralieBurton",
-        "date" : "23/05/2017",
-        "ID" : "1",
-        "content" : "Je suis une phrase avec un smiley :)"
-      },
-      {
-        "user" : "CoralieBurton",
-        "date" : "23/05/2017",
-        "ID" : "2",
-        "content" : "Je suis <3 une phrase avec deux smileys :D"
-      },
-      {
-        "user" : "CoralieBurton",
-        "date" : "23/05/2017",
-        "ID" : "3",
-        "content" : "Je suis <3 une phrase avec trois :/ smileys :D"
-      },
-      {
-        "user" : "CoralieBurton",
-        "date" : "23/05/2017",
-        "ID" : "4",
-        "content" : "je suis une phrase sans smiley"
-      }
-    ],
-    "users" : [
-      {
-        "pseudo" : "maureeniz"
-      }
-    ],
-    "ID" : "1"
-  }
-  ';
-}
-else{
-  echo '
-  {
-    "messages" : [
-      {
-        "user" : "CoralieBurton",
-        "date" : "23/05/2017",
-        "ID" : "5",
-        "content" : "coucou_:)_Coralie_:)_!!:) :)"
-      },
-      {
-        "user" : "CoralieBurton",
-        "date" : "23/05/2017",
-        "ID" : "6",
-        "content" : "pas trop :("
-      },
-      {
-        "user" : "CoralieBurton",
-        "date" : "23/05/2017",
-        "ID" : "7",
-        "content" : "Pourquoi ?? :P "
-      }
-    ],
-    "users" : [
-      {
-        "pseudo" : "CoralieBurton"
-      }
-    ],
-    "ID" : "2"
-  }
-  ';
-}
 
+    $id_conv = "";
+    $pseudo = "";
+    $data = array();
+		
+    $json = json_decode(file_get_contents('php://input'), true);
+    if(!is_array($json)) $data = array("Error", "Error: POST.");
+    else {
+        if(isset($json['id']) && $json['id'] != ''
+          && isset($json['pseudo']) && $json['pseudo'] != ''){
+            $id_conv = $json['id'];
+            $pseudo = $json['pseudo'];
+            $data["messages"] = ConversationModel::getAllMessagesOfConv($id_conv);
+
+            $id_user = UserModel::getUserId($pseudo);
+
+            $data["users"] = ConversationModel::getOtherUsers($id_user, $id_conv);
+            $current_user = array();
+            $current_user["pseudo"] = $pseudo;
+            array_push($data["users"], $current_user);
+
+            $data["id"] = $id_conv;
+        }
+        else{
+            $data = array("Error", "Error: the conversation id doesn't exist.");
+        }
+    }
+
+  echo json_encode($data);
 
 ?>

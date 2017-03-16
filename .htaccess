@@ -1,0 +1,10 @@
+<Files api/Config.php> 
+
+AuthUserFile api/Config.php 
+AuthGroupFile /dev/null 
+AuthName "Forbidden access" 
+AuthType Basic 
+
+</Files> 
+
+DirectoryIndex public_html/index.html

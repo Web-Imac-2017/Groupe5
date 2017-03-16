@@ -15,7 +15,10 @@ import MyProfile from './components/MyProfile.vue'
 import Admin from './components/Admin.vue'
 import Messages from './components/Messages.vue'
 import Match from './components/MatchCPN.vue'
+<<<<<<< HEAD
 import LegalNotice from './components/LegalNotice.vue'
+=======
+>>>>>>> 1dada203a0ffe5e55064a9bb21d7ccf4cf1fe3a0
 
 //Font Awesome
 import 'vue-awesome/icons/flag'

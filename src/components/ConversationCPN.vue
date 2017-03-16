@@ -8,8 +8,8 @@
         </div>
       </li>
     </ul>
-    <textarea v-on:keyup.enter="sendMessage();" v-model="newMessage" :style="{background:$parent.$parent.getLightColor($parent.connectedUser.color)}"></textarea>
-    <input type="file" name="messageImage" id="messageImage" v-on:click="sendImage()">
+    <textarea maxlength="115" v-on:keyup.enter="sendMessage();" v-model="newMessage" :style="{background:$parent.$parent.getLightColor($parent.connectedUser.color)}"></textarea>
+    <input type="file" name="messageImage" id="messageImage" v-on:change="sendImage()">
     <label for="messageImage"><icon name="picture-o"></icon></label>
   </div>
 </template>
@@ -30,25 +30,33 @@ export default {
   },
   watch: {
     '$route': function() {
-      this.me = this.$parent.connectedUser;
       this.init();
     }
   },
   created: function() {
-    this.me = this.$parent.connectedUser;
     this.init();
+    //this.updateBottomScroll();
   },
-  updated: function(){
-    this.scrollBottomAuto();
+  mounted: function() {
+    this.init();
+
+    var _this = this;
+
+    setTimeout(function() {
+      _this.scrollBottomAuto();
+    }, 500);
+
+    setInterval(function() {
+      _this.getConversation();
+    }, 3000);
   },
   methods: {
     init: function() {
+      this.me = this.$parent.connectedUser;
       this.newMessage="";
-      this.getConversation();
       var _this = this;
       setTimeout(function() {
-        _this.getImages();
-        _this.getSmiley();
+        _this.getConversation();
       }, 1000);
     },
     getUser: function(user) {
@@ -59,7 +67,7 @@ export default {
       }
       return theClass;
     },
-    getBackground(user){
+    getBackground: function(user){
       if(user == this.me.pseudo){
         return this.$parent.connectedUser.color;
       }
@@ -82,29 +90,43 @@ export default {
         return response.json();
       }).then(function(data){
         if(data[0] == "Error"){
-          console.log(data[1]);
+          //console.log(data[1]);
         }
         else {
-          _this.messages = data['messages'];
           _this.users = data['users'];
+          var canCommunicate = "false";
+
+          for(var i = 0; i < _this.users.length; i ++) {
+            if(_this.users[i][0] == _this.me.pseudo) {
+              canCommunicate = "true";
+            }
+          }
+          if(canCommunicate != "true") {
+            _this.$router.push('/messages/');
+          }
+          else {
+            _this.messages = data['messages'];
+            _this.getImages();
+          }
         }
       });
     },
     getImages : function() {
       for(var i = 0; i < this.messages.length; i ++) {
-        if(this.messages[i].content.indexOf("PLUME_IMAGE_MESSAGE:") !== -1) {
-
-          this.messages[i].content = this.messages[i].content.substr(20,this.messages[i].content.length-1);
-
-          var div = document.getElementById("Message" + this.messages[i].ID);
-          if(div.children.length == 2) {
-            var image = document.createElement('img');
-            image.src = this.messages[i].content;
-
-            div.append(image);
+        if(this.messages[i].content != "" && this.messages[i].content != null) {
+          if(this.messages[i].content.indexOf("PLUME_IMAGE_MESSAGE:") !== -1) {
+            this.messages[i].content = this.messages[i].content.substr(20,this.messages[i].content.length-1);
+            var div = document.getElementById("Message" + this.messages[i].ID);
+            if(div.children.length == 2) {
+              var image = document.createElement('img');
+              image.src = 'http://www.plume.ink/public_html' + this.messages[i].content;
+              div.append(image);
+            }
+            this.messages[i].content = "";
           }
-
-          this.messages[i].content = "";
+          else {
+            this.getSmiley();
+          }
         }
       }
     },
@@ -123,7 +145,7 @@ export default {
         return response.json();
       }).then(function(data){
         if(data[0] == "Error"){
-          console.log(data[1]);
+          //console.log(data[1]);
         }
         else {
           _this.init();
@@ -137,10 +159,13 @@ export default {
       var im = oData.append("avatar", file);
       var pseudo = oData.append("pseudo", this.me.pseudo);
       var idConv = oData.append("id_conv", this.$route.params.conversationID);
-      this.$http.post(apiRoot() + 'Controllers/Image/uploadImageMessage.php', oData);
-      this.init();
+      var _this = this;
+      this.$http.post(apiRoot() + 'Controllers/Image/uploadImageMessage.php', oData).then(function() {
+        _this.init();
+      });
 
     },
+<<<<<<< HEAD
     replaceTxtBySmiley : function(smiley,name,messages){
 
         //on récupère la balise html de la bulle concerné
@@ -171,6 +196,23 @@ export default {
 
         } while (rest != "" && rest.indexOf(":)") !== -1);
 
+=======
+    replaceTxtBySmiley : function(message, match, name){
+      var div = document.getElementById("Message" + message.ID);
+      div.innerHTML="";
+      var pos = match.index;
+      var image = document.createElement('img');
+      image.src = "http://www.plume.ink/public_html/static/smileys/"+name+".svg";
+      image.className = "smiley";
+      message.content = message.content.replace(match[0], " ");
+      var part1 = message.content.slice(0, pos);
+      var part2 = message.content.slice(pos);
+      div.append(image);
+      message.content = "";
+      div.append(part1);
+      div.append(image);
+      div.append(part2);
+>>>>>>> 1dada203a0ffe5e55064a9bb21d7ccf4cf1fe3a0
     },
     getSmiley : function() {
       for(var i = 0; i < this.messages.length; i ++) {

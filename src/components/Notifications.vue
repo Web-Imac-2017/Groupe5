@@ -1,21 +1,21 @@
 <template>
-    <div class="notification">
+    <div class="notification" v-if="$parent.notifications != ''">
         <div class="container-fluid">
             <div class="row">
                 <ul>
                     <li v-for="notif in $parent.notifications">
-                        <img src="/static/avatar/aleqsandr.jpg" id="avatarnotif"/>
+                        <img :src="'http://www.plume.ink/public_html' + notif.user_avatar" id="avatarnotif"/>
                         <div id="textnotif">
                             <p id="textuser">{{ notif.user }}</p>
                             <p id="textcontent">{{ notif.content }}</p>
                             <div id="buttons">
-                                <div id="accept">
-                                    <img src="/static/img/accept.png" class="iconbutton"/>
-                                    <p v-on:click="$parent.acceptConversation(notif.user, notif.ID)">Accept </p>
+                                <div id="accept" v-on:click="$parent.acceptConversation(notif.user, notif.ID)">
+                                    <img src="http://www.plume.ink/public_html/static/img/accept.png" class="iconbutton"/>
+                                    <p>Accept </p>
                                 </div>
-                                <div id="refuse">
-                                    <img src="/static/img/refuse.png" class="iconbutton"/>
-                                    <p v-on:click="$parent.refuseConversation(notif.ID)">Refuse </p>
+                                <div id="refuse" v-on:click="$parent.refuseConversation(notif.ID)">
+                                    <img src="http://www.plume.ink/public_html/static/img/refuse.png" class="iconbutton"/>
+                                    <p>Refuse </p>
                                 </div>
                             </div>
                         </div>
@@ -42,19 +42,21 @@ import ConversationComponent from './ConversationCPN.vue'
     methods: {
     },
     created: function() {
+      if(this.$parent.connected != "true") {
+        this.$parent.logout();
+      }
       var _this = this;
       this.connectedUser = this.$parent.connectedUser;
       setTimeout(function() {
         _this.$parent.getNotifications(_this.connectedUser.pseudo);
-        // console.log(_this.$parent.notifications);
       }, 1000);
     },
     mounted: function() {
-      var _this = this;
-      this.connectedUser = this.$parent.connectedUser;
-      setTimeout(function() {
-        _this.$parent.getNotifications(_this.connectedUser.pseudo);
-      }, 500);
+        this.connectedUser = this.$parent.connectedUser;
+        var _this = this;
+        setTimeout(function() {
+            _this.$parent.getNotifications(_this.connectedUser.pseudo);
+        }, 1000);
     }
   }
 </script>
@@ -98,6 +100,7 @@ import ConversationComponent from './ConversationCPN.vue'
         position: relative;
         display: inline-block;
         height: 120px;
+        width: 120px;
         background-color: red;
     }
 
