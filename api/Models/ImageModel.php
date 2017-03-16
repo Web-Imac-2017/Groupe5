@@ -10,7 +10,7 @@ class ImageModel{
     public static function uploadImageMessage($url, $pseudo, $id_conv) {
         $bdd = Database::connexionBDD();
         //$id_user = UserModel::getUserId($pseudo);
-        $contenu = "PLUME_IMAGE_MESSAGE:".$url;
+        $contenu = "PLUME_IMAGE_MESSAGE".$url;
         
         $data = array();
 

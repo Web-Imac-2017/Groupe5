@@ -511,7 +511,7 @@ export default {
 				}
 				else {
 					_this.init();
-					location.reload();
+					_this.$router.push('/myProfile/');
 				}
 			});
 		}

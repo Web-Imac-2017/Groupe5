@@ -88,11 +88,11 @@ export default {
 
     .pseudo{
       text-transform: uppercase;
-      font-size: 35px;
+      font-size: 32px;
       text-align: center;
       font-weight: 900;
-      margin-top: 30px;
-      margin-bottom: 25px;
+      margin-top: 10px;
+      margin-bottom: 10px;
     }
     .name, .country, .city{
       margin: 0;
@@ -112,7 +112,7 @@ export default {
       text-align: center;
       li{
         padding: 2px 6px;
-        margin: 6px 6px;
+        margin: 4px 4px;
         display: inline-block;
         color: #fff;
         text-transform: uppercase;
@@ -123,7 +123,7 @@ export default {
     .language{
       position: relative;
       bottom: 0;
-      margin: 50px auto 0;
+      margin: 20px auto 0;
       .llabel{
         font-style: italic;
         margin: 0;
@@ -145,7 +145,7 @@ export default {
     text-align: center;
     display: block;
     transition: .2s;
-    margin-top: 40px;
+    margin-top: 20px;
 
     &:hover
     {

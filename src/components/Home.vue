@@ -14,6 +14,7 @@
 					<a v-if="$parent.connected === 'true'" v-on:click.prevent="$parent.logout">Sign out</a>
 				</router-link>
 			</div>
+			<router-link class="legal-notice" v-bind:to="'/legalNotice/'">- Legal Notice -</router-link>
 		</div>
 	</div>
 </template>
@@ -70,6 +71,13 @@
 {
 	margin-right : 10px;
 	margin-left : 10px;
+}
+
+.legal-notice{
+	position: fixed;
+	bottom: 20px;
+	left: 30px;
+	font-size: 25px;
 }
 
 </style>

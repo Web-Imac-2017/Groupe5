@@ -84,11 +84,13 @@ export default {
     },
     closeResults: function(e)
     {
-      if (document.getElementById("resultdiv").style.display == "inline")
-      {
-        if (e.target != document.getElementById("searchbutton"))
+      if(document.getElementById("resultdiv") != null) {
+        if (document.getElementById("resultdiv").style.display == "inline")
         {
-          document.getElementById("resultdiv").style.display = "none";
+          if (e.target != document.getElementById("searchbutton"))
+          {
+            document.getElementById("resultdiv").style.display = "none";
+          }
         }
       }
     },
@@ -249,7 +251,7 @@ export default {
         return response.json();
       }).then(function(data){
         if(data[0] == "Error") {
-          console.log(data[1]);
+          //console.log(data[1]);
         }
         else {
           _this.connectedUser.pseudo = data['pseudo'];
@@ -288,7 +290,7 @@ export default {
         return response.json();
       }).then(function(data){
         if(data[0] == "Error"){
-          console.log(data[1]);
+          //console.log(data[1]);
         }
         else {
           _this.notifications = data;
@@ -309,7 +311,7 @@ export default {
         return response.json();
       }).then(function(data){
         if(data[0] == "Error"){
-          console.log(data[1]);
+          //console.log(data[1]);
         }
         else {
           _this.notifications = data["notifications"];
@@ -330,7 +332,7 @@ export default {
         return response.json();
       }).then(function(data){
         if(data[0] == "Error"){
-          console.log(data[1]);
+          //console.log(data[1]);
         }
         else {
           _this.notifications = data["notifications"];
@@ -360,7 +362,7 @@ export default {
         return response.json();
       }).then(function(data){
         if(data[0] == "Error"){
-          console.log(data[1]);
+          //console.log(data[1]);
         }
         else {
           _this.deleteNotification(idNotif);
@@ -393,6 +395,7 @@ export default {
   #app
   {
     overflow-x: hidden;
+    min-height: 100vh;
   }
 
 </style>
