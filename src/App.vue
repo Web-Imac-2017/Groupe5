@@ -84,11 +84,13 @@ export default {
     },
     closeResults: function(e)
     {
-      if (document.getElementById("resultdiv").style.display == "inline")
-      {
-        if (e.target != document.getElementById("searchbutton"))
+      if(document.getElementById("resultdiv") != null) {
+        if (document.getElementById("resultdiv").style.display == "inline")
         {
-          document.getElementById("resultdiv").style.display = "none";
+          if (e.target != document.getElementById("searchbutton"))
+          {
+            document.getElementById("resultdiv").style.display = "none";
+          }
         }
       }
     },
