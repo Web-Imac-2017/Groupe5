@@ -4,7 +4,7 @@
     <h2>General informations</h2>
     <p>Name of the owner : IMAC</p>
 
-    <p>Host : --------</p>
+    <p>Host : ovh</p>
 
     <p>General terms of use
       <br />
@@ -24,6 +24,9 @@
 </script>
 
 <style lang="scss">
-
+.LegalNotice{
+  width: 70%;
+  margin: 50px auto 0;
+}
 
 </style>

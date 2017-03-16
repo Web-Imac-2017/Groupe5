@@ -141,149 +141,211 @@ export default {
       this.init();
 
     },
-    replaceTxtBySmiley : function(message, match, name, domElm){
-      var pos = match.index;
-      var image = document.createElement('img');
-      image.src = "/static/smileys/"+name+".svg";
-      image.className = "smiley";
-      message.content = message.content.replace(match[0], " ");
-      var part1 = message.content.slice(0, pos);
-      var part2 = message.content.slice(pos);
-      domElm.append(image);
-      message.content = "";
-      domElm.append(part1);
-      domElm.append(image);
-      domElm.append(part2);
+    replaceTxtBySmiley : function(smiley, messages){
+
+        //on récupère la balise html de la bulle concerné
+        var domElm = document.getElementById("Message" + messages.ID);
+        domElm.innerHTML="";
+
+        var rest = messages.content;
+        do
+        {
+          //je récupère la position du smiley
+          var pos = rest.indexOf(smiley);
+          //Je selectionne le debut jusqu'a après le premier smiley
+          var str = rest.slice(0,pos+2);
+          //Je met le reste dans rest
+          var rest = rest.slice(pos+2);
+
+          //je créer une image
+          var image = document.createElement('img');
+          image.src = "/static/smileys/happy.svg";
+          image.className = "smiley";
+
+          //Je supprime le smiley text de str
+          str = str.replace(smiley, "");
+
+          //On met dans la balise html le texte puis l'image
+          domElm.append(str);
+          domElm.append(image);
+
+        } while (rest != "" && rest.indexOf(":)") !== -1);
+
     },
     getSmiley : function() {
       for(var i = 0; i < this.messages.length; i ++) {
-        //var re = /:\)|=\)|:-\)|:D|=D|:-D|:\(|=\(|:-\(|:O|=O|:-O|:P|=P|:-P|:\/|=\/|:-\/|<3|:@|=@|:-@|>:-\(/g,
-        var regex = /:\)|:D|:\(|:O|:P|:\/|<3|:@/g,
-          str = this.messages[i].content;
-          var match;
-          var domElm = document.getElementById("Message" + this.messages[i].ID);
 
-          while ((match = regex.exec(str)) != null) {
-            domElm.innerHTML="";
+        var regex = new RegExp(/:\)|:D|:\(|:O|:P|:\/|<3|:@/g);
 
-            switch (match[0]) {
-              case ":)":
-              this.replaceTxtBySmiley(this.messages[i], match, "smile", domElm);
-              break;
-              case ":D":
-              this.replaceTxtBySmiley(this.messages[i], match, "happy", domElm);
-              break;
-              case ":(":
-              this.replaceTxtBySmiley(this.messages[i], match, "sad", domElm);
-              break;
-              case ":O":
-              this.replaceTxtBySmiley(this.messages[i], match, "shock", domElm);
-              break;
-              case ":P":
-              this.replaceTxtBySmiley(this.messages[i], match, "tongue", domElm);
-              break;
-              case ":/":
-              this.replaceTxtBySmiley(this.messages[i], match, "jaded", domElm);
-              break;
-              case "<3":
-              this.replaceTxtBySmiley(this.messages[i], match, "inlove", domElm);
-              break;
-              case ":@":
-              this.replaceTxtBySmiley(this.messages[i], match, "angry", domElm);
-              break;
-            }
+        if (this.messages[i].content.match(regex)) {
+          var match = this.messages[i].content.match(regex);
+          var smiley = match[0];
+
+          switch (smiley) {
+            case ":)":
+              this.replaceTxtBySmiley(smiley, this.messages[i]);
+            break;
+            case ":D":
+              this.replaceTxtBySmiley(smiley, this.messages[i]);
+            break;
+            case ":(":
+              this.replaceTxtBySmiley(smiley, this.messages[i]);
+            break;
+            case ":O":
+              this.replaceTxtBySmiley(smiley, this.messages[i]);
+            break;
+            case ":P":
+              this.replaceTxtBySmiley(smiley, this.messages[i]);
+            break;
+            case ":/":
+              this.replaceTxtBySmiley(smiley, this.messages[i]);
+            break;
+            case "<3":
+              this.replaceTxtBySmiley(smiley, this.messages[i]);
+            break;
+            case ":@":
+              this.replaceTxtBySmiley(smiley, this.messages[i]);
+            break;
           }
         }
-      },
-      scrollBottomAuto: function(){
-        var container = this.$el.querySelector("#messages");
-        container.scrollTop = container.scrollHeight;
+
+
+
+        // var regex = new RegExp(/:\)|:D|:\(|:O|:P|:\/|<3|:@/g);
+        // var match;
+        // var domElm = document.getElementById("Message" + this.messages[i].ID);
+        // console.log(domElm);
+        // var str = this.messages[i].content;
+        // console.log(str);
+        //
+        // if((match = regex.exec(str)) != null) domElm.innerHTML="";
+        //
+        // while (str != "") {
+        //
+        //   if((match = regex.exec(str)) != null) {
+        //     console.log(match[0]);
+        //     switch (match[0]) {
+        //       case ":)":
+        //       this.replaceTxtBySmiley(str.slice(0, match.index+2), match, "smile", domElm);
+        //       break;
+        //       case ":D":
+        //       this.replaceTxtBySmiley(str.slice(0, match.index+2), match, "happy", domElm);
+        //       break;
+        //       case ":(":
+        //       this.replaceTxtBySmiley(str.slice(0, match.index+2), match, "sad", domElm);
+        //       break;
+        //       case ":O":
+        //       this.replaceTxtBySmiley(str.slice(0, match.index+2), match, "shock", domElm);
+        //       break;
+        //       case ":P":
+        //       this.replaceTxtBySmiley(str.slice(0, match.index+2), match, "tongue", domElm);
+        //       break;
+        //       case ":/":
+        //       this.replaceTxtBySmiley(str.slice(0, match.index+2), match, "jaded", domElm);
+        //       break;
+        //       case "<3":
+        //       this.replaceTxtBySmiley(str.slice(0, match.index+2), match, "inlove", domElm);
+        //       break;
+        //       case ":@":
+        //       this.replaceTxtBySmiley(str.slice(0, match.index+2), match, "angry", domElm);
+        //       break;
+        //     }
+        //     str = this.messages[i].content.slice(match.index+2);
+        //   }
+        //   else str = "";
+        //
+        // }
       }
+    },
+    scrollBottomAuto: function(){
+      var container = this.$el.querySelector("#messages");
+      container.scrollTop = container.scrollHeight;
     }
   }
-  </script>
+}
+</script>
 
 
-  <style lang="scss">
+<style lang="scss">
 
-  .conversation{
+.conversation{
 
-    ul {
-      padding: 0;
-      overflow-x: hidden;
-      overflow-y: auto;
-      height: calc(100vh - 140px);
+  ul {
+    padding: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: calc(100vh - 140px);
+  }
+  textarea {
+    outline: none;
+    resize: none;
+    border: 2px solid #000;
+    border-radius: 10px;
+    width: 100%;
+    position: relative;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    padding: 10px;
+    height: 60px;
+    color: #000;
+    padding-left: 65px;
+  }
+  input{
+    display: none;
+  }
+  label{
+    cursor: pointer;
+    position: absolute;
+    bottom: 6px;
+    left: 35px;
+    .fa-icon{
+      width: 30px;
+      height: 30px;
     }
-    textarea {
-      outline: none;
-      resize: none;
-      border: 2px solid #000;
-      border-radius: 10px;
-      width: 100%;
-      position: relative;
-      bottom: 0;
-      right: 0;
-      left: 0;
+  }
+
+
+  .user_other, .user_me {
+    list-style: none;
+    width: 100%;
+    display: inline-block;
+    margin: 5px 0;
+  }
+
+  .user_other, .user_me{
+    .messageContent{
       padding: 10px;
-      height: 60px;
-      color: #000;
-      padding-left: 65px;
+      border-radius: 10px;
+      display: block;
+      max-width: 60%;
     }
-    input{
-      display: none;
-    }
-    label{
-      cursor: pointer;
-      position: absolute;
-      bottom: 6px;
-      left: 35px;
-      .fa-icon{
-        width: 30px;
-        height: 30px;
-      }
-    }
-
-
-    .user_other, .user_me {
-      list-style: none;
-      width: 100%;
-      display: inline-block;
-      margin: 5px 0;
-    }
-
-    .user_other, .user_me{
-      .messageContent{
-        padding: 10px;
-        border-radius: 10px;
-        display: block;
-        max-width: 60%;
-      }
-      span{
-        font-size: 10px;
-        display: block;
-        margin-bottom: 10px;
-      }
-    }
-
-    .user_other {
-      .messageContent {
-        color: #000000;
-        background-color: #cdcccc;
-        float: left;
-      }
-    }
-
-    .user_me {
-      .messageContent {
-        color: #ffffff;
-        float: right;
-      }
-      .messageDate{
-
-      }
-    }
-    .smiley{
-      width: 40px;
+    span{
+      font-size: 10px;
+      display: block;
+      margin-bottom: 10px;
     }
   }
-  </style>
+
+  .user_other {
+    .messageContent {
+      color: #000000;
+      background-color: #cdcccc;
+      float: left;
+    }
+  }
+
+  .user_me {
+    .messageContent {
+      color: #ffffff;
+      float: right;
+    }
+    .messageDate{
+
+    }
+  }
+  .smiley{
+    width: 40px;
+  }
+}
+</style>

@@ -15,13 +15,25 @@ if($id == 1) {
         "user" : "CoralieBurton",
         "date" : "23/05/2017",
         "ID" : "1",
-        "content" : "Ca me saoule ! :@"
+        "content" : "Je suis une phrase avec un smiley :)"
       },
       {
         "user" : "CoralieBurton",
         "date" : "23/05/2017",
-        "ID" : "1",
-        "content" : "dis moi tout :/"
+        "ID" : "2",
+        "content" : "Je suis <3 une phrase avec deux smileys :D"
+      },
+      {
+        "user" : "CoralieBurton",
+        "date" : "23/05/2017",
+        "ID" : "3",
+        "content" : "Je suis <3 une phrase avec trois :/ smileys :D"
+      },
+      {
+        "user" : "CoralieBurton",
+        "date" : "23/05/2017",
+        "ID" : "4",
+        "content" : "je suis une phrase sans smiley"
       }
     ],
     "users" : [
@@ -40,8 +52,20 @@ else{
       {
         "user" : "CoralieBurton",
         "date" : "23/05/2017",
-        "ID" : "1",
-        "content" : "Hello comment ça va ? :)"
+        "ID" : "5",
+        "content" : "coucou_:)_Coralie_:)_!!:) :)"
+      },
+      {
+        "user" : "CoralieBurton",
+        "date" : "23/05/2017",
+        "ID" : "6",
+        "content" : "pas trop :("
+      },
+      {
+        "user" : "CoralieBurton",
+        "date" : "23/05/2017",
+        "ID" : "7",
+        "content" : "Pourquoi ?? :P "
       }
     ],
     "users" : [

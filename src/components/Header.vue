@@ -3,8 +3,8 @@
 
         <router-link v-bind:to="'/home/'"><img v-bind:src="'/static/img/logo.png'" class="headerlogo"></router-link>
         <a class="item" v-on:click.prevent="$parent.logout">SIGN OUT</a>
-        <router-link class="item" v-bind:to="'/messages/'">MESSAGES</router-link>
         <router-link class="item" v-bind:to="'/myProfile/'">MY PROFILE</router-link>
+        <router-link class="item" v-bind:to="'/messages/'">MESSAGES</router-link>
         <router-link class="item" v-if="$parent.connected === ''" v-bind:to="'/match/'">MATCHING</router-link>
         <search-bar-component class="search"></search-bar-component>
 
@@ -27,9 +27,6 @@ import SearchBarComponent from './SearchBarCPN.vue';
     {
         height: 50px;
         width: 100%;
-        // position: fixed;
-        // z-index: 1;
-        // top: 0;
         background: #fff;
         box-shadow: 0px 3px 15px rgba(0, 0, 0, .4);
 
@@ -68,7 +65,10 @@ import SearchBarComponent from './SearchBarCPN.vue';
         .search
         {
             position: relative;
-            z-index: 1000;
+        }
+
+        x a{
+          cursor: pointer;
         }
     }
 
