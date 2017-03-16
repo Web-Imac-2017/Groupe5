@@ -13,13 +13,19 @@
                 </div>
                 <div class="resulttext">
                     <p class="resultuser">{{ user.pseudo }}</p>
-                    <p class="resultcontent">Speaks</h2>
+                    <br/>
+                    <p class="resultcontent">Speaks&nbsp;</p>
                     <ul>
-                        <li class="resultcontent" v-for="spokenLang in user.languages.spokenLang">{{ spokenLang }}</li>
+                        <li class="resultcontent" v-for="spoken in user.spokenLang">
+                            {{ spoken.languageName }},&nbsp;
+                        </li>
                     </ul>
-                    <p class="resultcontent">Is learning</p>
+                    <br/>
+                    <p class="resultcontent">Is learning&nbsp;</p>
                     <ul>
-                        <li class="resultcontent" v-for="learningLang in user.languages.learningLang">{{learningLang}}</li>
+                        <li class="resultcontent" v-for="learned in user.learnedLang">
+                            {{ learned.languageName }},&nbsp;
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -147,6 +153,7 @@ export default {
                 height: 100px;
                 background-color: green;
                 margin-bottom: 5px;
+                cursor: pointer;
 
                 &:hover .resulttext
                 {
@@ -192,16 +199,21 @@ export default {
                         margin: 0;
                         margin-left: 10px;
                         margin-top: 3px; 
+                        display: inline-block;
                     }
 
                     .resultcontent
                     {
                         margin-top: 0;
+                        font-size: 1.5em;
+                        display: inline-block;
+                        float: left;
                     }
 
                     .resultspoken
                     {
-                        font-size: 1em;
+                        font-size: 1.5em;
+                        display: inline-block
                     }
                 }
             }

@@ -29,19 +29,24 @@ $pseudo = $json['pseudoToSearch'];
                 "Computering",
                 "Fashion"
             ],
-            "languages":[  
-                {  
-                    "spokenLang":[  
-                        {  
-                            "id_langue":"2",
-                            "name_langue":"French"
-                        }
-                    ]
+            "spokenLang" : [
+                {
+                    "languageName" : "french",
+                    "languageId" : "2"
                 },
-                {  
-                    "learningLang":[  
-
-                    ]
+                {
+                    "languageName" : "klingon",
+                    "languageId" : "18"
+                }
+            ],
+            "learnedLang" : [
+                {
+                    "languageName" : "russian",
+                    "languageId" : "6"
+                },
+                {
+                    "languageName" : "urdu",
+                    "languageId" : "89"
                 }
             ]
         },
