@@ -6,7 +6,7 @@
       </router-link>
     </div>
     <div class="wrapper">
-      <div class="bg" v-bind:style="{backgroundImage: 'url(/static/img/bg.jpg)' }"></div>
+      <div class="bg" v-bind:style="{backgroundImage: 'url(http://localhost/PLUME/public_html/static/img/bg.jpg)' }"></div>
       <h1 class="maintitle">{{ msgRegistration }}</h1>
 
       <form id="formRegistration" method="post" action="" v-on:submit.prevent>
@@ -15,12 +15,12 @@
         <div id="chargeImg">
           <div v-if="!user.avatar">
             <input type="file" name="file" id="file" v-on:change="avatarChecked" class="inputfile" />
-            <label class="filebutton" id="filebtn" for="file" v-bind:style="{backgroundImage: 'url(../../static/img/import.png'}"></label>
+            <label class="filebutton" id="filebtn" for="file" v-bind:style="{backgroundImage: 'url(http://localhost/PLUME/public_html/static/img/import.png'}"></label>
             <br/>
             <p id="loading" class="filebuttontext">Import your avatar</p>
           </div>
           <div v-else>
-            <img :src="user.avatar" />
+            <img :src="'../..' + user.avatar" />
             <button @click="">Remove image</button>
           </div>
         </div>
@@ -361,7 +361,7 @@ export default {
     {
       	var f = event.target.files[0];
         document.getElementById("loading").innerHTML = f.name + " loaded succesfully.";
-        document.getElementById("filebtn").style.backgroundImage = "url(../../static/img/checked.png)";
+        document.getElementById("filebtn").style.backgroundImage = "url(http://localhost/PLUME/public_html/static/img/checked.png)";
         document.getElementById("filebtn").style.border = "3px solid black"; 
     },
     convertToHTML: function(){

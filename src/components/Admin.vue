@@ -15,7 +15,7 @@
             <div class="col-sm-12">
               <div class="row">
                   <div class="col-lg-4">
-                    <img v-bind:src="user.avatar"> 
+                    <img v-bind:src="'http://localhost/PLUME/public_html' + user.avatar"> 
                   </div>
 
                   <div class="col-lg-8">

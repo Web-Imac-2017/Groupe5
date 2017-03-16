@@ -9,7 +9,7 @@
         <div id="resultdiv" class="col-md-12 result">
             <div v-for="user in users" class="col-md-4 resultitem">
                 <div class="resultavatar">
-                    <img class="resultimg" src="/static/avatar/default.jpg"/>
+                    <img class="resultimg" src="http://localhost/PLUME/public_html/static/avatar/default.jpg"/>
                 </div>
                 <div class="resulttext">
                     <p class="resultuser">{{ user.pseudo }}</p>

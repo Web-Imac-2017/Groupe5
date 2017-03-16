@@ -2,13 +2,13 @@
   <div class="conversationsMenu">
     <!-- <div class="CMHeader">
       <router-link v-bind:to="'/home/'"><icon name="long-arrow-left"></icon>back</router-link>
-      <img v-bind:src="'/static/img/logo.png'" class="CMLogo">
+      <img v-bind:src="'http://localhost/PLUME/public_html/static/img/logo.png'" class="CMLogo">
     </div> -->
     <ul>
       <li v-for="conversation in conversations" class="row">
         <router-link v-bind:to="'/messages/' + conversation.id" :style="{background:getActiveConversation(conversation.id)}" class="user">
           <span  v-for="user in conversation.users" class="avatar" v-on:click="$parent.$parent.changeSelectedUser(user.pseudo)">
-            <img :src="user.avatar">
+            <img :src="'http://localhost/PLUME/public_html' + user.avatar">
           </span>
           <span v-for="user in conversation.users" class="text-conv">
             <p class="titleConversation userPseudo" :class=getUserState(user)>{{ user.pseudo }} <icon name="circle"></icon></p>

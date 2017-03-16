@@ -8,11 +8,7 @@
         </div>
       </li>
     </ul>
-<<<<<<< HEAD
-    <textarea v-on:keyup.enter="sendMessage();" v-model="newMessage" :style="{background:$parent.$parent.getLightColor($parent.connectedUser.color)}"></textarea>
-=======
     <textarea maxlength="200" v-on:keyup.enter="sendMessage();" v-model="newMessage" :style="{background:$parent.$parent.getLightColor($parent.connectedUser.color)}"></textarea>
->>>>>>> refs/remotes/origin/dev
     <input type="file" name="messageImage" id="messageImage" v-on:change="sendImage()">
     <label for="messageImage"><icon name="picture-o"></icon></label>
   </div>
@@ -114,7 +110,7 @@ export default {
             var div = document.getElementById("Message" + this.messages[i].ID);
             if(div.children.length == 2) {
               var image = document.createElement('img');
-              image.src = this.messages[i].content;
+              image.src = 'http://localhost/PLUME/public_html' + this.messages[i].content;
               div.append(image);
             }
             this.messages[i].content = "";
@@ -162,7 +158,7 @@ export default {
       div.innerHTML="";
       var pos = match.index;
       var image = document.createElement('img');
-      image.src = "/static/smileys/"+name+".svg";
+      image.src = "http://localhost/PLUME/public_html/static/smileys/"+name+".svg";
       image.className = "smiley";
       message.content = message.content.replace(match[0], " ");
       var part1 = message.content.slice(0, pos);
