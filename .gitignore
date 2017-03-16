@@ -3,7 +3,7 @@ node_modules/
 dist/
 npm-debug.log
 api/secure/
-logs/
+logs/*
 access.log
 config/localhost/settings.js
 php/

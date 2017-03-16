@@ -186,6 +186,27 @@ export default {
           domElm.append(image);
 
         } while (rest != "" && rest.indexOf(":)") !== -1);
+<<<<<<< HEAD
+=======
+
+=======
+    replaceTxtBySmiley : function(message, match, name){
+      var div = document.getElementById("Message" + message.ID);
+      div.innerHTML="";
+      var pos = match.index;
+      var image = document.createElement('img');
+      image.src = "http://www.plume.ink/public_html/static/smileys/"+name+".svg";
+      image.className = "smiley";
+      message.content = message.content.replace(match[0], " ");
+      var part1 = message.content.slice(0, pos);
+      var part2 = message.content.slice(pos);
+      div.append(image);
+      message.content = "";
+      div.append(part1);
+      div.append(image);
+      div.append(part2);
+>>>>>>> 1dada203a0ffe5e55064a9bb21d7ccf4cf1fe3a0
+>>>>>>> origin/online
     },
     getSmiley : function() {
       for(var i = 0; i < this.messages.length; i ++) {
