@@ -188,7 +188,11 @@ export default{
 
 <style lang="scss">
 
-.matchs{margin-top:20px;}
+.matchs
+{
+  margin-top:20px;
+  height: 100%;
+}
 
 info {
   &.userConnected svg {

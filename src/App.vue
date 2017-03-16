@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" v-on:click="closeResults">
     <notifications></notifications>
     <header-component id="header"></header-component>
       <router-view keep-alive></router-view>
@@ -73,6 +73,16 @@ export default {
     }
   },
   methods: {
+    closeResults: function(e)
+    {
+      if (document.getElementById("resultdiv").style.display == "inline")
+      {
+        if (e.target != document.getElementById("searchbutton"))
+        {
+          document.getElementById("resultdiv").style.display = "none";
+        }
+      }
+    },
     logout: function(){
       document.cookie = "PLUME_pseudo=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
       this.setUserState(this.connectedUser.pseudo, '');
