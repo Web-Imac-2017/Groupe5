@@ -141,7 +141,7 @@ export default {
       this.init();
 
     },
-    replaceTxtBySmiley : function(smiley, messages){
+    replaceTxtBySmiley : function(smiley,name,messages){
 
         //on récupère la balise html de la bulle concerné
         var domElm = document.getElementById("Message" + messages.ID);
@@ -159,7 +159,7 @@ export default {
 
           //je créer une image
           var image = document.createElement('img');
-          image.src = "/static/smileys/happy.svg";
+          image.src = "/static/smileys/"+name+".svg";
           image.className = "smiley";
 
           //Je supprime le smiley text de str
@@ -183,78 +183,31 @@ export default {
 
           switch (smiley) {
             case ":)":
-              this.replaceTxtBySmiley(smiley, this.messages[i]);
+              this.replaceTxtBySmiley(smiley,"smile" ,this.messages[i]);
             break;
             case ":D":
-              this.replaceTxtBySmiley(smiley, this.messages[i]);
+              this.replaceTxtBySmiley(smiley,"happy" ,this.messages[i]);
             break;
             case ":(":
-              this.replaceTxtBySmiley(smiley, this.messages[i]);
+              this.replaceTxtBySmiley(smiley,"sad" ,this.messages[i]);
             break;
             case ":O":
-              this.replaceTxtBySmiley(smiley, this.messages[i]);
+              this.replaceTxtBySmiley(smiley,"shock" ,this.messages[i]);
             break;
             case ":P":
-              this.replaceTxtBySmiley(smiley, this.messages[i]);
+              this.replaceTxtBySmiley(smiley,"tongue" ,this.messages[i]);
             break;
             case ":/":
-              this.replaceTxtBySmiley(smiley, this.messages[i]);
+              this.replaceTxtBySmiley(smiley,"jaded" ,this.messages[i]);
             break;
             case "<3":
-              this.replaceTxtBySmiley(smiley, this.messages[i]);
+              this.replaceTxtBySmiley(smiley,"inlove" ,this.messages[i]);
             break;
             case ":@":
-              this.replaceTxtBySmiley(smiley, this.messages[i]);
+              this.replaceTxtBySmiley(smiley,"angry" ,this.messages[i]);
             break;
           }
         }
-
-
-
-        // var regex = new RegExp(/:\)|:D|:\(|:O|:P|:\/|<3|:@/g);
-        // var match;
-        // var domElm = document.getElementById("Message" + this.messages[i].ID);
-        // console.log(domElm);
-        // var str = this.messages[i].content;
-        // console.log(str);
-        //
-        // if((match = regex.exec(str)) != null) domElm.innerHTML="";
-        //
-        // while (str != "") {
-        //
-        //   if((match = regex.exec(str)) != null) {
-        //     console.log(match[0]);
-        //     switch (match[0]) {
-        //       case ":)":
-        //       this.replaceTxtBySmiley(str.slice(0, match.index+2), match, "smile", domElm);
-        //       break;
-        //       case ":D":
-        //       this.replaceTxtBySmiley(str.slice(0, match.index+2), match, "happy", domElm);
-        //       break;
-        //       case ":(":
-        //       this.replaceTxtBySmiley(str.slice(0, match.index+2), match, "sad", domElm);
-        //       break;
-        //       case ":O":
-        //       this.replaceTxtBySmiley(str.slice(0, match.index+2), match, "shock", domElm);
-        //       break;
-        //       case ":P":
-        //       this.replaceTxtBySmiley(str.slice(0, match.index+2), match, "tongue", domElm);
-        //       break;
-        //       case ":/":
-        //       this.replaceTxtBySmiley(str.slice(0, match.index+2), match, "jaded", domElm);
-        //       break;
-        //       case "<3":
-        //       this.replaceTxtBySmiley(str.slice(0, match.index+2), match, "inlove", domElm);
-        //       break;
-        //       case ":@":
-        //       this.replaceTxtBySmiley(str.slice(0, match.index+2), match, "angry", domElm);
-        //       break;
-        //     }
-        //     str = this.messages[i].content.slice(match.index+2);
-        //   }
-        //   else str = "";
-        //
-        // }
       }
     },
     scrollBottomAuto: function(){
