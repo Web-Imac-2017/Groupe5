@@ -8,7 +8,7 @@
         </div>
       </li>
     </ul>
-    <textarea maxlength="200" v-on:keyup.enter="sendMessage();" v-model="newMessage" :style="{background:$parent.$parent.getLightColor($parent.connectedUser.color)}"></textarea>
+    <textarea maxlength="115" v-on:keyup.enter="sendMessage();" v-model="newMessage" :style="{background:$parent.$parent.getLightColor($parent.connectedUser.color)}"></textarea>
     <input type="file" name="messageImage" id="messageImage" v-on:change="sendImage()">
     <label for="messageImage"><icon name="picture-o"></icon></label>
   </div>
@@ -30,17 +30,14 @@ export default {
   },
   watch: {
     '$route': function() {
-      this.me = this.$parent.connectedUser;
       this.init();
     }
   },
   created: function() {
-    this.me = this.$parent.connectedUser;
     this.init();
     //this.updateBottomScroll();
   },
   mounted: function() {
-    this.me = this.$parent.connectedUser;
     this.init();
 
     var _this = this;
@@ -51,16 +48,15 @@ export default {
 
     setInterval(function() {
       _this.getConversation();
-    }, 1000);
+    }, 3000);
   },
   methods: {
     init: function() {
+      this.me = this.$parent.connectedUser;
       this.newMessage="";
       var _this = this;
       setTimeout(function() {
         _this.getConversation();
-        _this.getImages();
-        _this.getSmiley();
       }, 1000);
     },
     getUser: function(user) {
@@ -94,11 +90,24 @@ export default {
         return response.json();
       }).then(function(data){
         if(data[0] == "Error"){
-          console.log(data[1]);
+          //console.log(data[1]);
         }
         else {
-          _this.messages = data['messages'];
           _this.users = data['users'];
+          var canCommunicate = "false";
+
+          for(var i = 0; i < _this.users.length; i ++) {
+            if(_this.users[i][0] == _this.me.pseudo) {
+              canCommunicate = "true";
+            }
+          }
+          if(canCommunicate != "true") {
+            _this.$router.push('/messages/');
+          }
+          else {
+            _this.messages = data['messages'];
+            _this.getImages();
+          }
         }
       });
     },
@@ -114,6 +123,9 @@ export default {
               div.append(image);
             }
             this.messages[i].content = "";
+          }
+          else {
+            this.getSmiley();
           }
         }
       }
@@ -133,7 +145,7 @@ export default {
         return response.json();
       }).then(function(data){
         if(data[0] == "Error"){
-          console.log(data[1]);
+          //console.log(data[1]);
         }
         else {
           _this.init();

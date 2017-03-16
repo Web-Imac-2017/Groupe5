@@ -1,5 +1,5 @@
 <template>
-  <div class="connexion" v-bind:style="{backgroundImage: 'url(../../static/img/bg.jpg)'}">
+  <div class="connexion" v-bind:style="{backgroundImage: 'url(http://localhost/PLUME/public_html/static/img/bg.jpg)'}">
     <div class="quitButton">
       <router-link v-bind:to="'/home/'" id="sign">
         <icon name="times"></icon>
@@ -7,7 +7,7 @@
     </div>
     <div class="wrapper">
       <!-- <h1>Connexion</h1> -->
-      <img v-bind:src="'/static/img/logo.png'" class="loginlogo">
+      <img v-bind:src="'http://localhost/PLUME/public_html/static/img/logo.png'" class="loginlogo">
       <div class="error-message" v-text="loginError"></div>
       <input type="text"  name="pseudo" id="pseudo" placeholder="ID" v-model="pseudo">
       <input type="password" name="password" id="password" placeholder="PASSWORD" v-model="password">

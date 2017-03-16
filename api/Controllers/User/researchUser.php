@@ -12,7 +12,6 @@
 	$pattern = "#^[a-z0-9]+$#i";
 	if (preg_match($pattern , $searched)){
 		$pseudo = UserModel::userResearch($searched);
-
 		$data = array();
 		$data['users'] = array();
 

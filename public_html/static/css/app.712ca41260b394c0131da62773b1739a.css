@@ -6515,7 +6515,7 @@ body a:hover, body a:active, body a:focus {
 }
 .header .search {
     position: relative;
-    z-index: 1000;
+    z-index: 15;
 }
 
 .searchBar {
@@ -6530,7 +6530,7 @@ body a:hover, body a:active, body a:focus {
     width: 500px;
 }
 .searchBar .result {
-    z-index: 9999;
+    z-index: 12;
     border-radius: 3px;
     width: 100%;
     background-color: rgba(100, 100, 100, 0.5);
@@ -6546,9 +6546,10 @@ body a:hover, body a:active, body a:focus {
       height: 100px;
       background-color: green;
       margin-bottom: 5px;
+      cursor: pointer;
 }
 .searchBar .result .resultitem:hover .resulttext {
-        background-color: pink;
+        background-color: #A1D4E2;
 }
 .searchBar .result .resultitem:last-child {
         margin-bottom: 0px;
@@ -6560,12 +6561,13 @@ body a:hover, body a:active, body a:focus {
 }
 .searchBar .result .resultitem .resultavatar .resultimg {
           height: 100%;
+          width: 100%;
 }
 .searchBar .result .resultitem .resulttext {
         display: inline-block;
         height: 100%;
         width: calc(100% - 100px);
-        background-color: lightblue;
+        background-color: #CFDEE7;
         float: right;
         transition: .2s;
 }
@@ -6579,9 +6581,26 @@ body a:hover, body a:active, body a:focus {
           margin: 0;
           margin-left: 10px;
           margin-top: 3px;
+          display: inline-block;
 }
 .searchBar .result .resultitem .resulttext .resultcontent {
           margin-top: 0;
+          font-size: 1.2em;
+          display: inline-block;
+          float: left;
+}
+.searchBar .result .resultitem .resulttext .resultcontent2 {
+          margin-top: -8px;
+}
+.searchBar .result .resultitem .resulttext .resultspoken {
+          font-size: 1.5em;
+          display: inline-block;
+}
+.visible {
+  display: inline;
+}
+.invisible {
+  display: none;
 }
 
 
@@ -6598,17 +6617,21 @@ body a:hover, body a:active, body a:focus {
   position: absolute;
   top: 0;
   left: 0;
-  height: 100%;
-  width: 100%;
+  height: 100vh;
+  width: 100vw;
   background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  z-index: 50;
 }
 .profilCPN {
+  transition: .3s;
   width: 350px;
-  position: absolute;
+  right: -350px;
+  position: fixed;
   top: 0;
-  right: 0;
   min-height: 100%;
   background-color: #fff;
+  z-index: 51;
 }
 .profilCPN .avatarProfil {
     width: 100%;
@@ -6626,6 +6649,8 @@ body a:hover, body a:active, body a:focus {
       font-size: 35px;
       text-align: center;
       font-weight: 900;
+      margin-top: 30px;
+      margin-bottom: 25px;
 }
 .profilCPN .infos .name, .profilCPN .infos .country, .profilCPN .infos .city {
       margin: 0;
@@ -6674,6 +6699,12 @@ body a:hover, body a:active, body a:focus {
     border-radius: 2px;
     text-align: center;
     display: block;
+    transition: .2s;
+    margin-top: 40px;
+}
+.profilCPN .talkButton:hover {
+      background-color: #888888;
+      color: white;
 }
 
 @keyframes fly {
@@ -7675,4 +7706,4 @@ input[type=range]:focus::-ms-fill-upper {
 }
 }
 
-/*# sourceMappingURL=app.c87a5a585335c7097148afc4e8d0d453.css.map*/
+/*# sourceMappingURL=app.712ca41260b394c0131da62773b1739a.css.map*/

@@ -1,7 +1,7 @@
 <template>
   <div class="Profil">
-    <div class="overlay" v-on:click="$parent.changeSelectedUser('')"></div>
-    <div class="profilCPN">
+    <div class="overlay" id="overlay" v-on:click="$parent.changeSelectedUser('')"></div>
+    <div class="profilCPN" id="profile">
       <div class="avatarProfil" :style="{borderBottom:4+'px '+'solid '+ $parent.selectedUser.color,backgroundImage:'url(http://localhost/PLUME/public_html' + $parent.selectedUser.avatar + ')'}">
       </div>
       <div class="infos">
@@ -27,7 +27,7 @@
             </li>
           </ul>
         </div>
-        <button name="talk" class="talkButton" v-bind:style="{border:1+'px '+'solid '+ $parent.selectedUser.color,color:$parent.selectedUser.avatar}" v-on:click="$parent.addNotification($parent.connectedUser.pseudo, $parent.selectedUser.pseudo)">Talk !</button>
+        <button name="talk" class="talkButton" v-bind:style="{border:1+'px '+'solid '+ $parent.selectedUser.color,color:$parent.selectedUser.avatar}" v-on:click="$parent.addNotification($parent.connectedUser.pseudo, $parent.selectedUser.pseudo)">TALK TO ME</button>
       </div>
     </div>
   </div>
@@ -51,22 +51,29 @@ export default {
 </script>
 
 <style lang="scss">
-.overlay{
+.overlay
+{
   position: absolute;
   top: 0;
   left: 0;
-  height: 100%;
-  width: 100%;
-  background-color: rgba(0,0,0,0.5);
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, .5);
+  display: none;
+  z-index: 50;
 }
-.profilCPN{
+
+.profilCPN
+{
+  transition: .3s;
   width: 350px;
-  position: absolute;
+  right: -350px;
+  position: fixed;
   top: 0;
-  right: 0;
   min-height: 100%;
   // box-shadow: 0px 0 40px 0px #706f6f;
   background-color: #fff;
+  z-index: 51;
 
   .avatarProfil{
     width: 100%;
@@ -84,6 +91,8 @@ export default {
       font-size: 35px;
       text-align: center;
       font-weight: 900;
+      margin-top: 30px;
+      margin-bottom: 25px;
     }
     .name, .country, .city{
       margin: 0;
@@ -135,6 +144,14 @@ export default {
     border-radius: 2px;
     text-align: center;
     display: block;
+    transition: .2s;
+    margin-top: 40px;
+
+    &:hover
+    {
+      background-color: #888888;
+      color: white;
+    }
   }
 }
 
