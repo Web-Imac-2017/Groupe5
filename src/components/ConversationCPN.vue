@@ -60,8 +60,6 @@ export default {
 
       setTimeout(function() {
         _this.getConversation();
-        _this.getImages();
-        _this.getSmiley();
       }, 1000);
     },
     getUser: function(user) {
@@ -98,8 +96,21 @@ export default {
           //console.log(data[1]);
         }
         else {
-          _this.messages = data['messages'];
           _this.users = data['users'];
+          var canCommunicate = "false";
+
+          for(var i = 0; i < _this.users.length; i ++) {
+            if(_this.users[i][0] == _this.me.pseudo) {
+              canCommunicate = "true";
+            }
+          }
+          if(canCommunicate != "true") {
+            _this.$router.push('/messages/');
+          }
+          else {
+            _this.messages = data['messages'];
+            _this.getImages();
+          }
         }
       });
     },
@@ -115,6 +126,9 @@ export default {
               div.append(image);
             }
             this.messages[i].content = "";
+          }
+          else {
+            this.getSmiley();
           }
         }
       }

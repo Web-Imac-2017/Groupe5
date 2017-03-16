@@ -69,6 +69,11 @@ export default {
     if(pseudo != "") {
       this.getUserState(pseudo);
       this.setConnectedUser(pseudo);
+      
+      var _this = this;
+      setInterval(function() {
+        _this.getNotifications(_this.connectedUser.pseudo);
+      }, 2000);
     }
   },
   methods: {
@@ -334,6 +339,7 @@ export default {
     },
     acceptConversation : function(pseudo, idNotif) {
       this.createConversation(pseudo, idNotif);
+      this.getNotifications(this.connectedUser.pseudo);
     },
     refuseConversation : function(idNotif) {
       this.deleteNotification(idNotif);
