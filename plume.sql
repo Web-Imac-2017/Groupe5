@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- GÃ©nÃ©rÃ© le :  Jeu 16 Mars 2017 Ã  16:47
+-- GÃ©nÃ©rÃ© le :  Jeu 16 Mars 2017 Ã  19:37
 -- Version du serveur :  5.6.17
 -- Version de PHP :  5.5.12
 
@@ -165,7 +165,7 @@ CREATE TABLE IF NOT EXISTS `message` (
   PRIMARY KEY (`ID`),
   KEY `id_user` (`id_user`),
   KEY `id_conversation` (`id_conversation`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=65 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=67 ;
 
 --
 -- Contenu de la table `message`
@@ -185,8 +185,7 @@ INSERT INTO `message` (`ID`, `contenu`, `date`, `id_user`, `id_conversation`) VA
 (60, 'žø2AÍòˆ—\n¹¼³Â·È''¾ÕÖ ŽW.J¡òòÓ>\r˜È\ZÔˆìÌÌezrbfc	*\0àl¼*D}lcÍl£oìP<"Ç^ì›±.aú¹¥0CƒÀPÕÉ9ßÈŽ?VâCéùòuîÎœ*Jæ¢ö_ù4°', '2017-03-16 14:04:37', 5, 3),
 (61, 'z\ntÑ`¡P²&ªÚöü¯Ä\nÚ’Ÿ¯n“X³f/X©Ÿ¢(çã×f±®4mÛ@„tI™ù¨xž@ÃÑÚi©^-Eò ìÁg@ëbvÓ*ÔöVÜ{ƒ§(7ŸSãkã_À×†šç4Yo!þÌˆ\ZŸ•YfñSÁ\0’z¦	øèê=ôgÙ', '2017-03-16 14:04:45', 5, 3),
 (62, 'aZKQmÜÂ"+Ë*ÙX×é óß¬@ÓîRæ‡æE<÷uQÐì''˜0nˆP¶±‰‚•Aù4âôQÕÏ¨Šg:.Öá“Þ,íõ¤‚ç« ë\\…÷Ôi±ªÉXŸ\Z<¦þ4ý’¾á«´¸ÚJæÍWÀöR½÷§Ón?ØV¾', '2017-03-16 16:36:42', 5, 5),
-(63, 'ƒÇdæ™§Ô\ru¹x~%™sbOÀÙ†4i×ôAÞG^a‹ÏŠoÓ==¸l[ƒGÿÙ\r6qŸº½œrWž{»Hb½ižˆ¯ZÜ!ýÆÉ½''eJ–8ô€77Iqíg¼À4i7²‘Ò–þ×pçˆûoßùAÍˆmFÞÖ}', '2017-03-16 16:36:46', 5, 5),
-(64, '˜''îÛjÆÏ\Zï7ýMyS7gø·³IñúÊÂ¥ë~ÌGEúCäÿŒBÍìçj•…ªš$½d\njŠáâ‘\nIŽ«|Ž@ßp%÷½<ÉsÝ@‰Íuš0òØ±J‘©ÜyˆÙ+p*†ÿ`GHz|aÂÙInA¸+Ÿ÷ œnsfßgô', '2017-03-16 16:45:20', 5, 5);
+(66, 'sâÀÏ:¯AG=\n§³ž­\r3AéßIe?¶¯b\Z²»Ê\ZÄ\n‘Cì¦ŽÈl!¾J=å¶<Å–ßïKg)Œ†˜k‡×2KŒ0™T¬’SÄµÃ%ßÐ’¡çÙæÍ5)q¦”†„ØJÃ	™ùýz:b¼ÎVAÖÉiÎS', '2017-03-16 19:37:12', 5, 5);
 
 -- --------------------------------------------------------
 
@@ -997,7 +996,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 INSERT INTO `user` (`ID`, `nom`, `prenom`, `pseudo`, `email`, `password`, `avatar`, `avatar_state`, `age`, `sexe`, `ville`, `couleur`, `date_inscription`, `derniere_connexion`, `description`, `id_pays`, `id_etat_activite`, `public_key`) VALUES
 (1, 'Fabrice', 'Teatcher', 'Fabricetea', 'test@test.fr', '489f71f382393834491ba8ac79208a56', '/static/avatar/Fabricetea.jpg', 1, 38, 1, 'Saint-Pierre', '#456545', '2017-02-16', '2017-02-16', 'Couleur prÃ©fÃ©rÃ©e    Vert\n\nVÃ©hicule    2005 Kia Sedona ', 183, 1, '-----BEGIN PUBLIC KEY-----\r\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDk30xR5WWSBDxSOLYYPBQNjxiB\r\nO5pS89EQaP6hYmsqFczgYq17ft/1ZO6ds6tzYGt3zdL5kqfkE0iJs/5dSQvico3m\r\n+kCkyK7mkzs058eDWvE1mPybPFT206EqpuX1BPJQ6mBycPajNVFqTQj+e1ysqpwn\r\nbMX9Zpk7ss6fF9ZiQQIDAQAB\r\n-----END PUBLIC KEY-----'),
-(2, 'MÃ©rion', 'Pierre-Augustin', 'PAdu77', 'test@test.fr', '851819adaaefda0a86d44e677c04ae87', '/static/avatar/PAdu77.jpg', 0, 24, 2, 'NANCY', '#875698', '2017-02-16', '2017-02-16', 'Couleur prÃ©fÃ©rÃ©e  Bleu\nVÃ©hicule   1999 Volvo V70 ', 67, 2, '-----BEGIN PUBLIC KEY-----\r\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCyxOWQptiomtb2VdkNFm9al0vO\r\n51Q7PTcxDfYG1dogb00WqAJhQb5jwbGXR2U04mXLdhTY9qFmHgjbbfpUyZh69BqB\r\nTa1oO7X+ItIJKMnNINWlwjZEA/6sgC+3GxZp4NjPXdF0ekqZ3UCASO6GeMSsXX7h\r\nekkLe1DeXh7QMLYv1QIDAQAB\r\n-----END PUBLIC KEY-----'),
+(2, 'MÃ©rion', 'Pierre-Augustin', 'PAdu77', 'test@test.fr', '851819adaaefda0a86d44e677c04ae87', '/static/avatar/PAdu77.jpg', 0, 24, 2, 'NANCY', '#875698', '2017-02-16', '2017-02-16', 'Couleur prÃ©fÃ©rÃ©e  Bleu\nVÃ©hicule   1999 Volvo V70 ', 67, 1, '-----BEGIN PUBLIC KEY-----\r\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCyxOWQptiomtb2VdkNFm9al0vO\r\n51Q7PTcxDfYG1dogb00WqAJhQb5jwbGXR2U04mXLdhTY9qFmHgjbbfpUyZh69BqB\r\nTa1oO7X+ItIJKMnNINWlwjZEA/6sgC+3GxZp4NjPXdF0ekqZ3UCASO6GeMSsXX7h\r\nekkLe1DeXh7QMLYv1QIDAQAB\r\n-----END PUBLIC KEY-----'),
 (3, 'Robtano', 'Benjamin', 'sapristi', 'test@test.fr', '3549458efc6a3e8c48e5c3d4c7c603e3', '/static/avatar/sapristi.jpg', 0, 68, 3, 'Navas de Estena', '#ab58df', '2017-02-16', '2017-02-16', 'Saperlipopette, sapristipopette !', 62, 2, '-----BEGIN PUBLIC KEY-----\r\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDKz+E32nZTFptpqCB/mzvBo4cv\r\n8vWUTy/DVj4DTb8YMizpXuVpceJHQcuj/LyjMGipKihQiODfMS/w992OsA2xWImx\r\nH0Ww7L4XcFE6HAW2snRVU60taDgeDS3G/pY3J6ixhL/n4i5Sc2Yg36ERA2OYkPjJ\r\nWh4wEKQkQaF3AKBAKQIDAQAB\r\n-----END PUBLIC KEY-----'),
 (4, 'Panzer', 'Caecilia', 'JesusGR', 'test@test.fr', '1035934c7570550f2a6e4c04dd2aa0a9', '/static/avatar/default.jpg', 0, 18, 2, 'Steinhausen', '#547862', '2017-02-16', '2017-02-16', 'I''m Jesus''s bitch. Pray our Lord and Savior.', 5, 2, '-----BEGIN PUBLIC KEY-----\r\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDtfaBjJnX4ItV8y56H0DFQt8Hj\r\nJC7agBVdS1/4/cZkO2rL45ZpYSaB7z5dVlidoqOcDr8qydkSFvkXHJDNijyUUgYr\r\nmjp4YKynGXYPDKaa4dM6bfecraoGUE4tZHmdkisIxVNgfHUjPEm9zVYcp5HXzBDK\r\nLkUvQDYNYDUGLyeZVwIDAQAB\r\n-----END PUBLIC KEY-----'),
 (5, 'Kalista', 'Vence', 'kingofimac', 'test@test.fr', '247c94e4e1f436851b7e9046f8f0c8e7', '/static/avatar/kingofimac.png', 1, 29, 0, 'MULHOUSE', '#35A7FF', '2017-02-16', '2017-02-16', 'The kingof the king of France ! Let''s learn languages together !', 67, 2, '-----BEGIN PUBLIC KEY-----\r\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCjdnEB+KDyrFCwR4F3oVTeOjhs\r\nBucE6TpxB0r5CMiJzOQ/9+CSzUpvBQTfbNWB1yVtEi2TkLsG/n0FSugRk+pTvmH1\r\nFn2iwUzD5QmFsjI7r0DkduTp75WzmOLscqpBU6eKYpniuRnCDYg/31yTAoK3PVNz\r\ndMkpPbKyYAy/JzLQGQIDAQAB\r\n-----END PUBLIC KEY-----'),
@@ -1224,8 +1223,7 @@ INSERT INTO `user_notification` (`ID`, `ID_user1`, `ID_user2`, `date`, `id_notif
 (22, 15, 2, '2017-03-16 14:43:45', 1),
 (23, 15, 11, '2017-03-16 14:43:48', 1),
 (25, 16, 11, '2017-03-16 14:54:11', 1),
-(26, 16, 12, '2017-03-16 14:54:18', 1),
-(27, 16, 5, '2017-03-16 14:54:25', 1);
+(26, 16, 12, '2017-03-16 14:54:18', 1);
 
 --
 -- Contraintes pour les tables exportÃ©es

@@ -251,7 +251,7 @@ export default {
         return response.json();
       }).then(function(data){
         if(data[0] == "Error") {
-          console.log(data[1]);
+          //console.log(data[1]);
         }
         else {
           _this.connectedUser.pseudo = data['pseudo'];
@@ -290,7 +290,7 @@ export default {
         return response.json();
       }).then(function(data){
         if(data[0] == "Error"){
-          console.log(data[1]);
+          //console.log(data[1]);
         }
         else {
           _this.notifications = data;
@@ -311,7 +311,7 @@ export default {
         return response.json();
       }).then(function(data){
         if(data[0] == "Error"){
-          console.log(data[1]);
+          //console.log(data[1]);
         }
         else {
           _this.notifications = data["notifications"];
@@ -332,7 +332,7 @@ export default {
         return response.json();
       }).then(function(data){
         if(data[0] == "Error"){
-          console.log(data[1]);
+          //console.log(data[1]);
         }
         else {
           _this.notifications = data["notifications"];
@@ -362,7 +362,7 @@ export default {
         return response.json();
       }).then(function(data){
         if(data[0] == "Error"){
-          console.log(data[1]);
+          //console.log(data[1]);
         }
         else {
           _this.deleteNotification(idNotif);

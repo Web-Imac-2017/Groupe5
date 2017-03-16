@@ -99,24 +99,27 @@ export default {
           _this.users = data['users'];
           _this.messages = data['messages'];
           _this.getImages();
+          _this.getSmiley();
         }
       });
     },
     getImages : function() {
       for(var i = 0; i < this.messages.length; i ++) {
         if(this.messages[i].content != "" && this.messages[i].content != null) {
-          if(this.messages[i].content.indexOf("PLUME_IMAGE_MESSAGE:") !== -1) {
-            this.messages[i].content = this.messages[i].content.substr(20,this.messages[i].content.length-1);
+          if(this.messages[i].content.indexOf("PLUME_IMAGE_MESSAGE") !== -1) {
+            this.messages[i].content = this.messages[i].content.substr(19);
             var div = document.getElementById("Message" + this.messages[i].ID);
-            if(div.children.length == 2) {
-              var image = document.createElement('img');
-              image.src = this.messages[i].content;
-              div.append(image);
+            if(div != null) {
+              if(div.children.length == 2) {
+                var image = document.createElement('img');
+                image.src = this.messages[i].content;
+                div.append(image);
+              }
             }
             this.messages[i].content = "";
           }
           else {
-            this.getSmiley();
+
           }
         }
       }
@@ -195,7 +198,6 @@ export default {
         if (this.messages[i].content.match(regex)) {
           var match = this.messages[i].content.match(regex);
           var smiley = match[0];
-
           switch (smiley) {
             case ":)":
               this.replaceTxtBySmiley(smiley,"smile" ,this.messages[i]);
